@@ -1,2 +1,0 @@
-# swiftshop
-Digital Shopping
