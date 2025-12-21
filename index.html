@@ -1,33 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-
+  <!-- Basic meta -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <!-- App title -->
   <title>SwiftShop</title>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+  <!-- Safari / iOS App Icon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
+  <!-- Browser Favicon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+
+  <!-- Styles -->
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     html, body {
       margin: 0;
       padding: 0;
+      width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #fff;
+      background: #ffffff;
     }
 
     iframe {
       width: 100%;
       height: 100%;
       border: none;
+      display: block;
     }
   </style>
 </head>
 
 <body>
-  <iframe src="https://script.google.com/macros/s/AKfycbz8Dj6dXDeRu2dpC-3szLwjMZ3o4IU972iYkAkNbt-ph1TSTpug85sCo0XxMAzGOxzTBw/exec"></iframe>
+  <!-- Google Apps Script Web App -->
+  <iframe
+    src="https://script.google.com/macros/s/AKfycbz8Dj6dXDeRu2dpC-3szLwjMZ3o4IU972iYkAkNbt-ph1TSTpug85sCo0XxMAzGOxzTBw/exec"
+    allow="clipboard-read; clipboard-write"
+  ></iframe>
 </body>
 </html>
