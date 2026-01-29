@@ -2,46 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SwiftShop</title>
-
-  <!-- Safari / iOS icon -->
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-  <!-- Browser favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
-
-  <!-- PWA manifest (important for Safari) -->
-  <link rel="manifest" href="manifest.json">
+  
+  <meta http-equiv="refresh" content="0; url=https://script.google.com/macros/s/AKfycbz_Cu_PGprhsUVkuCd1BPMjFto2ncYfeDF-FQMhHV1fe32xx6GtsTQ17Mq4YO859rpGDw/exec">
 
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #ffffff;
-    }
-
-    iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
+    body { font-family: -apple-system, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #ffffff; }
+    .loader { border: 4px solid #f3f3f3; border-top: 4px solid #3498db; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
-
-
 <body>
-  <!-- Google Apps Script Web App -->
-  <iframe
-  src="https://script.google.com/macros/s/AKfycbz_Cu_PGprhsUVkuCd1BPMjFto2ncYfeDF-FQMhHV1fe32xx6GtsTQ17Mq4YO859rpGDw/exec"
-  allow="geolocation; clipboard-read; clipboard-write"
-  style="width:100%;height:100%;border:none;"
-></iframe>
+  <div style="text-align:center;">
+    <div class="loader"></div>
+    <p>Opening SwiftShop...</p>
+    <a href="https://script.google.com/macros/s/AKfycbz_Cu_PGprhsUVkuCd1BPMjFto2ncYfeDF-FQMhHV1fe32xx6GtsTQ17Mq4YO859rpGDw/exec" style="color:#3498db; text-decoration:none;">Click here if not redirected</a>
+  </div>
 
+  <script>
+    // Force the redirect for mobile browsers
+    window.location.replace("https://script.google.com/macros/s/AKfycbz_Cu_PGprhsUVkuCd1BPMjFto2ncYfeDF-FQMhHV1fe32xx6GtsTQ17Mq4YO859rpGDw/exec");
+  </script>
 </body>
 </html>
