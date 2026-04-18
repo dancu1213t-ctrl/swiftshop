@@ -39,8 +39,6 @@
 <script>
 (function() {
   var ua = navigator.userAgent || navigator.vendor || window.opera;
-
-  // Detect Instagram or Facebook in-app browser
   var isInApp = /Instagram|FBAN|FBAV/i.test(ua);
 
   if (isInApp) {
@@ -64,39 +62,49 @@
     overlay.style.fontFamily = "Arial, sans-serif";
 
     overlay.innerHTML = `
-      <h2 style="font-size:22px;">⚠️ Open in Browser</h2>
-      <p style="font-size:16px; margin:15px 0;">
-        This app cannot run properly inside Instagram or Facebook.<br><br>
-        👉 Tap <b>⋮ (top right)</b><br>
-        👉 Tap <b>"Open in Browser"</b><br><br>
-        OR use the options below:
-      </p>
+      <div style="max-width:320px;">
+        <h2 style="font-size:22px; margin-bottom:10px;">⚠️ Open in Browser</h2>
 
-      <button onclick="tryOpen()" style="
-        padding:15px 25px;
-        margin:10px;
-        font-size:16px;
-        border:none;
-        border-radius:10px;
-        background:black;
-        color:white;
-        cursor:pointer;
-      ">
-        Try Open in Browser
-      </button>
+        <p style="font-size:15px; margin-bottom:20px; color:#444;">
+          This app cannot run properly inside Instagram or Facebook.
+        </p>
 
-      <button onclick="copyLink()" style="
-        padding:15px 25px;
-        margin:10px;
-        font-size:16px;
-        border:none;
-        border-radius:10px;
-        background:#eee;
-        color:black;
-        cursor:pointer;
-      ">
-        Copy Link
-      </button>
+        <div style="text-align:left; margin-bottom:25px; font-size:15px;">
+          <div style="margin-bottom:10px;">1️⃣ Tap <b>⋮ (top right)</b></div>
+          <div style="margin-bottom:10px;">2️⃣ Tap <b>"Open in Browser"</b></div>
+        </div>
+
+        <p style="font-size:14px; margin-bottom:15px; color:#666;">
+          OR use the options below:
+        </p>
+
+        <button onclick="tryOpen()" style="
+          width:100%;
+          padding:15px;
+          margin-bottom:10px;
+          font-size:16px;
+          border:none;
+          border-radius:10px;
+          background:black;
+          color:white;
+          cursor:pointer;
+        ">
+          Try Open in Browser
+        </button>
+
+        <button onclick="copyLink()" style="
+          width:100%;
+          padding:15px;
+          font-size:16px;
+          border:none;
+          border-radius:10px;
+          background:#eee;
+          color:black;
+          cursor:pointer;
+        ">
+          Copy Link
+        </button>
+      </div>
     `;
 
     document.body.appendChild(overlay);
