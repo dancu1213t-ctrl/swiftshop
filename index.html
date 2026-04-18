@@ -44,11 +44,9 @@
   var isInApp = /Instagram|FBAN|FBAV/i.test(ua);
 
   if (isInApp) {
-    // Hide iframe
     var frame = document.querySelector("iframe");
     if (frame) frame.style.display = "none";
 
-    // Overlay UI
     var overlay = document.createElement("div");
     overlay.style.position = "fixed";
     overlay.style.top = "0";
@@ -68,12 +66,15 @@
     overlay.innerHTML = `
       <h2 style="font-size:22px;">⚠️ Open in Browser</h2>
       <p style="font-size:16px; margin:15px 0;">
-        For the best experience, open this in your browser.<br><br>
-        Tap the button below or use the <b>⋮ menu</b> → <b>Open in Browser</b>.
+        This app cannot run properly inside Instagram or Facebook.<br><br>
+        👉 Tap <b>⋮ (top right)</b><br>
+        👉 Tap <b>"Open in Browser"</b><br><br>
+        OR use the options below:
       </p>
 
-      <button onclick="forceOpen()" style="
+      <button onclick="tryOpen()" style="
         padding:15px 25px;
+        margin:10px;
         font-size:16px;
         border:none;
         border-radius:10px;
@@ -81,7 +82,20 @@
         color:white;
         cursor:pointer;
       ">
-        Open in Browser
+        Try Open in Browser
+      </button>
+
+      <button onclick="copyLink()" style="
+        padding:15px 25px;
+        margin:10px;
+        font-size:16px;
+        border:none;
+        border-radius:10px;
+        background:#eee;
+        color:black;
+        cursor:pointer;
+      ">
+        Copy Link
       </button>
     `;
 
@@ -89,24 +103,19 @@
   }
 })();
 
-function forceOpen() {
+function tryOpen() {
   var url = window.location.href;
-  var ua = navigator.userAgent.toLowerCase();
+  window.open(url, "_blank");
+}
 
-  // ANDROID → try force Chrome
-  if (/android/.test(ua)) {
-    var chromeUrl = "intent://" + url.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end";
-    window.location.href = chromeUrl;
+function copyLink() {
+  var url = window.location.href;
 
-    // fallback if blocked
-    setTimeout(function() {
-      window.open(url, "_blank");
-    }, 1500);
-  } 
-  else {
-    // iPhone → opens in Safari (default)
-    window.open(url, "_blank");
-  }
+  navigator.clipboard.writeText(url).then(function() {
+    alert("Link copied! Paste it in Chrome or Safari.");
+  }).catch(function() {
+    alert("Copy failed. Please manually copy the link.");
+  });
 }
 </script>
 
