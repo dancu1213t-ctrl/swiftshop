@@ -10,14 +10,120 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="manifest" href="manifest.json">
 
-  <!-- Fallback meta redirect for browsers with JavaScript disabled -->
-  <meta http-equiv="refresh" content="0;url=https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmCeyKPp-zE1sxHWQpegkeqp6jsYzA_79Vp5v1f-56Oo4NeZOiMA/exec">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+  </style>
 </head>
 
 <body>
-  <script>
-    // Immediately redirect the top-level Instagram browser window to your Apps Script
-    window.location.replace("https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmCeyKPp-zE1sxHWQpegkeqp6jsYzA_79Vp5v1f-56Oo4NeZOiMA/exec");
-  </script>
+  <iframe
+    src="https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmCeyKPp-zE1sxHWQpegkeqp6jsYzA_79Vp5v1f-56Oo4NeZOiMA/exec"
+    allow="geolocation; clipboard-read; clipboard-write"
+    style="width:100%;height:100%;border:none;"
+  ></iframe>
+
+<script>
+var targetAppUrl = "https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmCeyKPp-zE1sxHWQpegkeqp6jsYzA_79Vp5v1f-56Oo4NeZOiMA/exec";
+
+(function() {
+  var ua = navigator.userAgent || navigator.vendor || window.opera;
+  var isInApp = /Instagram|FBAN|FBAV/i.test(ua);
+
+  if (isInApp) {
+    var frame = document.querySelector("iframe");
+    if (frame) frame.style.display = "none";
+
+    var overlay = document.createElement("div");
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "linear-gradient(135deg, #FF6600, #FF8533)";
+    overlay.style.zIndex = "9999";
+    overlay.style.display = "flex";
+    overlay.style.flexDirection = "column";
+    overlay.style.justifyContent = "center";
+    overlay.style.alignItems = "center";
+    overlay.style.textAlign = "center";
+    overlay.style.padding = "20px";
+    overlay.style.fontFamily = "Arial, sans-serif";
+    overlay.style.color = "#ffffff";
+
+    overlay.innerHTML = `
+      <div style="max-width:320px; background: rgba(0, 0, 0, 0.25); padding: 30px 20px; border-radius: 20px; backdrop-filter: blur(5px);">
+        <h2 style="font-size: 26px; margin-bottom: 8px; font-weight: 800; letter-spacing: 0.5px;">SwiftShop</h2>
+
+        <p style="font-size: 16px; margin-bottom: 25px; color: #fff; font-weight: 500; line-height: 1.4;">
+          You are steps from Ordering what you love!
+        </p>
+
+        <div style="text-align: left; margin-bottom: 25px; font-size: 14px; background: rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 10px;">
+          <div style="margin-bottom: 6px;">1️⃣ Tap <b>⋮ or (...)</b> in top right</div>
+          <div>2️⃣ Select <b>"Open in Browser"</b></div>
+        </div>
+
+        <a href="${targetAppUrl}" target="_blank" style="
+          display: block;
+          width: 100%;
+          box-sizing: border-box;
+          padding: 15px;
+          margin-bottom: 12px;
+          font-size: 16px;
+          font-weight: bold;
+          text-decoration: none;
+          border: none;
+          border-radius: 12px;
+          background: #ffffff;
+          color: #FF6600;
+          cursor: pointer;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        ">
+          Open in External Browser
+        </a>
+
+        <button onclick="copyLink()" style="
+          width: 100%;
+          padding: 14px;
+          font-size: 15px;
+          font-weight: bold;
+          border: none;
+          border-radius: 12px;
+          background: rgba(0, 0, 0, 0.4);
+          color: white;
+          cursor: pointer;
+        ">
+          Copy Link
+        </button>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+  }
+})();
+
+function copyLink() {
+  navigator.clipboard.writeText(targetAppUrl).then(function() {
+    alert("Link copied! Paste it in Chrome or Safari.");
+  }).catch(function() {
+    alert("Copy failed. Please manually copy the link.");
+  });
+}
+</script>
+
 </body>
 </html>
