@@ -10,111 +10,14 @@
   <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
   <link rel="manifest" href="manifest.json">
 
-  <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #ffffff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .container {
-      max-width: 340px;
-      padding: 30px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
-      color: #111;
-    }
-
-    p {
-      font-size: 15px;
-      color: #666;
-      margin-bottom: 25px;
-    }
-
-    .btn-primary {
-      width: 100%;
-      padding: 16px;
-      font-size: 16px;
-      font-weight: bold;
-      border: none;
-      border-radius: 12px;
-      background: #000;
-      color: #fff;
-      cursor: pointer;
-      margin-bottom: 12px;
-    }
-
-    .btn-secondary {
-      width: 100%;
-      padding: 16px;
-      font-size: 16px;
-      border: none;
-      border-radius: 12px;
-      background: #f1f1f1;
-      color: #333;
-      cursor: pointer;
-    }
-  </style>
+  <!-- Fallback meta redirect for browsers with JavaScript disabled -->
+  <meta http-equiv="refresh" content="0;url=https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmCeyKPp-zE1sxHWQpegkeqp6jsYzA_79Vp5v1f-56Oo4NeZOiMA/exec">
 </head>
 
 <body>
-
-  <div class="container" id="mainContent">
-    <h1>SwiftShop</h1>
-    <p>Tap the button below to launch the store securely.</p>
-    
-    <button class="btn-primary" onclick="openShop()">Open SwiftShop</button>
-  </div>
-
-<script>
-  var targetUrl = "https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmCeyKPp-zE1sxHWQpegkeqp6jsYzA_79Vp5v1f-56Oo4NeZOiMA/exec";
-
-  function openShop() {
-    window.location.href = targetUrl;
-  }
-
-  (function() {
-    var ua = navigator.userAgent || navigator.vendor || window.opera;
-    var isInApp = /Instagram|FBAN|FBAV/i.test(ua);
-
-    if (isInApp) {
-      document.getElementById("mainContent").innerHTML = `
-        <h2 style="font-size:22px; margin-bottom:10px;">⚠️ Open in Browser</h2>
-        <p style="font-size:15px; margin-bottom:20px; color:#444;">
-          Instagram blocks apps from running directly inside this window.
-        </p>
-        <div style="text-align:left; margin-bottom:25px; font-size:15px;">
-          <div style="margin-bottom:10px;">1️⃣ Tap <b>⋮ (top right)</b></div>
-          <div style="margin-bottom:10px;">2️⃣ Tap <b>"Open in Browser"</b></div>
-        </div>
-        <button class="btn-primary" onclick="tryOpen()">Try Open in Browser</button>
-        <button class="btn-secondary" onclick="copyLink()">Copy Link</button>
-      `;
-    }
-  })();
-
-  function tryOpen() {
-    window.open(targetUrl, "_blank");
-  }
-
-  function copyLink() {
-    navigator.clipboard.writeText(targetUrl).then(function() {
-      alert("Link copied! Paste it into Chrome or Safari.");
-    }).catch(function() {
-      alert("Please manually copy the link.");
-    });
-  }
-</script>
-
+  <script>
+    // Immediately redirect the top-level Instagram browser window to your Apps Script
+    window.location.replace("https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmCeyKPp-zE1sxHWQpegkeqp6jsYzA_79Vp5v1f-56Oo4NeZOiMA/exec");
+  </script>
 </body>
 </html>
