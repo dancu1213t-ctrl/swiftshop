@@ -37,8 +37,6 @@
   ></iframe>
 
 <script>
-var targetAppUrl = "https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmCeyKPp-zE1sxHWQpegkeqp6jsYzA_79Vp5v1f-56Oo4NeZOiMA/exec";
-
 (function() {
   var ua = navigator.userAgent || navigator.vendor || window.opera;
   var isInApp = /Instagram|FBAN|FBAV/i.test(ua);
@@ -53,7 +51,7 @@ var targetAppUrl = "https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmC
     overlay.style.left = "0";
     overlay.style.width = "100%";
     overlay.style.height = "100%";
-    overlay.style.background = "linear-gradient(135deg, #FF6600, #FF8533)";
+    overlay.style.background = "#ffffff";
     overlay.style.zIndex = "9999";
     overlay.style.display = "flex";
     overlay.style.flexDirection = "column";
@@ -62,50 +60,47 @@ var targetAppUrl = "https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmC
     overlay.style.textAlign = "center";
     overlay.style.padding = "20px";
     overlay.style.fontFamily = "Arial, sans-serif";
-    overlay.style.color = "#ffffff";
 
     overlay.innerHTML = `
-      <div style="max-width:320px; background: rgba(0, 0, 0, 0.25); padding: 30px 20px; border-radius: 20px; backdrop-filter: blur(5px);">
-        <h2 style="font-size: 26px; margin-bottom: 8px; font-weight: 800; letter-spacing: 0.5px;">SwiftShop</h2>
+      <div style="max-width:320px;">
+        <h2 style="font-size:22px; margin-bottom:10px;">⚠️ Open in Browser</h2>
 
-        <p style="font-size: 16px; margin-bottom: 25px; color: #fff; font-weight: 500; line-height: 1.4;">
-          You are steps from Ordering what you love!
+        <p style="font-size:15px; margin-bottom:20px; color:#444;">
+          This app cannot run properly inside Instagram or Facebook.
         </p>
 
-        <div style="text-align: left; margin-bottom: 25px; font-size: 14px; background: rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 10px;">
-          <div style="margin-bottom: 6px;">1️⃣ Tap <b>⋮ or (...)</b> in top right</div>
-          <div>2️⃣ Select <b>"Open in Browser"</b></div>
+        <div style="text-align:left; margin-bottom:25px; font-size:15px;">
+          <div style="margin-bottom:10px;">1️⃣ Tap <b>⋮ (top right)</b></div>
+          <div style="margin-bottom:10px;">2️⃣ Tap <b>"Open in Browser"</b></div>
         </div>
 
-        <a href="${targetAppUrl}" target="_blank" style="
-          display: block;
-          width: 100%;
-          box-sizing: border-box;
-          padding: 15px;
-          margin-bottom: 12px;
-          font-size: 16px;
-          font-weight: bold;
-          text-decoration: none;
-          border: none;
-          border-radius: 12px;
-          background: #ffffff;
-          color: #FF6600;
-          cursor: pointer;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        <p style="font-size:14px; margin-bottom:15px; color:#666;">
+          OR use the options below:
+        </p>
+
+        <button onclick="tryOpen()" style="
+          width:100%;
+          padding:15px;
+          margin-bottom:10px;
+          font-size:16px;
+          border:none;
+          border-radius:10px;
+          background:black;
+          color:white;
+          cursor:pointer;
         ">
-          Open in External Browser
-        </a>
+          Try Open in Browser
+        </button>
 
         <button onclick="copyLink()" style="
-          width: 100%;
-          padding: 14px;
-          font-size: 15px;
-          font-weight: bold;
-          border: none;
-          border-radius: 12px;
-          background: rgba(0, 0, 0, 0.4);
-          color: white;
-          cursor: pointer;
+          width:100%;
+          padding:15px;
+          font-size:16px;
+          border:none;
+          border-radius:10px;
+          background:#eee;
+          color:black;
+          cursor:pointer;
         ">
           Copy Link
         </button>
@@ -116,8 +111,15 @@ var targetAppUrl = "https://script.google.com/macros/s/AKfycbxOGpXACx9KiEVxwwtmC
   }
 })();
 
+function tryOpen() {
+  var url = window.location.href;
+  window.open(url, "_blank");
+}
+
 function copyLink() {
-  navigator.clipboard.writeText(targetAppUrl).then(function() {
+  var url = window.location.href;
+
+  navigator.clipboard.writeText(url).then(function() {
     alert("Link copied! Paste it in Chrome or Safari.");
   }).catch(function() {
     alert("Copy failed. Please manually copy the link.");
