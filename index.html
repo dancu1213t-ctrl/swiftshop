@@ -5950,7 +5950,7 @@ backdrop-filter: blur(6px);
 
 
 <script>
-// ==========================================
+  // ==========================================
   // SUPABASE CONFIGURATION (LIVE)
   // ==========================================
   const SUPABASE_URL = "https://sbjadbqlmkktljfpqowc.supabase.co";
@@ -6075,9 +6075,26 @@ backdrop-filter: blur(6px);
     }));
   }
 
-  // ==========================================
-  // ORIGINAL APP LOGIC & HELPERS
-  // ==========================================
+  // --- SERVICE FEE HELPER ---
+  function getServiceFee(zone) {
+    const fees = {
+      "town": 3.00,
+      "muffles": 3.50,
+      "trial_farm": 4.00,
+      "black_water": 4.50,
+      "san_lorenzo": 4.00,
+      "pasadita": 3.00,
+      "palmar": 4.50,
+      "petville": 4.50,
+      "chan_pine_ridge": 5.00,
+      "yo_creek": 6.00,
+      "san_estevan": 6.00,
+      "carmelita": 6.00,
+      "san_jose": 7.00,
+      "san_pablo": 7.00
+    };
+    return fees[zone] || 3.00;
+  }
 
   function buzz(ms = 30) {
     if (navigator.vibrate) navigator.vibrate(ms);
@@ -6103,16 +6120,23 @@ backdrop-filter: blur(6px);
   };
   console.log("SCRIPT LOADED");
 
+  /* EVERYTHING BELOW IS YOUR ORIGINAL LOGIC - UNCHANGED */
+  /************* 👑 ADMIN ACCESS *************/
   const ADMIN_NAME = "Danilo Cu";
   const ADMIN_PHONE = "6080205";
 
+  /************* ⏰ BUSINESS HOURS LOCK *************/
   function checkBusinessHoursLock(isAdminAttempt = false) {
     const now = new Date();
+
     const hour = now.getHours();
     const minute = now.getMinutes();
 
+    // OPEN: 7:30 AM
     const openHour = 7;
     const openMinute = 30;
+
+    // CLOSE: 9:00 PM
     const closeHour = 21;
     const closeMinute = 0;
 
@@ -6128,18 +6152,21 @@ backdrop-filter: blur(6px);
     const loginBox = document.getElementById("loginBox");
     const closedBox = document.getElementById("closedBox");
 
+    // ⛔ closed for normal users
     if (!isOpen && !isAdminAttempt) {
       if (loginBox) loginBox.style.display = "none";
       if (closedBox) closedBox.style.display = "block";
       return false;
     }
 
+    // ✅ open or admin
     if (loginBox) loginBox.style.display = "block";
     if (closedBox) closedBox.style.display = "none";
 
     return true;
   }
 
+  // --- LIVE TEXT SLIDER LOGIC ---
   function updateLiveSlider() {
     const comments = [
       "🌽Grab a Snack, with Krazy Corn, Best of the Best",
@@ -6173,16 +6200,19 @@ backdrop-filter: blur(6px);
     
     const track = document.getElementById("textSlider");
     if(track) {
+      // Clear and re-populate to keep it fresh every time they login
       track.innerHTML = comments.map(c => `<span>${c}</span>`).join('');
     }
   }
 
+  // Call this inside your enterApp() function or at the end of the script
   window.addEventListener('load', updateLiveSlider);
 
   const title = document.getElementById("title");
   if (title) {
     const text = title.innerText;
     title.innerHTML = "";
+
     [...text].forEach((c, i) => {
       const s = document.createElement("span");
       s.textContent = c === " " ? "\u00A0" : c;
@@ -6192,23 +6222,36 @@ backdrop-filter: blur(6px);
   }
 
   let allProducts=[], cart={}, total=0, cat="Snack";
+
   let customerName = "";
   let customerPhone = "";
+
   let customerEmail = "";
   let rewardPoints = 0;
+
+  // ===== REQUEST RIDE LOGIC =====
 
   let rideLocation = null;
 
   function openRequestRide(el) {
-    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".cat-btn").forEach(b =>
+      b.classList.remove("active")
+    );
     el.classList.add("active");
 
-    if (document.getElementById("products")) document.getElementById("products").style.display = "none";
-    if (document.getElementById("pickupOrderBox")) document.getElementById("pickupOrderBox").style.display = "none";
-    if (document.getElementById("tacoOrderBox")) document.getElementById("tacoOrderBox").style.display = "none";
+    if (document.getElementById("products"))
+      document.getElementById("products").style.display = "none";
+
+    if (document.getElementById("pickupOrderBox"))
+      document.getElementById("pickupOrderBox").style.display = "none";
+
+    if (document.getElementById("tacoOrderBox"))
+      document.getElementById("tacoOrderBox").style.display = "none";
 
     document.getElementById("requestRideBox").style.display = "block";
-    document.getElementById("rideName").value = localStorage.getItem("userName") || "Customer";
+
+    document.getElementById("rideName").value =
+      localStorage.getItem("userName") || "Customer";
   }
 
   function getRideLocation() {
@@ -6219,11 +6262,24 @@ backdrop-filter: blur(6px);
 
     navigator.geolocation.getCurrentPosition(
       pos => {
-        rideLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-        document.getElementById("rideLocationText").innerText = "Location pinned";
+        rideLocation = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        };
 
-        const mapUrl = "https://www.google.com/maps?q=" + rideLocation.lat + "," + rideLocation.lng + "&output=embed";
-        document.getElementById("rideMap").src = mapUrl;
+        // Update text
+        document.getElementById("rideLocationText").innerText =
+          "Location pinned";
+
+        // Show Google Map on site
+        const mapUrl =
+          "https://www.google.com/maps?q=" +
+          rideLocation.lat + "," + rideLocation.lng +
+          "&output=embed";
+
+        const iframe = document.getElementById("rideMap");
+        iframe.src = mapUrl;
+
         document.getElementById("rideMapWrapper").style.display = "block";
       },
       () => alert("Please enable location access"),
@@ -6283,17 +6339,24 @@ backdrop-filter: blur(6px);
     const btn = document.getElementById("geoBtn");
     if (!btn) return;
     
+    // 1. Initial Loading State
     btn.innerText = "Located✅...";
     btn.style.pointerEvents = "none"; 
     btn.style.opacity = "0.7";
 
-    const geoOptions = { enableHighAccuracy: true, timeout: 5000, maximumAge: 10000 };
+    const geoOptions = {
+      enableHighAccuracy: true, 
+      timeout: 5000,            
+      maximumAge: 10000        
+    };
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
         const latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        // 2. TRIGGER SNAP: This function now forces the "Located" text instantly
         snapPinTo(latLng); 
-      }, () => {
+      }, (err) => {
+        // Fallback: Try fast-track if high accuracy is slow
         navigator.geolocation.getCurrentPosition((pos) => {
           const latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
           snapPinTo(latLng);
@@ -6305,8 +6368,10 @@ backdrop-filter: blur(6px);
     }
   }
 
+  // 🎯 THE FIX: Helper to move pin and show "LOCATED" instantly
   function snapPinTo(latLng) {
     const btn = document.getElementById("geoBtn");
+    
     if (cartMap) {
       cartMap.panTo(latLng);
       cartMap.setZoom(17);
@@ -6314,19 +6379,25 @@ backdrop-filter: blur(6px);
     if (cartMarker) {
       cartMarker.setPosition(latLng);
     }
+    
     updateCartGPSFee(latLng); 
 
-    btn.innerHTML = "📍 LOCATED";
-    btn.style.background = "#1ebe57";
-    btn.style.opacity = "1";
-    btn.style.pointerEvents = "auto";
-    
-    setTimeout(() => {
-      btn.innerHTML = "📍 TAP HERE TO PIN LOCATION";
-      btn.style.background = "#ff6a00";
-    }, 3000);
+    // ✅ UI Update: Change text to "LOCATED" immediately
+    if (btn) {
+      btn.innerHTML = "📍 LOCATED";
+      btn.style.background = "#1ebe57"; // Turns green for success
+      btn.style.opacity = "1";
+      btn.style.pointerEvents = "auto";
+      
+      // Return to original prompt after 3 seconds
+      setTimeout(() => {
+        btn.innerHTML = "📍 TAP HERE TO PIN LOCATION";
+        btn.style.background = "#ff6a00";
+      }, 3000);
+    }
   }
 
+  // Simple reset function if GPS fails entirely
   function resetGeoBtn() {
     const btn = document.getElementById("geoBtn");
     if (!btn) return;
@@ -6339,19 +6410,29 @@ backdrop-filter: blur(6px);
   function updateCartGPSFee(latLng) {
     const lat = latLng.lat().toFixed(6);
     const lng = latLng.lng().toFixed(6);
+    
+    // 1. Save coords for the WhatsApp link
+    window.lastCartCoords = `${lat},${lng}`; 
+
+    // ONLY store coordinates — pricing comes from dropdown
     window.lastCartCoords = `${lat},${lng}`;
-    refreshCartTotals();
+
+    // 4. 🔥 THE LIVE CHANGE: This forces the screen to update right now
+    refreshCartTotals(); 
   }
 
   function refreshCartTotals() {
+    // Find the text elements on your screen
     const feeText = document.getElementById("cartDeliveryFee");
     const grandTotalText = document.getElementById("cartGrandTotal");
 
     if (feeText) {
+      // This updates the $3 or $4 text live
       feeText.innerHTML = `🚚 Delivery (${window.lastCartZone || "In-Town"}): <b>$${(window.lastCartFee || 3).toFixed(2)} BZD</b>`;
     }
 
     if (grandTotalText) {
+      // This updates the Final Total live
       const itemsTotal = window.total || 0;
       const finalAmount = itemsTotal + (window.lastCartFee || 3);
       grandTotalText.innerText = `Grand Total: $${finalAmount.toFixed(2)} BZD`;
@@ -6366,59 +6447,143 @@ backdrop-filter: blur(6px);
 
     const name = document.getElementById("rideName").value;
     const vehicle = document.getElementById("vehicleType").value;
-    const mapLink = "https://www.google.com/maps?q=" + rideLocation.lat + "," + rideLocation.lng;
 
-    const msg = "REQUEST RIDE\n\nName: " + name + "\nVehicle Type: " + vehicle + "\n\nLocation:\n" + mapLink;
-    window.open("https://wa.me/5016080205?text=" + encodeURIComponent(msg), "_blank");
+    const mapLink =
+      "https://www.google.com/maps?q=" +
+      rideLocation.lat + "," + rideLocation.lng;
+
+    const msg =
+      "REQUEST RIDE\n\n" +
+      "Name: " + name + "\n" +
+      "Vehicle Type: " + vehicle + "\n\n" +
+      "Location:\n" + mapLink;
+
+    window.open(
+      "https://wa.me/5016080205?text=" + encodeURIComponent(msg),
+      "_blank"
+    );
   }
 
   function setCategory(c, e) {
-    const elementsToHide = ["requestRideBox", "pickupOrderBox", "tacoOrderBox", "products", "map", "subcategory-bar"];
+    /* 1. HIDE EVERYTHING */
+    const elementsToHide = [
+      "requestRideBox",
+      "pickupOrderBox",
+      "tacoOrderBox",
+      "products",
+      "map",
+      "subcategory-bar"
+    ];
+
     elementsToHide.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
     });
 
+    /* 2. RESET ACTIVE BUTTONS */
     document.querySelectorAll(".cat-btn").forEach(btn => btn.classList.remove("active"));
+
+    /* 3. SAVE CURRENT CATEGORY */
     cat = c;
 
-    let isStore = e && e.dataset.store === "true";
+    /* 4. CHECK IF STORE */
+    let isStore = false;
+    if (e && e.dataset.store === "true") {
+      isStore = true;
+    }
 
+    /* 5. SHOW CORRECT SECTION */
     if (c === "RequestRide") {
-      if (document.getElementById("requestRideBox")) document.getElementById("requestRideBox").style.display = "block";
-      if (document.getElementById("map")) document.getElementById("map").style.display = "block";
-    } else if (c === "Pickup") {
-      if (document.getElementById("pickupOrderBox")) document.getElementById("pickupOrderBox").style.display = "block";
-    } else {
+      const rideBox = document.getElementById("requestRideBox");
+      const map = document.getElementById("map");
+
+      if (rideBox) rideBox.style.display = "block";
+      if (map) map.style.display = "block";
+    }
+    else if (c === "Pickup") {
+      const pickupBox = document.getElementById("pickupOrderBox");
+      if (pickupBox) pickupBox.style.display = "block";
+    }
+    else {
       const products = document.getElementById("products");
+
       if (products) {
         products.style.display = "grid";
+
+        /* STORE MENU WITH SUBCATEGORIES */
         if (isStore && typeof loadStoreMenu === "function") {
           loadStoreMenu(c);
-        } else {
+        }
+        /* NORMAL CATEGORY */
+        else {
           render();
         }
 
+        /* Smooth scroll after layout updates */
         setTimeout(() => {
-          products.scrollIntoView({ behavior: "smooth", block: "start" });
+          products.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
         }, 120);
       }
     }
 
+    /* 6. ACTIVATE BUTTON */
     if (e) {
+      /* Manual button click */
       e.classList.add("active");
+
       const container = e.closest('.categories');
+
       if (container) {
-        const scrollTo = e.offsetLeft - (container.offsetWidth / 2) + (e.offsetWidth / 2);
-        container.scrollTo({ left: scrollTo, behavior: "smooth" });
+        const elLeft = e.offsetLeft;
+        const elWidth = e.offsetWidth;
+        const containerWidth = container.offsetWidth;
+
+        const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+
+        container.scrollTo({
+          left: scrollTo,
+          behavior: "smooth"
+        });
       }
+    } 
+    else {
+      /* Automatic trigger (slider banners etc) */
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        const btnText = btn.innerText.toLowerCase();
+        const categoryTarget = c.toLowerCase();
+
+        if (btnText.includes(categoryTarget)) {
+          btn.classList.add("active");
+
+          const container = btn.closest('.categories');
+
+          if (container) {
+            const elLeft = btn.offsetLeft;
+            const elWidth = btn.offsetWidth;
+            const containerWidth = container.offsetWidth;
+
+            const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+
+            container.scrollTo({
+              left: scrollTo,
+              behavior: "smooth"
+            });
+          }
+        }
+      });
     }
   }
 
+  // 🌮 OPEN TACO ORDER SCREEN (NOT FROM SHEETS)
   function openTacoOrder(btn){
+    // highlight active button
     document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
+    // hide products, show taco box
     document.getElementById("products").style.display = "none";
     document.getElementById("tacoOrderBox").style.display = "block";
 
@@ -6426,6 +6591,7 @@ backdrop-filter: blur(6px);
     document.getElementById("tacoUserTitle").innerText = "🌮 Order For " + user;
   }
 
+  // ➜ GO FROM TACOS TO NORMAL ORDER FLOW
   function goToOrderFromTacos(){
     const place = document.getElementById("tacoPlace").value;
     const details = document.getElementById("tacoDetails").value.trim();
@@ -6436,11 +6602,15 @@ backdrop-filter: blur(6px);
       return;
     }
 
+    // ✅ save taco info
     localStorage.setItem("tacoPlace", place);
     localStorage.setItem("tacoOrder", details);
-    localStorage.setItem("tacoZone", zone);
+    localStorage.setItem("tacoZone", zone); // ✅ SAVE DELIVERY AREA
 
+    // ✅ close taco order box
     document.getElementById("tacoOrderBox").style.display = "none";
+
+    // ✅ SKIP CART → OPEN ORDER BOX DIRECTLY
     goToOrder();
   }
 
@@ -6448,8 +6618,11 @@ backdrop-filter: blur(6px);
     document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
+    // Hide everything else
     document.getElementById("products").style.display = "none";
     document.getElementById("tacoOrderBox").style.display = "none";
+    
+    // Show only pickup
     document.getElementById("pickupOrderBox").style.display = "block";
     
     fillPickupName();   
@@ -6457,16 +6630,24 @@ backdrop-filter: blur(6px);
   }
 
   let pickupMap, pickupMarker, pickupLatLng;
-  let dropoffMarker, dropoffLatLng;
+  let dropoffMap, dropoffMarker, dropoffLatLng;
   let directionsService, directionsRenderer;
 
   function initPickupMap() {
     if (pickupMap) return;
 
     directionsService = new google.maps.DirectionsService();
-    directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true, polylineOptions: { strokeWeight: 5 } });
+    directionsRenderer = new google.maps.DirectionsRenderer({
+      suppressMarkers: true,
+      polylineOptions: {
+        strokeWeight: 5
+      }
+    });
 
+    // 🏪 STORE LOCATION (POINT A)
     const STORE_LOCATION = { lat: 18.081, lng: -88.563 };
+
+    // DEFAULT (Orange Walk)
     pickupLatLng = { lat: 18.081, lng: -88.563 };
 
     pickupMap = new google.maps.Map(document.getElementById("pickupMap"), {
@@ -6477,17 +6658,31 @@ backdrop-filter: blur(6px);
 
     directionsRenderer.setMap(pickupMap);
 
-    pickupMarker = new google.maps.Marker({ position: STORE_LOCATION, map: pickupMap, label: "A" });
-    dropoffMarker = new google.maps.Marker({ map: pickupMap, label: "B" });
+    pickupMarker = new google.maps.Marker({
+      position: STORE_LOCATION,
+      map: pickupMap,
+      label: "A"
+    });
 
+    dropoffMarker = new google.maps.Marker({
+      map: pickupMap,
+      label: "B"
+    });
+
+    // 📍 CURRENT LOCATION = DROPOFF
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos => {
-        dropoffLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        dropoffLatLng = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        };
+
         dropoffMarker.setPosition(dropoffLatLng);
         drawPickupRoute();
       });
     }
 
+    // 🔍 AUTOCOMPLETE = PICKUP LOCATION
     const input = document.getElementById("pickupSearch");
     if (input) {
       const autocomplete = new google.maps.places.Autocomplete(input);
@@ -6497,9 +6692,19 @@ backdrop-filter: blur(6px);
         const place = autocomplete.getPlace();
         if (!place.geometry) return;
 
-        pickupLatLng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
+        // ✅ UPDATE PICKUP LOCATION (A)
+        pickupLatLng = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        };
+
+        // ✅ MOVE MARKER A
         pickupMarker.setPosition(pickupLatLng);
+
+        // ✅ CENTER MAP
         pickupMap.panTo(pickupLatLng);
+
+        // ✅ REDRAW ROUTE
         drawPickupRoute();
       });
     }
@@ -6513,18 +6718,23 @@ backdrop-filter: blur(6px);
       destination: dropoffLatLng,
       travelMode: google.maps.TravelMode.DRIVING
     }, (result, status) => {
-      if (status === "OK") directionsRenderer.setDirections(result);
+      if (status === "OK") {
+        directionsRenderer.setDirections(result);
+      }
     });
   }
 
   function sendPickupWhatsApp() {
+    // 1. Get the Dropdown element
     var requestDropdown = document.getElementById("requestType");
+    // 2. Get the specific text of the selected option (e.g., "Standard Pickup")
     var selectedService = requestDropdown ? requestDropdown.options[requestDropdown.selectedIndex].text : "Pickup";
     var cleanService = selectedService.replace(/[^\x00-\x7F]/g, "").trim(); 
 
     var name = document.getElementById("pickupName") ? document.getElementById("pickupName").value : "Customer";
     var type = document.getElementById("pickupType") ? document.getElementById("pickupType").value : "General";
     var from = document.getElementById("pickupSearch") ? document.getElementById("pickupSearch").value : "";
+    
     var orderFor = document.getElementById("pickupOrderFor") ? document.getElementById("pickupOrderFor").value : "Myself";
     var description = document.getElementById("pickupDescription") ? document.getElementById("pickupDescription").value : "No details provided";
 
@@ -6536,6 +6746,7 @@ backdrop-filter: blur(6px);
     var phoneNumber = "5016080205";
     var pickupMapURL = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(from);
     
+    // 3. Update the Header to reflect the specific choice
     var msg = "*📍 " + cleanService.toUpperCase() + "*\n\n" +
               "*Name:* " + name + "\n" +
               "*Order For:* " + orderFor + "\n" +
@@ -6549,37 +6760,48 @@ backdrop-filter: blur(6px);
 
     if (isIOS) {
       msg += "\nCustomer location\n📍 _Please tap “Attach → Location” to share live location_";
-      window.open("https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg), '_blank');
+      var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
+      window.open(waURL, '_blank');
     } else {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           function(position) {
-            var liveMap = "https://www.google.com/maps?q=" + position.coords.latitude + "," + position.coords.longitude;
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var liveMap = "https://www.google.com/maps?q=" + lat + "," + lng;
             msg += "\nCustomer Live Location\n*Map:* " + liveMap;
-            window.open("https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg), '_blank');
+            
+            var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
+            window.open(waURL, '_blank');
           },
-          function() {
+          function(error) {
             msg += "\nCustomer location (GPS disabled)";
-            window.open("https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg), '_blank');
+            var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
+            window.open(waURL, '_blank');
           },
           { timeout: 5000 }
         );
       } else {
-        window.open("https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg), '_blank');
+        msg += "\nCustomer location";
+        var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
+        window.open(waURL, '_blank');
       }
     }
   }
 
-  // ✅ SUPABASE LOGIN FLOW
   function handleLogin() {
     const name = document.getElementById("userName").value.trim();
     const phone = document.getElementById("userPhone").value.trim();
+
+    // 👑 ADMIN CHECK
     const isAdmin = name === ADMIN_NAME && phone === ADMIN_PHONE;
 
+    // ⏰ TIME LOCK (allow admin when closed)
     if (!checkBusinessHoursLock(isAdmin)) {
       alert("Sorry, SwiftShop is currently closed.\nOpening time: 7:30 AM");
       return;
     }
+
     if (!phone) {
       alert("Enter phone number");
       return;
@@ -6587,24 +6809,41 @@ backdrop-filter: blur(6px);
 
     customerName = name || "Customer";
     customerPhone = phone;
+    
+    // Keep your existing email logic
     customerEmail = document.getElementById("email")?.value || "";
 
+    // ✅ SUPABASE AUTH PATH
     checkUser(phone).then(res => {
       if (res && res.exists) {
         localStorage.setItem("userName", res.name);
         localStorage.setItem("userPhone", phone);
+        
+        // ✅ SYNC POINTS
         localStorage.setItem("points", res.points || 0); 
         localStorage.setItem("loggedIn", "true");
+        
         enterApp();
-        setTimeout(() => showPromoAd(), 500);
+        
+        // Show the ad after login success
+        setTimeout(() => {
+            showPromoAd();
+        }, 500);
+
       } else {
+        // NEW USER: saves with 0 points initially
         saveUser(name, phone, customerEmail).then(() => {
           localStorage.setItem("userName", name);
           localStorage.setItem("userPhone", phone);
           localStorage.setItem("points", 0); 
           localStorage.setItem("loggedIn", "true");
+          
           enterApp();
-          setTimeout(() => showPromoAd(), 500);
+          
+          // Show the ad for the new user
+          setTimeout(() => {
+              showPromoAd();
+          }, 500);
         });
       }
     });
@@ -6613,6 +6852,7 @@ backdrop-filter: blur(6px);
   function updateDeliveryFee() {
     const zoneEl = document.getElementById("deliveryZone");
     const zone = zoneEl ? zoneEl.value : "";
+
     const feeLine = document.getElementById("cartDeliveryFee");
     const cartGrand = document.getElementById("cartGrandTotal");
 
@@ -6623,15 +6863,21 @@ backdrop-filter: blur(6px);
     }
 
     const fee = getServiceFee(zone);
+
+    // ✅ REMOVED PLATFORM FEE: Now it's just the cart total + the delivery fee
     const grand = total + fee;
 
+    // ✅ SHOW DELIVERY FEE ABOVE GRAND TOTAL
     if (feeLine) feeLine.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
+
+    // ✅ GRAND TOTAL BELOW IT
     if (cartGrand) cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
   }
 
   function updateCartBubble() {
     const bubble = document.getElementById("cartBubble");
     if (!bubble) return;
+
     const count = Object.values(cart).reduce((a, b) => a + b.q, 0);
     bubble.style.display = count > 0 ? "flex" : "none";
   }
@@ -6639,38 +6885,49 @@ backdrop-filter: blur(6px);
   function openCart() {
     const panel = document.getElementById("cartPanel");
     const bubble = document.getElementById("cartBubble");
+    if (!panel) return;
+
     const isOpen = panel.style.bottom === "0px";
 
     if (isOpen) {
       panel.style.bottom = "-100%";
-      bubble.classList.remove("active");
+      if (bubble) bubble.classList.remove("active");
     } else {
-      panel.style.bottom = "0";             
-      bubble.classList.add("active");
+      panel.style.bottom = "0";             // 🔥 OPEN FIRST
+      if (bubble) bubble.classList.add("active");
 
       requestAnimationFrame(() => {
-        renderCartPanel();                  
+        renderCartPanel();                  // 🔥 RENDER ITEMS
+        
+        // ✅ ADDED: Trigger the map initialization
         setTimeout(() => {
-          if (typeof initCartMap === "function") initCartMap();
+          if (typeof initCartMap === "function") {
+            initCartMap();
+          }
         }, 350); 
       });
     }
   }
 
+  // 🌮 TACO DELIVERY FEE (same zones & prices as grocery)
   function updateTacoDeliveryFee() {
     const zone = document.getElementById("tacoDeliveryZone").value;
     const feeText = document.getElementById("tacoFeeText");
+
     if (!zone) {
-      feeText.textContent = "";
+      if (feeText) feeText.textContent = "";
       return;
     }
+
     const fee = getServiceFee(zone);
-    feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
+    if (feeText) feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
   }
 
   function closeCart() {
-    document.getElementById("cartPanel").style.bottom = "-100%";
-    document.getElementById("cartBubble").classList.remove("active");
+    const cp = document.getElementById("cartPanel");
+    const cb = document.getElementById("cartBubble");
+    if (cp) cp.style.bottom = "-100%";
+    if (cb) cb.classList.remove("active");
   }
 
   function renderCartPanel() {
@@ -6678,14 +6935,17 @@ backdrop-filter: blur(6px);
     const userName = localStorage.getItem("userName");
 
     if (cartTitle && userName) {
-      cartTitle.innerHTML = `Your Cart <span style="color:#ff6a00; font-weight:700;">(${userName})</span>`;
+      cartTitle.innerHTML =
+        `Your Cart <span style="color:#ff6a00; font-weight:700;">(${userName})</span>`;
     }
 
     const itemsDiv = document.getElementById("cartPanelItems");
     if (!itemsDiv) return;
     itemsDiv.innerHTML = "";
 
-    let sum = 0, totalSavings = 0, html = "";
+    let sum = 0;
+    let totalSavings = 0; 
+    let html = "";
 
     for (let name in cart) {
       const item = cart[name];
@@ -6715,6 +6975,8 @@ backdrop-filter: blur(6px);
     }
 
     itemsDiv.innerHTML = html;
+
+    // Track global total for checkout
     window.total = sum;
 
     const savingsDisplay = totalSavings > 0 
@@ -6724,10 +6986,12 @@ backdrop-filter: blur(6px);
     const totalDiv = document.getElementById("cartPanelTotal");
     if (totalDiv) totalDiv.innerHTML = savingsDisplay + "Items Total: $" + sum.toFixed(2) + " BZD";
 
+    // --- MAP FEE INTEGRATION ---
     const feeLine = document.getElementById("cartDeliveryFee");
     const cartGrand = document.getElementById("cartGrandTotal");
 
     if (feeLine && cartGrand) {
+      // Uses the values set by the Map Pin dragging
       const fee = window.lastCartFee || 3;
       const zone = window.lastCartZone || "In-Town";
       const grand = sum + fee;
@@ -6737,25 +7001,39 @@ backdrop-filter: blur(6px);
     }
   }
 
-  function openAdminLogin() { document.getElementById("adminLoginBox").style.display = "flex"; }
-  function closeAdminLogin() { document.getElementById("adminLoginBox").style.display = "none"; }
+  function openAdminLogin() {
+    document.getElementById("adminLoginBox").style.display = "flex";
+  }
+
+  function closeAdminLogin() {
+    document.getElementById("adminLoginBox").style.display = "none";
+  }
 
   function submitAdminLogin() {
     const name = document.getElementById("adminName").value.trim();
     const phone = document.getElementById("adminPhone").value.trim();
-    if (name !== ADMIN_NAME || phone !== ADMIN_PHONE) {
+
+    const isAdmin =
+      name === ADMIN_NAME &&
+      phone === ADMIN_PHONE;
+
+    if (!isAdmin) {
       alert("Invalid admin credentials");
       return;
     }
+
+    // Save admin session
     localStorage.setItem("userName", name);
     localStorage.setItem("userPhone", phone);
     localStorage.setItem("loggedIn", "true");
+
     enterApp();
   }
 
   function goToOrder() {
     closeCart();
-    document.getElementById("orderBox").style.display = "block";
+    const box = document.getElementById("orderBox");
+    if (box) box.style.display = "block";   // ✅ SHOW ORDER BOX
   }
 
   function fillPickupName() {
@@ -6765,67 +7043,91 @@ backdrop-filter: blur(6px);
   }
 
   function getInitials(name) {
-    return name.split(" ").map(w => w[0]).join("").substring(0,2).toUpperCase();
+    return name
+      .split(" ")
+      .map(w => w[0])
+      .join("")
+      .substring(0,2)
+      .toUpperCase();
   }
 
   function openProfile() {
     document.getElementById("profileOverlay").style.display = "flex";
+
     const name = localStorage.getItem("userName") || "Customer";
     const phone = localStorage.getItem("userPhone") || "—";
     const points = localStorage.getItem("points") || "0";
 
-    const profileNameEl = document.getElementById("profileName");
-    const profilePhoneEl = document.getElementById("profilePhone");
-    const profilePointsEl = document.getElementById("profilePoints");
-    const profileInitialsEl = document.getElementById("profileInitials");
+    const pName = document.getElementById("profileName");
+    const pPhone = document.getElementById("profilePhone");
+    const pPoints = document.getElementById("profilePoints");
+    const pInit = document.getElementById("profileInitials");
 
-    if (profileNameEl) profileNameEl.innerText = name;
-    if (profilePhoneEl) profilePhoneEl.innerText = phone;
-    if (profilePointsEl) profilePointsEl.innerText = points;
-    if (profileInitialsEl) profileInitialsEl.innerText = getInitials(name);
+    if (pName) pName.innerText = name;
+    if (pPhone) pPhone.innerText = phone;
+    if (pPoints) pPoints.innerText = points;
+    if (pInit) pInit.innerText = getInitials(name);
   }
 
-  function closeProfile() { document.getElementById("profileOverlay").style.display = "none"; }
+  function closeProfile() {
+    document.getElementById("profileOverlay").style.display = "none";
+  }
 
   function enterApp() {
-    const appScreen = document.getElementById("appScreen");
-    if (appScreen && appScreen.style.display === "block") return;
-    const authScreen = document.getElementById("authScreen");
-    if (authScreen) authScreen.style.display = "none";
-    if (appScreen) appScreen.style.display = "block";
+    const appScr = document.getElementById("appScreen");
+    if (appScr && appScr.style.display === "block") return;
+    const authScr = document.getElementById("authScreen");
+    if (authScr) authScr.style.display = "none";
+    if (appScr) appScr.style.display = "block";
     
-    const profileInitialsEl = document.getElementById("profileInitials");
-    if (profileInitialsEl) profileInitialsEl.innerText = getInitials(localStorage.getItem("userName") || "U");
+    const initials = getInitials(localStorage.getItem("userName") || "U");
+    const pInit = document.getElementById("profileInitials");
+    if (pInit) pInit.innerText = initials;
+
+    // 🔐 Sync phone to window + fetch balance
     window.userPhone = localStorage.getItem("userPhone");
     fetchUserBalance();
 
+    // Ensure the buttons show up side-by-side
     const wrap = document.getElementById("installWrap");
-    if(wrap) { wrap.hidden = false; wrap.style.display = "flex"; }
+    if(wrap) {
+      wrap.hidden = false;
+      wrap.style.display = "flex";
+    }
 
     const welcome = document.getElementById("welcomeScreen");
     if (welcome) welcome.remove();
   }
     
+  /* AUTO LOGIN */
   document.addEventListener("DOMContentLoaded", () => {
-    checkBusinessHoursLock(false);
+    checkBusinessHoursLock(false); // default: treat as normal user
+
+    // 🔁 Restore saved user info
     const savedName = localStorage.getItem("userName");
     const savedPhone = localStorage.getItem("userPhone");
 
-    const userNameInput = document.getElementById("userName");
-    const userPhoneInput = document.getElementById("userPhone");
-    if (savedName && userNameInput) userNameInput.value = savedName;
-    if (savedPhone && userPhoneInput) userPhoneInput.value = savedPhone;
+    const uNameInput = document.getElementById("userName");
+    const uPhoneInput = document.getElementById("userPhone");
+    if (savedName && uNameInput) uNameInput.value = savedName;
+    if (savedPhone && uPhoneInput) uPhoneInput.value = savedPhone;
 
-    const isAdminAuto = savedName === ADMIN_NAME && savedPhone === ADMIN_PHONE;
+    // Auto login ONLY if phone exists
+    const isAdminAuto =
+      savedName === ADMIN_NAME &&
+      savedPhone === ADMIN_PHONE;
+
     if (savedPhone && checkBusinessHoursLock(isAdminAuto)) {
       localStorage.setItem("loggedIn", "true");
       enterApp();
     }
 
+    // Order time toggle
     document.querySelectorAll('input[name="orderTime"]').forEach(radio => {
       radio.addEventListener("change", () => {
         const timeInput = document.getElementById("scheduleTime");
         if (!timeInput) return;
+
         if (radio.value === "later" && radio.checked) {
           timeInput.style.display = "block";
         } else {
@@ -6837,34 +7139,59 @@ backdrop-filter: blur(6px);
   });
 
   const subIcons = {
-    "Drink": "🥤", "Drinks": "🥤", "Food": "🍔", "Meals": "🍔",
-    "Dessert": "🍰", "Desserts": "🍰", "Coffee": "☕", "Tea": "🍵",
-    "Breakfast": "🍳", "Lunch": "🍽️", "Dinner": "🍽️", "Pastries": "🥐",
-    "Ice Cream": "🍦", "Items": "🛒"
+    "Drink": "🥤",
+    "Drinks": "🥤",
+    "Food": "🍔",
+    "Meals": "🍔",
+    "Dessert": "🍰",
+    "Desserts": "🍰",
+    "Coffee": "☕",
+    "Tea": "🍵",
+    "Breakfast": "🍳",
+    "Lunch": "🍽️",
+    "Dinner": "🍽️",
+    "Pastries": "🥐",
+    "Ice Cream": "🍦",
+    "Items": "🛒"
   };
 
   function render() {
     const box = document.getElementById("products");
     if (!box) return;
+
     box.innerHTML = "";
 
     const filteredItems = allProducts.filter(p => p.category === cat);
+
     if (filteredItems.length === 0) {
-      box.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#555;"><div style="font-size:50px; margin-bottom:15px;">🔒</div><h2 style="font-weight:900; color:#222;">Store Currently Closed</h2></div>`;
+      box.innerHTML = `
+        <div style="text-align:center; padding:50px 20px; color:#555;">
+          <div style="font-size:50px; margin-bottom:15px;">🔒</div>
+          <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
+        </div>`;
       return;
     }
 
+    /* GROUP BY SUBCATEGORY */
     const grouped = {};
+
     filteredItems.forEach(p => {
-      if(!p.subcategory) return;
-      if (!grouped[p.subcategory]) grouped[p.subcategory] = [];
-      grouped[p.subcategory].push(p);
+      if(!p.subcategory) return;   // skip items without subcategory
+      const sub = p.subcategory;
+      if (!grouped[sub]) grouped[sub] = [];
+      grouped[sub].push(p);
     });
 
+    /* RENDER GROUPS */
     Object.keys(grouped).forEach(sub => {
-      box.innerHTML += `<div class="subcategory-title">${sub}</div>`;
+      box.innerHTML += `
+        <div class="subcategory-title">${sub}</div>
+      `;
+
       grouped[sub].forEach(p => {
-        let badgeHTML = "", wasPriceHTML = "";
+        let badgeHTML = "";
+        let wasPriceHTML = "";
+
         if (p.was) {
           const isNumeric = !isNaN(parseFloat(p.was)) && isFinite(p.was);
           if (isNumeric && Number(p.was) > p.price) {
@@ -6874,17 +7201,24 @@ backdrop-filter: blur(6px);
           }
         }
 
-        const displayPrice = (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
+        const displayPrice =
+          (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
         const safeName = p.name.replace(/'/g, "\\'");
+
         box.innerHTML += `
           <div class="product">
             ${badgeHTML}
             <img src="${p.image}" onclick="openImage(this.src)">
             <div class="product-info">
               <strong>${p.name}</strong>
-              <div class="price">${wasPriceHTML} $${displayPrice} BZD</div>
+              <div class="price">
+                ${wasPriceHTML}
+                $${displayPrice} BZD
+              </div>
             </div>
-            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">Add</button>
+            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
+              Add
+            </button>
           </div>
         `;
       });
@@ -6897,7 +7231,9 @@ backdrop-filter: blur(6px);
   function handleSearchInput(value) {
     document.body.classList.add("searching");
     lastSearchValue = value;
+
     if (searchIdleTimer) clearTimeout(searchIdleTimer);
+
     searchIdleTimer = setTimeout(() => {
       document.body.classList.remove("searching");
       runSearchSafely();
@@ -6906,9 +7242,15 @@ backdrop-filter: blur(6px);
 
   function runSearchSafely() {
     const value = lastSearchValue.trim();
+
+    // 🧠 Skip if same value
     if (value === runSearchSafely.lastValue) return;
     runSearchSafely.lastValue = value;
-    requestAnimationFrame(() => searchProducts(value));
+
+    // 🚀 Run search in next paint cycle (no input lag)
+    requestAnimationFrame(() => {
+      searchProducts(value);
+    });
   }
 
   function searchProducts(query) {
@@ -6919,9 +7261,18 @@ backdrop-filter: blur(6px);
     box.innerHTML = "";
 
     const q = query.toLowerCase();
-    if (!q) { render(); return; }
 
-    const matches = allProducts.filter(p => p.name.toLowerCase().includes(q));
+    // If search is empty, go back to category view
+    if (!q) {
+      render();
+      return;
+    }
+
+    const matches = allProducts.filter(p =>
+      p.name.toLowerCase().includes(q)
+    );
+
+    // Auto-select category if a match exists
     if (matches.length > 0) {
       cat = matches[0].category;
       document.querySelectorAll(".cat-btn").forEach(btn => {
@@ -6942,7 +7293,10 @@ backdrop-filter: blur(6px);
           ${badgeHTML} <img src="${p.image}">
           <div class="product-info">
             <strong>${p.name}</strong>
-            <div class="price">${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''} $${p.price.toFixed(2)} BZD</div>
+            <div class="price">
+              ${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''}
+              $${p.price.toFixed(2)} BZD
+            </div>
           </div>
           <button onclick="add('${safeName}', ${p.price}, this, ${p.was || 'null'})">Add</button>
         </div>`;
@@ -6951,38 +7305,58 @@ backdrop-filter: blur(6px);
 
   function add(n, p, btn, w) {
     buzz(30); 
+
     if (btn) showAddCheck(btn);
+
     if (!cart[n]) {
-      cart[n] = { q: 0, p: p, w: w || null, cat: cat };
+      cart[n] = { 
+        q: 0, 
+        p: p, 
+        w: w || null, 
+        cat: cat // <--- TAGS ITEM WITH ACTIVE STORE
+      };
     }
+    
     cart[n].q++;
     total += p;
+
     update();
     updateCartBubble();
     renderCartPanel();
   }
 
   function remove(n){
-    buzz(20); 
+    buzz(20); // softer vibration
+
     if(!cart[n]) return;
+
     cart[n].q--;
     total -= cart[n].p;
-    if(cart[n].q <= 0) delete cart[n];
+
+    if(cart[n].q <= 0){
+      delete cart[n];
+    }
+
     update();
     updateCartBubble();
     renderCartPanel();
   }
 
   function update() {
-    renderCartPanel();
+    // Cart UI now handled by floating cart only
   }
 
   function backToCart(){
     document.getElementById("orderBox").style.display = "none";
-    if (localStorage.getItem("tacoOrder")) {
+
+    const hasTacos = localStorage.getItem("tacoOrder");
+
+    if (hasTacos) {
+      // go back to taco order screen
       document.getElementById("tacoOrderBox").style.display = "block";
       document.getElementById("products").style.display = "none";
     } else {
+      // normal grocery flow
       openCart();
     }
   }
@@ -6992,22 +7366,47 @@ backdrop-filter: blur(6px);
     return Number(el ? el.textContent : 0);
   }
 
+  // 📍 Store Coordinates Lookup Map
   const storeLocations = {
-    "SNACK": "18.084406,-88.565955", "BREAKFAST": "18.084406,-88.565955", "LUNCH": "18.084406,-88.565955",
-    "DRINK": "18.084406,-88.565955", "HOUSEHOLD": "18.084406,-88.565955", "HYGIENE": "18.084406,-88.565955",
-    "VEGETABLES": "18.080916,-88.562782", "TREATS": "18.084406,-88.565955", "ELECTRONICS": "18.079305,-88.562638",
-    "GENERAL": "18.084406,-88.565955", "SARITAS": "18.084406,-88.565955", "URBAN": "18.068463,-88.570723",
-    "AROMA": "18.081116,-88.566835", "BREW": "18.095398,-88.563983", "MARIA": "18.084044,-88.561874",
-    "LEO": "18.074679,-88.568029", "SHAKEN": "18.081813,-88.564966", "DAILY MENU": "18.084406,-88.565955",
-    "DUMPLING": "18.066928,-88.570507", "FONDA": "18.084406,-88.565955", "SALSAS": "18.088220,-88.567619",
-    "BURGA": "18.084406,-88.565955", "TFC": "18.082771,-88.562183", "GUERRERO": "18.092639,-88.561030",
-    "COSMETICS": "18.084406,-88.565955", "FAYE": "18.084406,-88.565955", "SISTER": "18.084406,-88.565955",
-    "ADDCART": "18.079520,-88.564390", "NEEYA": "18.086068,-88.568782", "FLOWER": "18.084406,-88.565955"
+    "SNACK": "18.084406,-88.565955",
+    "BREAKFAST": "18.084406,-88.565955",
+    "LUNCH": "18.084406,-88.565955",
+    "DRINK": "18.084406,-88.565955",
+    "HOUSEHOLD": "18.084406,-88.565955",
+    "HYGIENE": "18.084406,-88.565955",
+    "VEGETABLES": "18.080916,-88.562782",
+    "TREATS": "18.084406,-88.565955",
+    "ELECTRONICS": "18.079305,-88.562638",
+    "GENERAL": "18.084406,-88.565955",
+    "SARITAS": "18.084406,-88.565955",
+    "URBAN": "18.068463,-88.570723",
+    "AROMA": "18.081116,-88.566835",
+    "BREW": "18.095398,-88.563983",
+    "MARIA": "18.084044,-88.561874",
+    "LEO": "18.074679,-88.568029",
+    "SHAKEN": "18.081813,-88.564966",
+    "DAILY MENU": "18.084406,-88.565955",
+    "DUMPLING": "18.066928,-88.570507",
+    "FONDA": "18.084406,-88.565955",
+    "SALSAS": "18.088220,-88.567619",
+    "BURGA": "18.084406,-88.565955",
+    "TFC": "18.082771,-88.562183",
+    "GUERRERO": "18.092639,-88.561030",
+    "COSMETICS": "18.084406,-88.565955",
+    "FAYE": "18.084406,-88.565955",
+    "SISTER": "18.084406,-88.565955",
+    "ADDCART": "18.079520,-88.564390",
+    "NEEYA": "18.086068,-88.568782",
+    "FLOWER": "18.084406,-88.565955"
   };
 
   function order() {
     let forcedTotal = 0;
-    for (let name in cart) forcedTotal += cart[name].q * cart[name].p;
+
+    for (let name in cart) {
+      forcedTotal += cart[name].q * cart[name].p;
+    }
+
     total = forcedTotal;
 
     const userName = localStorage.getItem("userName") || "";
@@ -7017,22 +7416,39 @@ backdrop-filter: blur(6px);
     const hasTacos = !!tacoOrder;
 
     const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
-    const walletBalance = getWalletBalance();
+    const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
     const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
+
     const orderNum = Math.floor(100 + Math.random() * 900);
 
-    if (forcedTotal <= 0 && !hasTacos) { alert("Your cart is empty"); return; }
-    if (!window.lastCartCoords && total > 0) { alert("Please pin your location on the map!"); return; }
-    if (!window.lastCartZone) { alert("Please select your delivery area"); return; }
+    if (forcedTotal <= 0 && !hasTacos) {
+      alert("Your cart is empty");
+      return;
+    }
+
+    if (!window.lastCartCoords && total > 0) {
+      alert("Please pin your location on the map!");
+      return;
+    }
+
+    if (!window.lastCartZone) {
+      alert("Please select your delivery area");
+      return;
+    }
 
     const deliverySelect = document.getElementById("deliveryZoneSelect");
     const selectedValue = deliverySelect?.value;
-    if (!selectedValue) { alert("Please select your delivery area"); return; }
+
+    if (!selectedValue) {
+      alert("Please select your delivery area");
+      return;
+    }
 
     const [deliveryZone, fee] = selectedValue.split("|");
     const deliveryFee = parseFloat(fee);
     const itemsTotal = total;
     const grandTotal = itemsTotal + deliveryFee;
+
     const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
 
     if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
@@ -7041,10 +7457,14 @@ backdrop-filter: blur(6px);
     }
 
     let msg = `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
-    const groupedCart = {}, activeBusinesses = new Set();
+
+    const groupedCart = {};
+    const activeBusinesses = new Set();
 
     if (itemsTotal > 0) {
-      msg += `ITEMS%0A----------------------------%0A`;
+      msg += `ITEMS%0A`;
+      msg += `----------------------------%0A`;
+
       for (let i in cart) {
         const biz = (cart[i].cat || "GENERAL").toUpperCase();
         activeBusinesses.add(biz);
@@ -7054,70 +7474,119 @@ backdrop-filter: blur(6px);
 
       for (let bizName in groupedCart) {
         msg += `${bizName}%0A`;
+
         groupedCart[bizName].forEach(item => {
-          msg += `- ${item.name}%0A    Qty: ${item.details.q} x $${item.details.p.toFixed(2)} BZD%0A`;
+          const price = item.details.p.toFixed(2);
+          msg += `- ${item.name}%0A`;
+          msg += `    Qty: ${item.details.q} x $${price} BZD%0A`;
         });
+
         msg += `----------------------------%0A`;
       }
+
       msg += `%0A`;
     }
 
     if (hasTacos) {
-      msg += `TACO ORDER%0APLACE: ${tacoPlace}%0A----------------------------%0A${tacoOrder}%0A----------------------------%0ARUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A----------------------------%0A%0A`;
+      msg += `TACO ORDER%0A`;
+      msg += `PLACE: ${tacoPlace}%0A`;
+      msg += `----------------------------%0A`;
+      msg += `${tacoOrder}%0A`;
+      msg += `----------------------------%0A`;
+
+      msg += `RUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A`;
+      msg += `----------------------------%0A%0A`;
     }
 
     if (itemsTotal > 0) {
-      msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0AITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
-      if (tipAmount > 0) msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
-      msg += `----------------------------%0AGRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0APAYMENT METHOD: ${paymentMethod}%0A`;
-      if (paymentMethod.includes("Online")) {
-        msg += `Bank: Belize Bank%0AAccount Name: Danilo Cu%0AAccount Number: 275378010160000%0A`;
+      msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
+      msg += `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
+      
+      if (tipAmount > 0) {
+        msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
       }
+
+      msg += `----------------------------%0A`;
+      msg += `GRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
+      msg += `PAYMENT METHOD: ${paymentMethod}%0A`;
+
+      if (paymentMethod.includes("Online")) {
+        msg += `Bank: Belize Bank%0A`;
+        msg += `Account Name: Danilo Cu%0A`;
+        msg += `Account Number: 275378010160000%0A`;
+      }
+
       msg += `%0A`;
     }
 
+    // 📍 DYNAMIC MULTI-STORE MAP LINKS WITH "RUNNER ROUTE" LABEL & BLACK LINE SEPARATOR
     if (itemsTotal > 0) {
-      msg += `----------------------------%0ARUNNER ROUTE:%0A`;
+      msg += `----------------------------%0A`;
+      msg += `RUNNER ROUTE:%0A`;
+      
       activeBusinesses.forEach(bizName => {
         const storeCoords = storeLocations[bizName] || storeLocations["GENERAL"];
-        msg += ` ${bizName}:%0Ahttps://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}%0A%0A`;
+        const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
+        
+        msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
       });
     }
 
-    msg += `CUSTOMER: ${userName}%0APHONE: ${userPhone}`;
-    window.open(`https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n')), "_blank");
+    msg += `CUSTOMER: ${userName}%0A`;
+    msg += `PHONE: ${userPhone}`;
+
+    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
+    window.open(waUrl, "_blank");
   }
 
   function doneOrder() {
+    // 1. Clear Taco Data from Storage
     localStorage.removeItem("tacoPlace");
     localStorage.removeItem("tacoOrder");
     localStorage.removeItem("tacoZone");
 
-    const tp = document.getElementById("tacoPlace"); if (tp) tp.value = "";
-    const td = document.getElementById("tacoDetails"); if (td) td.value = "";
-    const tz = document.getElementById("tacoDeliveryZone"); if (tz) tz.value = "";
-    const tf = document.getElementById("tacoFeeText"); if (tf) tf.textContent = "";
+    // 2. Reset Taco UI Fields
+    const tp = document.getElementById("tacoPlace");
+    if (tp) tp.value = "";
+    const td = document.getElementById("tacoDetails");
+    if (td) td.value = "";
+    const tz = document.getElementById("tacoDeliveryZone");
+    if (tz) tz.value = "";
+    const tf = document.getElementById("tacoFeeText");
+    if (tf) tf.textContent = "";
 
+    // 3. Reset Cart Data
     cart = {};
     total = 0;
+    
+    // 4. IMPORTANT: Clear the last pinned location so next order is fresh
     window.lastCartCoords = null;
     window.lastCartFee = 3.00;
     window.lastCartZone = "In-Town";
 
-    const pm = document.getElementById("paymentMethod"); if (pm) pm.selectedIndex = 0;
+    // 5. Reset Payment Dropdown
+    const pm = document.getElementById("paymentMethod");
+    if (pm) pm.selectedIndex = 0;
 
+    // 6. Update UI
     update(); 
-    if (typeof updateCartBubble === "function") updateCartBubble();
+    if (typeof updateCartBubble === "function") {
+      updateCartBubble();
+    }
 
+    // 7. Close the Order Box
     const ob = document.getElementById("orderBox");
     const cp = document.getElementById("cartPanel");
     if (ob) ob.style.display = "none";
-    if (cp) cp.style.bottom = "-100%"; 
+    if (cp) cp.style.bottom = "-100%"; // Also close the cart panel
 
+    // 8. Show Thank You Message
     const toast = document.getElementById("thankYouToast");
     if (toast) {
       toast.classList.add("show");
-      setTimeout(() => toast.classList.remove("show"), 2500);
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2500);
     } else {
       alert("Order Processed Successfully");
     }
@@ -7127,7 +7596,7 @@ backdrop-filter: blur(6px);
   getProducts().then(d => {
     allProducts = d || [];
     render();
-    updateCategoryStatusDots(); 
+    updateCategoryStatusDots(); // ✨ Update the dots as soon as data arrives
   });
 
   document.addEventListener("click", function(e){
@@ -7144,51 +7613,71 @@ backdrop-filter: blur(6px);
 
   window.addEventListener("beforeinstallprompt",(e)=>{
     e.preventDefault();
-    deferredPrompt = e;
+    deferredPrompt=e;
     if (installWrap) installWrap.hidden = false;
   });
 
   if (installBtn) {
     installBtn.addEventListener("click", async () => {
+      // Android native install available
       if (deferredPrompt) {
         deferredPrompt.prompt();
         await deferredPrompt.userChoice;
         deferredPrompt = null;
         if (installWrap) installWrap.hidden = true;
-      } else {
+      } 
+      // iOS or fallback
+      else {
         if (typeof showInstallInstructions === "function") showInstallInstructions();
       }
     });
   }
 
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  if (isIOS && installWrap) installWrap.hidden = false;
-  if (window.matchMedia('(display-mode: standalone)').matches && installWrap) installWrap.hidden = true;
 
+  // Show install button manually on iOS
+  if (isIOS && installWrap) {
+    installWrap.hidden = false;
+  }
+
+  if (window.matchMedia('(display-mode: standalone)').matches && installWrap) {
+    installWrap.hidden = true;
+  }
+
+  // Remove welcome screen after animation finishes
   setTimeout(() => {
     const welcome = document.getElementById("welcomeScreen");
     if (welcome) welcome.remove();
-  }, 2600);
+  }, 2600); // 2s display + fade
 
-  function openSuggest() { document.getElementById("suggestOverlay").style.display = "flex"; }
+  function openSuggest() {
+    const sOverlay = document.getElementById("suggestOverlay");
+    if (sOverlay) sOverlay.style.display = "flex";
+  }
+
   function closeSuggest() {
-    document.getElementById("suggestOverlay").style.display = "none";
-    document.getElementById("suggestInput").value = "";
+    const sOverlay = document.getElementById("suggestOverlay");
+    const sInput = document.getElementById("suggestInput");
+    if (sOverlay) sOverlay.style.display = "none";
+    if (sInput) sInput.value = "";
   }
 
   // ✅ SUPABASE SUGGESTION SUBMISSION
   function submitSuggestion() {
-    const item = document.getElementById("suggestInput").value.trim();
+    const itemInput = document.getElementById("suggestInput");
+    const item = itemInput ? itemInput.value.trim() : "";
     if (!item) return alert("Please enter an item name");
 
     saveSuggestion(item);
+
     alert("✅ Your suggestion will be added soon!");
     closeSuggest();
   }
 
-  const suggestOverlay = document.getElementById("suggestOverlay");
-  if (suggestOverlay) {
-    suggestOverlay.addEventListener("click", e => {
+  // Close suggest modal when clicking outside the box
+  const suggestOverlayEl = document.getElementById("suggestOverlay");
+  if (suggestOverlayEl) {
+    suggestOverlayEl.addEventListener("click", e => {
       if (e.target.id === "suggestOverlay") closeSuggest();
     });
   }
@@ -7197,10 +7686,14 @@ backdrop-filter: blur(6px);
     const check = document.createElement("div");
     check.className = "add-check";
     check.textContent = "✓";
+
     const rect = btn.getBoundingClientRect();
+
     check.style.left = rect.left + rect.width / 2 - 17 + "px";
     check.style.top = rect.top + window.scrollY - 10 + "px";
+
     document.body.appendChild(check);
+
     setTimeout(() => check.remove(), 600);
   }
 
@@ -7209,12 +7702,13 @@ backdrop-filter: blur(6px);
     if (menu) menu.style.display = menu.style.display === "block" ? "none" : "block";
   }
 
+  // LOGOUT: Clears data and reloads the app to the login screen
   function handleLogout() {
     if (confirm("Are you sure you want to logout?")) {
       localStorage.removeItem("userName");
       localStorage.removeItem("userPhone");
       localStorage.removeItem("loggedIn");
-      location.reload(); 
+      location.reload(); // Re-runs the login check
     }
   }
 
@@ -7222,20 +7716,34 @@ backdrop-filter: blur(6px);
     const dict = translations[lang];
     if (!dict) return;
 
+    // Update Slogan
     const slogan = document.querySelector(".header p");
     if (slogan) slogan.innerText = dict.slogan;
+
+    // Update Suggest Button
     const suggestBtn = document.querySelector(".suggest-btn");
     if (suggestBtn) suggestBtn.innerText = dict.suggest;
+
+    // Update Search Placeholder
     const searchBar = document.querySelector(".search-bar");
     if (searchBar) searchBar.placeholder = dict.searchPlaceholder;
+
+    // Update Cart Header
     const cartTitle = document.querySelector("#cartTitle");
     if (cartTitle) cartTitle.innerText = dict.cartTitle;
+
+    // Update the 'Next' button (make sure yours has class="next-btn")
     const nextBtn = document.querySelector(".next-btn");
     if (nextBtn) nextBtn.innerText = dict.orderBtn;
+
+    // Update WhatsApp Button
     const waBtn = document.querySelector(".whatsapp");
     if (waBtn) waBtn.innerText = dict.checkoutBtn;
 
+    // Save selection
     localStorage.setItem("selectedLang", lang);
+    
+    // Close menu
     toggleSettings();
   }
 
@@ -7253,27 +7761,52 @@ backdrop-filter: blur(6px);
   }
 
   function openImage(src) {
-    buzz(25);
-    document.getElementById("overlayImg").src = src;
-    document.getElementById("imageOverlay").style.display = "flex";
+    buzz(25); // light tap feedback
+
+    const overlay = document.getElementById("imageOverlay");
+    const img = document.getElementById("overlayImg");
+
+    if (img) img.src = src;
+    if (overlay) overlay.style.display = "flex";
   }
 
-  function closeImage() { document.getElementById("imageOverlay").style.display = "none"; }
+  function closeImage() {
+    const overlay = document.getElementById("imageOverlay");
+    if (overlay) overlay.style.display = "none";
+  }
 
-  function showPromoAd() { document.getElementById('promoOverlay').style.display = 'flex'; }
-  function closeAd() { document.getElementById('promoOverlay').style.display = 'none'; }
+  function showPromoAd() {
+    const overlay = document.getElementById('promoOverlay');
+    if (overlay) {
+        overlay.style.display = 'flex';
+    }
+  }
+
+  function closeAd() {
+    const overlay = document.getElementById('promoOverlay');
+    if (overlay) {
+        overlay.style.display = 'none';
+    }
+  }
 
   function showNextAd(button) {
+    // 1. Find the promo-card container, no matter where the button is inside it
     const currentCard = button.closest('.promo-card');
     if (!currentCard) return;
+    
+    // 2. Find the next card in the HTML structure
     const nextCard = currentCard.nextElementSibling;
     const overlay = document.getElementById('promoOverlay');
 
+    // 3. Hide the current card
     currentCard.style.display = 'none';
+
+    // 4. If there is a next card with the right class, show it. 
+    // Otherwise, close the whole overlay.
     if (nextCard && nextCard.classList.contains('promo-card')) {
-      nextCard.style.display = 'block';
+        nextCard.style.display = 'block';
     } else if (overlay) {
-      overlay.style.display = 'none';
+        overlay.style.display = 'none';
     }
   }
 
@@ -7282,22 +7815,36 @@ backdrop-filter: blur(6px);
     buzz(45);
     const box = document.getElementById("products");
     if (!box) return;
+    
+    // 1. Show loading state
     box.innerHTML = `<div id="loadingDeals" style="text-align:center; padding:40px;"><p>Loading exclusive deals... 🔥</p></div>`;
     
-    ["pickupOrderBox", "tacoOrderBox", "requestRideBox", "orderBox"].forEach(id => {
+    // 2. Hide other modules
+    const sections = ["pickupOrderBox", "tacoOrderBox", "requestRideBox", "orderBox"];
+    sections.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
     });
     box.style.display = "block";
+
+    // 3. AUTO-SCROLL to the loading message so they know it's happening
     box.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
+    // 4. Call Supabase Promos
     getPromos().then(promoItems => {
       if (!promoItems || promoItems.length === 0) {
-        box.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#888;"><h3>No Promos Active</h3><p>Check back later for today's special deals!</p><button onclick="render()" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; background:#eee;">Back to Shop</button></div>`;
+        box.innerHTML = `
+          <div style="text-align:center; padding:50px 20px; color:#888;">
+            <h3>No Promos Active</h3>
+            <p>Check back later for today's special deals!</p>
+            <button onclick="render()" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; background:#eee;">Back to Shop</button>
+          </div>`;
         return;
       }
 
+      // 5. Build the HTML
       let html = `<h2 id="dealsHeader" style="text-align:center; color:#ff5a1f; margin:15px 0;">🔥 LIVE DEALS</h2>`;
+
       promoItems.forEach(p => {
         let badgeHTML = "";
         if (p.was && !isNaN(p.was) && p.was > p.price) {
@@ -7312,31 +7859,48 @@ backdrop-filter: blur(6px);
             <img src="${p.image}" onclick="openImage(this.src)">
             <div class="product-info">
               <strong>${p.name}</strong>
-              <div class="price">${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''} $${p.price.toFixed(2)} BZD</div>
+              <div class="price">
+                ${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''}
+                $${p.price.toFixed(2)} BZD
+              </div>
             </div>
             <button onclick="add('${safeName}', ${p.price}, this, ${p.was || 'null'})">Add</button>
           </div>`;
       });
 
       box.innerHTML = html;
-      setTimeout(() => document.getElementById("dealsHeader").scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-    });
+
+      // 6. FINAL SCROLL: Ensure the "LIVE DEALS" header is at the very top of the screen
+      setTimeout(() => {
+          const dHeader = document.getElementById("dealsHeader");
+          if (dHeader) dHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }); 
   }
 
   function updateCategoryStatusDots() {
-    document.querySelectorAll(".cat-btn").forEach(btn => {
+    const buttons = document.querySelectorAll(".cat-btn");
+
+    buttons.forEach(btn => {
+      // 1. Identify category
       const onclickAttr = btn.getAttribute("onclick");
       if (!onclickAttr) return;
       const match = onclickAttr.match(/'([^']+)'/);
       if (!match) return;
       const categoryName = match[1];
 
+      // 2. Check if category has active items
       const isOpen = allProducts.some(p => p.category === categoryName);
+
+      // 3. Remove existing dot if present
       const existingDot = btn.querySelector(".status-dot");
       if (existingDot) existingDot.remove();
 
+      // 4. Create the dot
       const dot = document.createElement("span");
       dot.className = isOpen ? "status-dot dot-open" : "status-dot dot-closed";
+      
+      // 5. Append (Absolute positioning keeps it from messing with styles)
       btn.appendChild(dot);
     });
   }
@@ -7345,51 +7909,89 @@ backdrop-filter: blur(6px);
     var type = document.getElementById("requestType").value;
     var notice = document.getElementById("expressNotice");
     if (!notice) return;
-    notice.style.display = (type === "Express") ? "block" : "none";
+    
+    if (type === "Express") {
+      notice.style.display = "block";
+    } else {
+      notice.style.display = "none";
+    }
   }
 
   function scrollToProducts() {
     const productSection = document.getElementById("products");
+
     if (productSection) {
-      const yOffset = -20; 
+      const yOffset = -20; // adjust if you have sticky headers
       const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
+
+      window.scrollTo({
+        top: y,
+        behavior: "smooth"
+      });
     }
   }
 
   function bannerCategory(category){
     const btn = document.querySelector(`.cat-btn[data-cat="${category}"]`);
-    if(btn) btn.click(); else setCategory(category);
+
+    if(btn){
+      btn.click();   // triggers the real category button
+    } else {
+      setCategory(category);
+    }
   }
 
   // ✅ SUPABASE STORE DATA FETCH
   function openStore(storeName, logoUrl) {
     localStorage.removeItem("tacoPlace");
     localStorage.removeItem("tacoOrder");
+
     cat = storeName; 
 
-    document.getElementById('main-view').style.display = 'none';
-    document.getElementById('store-detail-view').style.display = 'block';
-    document.getElementById('detail-name').innerText = storeName;
-    document.getElementById('detail-logo').src = logoUrl;
+    const mainView = document.getElementById('main-view');
+    const storeDetailView = document.getElementById('store-detail-view');
+    const detailName = document.getElementById('detail-name');
+    const detailLogo = document.getElementById('detail-logo');
+
+    if (mainView) mainView.style.display = 'none';
+    if (storeDetailView) storeDetailView.style.display = 'block';
+    if (detailName) detailName.innerText = storeName;
+    if (detailLogo) detailLogo.src = logoUrl;
     
     const container = document.getElementById('items-container');
+    if (!container) return;
     container.innerHTML = "<div style='text-align:center; padding:20px;'>Loading " + storeName + "...</div>";
 
     getStoreData(storeName).then(items => {
       container.innerHTML = ""; 
+
       items.forEach(function(item) {
         const safeName = item.name.replace(/'/g, "\\'");
-        let badgeHTML = item.comment ? `<div style="position:absolute; top:8px; left:8px; background:#ff6a00; color:white; padding:4px 8px; font-size:10px; font-weight:bold; border-radius:4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index:1;">${item.comment}</div>` : "";
+        
+        // 🎀 Logic for the Badge (only shows if comment exists)
+        let badgeHTML = "";
+        if (item.comment && item.comment.trim() !== "") {
+           badgeHTML = `<div style="position:absolute; top:8px; left:8px; background:#ff6a00; color:white; padding:4px 8px; font-size:10px; font-weight:bold; border-radius:4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index:1;">
+                          ${item.comment}
+                        </div>`;
+        }
 
         container.innerHTML += `
           <div class="item-card" style="position:relative;">
             ${badgeHTML}
-            <img src="${item.image || 'https://via.placeholder.com/150'}" style="width:100%; border-radius:10px; cursor:pointer;" onclick="openImage(this.src)">
+            <img 
+              src="${item.image || 'https://via.placeholder.com/150'}"
+              style="width:100%; border-radius:10px; cursor:pointer;"
+              onclick="openImage(this.src)"
+            >
             <div class="item-info">
               <div style="font-weight:bold; height:40px; overflow:hidden; margin-top:5px;">${item.name}</div>
               <div style="color:#ff6a00; font-weight:bold; margin:5px 0;">$${Number(item.price).toFixed(2)}</div>
-              <button class="store-add-btn" onclick="add('${safeName}', ${item.price}, this)">Add to Cart</button>
+              
+              <button class="store-add-btn"
+                onclick="add('${safeName}', ${item.price}, this)">
+                Add to Cart
+              </button>
             </div>
           </div>`;
       });
@@ -7397,9 +7999,18 @@ backdrop-filter: blur(6px);
   }
 
   function closeStore() {
-    document.getElementById('main-view').style.display = 'block';
-    document.getElementById('store-detail-view').style.display = 'none';
+    // 1. Show the main category/marketplace view
+    const mainView = document.getElementById('main-view');
+    const storeDetailView = document.getElementById('store-detail-view');
+    if (mainView) mainView.style.display = 'block';
+    
+    // 2. Hide the specific store detail view
+    if (storeDetailView) storeDetailView.style.display = 'none';
+    
+    // 3. Reset 'cat' to a default so grocery adds don't get tagged as a store
     cat = "Grocery"; 
+    
+    // 4. Scroll to top so they start at the beginning of the list
     window.scrollTo(0, 0);
   }
 
@@ -7412,390 +8023,48 @@ backdrop-filter: blur(6px);
     subBar.innerHTML = "";
 
     getProducts().then(data => {
-      const storeItems = (data || []).filter(p => p.category === store);
+      /* FILTER ONLY THIS STORE */
+      const storeItems = (data || []).filter(function(p){
+        return p.category === store;
+      });
+
       if(storeItems.length === 0){
         productsBox.innerHTML = "<p>No items yet</p>";
         return;
       }
 
-      const subs = [...new Set(storeItems.map(p => p.subcategory))];
-      subs.forEach((sub, i) => {
+      /* GET UNIQUE SUBCATEGORIES */
+      const subs = [...new Set(storeItems.map(function(p){
+        return p.subcategory;
+      }))];
+
+      subs.forEach(function(sub,i){
         const btn = document.createElement("div");
         btn.className = "sub-btn";
         btn.innerText = sub;
+
         if(i === 0) btn.classList.add("active");
-        btn.onclick = () => renderSubcategory(storeItems, sub, btn);
+
+        btn.onclick = function(){
+          renderSubcategory(storeItems, sub, btn);
+        };
+
         subBar.appendChild(btn);
       });
 
       subBar.style.display = "flex";
+
+      /* SHOW FIRST SUBCATEGORY */
       if (subs.length > 0) {
         renderSubcategory(storeItems, subs[0]);
       }
+    }).catch(function(err){
+      console.error(err);
+      productsBox.innerHTML = "Error loading menu";
     });
   }
 
-  const track = document.getElementById("featureTrack");
-  if (track) {
-    const cards = Array.from(track.children);
-    let index = 0;
-    const visibleCount = 4;
-
-    function rotateFeatures() {
-      track.classList.add("fade-out");
-      setTimeout(() => {
-        track.innerHTML = "";
-        for (let i = 0; i < visibleCount; i++) {
-          track.appendChild(cards[(index + i) % cards.length].cloneNode(true));
-        }
-        index = (index + visibleCount) % cards.length;
-        track.classList.remove("fade-out");
-        track.classList.add("fade-in");
-      }, 500);
-    }
-    setInterval(rotateFeatures, 3000);
-  }
-
-  const track2 = document.getElementById("featureTrack2");
-  if (track2) {
-    const cards2 = Array.from(track2.children);
-    let index2 = 0;
-    const visibleCount2 = 3;
-
-    function rotateFeatures2() {
-      track2.classList.add("fade-out");
-      setTimeout(() => {
-        track2.innerHTML = "";
-        for (let i = 0; i < visibleCount2; i++) {
-          track2.appendChild(cards2[(index2 + i) % cards2.length].cloneNode(true));
-        }
-        index2 = (index2 + visibleCount2) % cards2.length;
-        track2.classList.remove("fade-out");
-        track2.classList.add("fade-in");
-      }, 500);
-    }
-    rotateFeatures2();
-    setInterval(rotateFeatures2, 3000);
-  }
-
-  function setDeliveryZone(val) {
-    const [zone, fee] = val.split("|");
-    window.lastCartZone = zone;
-    window.lastCartFee = parseFloat(fee);
-    refreshCartTotals();
-  }
-
-  document.querySelectorAll(".toggle-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-    });
-  });
-
-  window.addEventListener("DOMContentLoaded", () => {
-    let orderType = "Delivery";
-    document.querySelectorAll(".toggle-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        orderType = btn.textContent.trim();
-
-        if (orderType === "Pickup") {
-          const pickupBtn = document.querySelector('.cat-btn[onclick*="openPickupOrder"]');
-          if (pickupBtn) {
-            openPickupOrder(pickupBtn);
-            setTimeout(() => {
-              const form = document.getElementById("pickupOrderBox");
-              if (form) {
-                const yOffset = -90;
-                const y = form.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                window.scrollTo({ top: y, behavior: "smooth" });
-              }
-            }, 400);
-          }
-        }
-      });
-    });
-  });
-
-  document.querySelectorAll(".media-card video").forEach(video => {
-    video.addEventListener("mouseenter", () => video.play());
-    video.addEventListener("mouseleave", () => video.pause());
-  });
-
-  function toggleMenu() {
-    const sidePanel = document.getElementById("sidePanel");
-    const menuOverlay = document.getElementById("menuOverlay");
-    if (sidePanel) sidePanel.classList.toggle("active");
-    if (menuOverlay) menuOverlay.classList.toggle("active");
-  }
-
-  function saveProfile() {
-    const name = document.getElementById("profileName").value;
-    const phone = document.getElementById("profilePhone").value;
-    localStorage.setItem("userName", name);
-    localStorage.setItem("userPhone", phone);
-    updateAvatar(name);
-  }
-
-  function updateAvatar(name) {
-    const initial = name ? name.charAt(0).toUpperCase() : "?";
-    const pi = document.getElementById("profileInitial");
-    if (pi) pi.innerText = initial;
-  }
-
-  function quickAdd(name, price, wasPrice = null) {
-    if (!window.cart) window.cart = {};
-    if (cart[name]) {
-      cart[name].q += 1;
-    } else {
-      cart[name] = { q: 1, p: price, w: wasPrice };
-    }
-    if (typeof updateCartBubble === "function") updateCartBubble();
-    if (typeof openCart === "function") openCart();
-  }
-
-  function openFoodMap() {
-    const screen = document.getElementById("foodMapScreen");
-    const mapFrame = document.getElementById("foodMapFrame");
-    if (screen) screen.style.display = "block";
-    if (mapFrame && !mapFrame.src) {
-      mapFrame.src = "https://www.google.com/maps?q=food+drink+cafes+restaurants+bars+in+Orange+Walk+District+Belize&z=13&output=embed";
-    }
-    renderSuggestions();
-  }
-
-  function closeFoodMap() { document.getElementById("foodMapScreen").style.display = "none"; }
-
-  function renderSuggestions() {
-    const list = document.getElementById("suggestionsList");
-    if (!list) return;
-    list.innerHTML = "";
-
-    const suggestions = [
-      { name: "TFC: 10 PC Wings", price: 23, image: "https://i.imgur.com/AeYUFed.png" },
-      { name: "Dumpling Kings: Japanese Dumplings", price: 11, image: "https://i.imgur.com/aaCuA71.png" },
-      { name: "Maria's: Salted Caramel", price: 12.50, image: "https://i.imgur.com/P8sjMJQ.png" },
-      { name: "Guerreros: 3 Cheese Burger Combo", price: 26.50, image: "https://i.imgur.com/c14NCA3.png" }
-    ];
-
-    suggestions.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "suggestion-card";
-
-      const img = document.createElement("img");
-      img.src = item.image;
-
-      const info = document.createElement("div");
-      info.className = "suggestion-info";
-      info.innerHTML = `<strong>${item.name}</strong><span>$${item.price.toFixed(2)} BZD</span>`;
-
-      const btn = document.createElement("button");
-      btn.className = "suggestion-add-btn";
-      btn.textContent = "Add";
-      const safeName = item.name.replace(/'/g, "\\'");
-      btn.onclick = function () {
-        cat = "Suggestions";
-        add(safeName, item.price, btn, null);
-      };
-
-      card.appendChild(img);
-      card.appendChild(info);
-      card.appendChild(btn);
-      list.appendChild(card);
-    });
-  }
-
-  function toggleSuggestions() {
-    const box = document.getElementById("mapSuggestions");
-    const btn = document.getElementById("toggleSuggestionsBtn");
-    if (!box || !btn) return;
-    box.classList.toggle("collapsed");
-    btn.textContent = box.classList.contains("collapsed") ? "⬆️" : "⬇️";
-  }
-
-  window.addEventListener("load", () => {
-    const btn = document.getElementById("toggleSuggestionsBtn");
-    if (btn) btn.addEventListener("click", toggleSuggestions);
-  });
-
-  function openLeaderBoard() {
-    const lbScreen = document.getElementById("leaderBoardScreen");
-    if (lbScreen) lbScreen.style.display = "block";
-    toggleMenu();
-    fetchLeaderBoard();
-  }
-
-  function closeLeaderBoard() { document.getElementById("leaderBoardScreen").style.display = "none"; }
-
-  // ✅ SUPABASE LEADERBOARD FETCH
-  function fetchLeaderBoard() {
-    getLeaderBoard().then(data => {
-      const container = document.getElementById("leaderBoardContainer");
-      if (!container) return;
-      container.innerHTML = "";
-
-      data.forEach(function(user) {
-        const points = Number(user.points) || 0;
-        const target = 500;
-        const progress = Math.min((points / target) * 100, 100);
-        const pointsLeft = Math.max(target - points, 0);
-        let trophy = user.rank == 1 ? "🥇" : user.rank == 2 ? "🥈" : user.rank == 3 ? "🥉" : "🏆";
-
-        container.innerHTML += `
-          <div class="leaderboard-card">
-            <div class="leaderboard-left">
-              <div class="leaderboard-rank">#${user.rank}</div>
-              <div class="leaderboard-user">
-                <div class="leaderboard-name">${user.name}</div>
-                <div class="leaderboard-points">${points} Points</div>
-                ${user.rank == 1 ? `<div class="leaderboard-prize">🏆 Leading The Race</div>` : ""}
-                <div class="leaderboard-progress-wrap">
-                  <div class="leaderboard-progress-top">
-                    <div class="leaderboard-target">${pointsLeft} points left to win</div>
-                    <div class="leaderboard-progress-pill">${Math.round(progress)}%</div>
-                  </div>
-                  <div class="leaderboard-progress-bar">
-                    <div class="leaderboard-progress-fill" style="width:${progress}%;"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="leaderboard-score">${trophy}</div>
-          </div>`;
-      });
-    }).catch(error => {
-      console.log("Leaderboard Error:", error);
-    });
-  }
-
-  function selectNetwork(network, element){
-    const cn = document.getElementById("creditNetwork");
-    if (cn) cn.value = network;
-    document.querySelectorAll(".network-card").forEach(card => card.classList.remove("active"));
-    if (element) element.classList.add("active");
-  }
-
-  function openCreditPurchase(){
-    const profileName = document.getElementById("profileName")?.value || "";
-    const creditNameEl = document.getElementById("creditName");
-    if (creditNameEl) creditNameEl.value = profileName;
-    const creditScreen = document.getElementById("creditPurchaseScreen");
-    if (creditScreen) creditScreen.style.display = "block";
-    const sidePanel = document.getElementById("sidePanel");
-    if (sidePanel) sidePanel.style.display = "none";
-    const menuOverlay = document.getElementById("menuOverlay");
-    if(menuOverlay) menuOverlay.style.display = "none";
-  }
-
-  function closeCreditPurchase() {
-    const creditScreen = document.getElementById("creditPurchaseScreen");
-    if (creditScreen) creditScreen.style.display = "none";
-    const sidePanel = document.getElementById("sidePanel");
-    const menuOverlay = document.getElementById("menuOverlay");
-    if(sidePanel) sidePanel.style.display = "";
-    if(menuOverlay) menuOverlay.style.display = "";
-  }
-
-  function showCreditConfirmation() {
-    const network = document.getElementById("creditNetwork").value;
-    const phone = document.getElementById("creditPhone").value.trim();
-    const amount = parseFloat(document.getElementById("creditAmount").value);
-    const name = document.getElementById("creditName").value.trim();
-
-    if (!name) { alert("Please enter your name."); return; }
-    if (!phone) { alert("Please enter a phone number."); return; }
-    if (!amount || amount <= 0) { alert("Please enter a valid amount."); return; }
-
-    const totalTransfer = amount + 1;
-    const summary = document.getElementById("creditSummary");
-    if (summary) {
-      summary.innerHTML = `
-        <div style="background:#fafafa; padding:15px; border-radius:16px; line-height:1.8;">
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Network:</strong> ${network}</p>
-          <p><strong>Phone:</strong> ${phone}</p>
-          <p><strong>Credit:</strong> $${amount.toFixed(2)}</p>
-          <p><strong>Service Fee:</strong> $1.00</p>
-          <p style="color:#ff6a00; font-size:18px; font-weight:900;">Total Transfer: $${totalTransfer.toFixed(2)}</p>
-        </div>
-      `;
-    }
-
-    const creditScreen = document.getElementById("creditPurchaseScreen");
-    const creditConfirm = document.getElementById("creditConfirmScreen");
-    if (creditScreen) creditScreen.style.display = "none";
-    if (creditConfirm) creditConfirm.style.display = "block";
-  }
-
-  function closeCreditConfirm() {
-    const creditConfirm = document.getElementById("creditConfirmScreen");
-    const creditScreen = document.getElementById("creditPurchaseScreen");
-    if (creditConfirm) creditConfirm.style.display = "none";
-    if (creditScreen) creditScreen.style.display = "block";
-  }
-
-  function sendCreditWhatsapp() {
-    const name = document.getElementById("creditName").value;
-    const network = document.getElementById("creditNetwork").value;
-    const phone = document.getElementById("creditPhone").value;
-    const amount = parseFloat(document.getElementById("creditAmount").value || 0);
-    const totalTransfer = amount + 1;
-
-    const message = `SwiftShop Credit Purchase
-
-Name: ${name}
-Network: ${network}
-Phone Number: ${phone}
-----------------------------------------
-Credit Amount: $${amount.toFixed(2)}
-Service Fee: $1.00
-Total Transfer: $${totalTransfer.toFixed(2)}
-----------------------------------------
-Belize Bank
-Account Name: SwiftShop
-Account Number: 275378010160000
-----------------------------------------
-I have completed the Instant Fund Transfer and will attach my screenshot.`;
-
-    window.open("https://wa.me/5016080205?text=" + encodeURIComponent(message), "_blank");
-
-    document.getElementById("creditName").value = "";
-    document.getElementById("creditPhone").value = "";
-    document.getElementById("creditAmount").value = "";
-    document.getElementById("creditNetwork").value = "SMART";
-
-    document.querySelectorAll(".network-card").forEach(card => card.classList.remove("active"));
-    const firstNet = document.querySelector(".network-card");
-    if (firstNet) firstNet.classList.add("active");
-
-    const feePreview = document.getElementById("feePreview");
-    if (feePreview) feePreview.innerHTML = "Total Transfer: $0.00";
-    const creditConfirm = document.getElementById("creditConfirmScreen");
-    if (creditConfirm) creditConfirm.style.display = "none";
-  }
-
-  // --- SERVICE FEE & MODAL HELPERS ---
-  function getServiceFee(zone) {
-    const fees = {
-      "town": 3.00,
-      "muffles": 3.50,
-      "trial_farm": 4.00,
-      "black_water": 4.50,
-      "san_lorenzo": 4.00,
-      "pasadita": 3.00,
-      "palmar": 4.50,
-      "petville": 4.50,
-      "chan_pine_ridge": 5.00,
-      "yo_creek": 6.00,
-      "san_estevan": 6.00,
-      "carmelita": 6.00,
-      "san_jose": 7.00,
-      "san_pablo": 7.00
-    };
-    return fees[zone] || 3.00;
-  }
-
+  // Subcategory helper for stores
   function renderSubcategory(items, subcategory, btnElement) {
     if (btnElement) {
       document.querySelectorAll(".sub-btn").forEach(b => b.classList.remove("active"));
@@ -7821,32 +8090,902 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
     });
   }
 
-  function openLocationModal() {
-    const modal = document.getElementById("locationModal");
-    if (modal) modal.style.display = "flex";
-  }
+  const track = document.getElementById("featureTrack");
+  if (track) {
+    const cards = Array.from(track.children);
 
-  function closeLocationModal() {
-    const modal = document.getElementById("locationModal");
-    if (modal) modal.style.display = "none";
-  }
+    let index = 0;
+    const visibleCount = 4; // how many boxes show at once
 
-  function saveLocation() {
-    const input = document.getElementById("locationInput");
-    const locText = document.getElementById("locationText");
-    if (input && input.value.trim() && locText) {
-      locText.textContent = input.value.trim();
+    function rotateFeatures() {
+      // fade out
+      track.classList.add("fade-out");
+
+      setTimeout(() => {
+        track.innerHTML = "";
+
+        for (let i = 0; i < visibleCount; i++) {
+          const item = cards[(index + i) % cards.length];
+          track.appendChild(item.cloneNode(true));
+        }
+
+        index = (index + visibleCount) % cards.length;
+
+        // fade in
+        track.classList.remove("fade-out");
+        track.classList.add("fade-in");
+
+      }, 500); // match CSS duration
     }
-    closeLocationModal();
+
+    // start loop
+    setInterval(rotateFeatures, 3000);
   }
 
-  function selectTip(amount, btnElement) {
-    document.querySelectorAll(".tip-btn").forEach(b => b.classList.remove("active"));
-    if (btnElement) btnElement.classList.add("active");
-    const tipInput = document.getElementById("selectedTipAmount");
-    if (tipInput) tipInput.value = amount;
+  const track2 = document.getElementById("featureTrack2");
+  if (track2) {
+    const cards2 = Array.from(track2.children);
+
+    let index2 = 0;
+    const visibleCount2 = 3;
+
+    function rotateFeatures2() {
+      track2.classList.add("fade-out");
+
+      setTimeout(() => {
+        track2.innerHTML = "";
+
+        for (let i = 0; i < visibleCount2; i++) {
+          const item = cards2[(index2 + i) % cards2.length];
+          track2.appendChild(item.cloneNode(true));
+        }
+
+        index2 = (index2 + visibleCount2) % cards2.length;
+
+        track2.classList.remove("fade-out");
+        track2.classList.add("fade-in");
+
+      }, 500);
+    }
+
+    rotateFeatures2();
+    setInterval(rotateFeatures2, 3000);
+  }
+
+  function setDeliveryZone(val) {
+    const [zone, fee] = val.split("|");
+
+    window.lastCartZone = zone;
+    window.lastCartFee = parseFloat(fee);
+
     refreshCartTotals();
   }
+
+  function toggleMenu() {
+    const panel = document.getElementById("sidePanel");
+    const overlay = document.getElementById("overlay");
+    const menuOverlay = document.getElementById("menuOverlay");
+
+    if (panel) panel.classList.toggle("open");
+    if (panel) panel.classList.toggle("active");
+    if (overlay) overlay.classList.toggle("show");
+    if (menuOverlay) menuOverlay.classList.toggle("active");
+  }
+
+  document.querySelectorAll(".toggle-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
+
+  window.addEventListener("DOMContentLoaded", () => {
+    let orderType = "Delivery";
+
+    document.querySelectorAll(".toggle-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+
+        orderType = btn.textContent.trim();
+
+        if (orderType === "Pickup") {
+          const pickupBtn = document.querySelector('.cat-btn[onclick*="openPickupOrder"]') || document.getElementById("pickupSection");
+
+          if (pickupBtn) {
+            openPickupOrder(pickupBtn);
+
+            // ✅ SCROLL TO FORM (REAL FIX)
+            setTimeout(() => {
+              const form = document.getElementById("pickupOrderBox");
+
+              if (form) {
+                const yOffset = -90;
+                const y = form.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+                window.scrollTo({
+                  top: y,
+                  behavior: "smooth"
+                });
+              }
+            }, 400);
+          }
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll(".media-card video").forEach(video => {
+    video.addEventListener("mouseenter", () => video.play());
+    video.addEventListener("mouseleave", () => video.pause());
+  });
+
+  /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+     PROFILE SCREEN LOGIC
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+  function openProfile() {
+    // Show the profile screen
+    const pScreen = document.getElementById("profileScreen");
+    const pOverlay = document.getElementById("profileOverlay");
+    if (pScreen) pScreen.classList.add("active");
+    if (pOverlay) pOverlay.style.display = "flex";
+    
+    // Load saved data from LocalStorage
+    const name = localStorage.getItem("userName") || "Customer";
+    const phone = localStorage.getItem("userPhone") || "—";
+    const points = localStorage.getItem("points") || "0";
+    
+    const pName = document.getElementById("profileName");
+    const pPhone = document.getElementById("profilePhone");
+    const pPoints = document.getElementById("profilePoints");
+    const pInitials = document.getElementById("profileInitials");
+    const pInit = document.getElementById("profileInitial");
+
+    if (pName) {
+      if (pName.tagName === "INPUT") pName.value = name;
+      else pName.innerText = name;
+    }
+    if (pPhone) {
+      if (pPhone.tagName === "INPUT") pPhone.value = phone;
+      else pPhone.innerText = phone;
+    }
+    if (pPoints) pPoints.innerText = points;
+    if (pInitials) pInitials.innerText = getInitials(name);
+    updateAvatar(name);
+
+    // Close the side menu if open
+    toggleMenu(); 
+  }
+
+  function closeProfile() {
+    const pScreen = document.getElementById("profileScreen");
+    const pOverlay = document.getElementById("profileOverlay");
+    if (pScreen) pScreen.classList.remove("active");
+    if (pOverlay) pOverlay.style.display = "none";
+  }
+
+  /* DATA PERSISTENCE */
+  function saveProfile() {
+    const nameEl = document.getElementById("profileName");
+    const phoneEl = document.getElementById("profilePhone");
+    const name = nameEl ? (nameEl.value || nameEl.innerText) : "";
+    const phone = phoneEl ? (phoneEl.value || phoneEl.innerText) : "";
+    
+    localStorage.setItem("userName", name);
+    localStorage.setItem("userPhone", phone);
+    
+    updateAvatar(name);
+  }
+
+  function updateAvatar(name) {
+    const initial = name ? name.charAt(0).toUpperCase() : "?";
+    const pi = document.getElementById("profileInitial");
+    if (pi) pi.innerText = initial;
+  }
+
+  function quickAdd(name, price, wasPrice = null) {
+    // Make sure cart exists
+    if (!window.cart) window.cart = {};
+
+    // Add or increase quantity
+    if (cart[name]) {
+      cart[name].q += 1;
+    } else {
+      cart[name] = {
+        q: 1,
+        p: price,
+        w: wasPrice // optional (for discounts)
+      };
+    }
+
+    // Update cart bubble count
+    if (typeof updateCartBubble === "function") {
+      updateCartBubble();
+    }
+
+    // Open cart automatically (your existing flow)
+    if (typeof openCart === "function") {
+      openCart();
+    }
+  }
+
+  function openFoodMap() {
+    const screen = document.getElementById("foodMapScreen");
+    const mapFrame = document.getElementById("foodMapFrame");
+    if (!screen) return;
+
+    // Show screen
+    screen.style.display = "block";
+
+    // Load map (only if not already loaded to avoid reload flicker)
+    if (mapFrame && !mapFrame.src) {
+      mapFrame.src =
+        "https://www.google.com/maps?q=food+drink+cafes+restaurants+bars+in+Orange+Walk+District+Belize&z=13&output=embed";
+    }
+
+    // Load suggestions
+    renderSuggestions();
+  }
+
+  function closeFoodMap() {
+    const screen = document.getElementById("foodMapScreen");
+    if (screen) screen.style.display = "none";
+  }
+
+  function renderSuggestions() {
+    const list = document.getElementById("suggestionsList");
+    if (!list) return;
+    list.innerHTML = "";
+
+    const suggestions = [
+      { name: "TFC: 10 PC Wings", price: 23, image: "https://i.imgur.com/AeYUFed.png" },
+      { name: "Dumpling Kings: Japanese Dumplings", price: 11, image: "https://i.imgur.com/aaCuA71.png" },
+      { name: "Maria's: Salted Caramel", price: 12.50, image: "https://i.imgur.com/P8sjMJQ.png" },
+      { name: "Guerreros: 3 Cheese Burger Combo", price: 26.50, image: "https://i.imgur.com/c14NCA3.png" }
+    ];
+
+    suggestions.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "suggestion-card";
+
+      const img = document.createElement("img");
+      img.src = item.image;
+
+      const info = document.createElement("div");
+      info.className = "suggestion-info";
+      info.innerHTML = `
+        <strong>${item.name}</strong>
+        <span>$${item.price.toFixed(2)} BZD</span>
+      `;
+
+      const btn = document.createElement("button");
+      btn.className = "suggestion-add-btn";
+      btn.textContent = "Add";
+
+      // 🔥 Each button ONLY controls its own item
+      const safeName = item.name.replace(/'/g, "\\'");
+      btn.onclick = function () {
+        cat = "Suggestions"; // 🔥 force category name
+        add(safeName, item.price, btn, null);
+      };
+
+      card.appendChild(img);
+      card.appendChild(info);
+      card.appendChild(btn);
+
+      list.appendChild(card);
+    });
+  }
+
+  function toggleSuggestions() {
+    const box = document.getElementById("mapSuggestions");
+    const btn = document.getElementById("toggleSuggestionsBtn");
+
+    if (!box || !btn) return;
+
+    box.classList.toggle("collapsed");
+
+    // Update arrow
+    btn.textContent = box.classList.contains("collapsed") ? "⬆️" : "⬇️";
+  }
+
+  // 🔥 Ensure button always works
+  window.addEventListener("load", () => {
+    const btn = document.getElementById("toggleSuggestionsBtn");
+    if (btn) {
+      btn.addEventListener("click", toggleSuggestions);
+    }
+  });
+
+  function openLeaderBoard() {
+    const lbScreen = document.getElementById("leaderBoardScreen");
+    if (lbScreen) lbScreen.style.display = "block";
+    toggleMenu();
+    fetchLeaderBoard();
+  }
+
+  function closeLeaderBoard() {
+    const lbScreen = document.getElementById("leaderBoardScreen");
+    if (lbScreen) lbScreen.style.display = "none";
+  }
+
+  // ✅ SUPABASE LEADERBOARD FETCH
+  function fetchLeaderBoard() {
+    getLeaderBoard().then(data => {
+      const container = document.getElementById("leaderBoardContainer");
+      if (!container) return;
+
+      container.innerHTML = "";
+
+      data.forEach(function(user) {
+        const points = Number(user.points) || 0;
+        const target = 500;
+        const progress = Math.min((points / target) * 100, 100);
+        const pointsLeft = Math.max(target - points, 0);
+
+        let trophy = "🏆";
+        if (user.rank == 1) trophy = "🥇";
+        if (user.rank == 2) trophy = "🥈";
+        if (user.rank == 3) trophy = "🥉";
+
+        container.innerHTML += `
+          <div class="leaderboard-card">
+            <div class="leaderboard-left">
+              <div class="leaderboard-rank">
+                #${user.rank}
+              </div>
+              <div class="leaderboard-user">
+                <div class="leaderboard-name">
+                  ${user.name}
+                </div>
+                <div class="leaderboard-points">
+                  ${points} Points
+                </div>
+                ${
+                  user.rank == 1
+                  ? `
+                    <div class="leaderboard-prize">
+                      🏆 Leading The Race
+                    </div>
+                  `
+                  : ""
+                }
+                <!-- PROGRESS -->
+                <div class="leaderboard-progress-wrap">
+                  <div class="leaderboard-progress-top">
+                    <div class="leaderboard-target">
+                      ${pointsLeft} points left to win
+                    </div>
+                    <div class="leaderboard-progress-pill">
+                      ${Math.round(progress)}%
+                    </div>
+                  </div>
+                  <div class="leaderboard-progress-bar">
+                    <div
+                      class="leaderboard-progress-fill"
+                      style="width:${progress}%;">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="leaderboard-score">
+              ${trophy}
+            </div>
+          </div>
+        `;
+      });
+    }).catch(function(error) {
+      console.log("Leaderboard Error:", error);
+    });
+  }
+
+  function selectNetwork(network, element){
+    const cn = document.getElementById("creditNetwork");
+    if (cn) cn.value = network;
+
+    document
+      .querySelectorAll(".network-card")
+      .forEach(card =>
+        card.classList.remove("active")
+      );
+
+    if (element) element.classList.add("active");
+  }
+
+  function openCreditPurchase(){
+    const profileName = document.getElementById("profileName")?.value || "";
+    const cName = document.getElementById("creditName");
+    if (cName) cName.value = profileName;
+
+    const cScreen = document.getElementById("creditPurchaseScreen");
+    if (cScreen) cScreen.style.display = "block";
+
+    const sidePanel = document.getElementById("sidePanel");
+    if (sidePanel) sidePanel.style.display = "none";
+
+    const menuOverlay = document.getElementById("menuOverlay");
+    if(menuOverlay){
+      menuOverlay.style.display = "none";
+    }
+  }
+
+  function closeCreditPurchase() {
+    const cScreen = document.getElementById("creditPurchaseScreen");
+    if (cScreen) cScreen.style.display = "none";
+
+    const sidePanel = document.getElementById("sidePanel");
+    const menuOverlay = document.getElementById("menuOverlay");
+
+    if(sidePanel){
+      sidePanel.style.display = "";
+    }
+
+    if(menuOverlay){
+      menuOverlay.style.display = "";
+    }
+  }
+
+  function showCreditConfirmation() {
+    const network = document.getElementById("creditNetwork").value;
+    const phone = document.getElementById("creditPhone").value.trim();
+    const amount = parseFloat(
+      document.getElementById("creditAmount").value
+    );
+    const name = document.getElementById("creditName").value.trim();
+
+    if (!name) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    if (!phone) {
+      alert("Please enter a phone number.");
+      return;
+    }
+
+    if (!amount || amount <= 0) {
+      alert("Please enter a valid amount.");
+      return;
+    }
+
+    const totalTransfer = amount + 1;
+    const cSummary = document.getElementById("creditSummary");
+
+    if (cSummary) {
+      cSummary.innerHTML = `
+        <div style="
+          background:#fafafa;
+          padding:15px;
+          border-radius:16px;
+          line-height:1.8;
+        ">
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Network:</strong> ${network}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Credit:</strong> $${amount.toFixed(2)}</p>
+          <p><strong>Service Fee:</strong> $1.00</p>
+          <p style="
+            color:#ff6a00;
+            font-size:18px;
+            font-weight:900;
+          ">
+            Total Transfer: $${totalTransfer.toFixed(2)}
+          </p>
+        </div>
+      `;
+    }
+
+    const cPurchase = document.getElementById("creditPurchaseScreen");
+    const cConfirm = document.getElementById("creditConfirmScreen");
+    if (cPurchase) cPurchase.style.display = "none";
+    if (cConfirm) cConfirm.style.display = "block";
+  }
+
+  function closeCreditConfirm() {
+    const cConfirm = document.getElementById("creditConfirmScreen");
+    const cPurchase = document.getElementById("creditPurchaseScreen");
+    if (cConfirm) cConfirm.style.display = "none";
+    if (cPurchase) cPurchase.style.display = "block";
+  }
+
+  function sendCreditWhatsapp() {
+    const name = document.getElementById("creditName").value;
+    const network = document.getElementById("creditNetwork").value;
+    const phone = document.getElementById("creditPhone").value;
+    const amount = parseFloat(
+      document.getElementById("creditAmount").value || 0
+    );
+    const totalTransfer = amount + 1;
+
+    const message = `SwiftShop Credit Purchase
+
+Name: ${name}
+Network: ${network}
+Phone Number: ${phone}
+----------------------------------------
+Credit Amount: $${amount.toFixed(2)}
+Service Fee: $1.00
+Total Transfer: $${totalTransfer.toFixed(2)}
+----------------------------------------
+Belize Bank
+Account Name: SwiftShop
+Account Number: 275378010160000
+----------------------------------------
+I have completed the Instant Fund Transfer and will attach my screenshot.`;
+
+    window.open(
+      "https://wa.me/5016080205?text=" +
+      encodeURIComponent(message),
+      "_blank"
+    );
+
+    // RESET FORM
+    document.getElementById("creditName").value = "";
+    document.getElementById("creditPhone").value = "";
+    document.getElementById("creditAmount").value = "";
+
+    document.getElementById("creditNetwork").value = "SMART";
+
+    document
+      .querySelectorAll(".network-card")
+      .forEach(card =>
+        card.classList.remove("active")
+      );
+
+    const firstCard = document.querySelector(".network-card");
+    if (firstCard) firstCard.classList.add("active");
+
+    const feePrev = document.getElementById("feePreview");
+    if (feePrev) feePrev.innerHTML = "Total Transfer: $0.00";
+
+    const cConfirm = document.getElementById("creditConfirmScreen");
+    if (cConfirm) cConfirm.style.display = "none";
+  }
+</script>
+
+<!-- 📝 SUGGEST ITEM MODAL -->
+<div id="suggestOverlay" class="suggest-overlay">
+  <div class="suggest-box">
+    <button class="close-btn" onclick="closeSuggest()">✕</button>
+    <h3>Suggest an Item</h3>
+    <input id="suggestInput" type="text" placeholder="Item name">
+    <button class="submit-btn" onclick="submitSuggestion()">Submit</button>
+  </div>
+</div>
+
+<div id="thankYouToast">✅ Thank you for your order!</div>
+
+<!-- 🛒 Floating Cart Button -->
+<div id="cartBubble" onclick="openCart()" style="
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#ff9000;
+  color:white;
+  width:64px;
+  height:64px;
+  border-radius:50%;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  font-size:26px;
+  font-weight:900;
+  box-shadow:0 10px 25px rgba(0,0,0,0.3);
+  z-index:1000;
+">
+  🛒
+</div>
+
+<!-- 🧾 Cart Panel -->
+<div id="cartPanel" style="
+  position:fixed;
+  bottom:-100%;
+  left:0;
+  width:100%;
+  height:70%;
+  background:white;
+  border-radius:24px 24px 0 0;
+  box-shadow:0 -10px 30px rgba(0,0,0,0.2);
+  transition:bottom 0.35s ease;
+  z-index:999;
+  padding:20px;
+  overflow-y:auto;
+">
+<!-- ❌ CLOSE BUTTON -->
+  <button onclick="closeCart()" style="
+    position:absolute;
+    top:14px;
+    right:16px;
+    background:none;
+    border:none;
+    font-size:22px;
+    font-weight:900;
+    cursor:pointer;
+  ">
+    ✕
+  </button>
+
+  <h2 id="cartTitle">Your Cart</h2>
+
+  <div id="cartPanelItems"></div>
+
+  <hr>
+
+  <h3 id="cartPanelTotal"></h3>
+  <div id="cartDeliveryFee" style="
+  margin-top:6px;
+  font-weight:700;
+  color:#ff5a1f;
+  text-align:center;
+"></div>
+<div id="cartGrandTotal" style="
+  margin-top:6px;
+  font-weight:900;
+  font-size:18px;
+  text-align:center;
+"></div>
+
+  <div style="
+  font-size:10px;
+  color:#777;
+  text-align:center;
+  margin-top:6px;
+  line-height:1.4;
+">
+
+<label style="font-weight:700; margin-top:14px; display:block;">
+  Delivery Location
+</label>
+
+<div id="cartMapSection" style="margin-top: 15px; padding: 12px; background: #fff; border-radius: 18px; border: 1px solid #eee;">
+  <button id="geoBtn" onclick="getCurrentLocation()" style="width:100%; padding:15px; background:#ff6a00; color:white; border:none; border-radius:12px; font-weight:800; font-size:16px; margin-bottom:12px; box-shadow: 0 4px 15px rgba(255,106,0,0.3); cursor:pointer; transition: 0.3s;">
+    📍 TAP HERE TO PIN LOCATION
+  </button>
+
+  <input id="cartMapSearch" type="text" placeholder="Or search street name..." 
+    style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-bottom:10px; outline:none; font-size:14px; background:#f9f9f9;">
+
+  <div id="cartDeliveryMap" style="width:100%; height:220px; border-radius:15px; background:#eee;"></div>
+  
+  <div style="margin-top:10px; font-weight:700; color:#ff6a00; text-align:center; font-size:14px;">
+    Pin your house for accurate delivery 🏠
+  </div>
+</div>
+
+  SwiftShop purchases items on your behalf from local stores.<br>
+  Prices and availability may vary.
+</div>
+
+  <div class="next-btn-outer" onclick="goToOrder()">
+  <button class="next-btn-inner">
+    Next ➔
+  </button>
+</div>
+
+</div>
+
+<!-- 👤 PROFILE MODAL -->
+<div id="profileOverlay" class="suggest-overlay" onclick="closeProfile()">
+  <div class="profile-card" onclick="event.stopPropagation()">
+
+    <!-- TOP / IDENTITY -->
+    <div class="profile-top">
+      <div class="profile-avatar">
+        <span id="profileInitials">U</span>
+      </div>
+
+      <div class="profile-main">
+        <div id="profileName" class="profile-name">Customer Name</div>
+        <div id="profilePhone" class="profile-phone">+501 000-0000</div>
+      </div>
+    </div>
+
+    <!-- POINTS -->
+    <div class="profile-points">
+      <div id="profilePoints" class="points-number">0</div>
+      <div class="points-label">Reward Points</div>
+    </div>
+
+    <!-- REWARDS -->
+    <div class="profile-rewards">
+      <div class="reward">🚚 <span>5 pts</span><br>Free Run</div>
+      <div class="reward">☕ <span>10 pts</span><br>Frappe</div>
+      <div class="reward">🍔 <span>15 pts</span><br>Meal + Drink</div>
+      <div class="reward">🍕 <span>35 pts</span><br>Family Pizza + Drinks</div>
+    </div>
+
+    <button class="profile-close" onclick="closeProfile()">Done</button>
+
+  </div>
+</div>
+
+<div id="imageOverlay" onclick="closeImage()">
+  <img id="overlayImg">
+</div>
+
+<script>
+  let currentCategoryName = "Snack"; // Default category when app loads
+  document.addEventListener("DOMContentLoaded", () => {
+    const track = document.getElementById("adTrack");
+    if (!track) return;
+
+    const slides = track.children.length;
+    const slideHeight = 250; // 👈 Updated to match your CSS height
+    let index = 0;
+    let lastTime = 0;
+    const interval = 4000;
+
+    function slideLoop(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+
+      if (timestamp - lastTime >= interval) {
+        index = (index + 1) % slides;
+        // Moves the track up exactly 250px
+        track.style.transform = `translateY(-${index * slideHeight}px)`;
+        lastTime = timestamp;
+      }
+
+      requestAnimationFrame(slideLoop);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) lastTime = 0;
+    });
+
+    requestAnimationFrame(slideLoop);
+  });
+</script>
+
+<script>
+  (function() {
+    const track = document.getElementById("pillTrackV2");
+    const dotContainer = document.getElementById("pillDotsV2");
+    if (!track || !dotContainer) return;
+
+    const slides = track.children.length;
+    let index = 0;
+
+    // Create dots dynamically
+    for (let i = 0; i < slides; i++) {
+      const dot = document.createElement("div");
+      dot.classList.add("dot-v2");
+      if (i === 0) dot.classList.add("active");
+      dotContainer.appendChild(dot);
+    }
+
+    const allDots = dotContainer.querySelectorAll(".dot-v2");
+
+    function updatePillSlider() {
+      index = (index + 1) % slides;
+      
+      // ⬅️ Slide the images
+      track.style.transform = `translateX(-${index * 100}%)`;
+
+      // ✨ Swooze the dots
+      allDots.forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+      });
+    }
+
+    setInterval(updatePillSlider, 5000);
+  })();
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const promoOverlay = document.getElementById("promoOverlay");
+    if (!promoOverlay) return;
+    const promoCards = Array.from(promoOverlay.querySelectorAll(".promo-card"));
+
+    let currentIndex = 0;
+
+    function showAd(index) {
+      promoCards.forEach((card, i) => {
+        card.style.display = i === index ? "block" : "none";
+      });
+    }
+
+    function nextAd() {
+      currentIndex++;
+
+      if (currentIndex >= promoCards.length) {
+        promoOverlay.style.display = "none";
+      } else {
+        showAd(currentIndex);
+      }
+    }
+
+    // Expose globally for ❌ buttons
+    window.showNextAd = function (e) {
+      if (e && e.stopPropagation) e.stopPropagation();
+      nextAd();
+    };
+
+    // Tap background = next ad
+    promoOverlay.addEventListener("click", () => {
+      nextAd();
+    });
+
+    // Tap inside promo card = do nothing
+    promoCards.forEach(card => {
+      card.addEventListener("click", e => {
+        e.stopPropagation();
+      });
+    });
+
+    // Init
+    showAd(currentIndex);
+  });
+</script>
+
+<script>
+// WAIT until page fully loads ✅
+window.addEventListener("DOMContentLoaded", () => {
+
+  // =======================
+  // DELIVERY / PICKUP
+  // =======================
+  let orderType = "Delivery";
+
+  document.querySelectorAll(".toggle-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+
+      document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      orderType = btn.textContent.trim();
+
+      console.log("Clicked:", orderType);
+
+      if (orderType === "Pickup") {
+        const pickupBtn = document.querySelector('.cat-btn[onclick*="openPickupOrder"]');
+
+        if (pickupBtn) {
+          openPickupOrder(pickupBtn);
+        } else {
+          console.log("Pickup button NOT found ❌");
+        }
+      }
+    });
+  });
+
+});
+
+// =======================
+// LOCATION MODAL (GLOBAL)
+// =======================
+function openLocationModal() {
+  console.log("Opening location modal");
+  const lModal = document.getElementById("locationModal");
+  if (lModal) lModal.style.display = "flex";
+}
+
+function closeLocationModal() {
+  const lModal = document.getElementById("locationModal");
+  if (lModal) lModal.style.display = "none";
+}
+
+function saveLocation() {
+  const inputEl = document.getElementById("locationInput");
+  const textEl = document.getElementById("locationText");
+  if (!inputEl) return;
+  const input = inputEl.value;
+
+  if (!input.trim()) return;
+
+  if (textEl) textEl.textContent = input;
+  closeLocationModal();
+
+  console.log("Saved location:", input);
+}
+
+function selectTip(amount, element) {
+  document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.remove('active'));
+  if (element) element.classList.add('active');
+  const tipInput = document.getElementById('selectedTipAmount');
+  if (tipInput) tipInput.value = amount;
+}
 </script>
 
 </body>
