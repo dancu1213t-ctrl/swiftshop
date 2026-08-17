@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpkP-1hNTsxKVNmPhPP_J-SawsNZi3TIQ&libraries=places"></script>
 
@@ -5948,24 +5949,136 @@ backdrop-filter: blur(6px);
 
 
 
-<script>
-  // Your live Google Apps Script Web App URL
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbySDAPLbLqzS6sBfElhD6k69vLfLDKfKu6m0u2xrAfretsEzWsUnFikrvjtqKN8_8pveQ/exec";
 
-  async function callBackend(action, params = {}) {
-    let url = `${WEB_APP_URL}?action=${action}`;
-    Object.keys(params).forEach(key => {
-      url += `&${key}=${encodeURIComponent(params[key])}`;
-    });
+<script>
+  // ==========================================
+  // SUPABASE CONFIGURATION (LIVE)
+  // ==========================================
+  const SUPABASE_URL = "https://sbjadbqlmkktljfpqowc.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNiamFkYnFsbWtrdGxqZnBxb3djIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5MTc2NTIsImV4cCI6MjEwMjQ5MzY1Mn0.RCgn8yNmxkQWFPu6sJdyYD3_zJ7n2QmvPQjqZC70F8s";
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // --- SUPABASE DATA BRIDGE FUNCTIONS ---
+
+  async function getProducts() {
+    const { data, error } = await supabaseClient
+      .from('products')
+      .select('*')
+      .ilike('active', 'yes');
     
-    try {
-      const response = await fetch(url);
-      return await response.json();
-    } catch (error) {
-      console.error(`Error calling ${action}:`, error);
-      return null;
-    }
+    if (error) { console.error(error); return []; }
+    
+    return data.map(r => ({
+      id: r.id,
+      name: r.name,
+      category: r.category,
+      price: Number(r.price),
+      image: r.image,
+      was: r.was ? Number(r.was) : null,
+      subcategory: r.subcategory || "Items"
+    }));
   }
+
+  async function checkUser(phone) {
+    const { data, error } = await supabaseClient
+      .from('swiftshop_users')
+      .select('*')
+      .eq('phone', phone)
+      .single();
+
+    if (error || !data) {
+      return { exists: false };
+    }
+
+    return {
+      exists: true,
+      name: data.name,
+      points: data.points || 0
+    };
+  }
+
+  async function saveUser(name, phone, email) {
+    const { error } = await supabaseClient
+      .from('swiftshop_users')
+      .insert([{ name, phone, email, points: 0, balance: 0 }]);
+
+    if (error) console.error(error);
+    return { success: true };
+  }
+
+  async function getUserBalance(phone) {
+    const { data, error } = await supabaseClient
+      .from('swiftshop_users')
+      .select('balance')
+      .eq('phone', phone)
+      .single();
+
+    if (error || !data) return 0;
+    return Number(data.balance || 0);
+  }
+
+  async function saveSuggestion(itemName) {
+    const { error } = await supabaseClient
+      .from('suggestions')
+      .insert([{ item_name: itemName }]);
+
+    if (error) console.error(error);
+  }
+
+  async function getPromos() {
+    const { data, error } = await supabaseClient
+      .from('promos')
+      .select('*')
+      .not('image', 'is', null);
+
+    if (error) return [];
+
+    return data.map(r => ({
+      name: r.name,
+      price: Number(r.price),
+      image: r.image,
+      category: r.category,
+      was: r.was ? Number(r.was) : null
+    }));
+  }
+
+  async function getStoreData(storeName) {
+    const { data, error } = await supabaseClient
+      .from('store_items')
+      .select('*')
+      .ilike('store_name', storeName);
+
+    if (error) return [];
+
+    return data.map(row => ({
+      name: row.name,
+      price: Number(row.price),
+      image: row.image,
+      phone: row.phone,
+      comment: row.comment || ""
+    }));
+  }
+
+  async function getLeaderBoard() {
+    const { data, error } = await supabaseClient
+      .from('leaderboard')
+      .select('*')
+      .order('points', { ascending: false });
+
+    if (error) return [];
+
+    return data.map((row, index) => ({
+      rank: index + 1,
+      number: row.number,
+      name: row.name,
+      points: row.points
+    }));
+  }
+
+  // ==========================================
+  // ORIGINAL APP LOGIC
+  // ==========================================
 
   function buzz(ms = 30) {
     if (navigator.vibrate) navigator.vibrate(ms);
@@ -5991,11 +6104,9 @@ backdrop-filter: blur(6px);
   };
   console.log("SCRIPT LOADED");
 
-  /************* 👑 ADMIN ACCESS *************/
   const ADMIN_NAME = "Danilo Cu";
   const ADMIN_PHONE = "6080205";
 
-  /************* ⏰ BUSINESS HOURS LOCK *************/
   function checkBusinessHoursLock(isAdminAttempt = false) {
     const now = new Date();
     const hour = now.getHours();
@@ -6030,7 +6141,6 @@ backdrop-filter: blur(6px);
     return true;
   }
 
-  // --- LIVE TEXT SLIDER LOGIC ---
   function updateLiveSlider() {
     const comments = [
       "🌽Grab a Snack, with Krazy Corn, Best of the Best",
@@ -6088,23 +6198,15 @@ backdrop-filter: blur(6px);
   let customerEmail = "";
   let rewardPoints = 0;
 
-  // ===== REQUEST RIDE LOGIC =====
   let rideLocation = null;
 
   function openRequestRide(el) {
-    document.querySelectorAll(".cat-btn").forEach(b =>
-      b.classList.remove("active")
-    );
+    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     el.classList.add("active");
 
-    if (document.getElementById("products"))
-      document.getElementById("products").style.display = "none";
-
-    if (document.getElementById("pickupOrderBox"))
-      document.getElementById("pickupOrderBox").style.display = "none";
-
-    if (document.getElementById("tacoOrderBox"))
-      document.getElementById("tacoOrderBox").style.display = "none";
+    if (document.getElementById("products")) document.getElementById("products").style.display = "none";
+    if (document.getElementById("pickupOrderBox")) document.getElementById("pickupOrderBox").style.display = "none";
+    if (document.getElementById("tacoOrderBox")) document.getElementById("tacoOrderBox").style.display = "none";
 
     document.getElementById("requestRideBox").style.display = "block";
     document.getElementById("rideName").value = localStorage.getItem("userName") || "Customer";
@@ -6118,17 +6220,11 @@ backdrop-filter: blur(6px);
 
     navigator.geolocation.getCurrentPosition(
       pos => {
-        rideLocation = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        };
-
+        rideLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         document.getElementById("rideLocationText").innerText = "Location pinned";
 
         const mapUrl = "https://www.google.com/maps?q=" + rideLocation.lat + "," + rideLocation.lng + "&output=embed";
-        const iframe = document.getElementById("rideMap");
-        iframe.src = mapUrl;
-
+        document.getElementById("rideMap").src = mapUrl;
         document.getElementById("rideMapWrapper").style.display = "block";
       },
       () => alert("Please enable location access"),
@@ -6192,11 +6288,7 @@ backdrop-filter: blur(6px);
     btn.style.pointerEvents = "none"; 
     btn.style.opacity = "0.7";
 
-    const geoOptions = {
-      enableHighAccuracy: true, 
-      timeout: 5000,           
-      maximumAge: 10000        
-    };
+    const geoOptions = { enableHighAccuracy: true, timeout: 5000, maximumAge: 10000 };
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((pos) => {
@@ -6216,7 +6308,6 @@ backdrop-filter: blur(6px);
 
   function snapPinTo(latLng) {
     const btn = document.getElementById("geoBtn");
-    
     if (cartMap) {
       cartMap.panTo(latLng);
       cartMap.setZoom(17);
@@ -6224,20 +6315,17 @@ backdrop-filter: blur(6px);
     if (cartMarker) {
       cartMarker.setPosition(latLng);
     }
-    
     updateCartGPSFee(latLng); 
 
-    if (btn) {
-      btn.innerHTML = "📍 LOCATED";
-      btn.style.background = "#1ebe57";
-      btn.style.opacity = "1";
-      btn.style.pointerEvents = "auto";
-      
-      setTimeout(() => {
-        btn.innerHTML = "📍 TAP HERE TO PIN LOCATION";
-        btn.style.background = "#ff6a00";
-      }, 3000);
-    }
+    btn.innerHTML = "📍 LOCATED";
+    btn.style.background = "#1ebe57";
+    btn.style.opacity = "1";
+    btn.style.pointerEvents = "auto";
+    
+    setTimeout(() => {
+      btn.innerHTML = "📍 TAP HERE TO PIN LOCATION";
+      btn.style.background = "#ff6a00";
+    }, 3000);
   }
 
   function resetGeoBtn() {
@@ -6252,8 +6340,7 @@ backdrop-filter: blur(6px);
   function updateCartGPSFee(latLng) {
     const lat = latLng.lat().toFixed(6);
     const lng = latLng.lng().toFixed(6);
-    
-    window.lastCartCoords = `${lat},${lng}`; 
+    window.lastCartCoords = `${lat},${lng}`;
     refreshCartTotals();
   }
 
@@ -6280,28 +6367,14 @@ backdrop-filter: blur(6px);
 
     const name = document.getElementById("rideName").value;
     const vehicle = document.getElementById("vehicleType").value;
-
     const mapLink = "https://www.google.com/maps?q=" + rideLocation.lat + "," + rideLocation.lng;
 
-    const msg =
-      "REQUEST RIDE\n\n" +
-      "Name: " + name + "\n" +
-      "Vehicle Type: " + vehicle + "\n\n" +
-      "Location:\n" + mapLink;
-
+    const msg = "REQUEST RIDE\n\nName: " + name + "\nVehicle Type: " + vehicle + "\n\nLocation:\n" + mapLink;
     window.open("https://wa.me/5016080205?text=" + encodeURIComponent(msg), "_blank");
   }
 
   function setCategory(c, e) {
-    const elementsToHide = [
-      "requestRideBox",
-      "pickupOrderBox",
-      "tacoOrderBox",
-      "products",
-      "map",
-      "subcategory-bar"
-    ];
-
+    const elementsToHide = ["requestRideBox", "pickupOrderBox", "tacoOrderBox", "products", "map", "subcategory-bar"];
     elementsToHide.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
@@ -6310,19 +6383,13 @@ backdrop-filter: blur(6px);
     document.querySelectorAll(".cat-btn").forEach(btn => btn.classList.remove("active"));
     cat = c;
 
-    let isStore = false;
-    if (e && e.dataset.store === "true") {
-      isStore = true;
-    }
+    let isStore = e && e.dataset.store === "true";
 
     if (c === "RequestRide") {
-      const rideBox = document.getElementById("requestRideBox");
-      const map = document.getElementById("map");
-      if (rideBox) rideBox.style.display = "block";
-      if (map) map.style.display = "block";
+      if (document.getElementById("requestRideBox")) document.getElementById("requestRideBox").style.display = "block";
+      if (document.getElementById("map")) document.getElementById("map").style.display = "block";
     } else if (c === "Pickup") {
-      const pickupBox = document.getElementById("pickupOrderBox");
-      if (pickupBox) pickupBox.style.display = "block";
+      if (document.getElementById("pickupOrderBox")) document.getElementById("pickupOrderBox").style.display = "block";
     } else {
       const products = document.getElementById("products");
       if (products) {
@@ -6343,28 +6410,9 @@ backdrop-filter: blur(6px);
       e.classList.add("active");
       const container = e.closest('.categories');
       if (container) {
-        const elLeft = e.offsetLeft;
-        const elWidth = e.offsetWidth;
-        const containerWidth = container.offsetWidth;
-        const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+        const scrollTo = e.offsetLeft - (container.offsetWidth / 2) + (e.offsetWidth / 2);
         container.scrollTo({ left: scrollTo, behavior: "smooth" });
       }
-    } else {
-      document.querySelectorAll(".cat-btn").forEach(btn => {
-        const btnText = btn.innerText.toLowerCase();
-        const categoryTarget = c.toLowerCase();
-        if (btnText.includes(categoryTarget)) {
-          btn.classList.add("active");
-          const container = btn.closest('.categories');
-          if (container) {
-            const elLeft = btn.offsetLeft;
-            const elWidth = btn.offsetWidth;
-            const containerWidth = container.offsetWidth;
-            const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
-            container.scrollTo({ left: scrollTo, behavior: "smooth" });
-          }
-        }
-      });
     }
   }
 
@@ -6410,17 +6458,14 @@ backdrop-filter: blur(6px);
   }
 
   let pickupMap, pickupMarker, pickupLatLng;
-  let dropoffMap, dropoffMarker, dropoffLatLng;
+  let dropoffMarker, dropoffLatLng;
   let directionsService, directionsRenderer;
 
   function initPickupMap() {
     if (pickupMap) return;
 
     directionsService = new google.maps.DirectionsService();
-    directionsRenderer = new google.maps.DirectionsRenderer({
-      suppressMarkers: true,
-      polylineOptions: { strokeWeight: 5 }
-    });
+    directionsRenderer = new google.maps.DirectionsRenderer({ suppressMarkers: true, polylineOptions: { strokeWeight: 5 } });
 
     const STORE_LOCATION = { lat: 18.081, lng: -88.563 };
     pickupLatLng = { lat: 18.081, lng: -88.563 };
@@ -6433,23 +6478,12 @@ backdrop-filter: blur(6px);
 
     directionsRenderer.setMap(pickupMap);
 
-    pickupMarker = new google.maps.Marker({
-      position: STORE_LOCATION,
-      map: pickupMap,
-      label: "A"
-    });
-
-    dropoffMarker = new google.maps.Marker({
-      map: pickupMap,
-      label: "B"
-    });
+    pickupMarker = new google.maps.Marker({ position: STORE_LOCATION, map: pickupMap, label: "A" });
+    dropoffMarker = new google.maps.Marker({ map: pickupMap, label: "B" });
 
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(pos => {
-        dropoffLatLng = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        };
+        dropoffLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         dropoffMarker.setPosition(dropoffLatLng);
         drawPickupRoute();
       });
@@ -6464,11 +6498,7 @@ backdrop-filter: blur(6px);
         const place = autocomplete.getPlace();
         if (!place.geometry) return;
 
-        pickupLatLng = {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng()
-        };
-
+        pickupLatLng = { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() };
         pickupMarker.setPosition(pickupLatLng);
         pickupMap.panTo(pickupLatLng);
         drawPickupRoute();
@@ -6484,9 +6514,7 @@ backdrop-filter: blur(6px);
       destination: dropoffLatLng,
       travelMode: google.maps.TravelMode.DRIVING
     }, (result, status) => {
-      if (status === "OK") {
-        directionsRenderer.setDirections(result);
-      }
+      if (status === "OK") directionsRenderer.setDirections(result);
     });
   }
 
@@ -6498,7 +6526,6 @@ backdrop-filter: blur(6px);
     var name = document.getElementById("pickupName") ? document.getElementById("pickupName").value : "Customer";
     var type = document.getElementById("pickupType") ? document.getElementById("pickupType").value : "General";
     var from = document.getElementById("pickupSearch") ? document.getElementById("pickupSearch").value : "";
-    
     var orderFor = document.getElementById("pickupOrderFor") ? document.getElementById("pickupOrderFor").value : "Myself";
     var description = document.getElementById("pickupDescription") ? document.getElementById("pickupDescription").value : "No details provided";
 
@@ -6523,46 +6550,37 @@ backdrop-filter: blur(6px);
 
     if (isIOS) {
       msg += "\nCustomer location\n📍 _Please tap “Attach → Location” to share live location_";
-      var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-      window.open(waURL, '_blank');
+      window.open("https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg), '_blank');
     } else {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
           function(position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            var liveMap = "https://www.google.com/maps?q=" + lat + "," + lng;
+            var liveMap = "https://www.google.com/maps?q=" + position.coords.latitude + "," + position.coords.longitude;
             msg += "\nCustomer Live Location\n*Map:* " + liveMap;
-            
-            var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-            window.open(waURL, '_blank');
+            window.open("https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg), '_blank');
           },
-          function(error) {
+          function() {
             msg += "\nCustomer location (GPS disabled)";
-            var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-            window.open(waURL, '_blank');
+            window.open("https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg), '_blank');
           },
           { timeout: 5000 }
         );
       } else {
-        msg += "\nCustomer location";
-        var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-        window.open(waURL, '_blank');
+        window.open("https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg), '_blank');
       }
     }
   }
 
+  // ✅ SUPABASE LOGIN FLOW
   function handleLogin() {
     const name = document.getElementById("userName").value.trim();
     const phone = document.getElementById("userPhone").value.trim();
-
     const isAdmin = name === ADMIN_NAME && phone === ADMIN_PHONE;
 
     if (!checkBusinessHoursLock(isAdmin)) {
       alert("Sorry, SwiftShop is currently closed.\nOpening time: 7:30 AM");
       return;
     }
-
     if (!phone) {
       alert("Enter phone number");
       return;
@@ -6572,32 +6590,22 @@ backdrop-filter: blur(6px);
     customerPhone = phone;
     customerEmail = document.getElementById("email")?.value || "";
 
-    // ✅ Replaced google.script.run with callBackend API Bridge
-    callBackend("checkUser", { phone }).then(res => {
+    checkUser(phone).then(res => {
       if (res && res.exists) {
         localStorage.setItem("userName", res.name);
         localStorage.setItem("userPhone", phone);
         localStorage.setItem("points", res.points || 0); 
         localStorage.setItem("loggedIn", "true");
-        
         enterApp();
-        
-        setTimeout(() => {
-            showPromoAd();
-        }, 500);
-
+        setTimeout(() => showPromoAd(), 500);
       } else {
-        callBackend("saveUser", { name, phone, email: customerEmail }).then(() => {
+        saveUser(name, phone, customerEmail).then(() => {
           localStorage.setItem("userName", name);
           localStorage.setItem("userPhone", phone);
           localStorage.setItem("points", 0); 
           localStorage.setItem("loggedIn", "true");
-          
           enterApp();
-          
-          setTimeout(() => {
-              showPromoAd();
-          }, 500);
+          setTimeout(() => showPromoAd(), 500);
         });
       }
     });
@@ -6606,13 +6614,16 @@ backdrop-filter: blur(6px);
   function updateDeliveryFee() {
     const zoneEl = document.getElementById("deliveryZone");
     const zone = zoneEl ? zoneEl.value : "";
-
     const feeLine = document.getElementById("cartDeliveryFee");
     const cartGrand = document.getElementById("cartGrandTotal");
 
-    if (!zone || !feeLine || !cartGrand) return;
+    if (!zone) {
+      feeLine.textContent = "";
+      cartGrand.textContent = "";
+      return;
+    }
 
-    const fee = getServiceFee ? getServiceFee(zone) : 3;
+    const fee = getServiceFee(zone);
     const grand = total + fee;
 
     feeLine.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
@@ -6622,7 +6633,6 @@ backdrop-filter: blur(6px);
   function updateCartBubble() {
     const bubble = document.getElementById("cartBubble");
     if (!bubble) return;
-
     const count = Object.values(cart).reduce((a, b) => a + b.q, 0);
     bubble.style.display = count > 0 ? "flex" : "none";
   }
@@ -6630,7 +6640,6 @@ backdrop-filter: blur(6px);
   function openCart() {
     const panel = document.getElementById("cartPanel");
     const bubble = document.getElementById("cartBubble");
-
     const isOpen = panel.style.bottom === "0px";
 
     if (isOpen) {
@@ -6643,9 +6652,7 @@ backdrop-filter: blur(6px);
       requestAnimationFrame(() => {
         renderCartPanel();                  
         setTimeout(() => {
-          if (typeof initCartMap === "function") {
-            initCartMap();
-          }
+          if (typeof initCartMap === "function") initCartMap();
         }, 350); 
       });
     }
@@ -6654,9 +6661,11 @@ backdrop-filter: blur(6px);
   function updateTacoDeliveryFee() {
     const zone = document.getElementById("tacoDeliveryZone").value;
     const feeText = document.getElementById("tacoFeeText");
-
-    if (!zone || !feeText) return;
-    const fee = getServiceFee ? getServiceFee(zone) : 3;
+    if (!zone) {
+      feeText.textContent = "";
+      return;
+    }
+    const fee = getServiceFee(zone);
     feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
   }
 
@@ -6676,9 +6685,7 @@ backdrop-filter: blur(6px);
     const itemsDiv = document.getElementById("cartPanelItems");
     itemsDiv.innerHTML = "";
 
-    let sum = 0;
-    let totalSavings = 0; 
-    let html = "";
+    let sum = 0, totalSavings = 0, html = "";
 
     for (let name in cart) {
       const item = cart[name];
@@ -6714,7 +6721,7 @@ backdrop-filter: blur(6px);
       : "";
 
     const totalDiv = document.getElementById("cartPanelTotal");
-    if(totalDiv) totalDiv.innerHTML = savingsDisplay + "Items Total: $" + sum.toFixed(2) + " BZD";
+    totalDiv.innerHTML = savingsDisplay + "Items Total: $" + sum.toFixed(2) + " BZD";
 
     const feeLine = document.getElementById("cartDeliveryFee");
     const cartGrand = document.getElementById("cartGrandTotal");
@@ -6729,36 +6736,25 @@ backdrop-filter: blur(6px);
     }
   }
 
-  function openAdminLogin() {
-    document.getElementById("adminLoginBox").style.display = "flex";
-  }
-
-  function closeAdminLogin() {
-    document.getElementById("adminLoginBox").style.display = "none";
-  }
+  function openAdminLogin() { document.getElementById("adminLoginBox").style.display = "flex"; }
+  function closeAdminLogin() { document.getElementById("adminLoginBox").style.display = "none"; }
 
   function submitAdminLogin() {
     const name = document.getElementById("adminName").value.trim();
     const phone = document.getElementById("adminPhone").value.trim();
-
-    const isAdmin = name === ADMIN_NAME && phone === ADMIN_PHONE;
-
-    if (!isAdmin) {
+    if (name !== ADMIN_NAME || phone !== ADMIN_PHONE) {
       alert("Invalid admin credentials");
       return;
     }
-
     localStorage.setItem("userName", name);
     localStorage.setItem("userPhone", phone);
     localStorage.setItem("loggedIn", "true");
-
     enterApp();
   }
 
   function goToOrder() {
     closeCart();
-    const box = document.getElementById("orderBox");
-    if(box) box.style.display = "block";
+    document.getElementById("orderBox").style.display = "block";
   }
 
   function fillPickupName() {
@@ -6768,57 +6764,34 @@ backdrop-filter: blur(6px);
   }
 
   function getInitials(name) {
-    return name
-      .split(" ")
-      .map(w => w[0])
-      .join("")
-      .substring(0,2)
-      .toUpperCase();
+    return name.split(" ").map(w => w[0]).join("").substring(0,2).toUpperCase();
   }
 
   function openProfile() {
-    const overlay = document.getElementById("profileOverlay");
-    if (overlay) overlay.style.display = "flex";
-
+    document.getElementById("profileOverlay").style.display = "flex";
     const name = localStorage.getItem("userName") || "Customer";
     const phone = localStorage.getItem("userPhone") || "—";
     const points = localStorage.getItem("points") || "0";
 
-    const pName = document.getElementById("profileName");
-    const pPhone = document.getElementById("profilePhone");
-    const pPoints = document.getElementById("profilePoints");
-    const pInit = document.getElementById("profileInitials");
-
-    if (pName) pName.innerText = name;
-    if (pPhone) pPhone.innerText = phone;
-    if (pPoints) pPoints.innerText = points;
-    if (pInit) pInit.innerText = getInitials(name);
+    document.getElementById("profileName").innerText = name;
+    document.getElementById("profilePhone").innerText = phone;
+    document.getElementById("profilePoints").innerText = points;
+    document.getElementById("profileInitials").innerText = getInitials(name);
   }
 
-  function closeProfile() {
-    const overlay = document.getElementById("profileOverlay");
-    if (overlay) overlay.style.display = "none";
-  }
+  function closeProfile() { document.getElementById("profileOverlay").style.display = "none"; }
 
   function enterApp() {
-    const appScreen = document.getElementById("appScreen");
-    const authScreen = document.getElementById("authScreen");
-    if (appScreen && appScreen.style.display === "block") return;
-    if (authScreen) authScreen.style.display = "none";
-    if (appScreen) appScreen.style.display = "block";
+    if (document.getElementById("appScreen").style.display === "block") return;
+    document.getElementById("authScreen").style.display = "none";
+    document.getElementById("appScreen").style.display = "block";
     
-    const initials = getInitials(localStorage.getItem("userName") || "U");
-    const pInit = document.getElementById("profileInitials");
-    if (pInit) pInit.innerText = initials;
-
+    document.getElementById("profileInitials").innerText = getInitials(localStorage.getItem("userName") || "U");
     window.userPhone = localStorage.getItem("userPhone");
     fetchUserBalance();
 
     const wrap = document.getElementById("installWrap");
-    if(wrap) {
-      wrap.hidden = false;
-      wrap.style.display = "flex";
-    }
+    if(wrap) { wrap.hidden = false; wrap.style.display = "flex"; }
 
     const welcome = document.getElementById("welcomeScreen");
     if (welcome) welcome.remove();
@@ -6826,18 +6799,13 @@ backdrop-filter: blur(6px);
     
   document.addEventListener("DOMContentLoaded", () => {
     checkBusinessHoursLock(false);
-
     const savedName = localStorage.getItem("userName");
     const savedPhone = localStorage.getItem("userPhone");
 
-    const nameInput = document.getElementById("userName");
-    const phoneInput = document.getElementById("userPhone");
-
-    if (savedName && nameInput) nameInput.value = savedName;
-    if (savedPhone && phoneInput) phoneInput.value = savedPhone;
+    if (savedName) document.getElementById("userName").value = savedName;
+    if (savedPhone) document.getElementById("userPhone").value = savedPhone;
 
     const isAdminAuto = savedName === ADMIN_NAME && savedPhone === ADMIN_PHONE;
-
     if (savedPhone && checkBusinessHoursLock(isAdminAuto)) {
       localStorage.setItem("loggedIn", "true");
       enterApp();
@@ -6847,7 +6815,6 @@ backdrop-filter: blur(6px);
       radio.addEventListener("change", () => {
         const timeInput = document.getElementById("scheduleTime");
         if (!timeInput) return;
-
         if (radio.value === "later" && radio.checked) {
           timeInput.style.display = "block";
         } else {
@@ -6859,47 +6826,34 @@ backdrop-filter: blur(6px);
   });
 
   const subIcons = {
-    "Drink": "🥤", "Drinks": "🥤",
-    "Food": "🍔", "Meals": "🍔",
-    "Dessert": "🍰", "Desserts": "🍰",
-    "Coffee": "☕", "Tea": "🍵",
-    "Breakfast": "🍳", "Lunch": "🍽️", "Dinner": "🍽️",
-    "Pastries": "🥐", "Ice Cream": "🍦",
-    "Items": "🛒"
+    "Drink": "🥤", "Drinks": "🥤", "Food": "🍔", "Meals": "🍔",
+    "Dessert": "🍰", "Desserts": "🍰", "Coffee": "☕", "Tea": "🍵",
+    "Breakfast": "🍳", "Lunch": "🍽️", "Dinner": "🍽️", "Pastries": "🥐",
+    "Ice Cream": "🍦", "Items": "🛒"
   };
 
   function render() {
     const box = document.getElementById("products");
     if (!box) return;
-
     box.innerHTML = "";
 
     const filteredItems = allProducts.filter(p => p.category === cat);
-
     if (filteredItems.length === 0) {
-      box.innerHTML = `
-        <div style="text-align:center; padding:50px 20px; color:#555;">
-          <div style="font-size:50px; margin-bottom:15px;">🔒</div>
-          <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
-        </div>`;
+      box.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#555;"><div style="font-size:50px; margin-bottom:15px;">🔒</div><h2 style="font-weight:900; color:#222;">Store Currently Closed</h2></div>`;
       return;
     }
 
     const grouped = {};
     filteredItems.forEach(p => {
       if(!p.subcategory) return;
-      const sub = p.subcategory;
-      if (!grouped[sub]) grouped[sub] = [];
-      grouped[sub].push(p);
+      if (!grouped[p.subcategory]) grouped[p.subcategory] = [];
+      grouped[p.subcategory].push(p);
     });
 
     Object.keys(grouped).forEach(sub => {
       box.innerHTML += `<div class="subcategory-title">${sub}</div>`;
-
       grouped[sub].forEach(p => {
-        let badgeHTML = "";
-        let wasPriceHTML = "";
-
+        let badgeHTML = "", wasPriceHTML = "";
         if (p.was) {
           const isNumeric = !isNaN(parseFloat(p.was)) && isFinite(p.was);
           if (isNumeric && Number(p.was) > p.price) {
@@ -6910,21 +6864,15 @@ backdrop-filter: blur(6px);
         }
 
         const displayPrice = (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
-
         box.innerHTML += `
           <div class="product">
             ${badgeHTML}
             <img src="${p.image}" onclick="openImage(this.src)">
             <div class="product-info">
               <strong>${p.name}</strong>
-              <div class="price">
-                ${wasPriceHTML}
-                $${displayPrice} BZD
-              </div>
+              <div class="price">${wasPriceHTML} $${displayPrice} BZD</div>
             </div>
-            <button onclick="add('${p.name}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
-              Add
-            </button>
+            <button onclick="add('${p.name}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">Add</button>
           </div>
         `;
       });
@@ -6937,9 +6885,7 @@ backdrop-filter: blur(6px);
   function handleSearchInput(value) {
     document.body.classList.add("searching");
     lastSearchValue = value;
-
     if (searchIdleTimer) clearTimeout(searchIdleTimer);
-
     searchIdleTimer = setTimeout(() => {
       document.body.classList.remove("searching");
       runSearchSafely();
@@ -6950,29 +6896,18 @@ backdrop-filter: blur(6px);
     const value = lastSearchValue.trim();
     if (value === runSearchSafely.lastValue) return;
     runSearchSafely.lastValue = value;
-
-    requestAnimationFrame(() => {
-      searchProducts(value);
-    });
+    requestAnimationFrame(() => searchProducts(value));
   }
 
   function searchProducts(query) {
-    const pickupBox = document.getElementById("pickupOrderBox");
-    if (pickupBox) pickupBox.style.display = "none";
-    
+    document.getElementById("pickupOrderBox").style.display = "none";
     const box = document.getElementById("products");
-    if (!box) return;
     box.innerHTML = "";
 
     const q = query.toLowerCase();
-
-    if (!q) {
-      render();
-      return;
-    }
+    if (!q) { render(); return; }
 
     const matches = allProducts.filter(p => p.name.toLowerCase().includes(q));
-
     if (matches.length > 0) {
       cat = matches[0].category;
       document.querySelectorAll(".cat-btn").forEach(btn => {
@@ -6992,10 +6927,7 @@ backdrop-filter: blur(6px);
           ${badgeHTML} <img src="${p.image}">
           <div class="product-info">
             <strong>${p.name}</strong>
-            <div class="price">
-              ${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''}
-              $${p.price.toFixed(2)} BZD
-            </div>
+            <div class="price">${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''} $${p.price.toFixed(2)} BZD</div>
           </div>
           <button onclick="add('${p.name}', ${p.price}, this, ${p.was || 'null'})">Add</button>
         </div>`;
@@ -7005,19 +6937,11 @@ backdrop-filter: blur(6px);
   function add(n, p, btn, w) {
     buzz(30); 
     if (btn) showAddCheck(btn);
-
     if (!cart[n]) {
-      cart[n] = { 
-        q: 0, 
-        p: p, 
-        w: w || null, 
-        cat: cat 
-      };
+      cart[n] = { q: 0, p: p, w: w || null, cat: cat };
     }
-    
     cart[n].q++;
     total += p;
-
     update();
     updateCartBubble();
     renderCartPanel();
@@ -7026,14 +6950,9 @@ backdrop-filter: blur(6px);
   function remove(n){
     buzz(20); 
     if(!cart[n]) return;
-
     cart[n].q--;
     total -= cart[n].p;
-
-    if(cart[n].q <= 0){
-      delete cart[n];
-    }
-
+    if(cart[n].q <= 0) delete cart[n];
     update();
     updateCartBubble();
     renderCartPanel();
@@ -7042,12 +6961,8 @@ backdrop-filter: blur(6px);
   function update() {}
 
   function backToCart(){
-    const orderBox = document.getElementById("orderBox");
-    if (orderBox) orderBox.style.display = "none";
-
-    const hasTacos = localStorage.getItem("tacoOrder");
-
-    if (hasTacos) {
+    document.getElementById("orderBox").style.display = "none";
+    if (localStorage.getItem("tacoOrder")) {
       document.getElementById("tacoOrderBox").style.display = "block";
       document.getElementById("products").style.display = "none";
     } else {
@@ -7061,45 +6976,21 @@ backdrop-filter: blur(6px);
   }
 
   const storeLocations = {
-    "SNACK": "18.084406,-88.565955",
-    "BREAKFAST": "18.084406,-88.565955",
-    "LUNCH": "18.084406,-88.565955",
-    "DRINK": "18.084406,-88.565955",
-    "HOUSEHOLD": "18.084406,-88.565955",
-    "HYGIENE": "18.084406,-88.565955",
-    "VEGETABLES": "18.080916,-88.562782",
-    "TREATS": "18.084406,-88.565955",
-    "ELECTRONICS": "18.079305,-88.562638",
-    "GENERAL": "18.084406,-88.565955",
-    "SARITAS": "18.084406,-88.565955",
-    "URBAN": "18.068463,-88.570723",
-    "AROMA": "18.081116,-88.566835",
-    "BREW": "18.095398,-88.563983",
-    "MARIA": "18.084044,-88.561874",
-    "LEO": "18.074679,-88.568029",
-    "SHAKEN": "18.081813,-88.564966",
-    "DAILY MENU": "18.084406,-88.565955",
-    "DUMPLING": "18.066928,-88.570507",
-    "FONDA": "18.084406,-88.565955",
-    "SALSAS": "18.088220,-88.567619",
-    "BURGA": "18.084406,-88.565955",
-    "TFC": "18.082771,-88.562183",
-    "GUERRERO": "18.092639,-88.561030",
-    "COSMETICS": "18.084406,-88.565955",
-    "FAYE": "18.084406,-88.565955",
-    "SISTER": "18.084406,-88.565955",
-    "ADDCART": "18.079520,-88.564390",
-    "NEEYA": "18.086068,-88.568782",
-    "FLOWER": "18.084406,-88.565955"
+    "SNACK": "18.084406,-88.565955", "BREAKFAST": "18.084406,-88.565955", "LUNCH": "18.084406,-88.565955",
+    "DRINK": "18.084406,-88.565955", "HOUSEHOLD": "18.084406,-88.565955", "HYGIENE": "18.084406,-88.565955",
+    "VEGETABLES": "18.080916,-88.562782", "TREATS": "18.084406,-88.565955", "ELECTRONICS": "18.079305,-88.562638",
+    "GENERAL": "18.084406,-88.565955", "SARITAS": "18.084406,-88.565955", "URBAN": "18.068463,-88.570723",
+    "AROMA": "18.081116,-88.566835", "BREW": "18.095398,-88.563983", "MARIA": "18.084044,-88.561874",
+    "LEO": "18.074679,-88.568029", "SHAKEN": "18.081813,-88.564966", "DAILY MENU": "18.084406,-88.565955",
+    "DUMPLING": "18.066928,-88.570507", "FONDA": "18.084406,-88.565955", "SALSAS": "18.088220,-88.567619",
+    "BURGA": "18.084406,-88.565955", "TFC": "18.082771,-88.562183", "GUERRERO": "18.092639,-88.561030",
+    "COSMETICS": "18.084406,-88.565955", "FAYE": "18.084406,-88.565955", "SISTER": "18.084406,-88.565955",
+    "ADDCART": "18.079520,-88.564390", "NEEYA": "18.086068,-88.568782", "FLOWER": "18.084406,-88.565955"
   };
 
   function order() {
     let forcedTotal = 0;
-
-    for (let name in cart) {
-      forcedTotal += cart[name].q * cart[name].p;
-    }
-
+    for (let name in cart) forcedTotal += cart[name].q * cart[name].p;
     total = forcedTotal;
 
     const userName = localStorage.getItem("userName") || "";
@@ -7109,38 +7000,20 @@ backdrop-filter: blur(6px);
     const hasTacos = !!tacoOrder;
 
     const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
-    const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
+    const walletBalance = getWalletBalance();
     const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
-
     const orderNum = Math.floor(100 + Math.random() * 900);
 
-    if (forcedTotal <= 0 && !hasTacos) {
-      alert("Your cart is empty");
-      return;
-    }
-
-    if (!window.lastCartCoords && total > 0) {
-      alert("Please pin your location on the map!");
-      return;
-    }
-
-    if (!window.lastCartZone) {
-      alert("Please select your delivery area");
-      return;
-    }
+    if (forcedTotal <= 0 && !hasTacos) { alert("Your cart is empty"); return; }
+    if (!window.lastCartCoords && total > 0) { alert("Please pin your location on the map!"); return; }
+    if (!window.lastCartZone) { alert("Please select your delivery area"); return; }
 
     const deliverySelect = document.getElementById("deliveryZoneSelect");
     const selectedValue = deliverySelect?.value;
+    if (!selectedValue) { alert("Please select your delivery area"); return; }
 
-    let deliveryFee = window.lastCartFee || 3;
-    let deliveryZone = window.lastCartZone || "In-Town";
-
-    if (selectedValue && selectedValue.includes("|")) {
-      const parts = selectedValue.split("|");
-      deliveryZone = parts[0];
-      deliveryFee = parseFloat(parts[1]);
-    }
-
+    const [deliveryZone, fee] = selectedValue.split("|");
+    const deliveryFee = parseFloat(fee);
     const itemsTotal = total;
     const grandTotal = itemsTotal + deliveryFee;
     const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
@@ -7151,14 +7024,10 @@ backdrop-filter: blur(6px);
     }
 
     let msg = `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
-
-    const groupedCart = {};
-    const activeBusinesses = new Set();
+    const groupedCart = {}, activeBusinesses = new Set();
 
     if (itemsTotal > 0) {
-      msg += `ITEMS%0A`;
-      msg += `----------------------------%0A`;
-
+      msg += `ITEMS%0A----------------------------%0A`;
       for (let i in cart) {
         const biz = (cart[i].cat || "GENERAL").toUpperCase();
         activeBusinesses.add(biz);
@@ -7168,66 +7037,38 @@ backdrop-filter: blur(6px);
 
       for (let bizName in groupedCart) {
         msg += `${bizName}%0A`;
-
         groupedCart[bizName].forEach(item => {
-          const price = item.details.p.toFixed(2);
-          msg += `- ${item.name}%0A`;
-          msg += `    Qty: ${item.details.q} x $${price} BZD%0A`;
+          msg += `- ${item.name}%0A    Qty: ${item.details.q} x $${item.details.p.toFixed(2)} BZD%0A`;
         });
-
         msg += `----------------------------%0A`;
       }
-
       msg += `%0A`;
     }
 
     if (hasTacos) {
-      msg += `TACO ORDER%0A`;
-      msg += `PLACE: ${tacoPlace}%0A`;
-      msg += `----------------------------%0A`;
-      msg += `${tacoOrder}%0A`;
-      msg += `----------------------------%0A`;
-      msg += `RUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A`;
-      msg += `----------------------------%0A%0A`;
+      msg += `TACO ORDER%0APLACE: ${tacoPlace}%0A----------------------------%0A${tacoOrder}%0A----------------------------%0ARUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A----------------------------%0A%0A`;
     }
 
     if (itemsTotal > 0) {
-      msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
-      msg += `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
-      
-      if (tipAmount > 0) {
-        msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
-      }
-
-      msg += `----------------------------%0A`;
-      msg += `GRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
-      msg += `PAYMENT METHOD: ${paymentMethod}%0A`;
-
+      msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0AITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
+      if (tipAmount > 0) msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
+      msg += `----------------------------%0AGRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0APAYMENT METHOD: ${paymentMethod}%0A`;
       if (paymentMethod.includes("Online")) {
-        msg += `Bank: Belize Bank%0A`;
-        msg += `Account Name: Danilo Cu%0A`;
-        msg += `Account Number: 275378010160000%0A`;
+        msg += `Bank: Belize Bank%0AAccount Name: Danilo Cu%0AAccount Number: 275378010160000%0A`;
       }
-
       msg += `%0A`;
     }
 
     if (itemsTotal > 0) {
-      msg += `----------------------------%0A`;
-      msg += `RUNNER ROUTE:%0A`;
-      
+      msg += `----------------------------%0ARUNNER ROUTE:%0A`;
       activeBusinesses.forEach(bizName => {
         const storeCoords = storeLocations[bizName] || storeLocations["GENERAL"];
-        const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
-        msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
+        msg += ` ${bizName}:%0Ahttps://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}%0A%0A`;
       });
     }
 
-    msg += `CUSTOMER: ${userName}%0A`;
-    msg += `PHONE: ${userPhone}`;
-
-    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
-    window.open(waUrl, "_blank");
+    msg += `CUSTOMER: ${userName}%0APHONE: ${userPhone}`;
+    window.open(`https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n')), "_blank");
   }
 
   function doneOrder() {
@@ -7235,29 +7076,21 @@ backdrop-filter: blur(6px);
     localStorage.removeItem("tacoOrder");
     localStorage.removeItem("tacoZone");
 
-    const tp = document.getElementById("tacoPlace");
-    if (tp) tp.value = "";
-    const td = document.getElementById("tacoDetails");
-    if (td) td.value = "";
-    const tz = document.getElementById("tacoDeliveryZone");
-    if (tz) tz.value = "";
-    const tf = document.getElementById("tacoFeeText");
-    if (tf) tf.textContent = "";
+    const tp = document.getElementById("tacoPlace"); if (tp) tp.value = "";
+    const td = document.getElementById("tacoDetails"); if (td) td.value = "";
+    const tz = document.getElementById("tacoDeliveryZone"); if (tz) tz.value = "";
+    const tf = document.getElementById("tacoFeeText"); if (tf) tf.textContent = "";
 
     cart = {};
     total = 0;
-    
     window.lastCartCoords = null;
     window.lastCartFee = 3.00;
     window.lastCartZone = "In-Town";
 
-    const pm = document.getElementById("paymentMethod");
-    if (pm) pm.selectedIndex = 0;
+    const pm = document.getElementById("paymentMethod"); if (pm) pm.selectedIndex = 0;
 
     update(); 
-    if (typeof updateCartBubble === "function") {
-      updateCartBubble();
-    }
+    if (typeof updateCartBubble === "function") updateCartBubble();
 
     const ob = document.getElementById("orderBox");
     const cp = document.getElementById("cartPanel");
@@ -7267,16 +7100,14 @@ backdrop-filter: blur(6px);
     const toast = document.getElementById("thankYouToast");
     if (toast) {
       toast.classList.add("show");
-      setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2500);
+      setTimeout(() => toast.classList.remove("show"), 2500);
     } else {
       alert("Order Processed Successfully");
     }
   }
 
-  // ✅ Replaced startup getProducts with callBackend
-  callBackend("getProducts").then(d => {
+  // ✅ INITIALIZE PRODUCTS FROM SUPABASE
+  getProducts().then(d => {
     allProducts = d || [];
     render();
     updateCategoryStatusDots(); 
@@ -7296,7 +7127,7 @@ backdrop-filter: blur(6px);
 
   window.addEventListener("beforeinstallprompt",(e)=>{
     e.preventDefault();
-    deferredPrompt=e;
+    deferredPrompt = e;
     if (installWrap) installWrap.hidden = false;
   });
 
@@ -7308,46 +7139,32 @@ backdrop-filter: blur(6px);
         deferredPrompt = null;
         if (installWrap) installWrap.hidden = true;
       } else {
-        if(typeof showInstallInstructions === "function") showInstallInstructions();
+        if (typeof showInstallInstructions === "function") showInstallInstructions();
       }
     });
   }
 
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  if (isIOS && installWrap) {
-    installWrap.hidden = false;
-  }
-
-  if (window.matchMedia('(display-mode: standalone)').matches && installWrap) {
-    installWrap.hidden = true;
-  }
+  if (isIOS && installWrap) installWrap.hidden = false;
+  if (window.matchMedia('(display-mode: standalone)').matches && installWrap) installWrap.hidden = true;
 
   setTimeout(() => {
     const welcome = document.getElementById("welcomeScreen");
     if (welcome) welcome.remove();
-  }, 2600); 
+  }, 2600);
 
-  function openSuggest() {
-    const overlay = document.getElementById("suggestOverlay");
-    if (overlay) overlay.style.display = "flex";
-  }
-
+  function openSuggest() { document.getElementById("suggestOverlay").style.display = "flex"; }
   function closeSuggest() {
-    const overlay = document.getElementById("suggestOverlay");
-    const input = document.getElementById("suggestInput");
-    if (overlay) overlay.style.display = "none";
-    if (input) input.value = "";
+    document.getElementById("suggestOverlay").style.display = "none";
+    document.getElementById("suggestInput").value = "";
   }
 
+  // ✅ SUPABASE SUGGESTION SUBMISSION
   function submitSuggestion() {
-    const input = document.getElementById("suggestInput");
-    if (!input) return;
-    const item = input.value.trim();
+    const item = document.getElementById("suggestInput").value.trim();
     if (!item) return alert("Please enter an item name");
 
-    // ✅ Replaced google.script.run with callBackend
-    callBackend("saveSuggestion", { item });
-
+    saveSuggestion(item);
     alert("✅ Your suggestion will be added soon!");
     closeSuggest();
   }
@@ -7363,11 +7180,9 @@ backdrop-filter: blur(6px);
     const check = document.createElement("div");
     check.className = "add-check";
     check.textContent = "✓";
-
     const rect = btn.getBoundingClientRect();
     check.style.left = rect.left + rect.width / 2 - 17 + "px";
     check.style.top = rect.top + window.scrollY - 10 + "px";
-
     document.body.appendChild(check);
     setTimeout(() => check.remove(), 600);
   }
@@ -7392,19 +7207,14 @@ backdrop-filter: blur(6px);
 
     const slogan = document.querySelector(".header p");
     if (slogan) slogan.innerText = dict.slogan;
-
     const suggestBtn = document.querySelector(".suggest-btn");
     if (suggestBtn) suggestBtn.innerText = dict.suggest;
-
     const searchBar = document.querySelector(".search-bar");
     if (searchBar) searchBar.placeholder = dict.searchPlaceholder;
-
     const cartTitle = document.querySelector("#cartTitle");
     if (cartTitle) cartTitle.innerText = dict.cartTitle;
-
     const nextBtn = document.querySelector(".next-btn");
     if (nextBtn) nextBtn.innerText = dict.orderBtn;
-
     const waBtn = document.querySelector(".whatsapp");
     if (waBtn) waBtn.innerText = dict.checkoutBtn;
 
@@ -7412,13 +7222,13 @@ backdrop-filter: blur(6px);
     toggleSettings();
   }
 
-  // ✅ Replaced fetchUserBalance with callBackend
+  // ✅ SUPABASE BALANCE FETCHING
   function fetchUserBalance() {
     if (!window.userPhone) return;
 
-    callBackend("getUserBalance", { phone: window.userPhone }).then(res => {
+    getUserBalance(window.userPhone).then(balance => {
       const el = document.getElementById("userBalance");
-      if (el) el.textContent = Number(res?.balance || 0).toFixed(2);
+      if (el) el.textContent = Number(balance || 0).toFixed(2);
     }).catch(() => {
       const el = document.getElementById("userBalance");
       if (el) el.textContent = "0.00";
@@ -7426,32 +7236,15 @@ backdrop-filter: blur(6px);
   }
 
   function openImage(src) {
-    buzz(25); 
-    const overlay = document.getElementById("imageOverlay");
-    const img = document.getElementById("overlayImg");
-
-    if (img) img.src = src;
-    if (overlay) overlay.style.display = "flex";
+    buzz(25);
+    document.getElementById("overlayImg").src = src;
+    document.getElementById("imageOverlay").style.display = "flex";
   }
 
-  function closeImage() {
-    const overlay = document.getElementById("imageOverlay");
-    if (overlay) overlay.style.display = "none";
-  }
+  function closeImage() { document.getElementById("imageOverlay").style.display = "none"; }
 
-  function showPromoAd() {
-    const overlay = document.getElementById('promoOverlay');
-    if (overlay) {
-      overlay.style.display = 'flex';
-    }
-  }
-
-  function closeAd() {
-    const overlay = document.getElementById('promoOverlay');
-    if (overlay) {
-      overlay.style.display = 'none';
-    }
-  }
+  function showPromoAd() { document.getElementById('promoOverlay').style.display = 'flex'; }
+  function closeAd() { document.getElementById('promoOverlay').style.display = 'none'; }
 
   function showNextAd(button) {
     const currentCard = button.closest('.promo-card');
@@ -7460,7 +7253,6 @@ backdrop-filter: blur(6px);
     const overlay = document.getElementById('promoOverlay');
 
     currentCard.style.display = 'none';
-
     if (nextCard && nextCard.classList.contains('promo-card')) {
       nextCard.style.display = 'block';
     } else if (overlay) {
@@ -7468,35 +7260,26 @@ backdrop-filter: blur(6px);
     }
   }
 
-  // ✅ Replaced fetchAndShowPromos with callBackend
+  // ✅ SUPABASE PROMOS FETCH
   function fetchAndShowPromos() {
     buzz(45);
     const box = document.getElementById("products");
-    if (!box) return;
-    
     box.innerHTML = `<div id="loadingDeals" style="text-align:center; padding:40px;"><p>Loading exclusive deals... 🔥</p></div>`;
     
-    const sections = ["pickupOrderBox", "tacoOrderBox", "requestRideBox", "orderBox"];
-    sections.forEach(id => {
+    ["pickupOrderBox", "tacoOrderBox", "requestRideBox", "orderBox"].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
     });
     box.style.display = "block";
     box.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-    callBackend("getPromos").then(promoItems => {
+    getPromos().then(promoItems => {
       if (!promoItems || promoItems.length === 0) {
-        box.innerHTML = `
-          <div style="text-align:center; padding:50px 20px; color:#888;">
-            <h3>No Promos Active</h3>
-            <p>Check back later for today's special deals!</p>
-            <button onclick="render()" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; background:#eee;">Back to Shop</button>
-          </div>`;
+        box.innerHTML = `<div style="text-align:center; padding:50px 20px; color:#888;"><h3>No Promos Active</h3><p>Check back later for today's special deals!</p><button onclick="render()" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; background:#eee;">Back to Shop</button></div>`;
         return;
       }
 
       let html = `<h2 id="dealsHeader" style="text-align:center; color:#ff5a1f; margin:15px 0;">🔥 LIVE DEALS</h2>`;
-
       promoItems.forEach(p => {
         let badgeHTML = "";
         if (p.was && !isNaN(p.was) && p.was > p.price) {
@@ -7510,42 +7293,29 @@ backdrop-filter: blur(6px);
             <img src="${p.image}" onclick="openImage(this.src)">
             <div class="product-info">
               <strong>${p.name}</strong>
-              <div class="price">
-                ${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''}
-                $${p.price.toFixed(2)} BZD
-              </div>
+              <div class="price">${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''} $${p.price.toFixed(2)} BZD</div>
             </div>
             <button onclick="add('${p.name}', ${p.price}, this, ${p.was || 'null'})">Add</button>
           </div>`;
       });
 
       box.innerHTML = html;
-
-      setTimeout(() => {
-        const dh = document.getElementById("dealsHeader");
-        if(dh) dh.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 100);
+      setTimeout(() => document.getElementById("dealsHeader").scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
     });
   }
 
   function updateCategoryStatusDots() {
-    const buttons = document.querySelectorAll(".cat-btn");
-
-    buttons.forEach(btn => {
-      const onclickAttr = btn.getAttribute("onclick");
-      if (!onclickAttr) return;
-      const match = onclickAttr.match(/'([^']+)'/);
+    document.querySelectorAll(".cat-btn").forEach(btn => {
+      const match = btn.getAttribute("onclick").match(/'([^']+)'/);
       if (!match) return;
       const categoryName = match[1];
 
       const isOpen = allProducts.some(p => p.category === categoryName);
-
       const existingDot = btn.querySelector(".status-dot");
       if (existingDot) existingDot.remove();
 
       const dot = document.createElement("span");
       dot.className = isOpen ? "status-dot dot-open" : "status-dot dot-closed";
-      
       btn.appendChild(dot);
     });
   }
@@ -7554,75 +7324,42 @@ backdrop-filter: blur(6px);
     var type = document.getElementById("requestType").value;
     var notice = document.getElementById("expressNotice");
     if (!notice) return;
-    
-    if (type === "Express") {
-      notice.style.display = "block";
-    } else {
-      notice.style.display = "none";
-    }
+    notice.style.display = (type === "Express") ? "block" : "none";
   }
 
   function scrollToProducts() {
     const productSection = document.getElementById("products");
-
     if (productSection) {
       const yOffset = -20; 
       const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-      window.scrollTo({
-        top: y,
-        behavior: "smooth"
-      });
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
   }
 
   function bannerCategory(category){
     const btn = document.querySelector(`.cat-btn[data-cat="${category}"]`);
-    if(btn){
-      btn.click();   
-    } else {
-      setCategory(category);
-    }
+    if(btn) btn.click(); else setCategory(category);
   }
 
-  // ✅ Replaced openStore data fetch with callBackend
+  // ✅ SUPABASE STORE DATA FETCH
   function openStore(storeName, logoUrl) {
     localStorage.removeItem("tacoPlace");
     localStorage.removeItem("tacoOrder");
-
     cat = storeName; 
 
-    const mainView = document.getElementById('main-view');
-    const detailView = document.getElementById('store-detail-view');
-    if (mainView) mainView.style.display = 'none';
-    if (detailView) detailView.style.display = 'block';
-
-    const dName = document.getElementById('detail-name');
-    const dLogo = document.getElementById('detail-logo');
-    if (dName) dName.innerText = storeName;
-    if (dLogo) dLogo.src = logoUrl;
+    document.getElementById('main-view').style.display = 'none';
+    document.getElementById('store-detail-view').style.display = 'block';
+    document.getElementById('detail-name').innerText = storeName;
+    document.getElementById('detail-logo').src = logoUrl;
     
     const container = document.getElementById('items-container');
-    if (!container) return;
     container.innerHTML = "<div style='text-align:center; padding:20px;'>Loading " + storeName + "...</div>";
 
-    callBackend("getStoreData", { store: storeName }).then(items => {
+    getStoreData(storeName).then(items => {
       container.innerHTML = ""; 
-
-      if(!items || items.length === 0) {
-        container.innerHTML = "<div style='text-align:center; padding:20px;'>No items found.</div>";
-        return;
-      }
-
       items.forEach(function(item) {
         const safeName = item.name.replace(/'/g, "\\'");
-        
-        let badgeHTML = "";
-        if (item.comment && item.comment.trim() !== "") {
-           badgeHTML = `<div style="position:absolute; top:8px; left:8px; background:#ff6a00; color:white; padding:4px 8px; font-size:10px; font-weight:bold; border-radius:4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index:1;">
-                        ${item.comment}
-                      </div>`;
-        }
+        let badgeHTML = item.comment ? `<div style="position:absolute; top:8px; left:8px; background:#ff6a00; color:white; padding:4px 8px; font-size:10px; font-weight:bold; border-radius:4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index:1;">${item.comment}</div>` : "";
 
         container.innerHTML += `
           <div class="item-card" style="position:relative;">
@@ -7639,10 +7376,8 @@ backdrop-filter: blur(6px);
   }
 
   function closeStore() {
-    const mainView = document.getElementById('main-view');
-    const detailView = document.getElementById('store-detail-view');
-    if (mainView) mainView.style.display = 'block';
-    if (detailView) detailView.style.display = 'none';
+    document.getElementById('main-view').style.display = 'block';
+    document.getElementById('store-detail-view').style.display = 'none';
     cat = "Grocery"; 
     window.scrollTo(0, 0);
   }
@@ -7650,37 +7385,25 @@ backdrop-filter: blur(6px);
   function loadStoreMenu(store){
     const productsBox = document.getElementById("products");
     const subBar = document.getElementById("subcategory-bar");
-
-    if(!productsBox || !subBar) return;
+    if (!productsBox || !subBar) return;
 
     productsBox.innerHTML = "";
     subBar.innerHTML = "";
 
-    callBackend("getProducts").then(data => {
-      const storeItems = (data || []).filter(function(p){
-        return p.category === store;
-      });
-
+    getProducts().then(data => {
+      const storeItems = (data || []).filter(p => p.category === store);
       if(storeItems.length === 0){
         productsBox.innerHTML = "<p>No items yet</p>";
         return;
       }
 
-      const subs = [...new Set(storeItems.map(function(p){
-        return p.subcategory;
-      }))];
-
-      subs.forEach(function(sub,i){
+      const subs = [...new Set(storeItems.map(p => p.subcategory))];
+      subs.forEach((sub, i) => {
         const btn = document.createElement("div");
         btn.className = "sub-btn";
         btn.innerText = sub;
-
         if(i === 0) btn.classList.add("active");
-
-        btn.onclick = function(){
-          renderSubcategory(storeItems, sub, btn);
-        };
-
+        btn.onclick = () => renderSubcategory(storeItems, sub, btn);
         subBar.appendChild(btn);
       });
 
@@ -7688,9 +7411,6 @@ backdrop-filter: blur(6px);
       if (typeof renderSubcategory === "function") {
         renderSubcategory(storeItems, subs[0]);
       }
-    }).catch(err => {
-      console.error(err);
-      productsBox.innerHTML = "Error loading menu";
     });
   }
 
@@ -7702,22 +7422,16 @@ backdrop-filter: blur(6px);
 
     function rotateFeatures() {
       track.classList.add("fade-out");
-
       setTimeout(() => {
         track.innerHTML = "";
-
         for (let i = 0; i < visibleCount; i++) {
-          const item = cards[(index + i) % cards.length];
-          track.appendChild(item.cloneNode(true));
+          track.appendChild(cards[(index + i) % cards.length].cloneNode(true));
         }
-
         index = (index + visibleCount) % cards.length;
-
         track.classList.remove("fade-out");
         track.classList.add("fade-in");
-      }, 500); 
+      }, 500);
     }
-
     setInterval(rotateFeatures, 3000);
   }
 
@@ -7729,22 +7443,16 @@ backdrop-filter: blur(6px);
 
     function rotateFeatures2() {
       track2.classList.add("fade-out");
-
       setTimeout(() => {
         track2.innerHTML = "";
-
         for (let i = 0; i < visibleCount2; i++) {
-          const item = cards2[(index2 + i) % cards2.length];
-          track2.appendChild(item.cloneNode(true));
+          track2.appendChild(cards2[(index2 + i) % cards2.length].cloneNode(true));
         }
-
         index2 = (index2 + visibleCount2) % cards2.length;
-
         track2.classList.remove("fade-out");
         track2.classList.add("fade-in");
       }, 500);
     }
-
     rotateFeatures2();
     setInterval(rotateFeatures2, 3000);
   }
@@ -7765,20 +7473,16 @@ backdrop-filter: blur(6px);
 
   window.addEventListener("DOMContentLoaded", () => {
     let orderType = "Delivery";
-
     document.querySelectorAll(".toggle-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
-
         orderType = btn.textContent.trim();
 
         if (orderType === "Pickup") {
           const pickupBtn = document.querySelector('.cat-btn[onclick*="openPickupOrder"]');
-
           if (pickupBtn) {
             openPickupOrder(pickupBtn);
-
             setTimeout(() => {
               const form = document.getElementById("pickupOrderBox");
               if (form) {
@@ -7799,40 +7503,27 @@ backdrop-filter: blur(6px);
   });
 
   function toggleMenu() {
-    const sidePanel = document.getElementById("sidePanel");
-    const menuOverlay = document.getElementById("menuOverlay");
-    if (sidePanel) sidePanel.classList.toggle("active");
-    if (menuOverlay) menuOverlay.classList.toggle("active");
+    document.getElementById("sidePanel").classList.toggle("active");
+    document.getElementById("menuOverlay").classList.toggle("active");
   }
 
   function openProfile() {
-    const screen = document.getElementById("profileScreen");
-    if (screen) screen.classList.add("active");
-    
+    document.getElementById("profileScreen").classList.add("active");
     const name = localStorage.getItem("userName") || "";
     const phone = localStorage.getItem("userPhone") || "";
-    
-    const pName = document.getElementById("profileName");
-    const pPhone = document.getElementById("profilePhone");
-    if (pName) pName.value = name;
-    if (pPhone) pPhone.value = phone;
+    document.getElementById("profileName").value = name;
+    document.getElementById("profilePhone").value = phone;
     updateAvatar(name);
-
-    toggleMenu(); 
+    toggleMenu();
   }
 
-  function closeProfile() {
-    const screen = document.getElementById("profileScreen");
-    if (screen) screen.classList.remove("active");
-  }
+  function closeProfile() { document.getElementById("profileScreen").classList.remove("active"); }
 
   function saveProfile() {
     const name = document.getElementById("profileName").value;
     const phone = document.getElementById("profilePhone").value;
-    
     localStorage.setItem("userName", name);
     localStorage.setItem("userPhone", phone);
-    
     updateAvatar(name);
   }
 
@@ -7844,43 +7535,26 @@ backdrop-filter: blur(6px);
 
   function quickAdd(name, price, wasPrice = null) {
     if (!window.cart) window.cart = {};
-
     if (cart[name]) {
       cart[name].q += 1;
     } else {
-      cart[name] = {
-        q: 1,
-        p: price,
-        w: wasPrice 
-      };
+      cart[name] = { q: 1, p: price, w: wasPrice };
     }
-
-    if (typeof updateCartBubble === "function") {
-      updateCartBubble();
-    }
-
-    if (typeof openCart === "function") {
-      openCart();
-    }
+    if (typeof updateCartBubble === "function") updateCartBubble();
+    if (typeof openCart === "function") openCart();
   }
 
   function openFoodMap() {
     const screen = document.getElementById("foodMapScreen");
     const mapFrame = document.getElementById("foodMapFrame");
-
-    if (screen) screen.style.display = "block";
-
-    if (mapFrame && !mapFrame.src) {
+    screen.style.display = "block";
+    if (!mapFrame.src) {
       mapFrame.src = "https://www.google.com/maps?q=food+drink+cafes+restaurants+bars+in+Orange+Walk+District+Belize&z=13&output=embed";
     }
-
     renderSuggestions();
   }
 
-  function closeFoodMap() {
-    const screen = document.getElementById("foodMapScreen");
-    if (screen) screen.style.display = "none";
-  }
+  function closeFoodMap() { document.getElementById("foodMapScreen").style.display = "none"; }
 
   function renderSuggestions() {
     const list = document.getElementById("suggestionsList");
@@ -7903,24 +7577,19 @@ backdrop-filter: blur(6px);
 
       const info = document.createElement("div");
       info.className = "suggestion-info";
-      info.innerHTML = `
-        <strong>${item.name}</strong>
-        <span>$${item.price.toFixed(2)} BZD</span>
-      `;
+      info.innerHTML = `<strong>${item.name}</strong><span>$${item.price.toFixed(2)} BZD</span>`;
 
       const btn = document.createElement("button");
       btn.className = "suggestion-add-btn";
       btn.textContent = "Add";
-
       btn.onclick = function () {
-        cat = "Suggestions"; 
+        cat = "Suggestions";
         add(item.name, item.price, btn, null);
       };
 
       card.appendChild(img);
       card.appendChild(info);
       card.appendChild(btn);
-
       list.appendChild(card);
     });
   }
@@ -7928,95 +7597,59 @@ backdrop-filter: blur(6px);
   function toggleSuggestions() {
     const box = document.getElementById("mapSuggestions");
     const btn = document.getElementById("toggleSuggestionsBtn");
-
     if (!box || !btn) return;
-
     box.classList.toggle("collapsed");
     btn.textContent = box.classList.contains("collapsed") ? "⬆️" : "⬇️";
   }
 
   window.addEventListener("load", () => {
     const btn = document.getElementById("toggleSuggestionsBtn");
-    if (btn) {
-      btn.addEventListener("click", toggleSuggestions);
-    }
+    if (btn) btn.addEventListener("click", toggleSuggestions);
   });
 
   function openLeaderBoard() {
-    const lbScreen = document.getElementById("leaderBoardScreen");
-    if (lbScreen) lbScreen.style.display = "block";
+    document.getElementById("leaderBoardScreen").style.display = "block";
     toggleMenu();
     fetchLeaderBoard();
   }
 
-  function closeLeaderBoard() {
-    const lbScreen = document.getElementById("leaderBoardScreen");
-    if (lbScreen) lbScreen.style.display = "none";
-  }
+  function closeLeaderBoard() { document.getElementById("leaderBoardScreen").style.display = "none"; }
 
-  // ✅ Replaced fetchLeaderBoard with callBackend
+  // ✅ SUPABASE LEADERBOARD FETCH
   function fetchLeaderBoard() {
-    callBackend("getLeaderBoard").then(data => {
+    getLeaderBoard().then(data => {
       const container = document.getElementById("leaderBoardContainer");
       if (!container) return;
       container.innerHTML = "";
 
-      (data || []).forEach(function(user) {
+      data.forEach(function(user) {
         const points = Number(user.points) || 0;
         const target = 500;
         const progress = Math.min((points / target) * 100, 100);
         const pointsLeft = Math.max(target - points, 0);
-
-        let trophy = "🏆";
-        if (user.rank == 1) trophy = "🥇";
-        if (user.rank == 2) trophy = "🥈";
-        if (user.rank == 3) trophy = "🥉";
+        let trophy = user.rank == 1 ? "🥇" : user.rank == 2 ? "🥈" : user.rank == 3 ? "🥉" : "🏆";
 
         container.innerHTML += `
           <div class="leaderboard-card">
             <div class="leaderboard-left">
-              <div class="leaderboard-rank">
-                #${user.rank}
-              </div>
+              <div class="leaderboard-rank">#${user.rank}</div>
               <div class="leaderboard-user">
-                <div class="leaderboard-name">
-                  ${user.name}
-                </div>
-                <div class="leaderboard-points">
-                  ${points} Points
-                </div>
-                ${
-                  user.rank == 1
-                  ? `
-                    <div class="leaderboard-prize">
-                      🏆 Leading The Race
-                    </div>
-                  `
-                  : ""
-                }
+                <div class="leaderboard-name">${user.name}</div>
+                <div class="leaderboard-points">${points} Points</div>
+                ${user.rank == 1 ? `<div class="leaderboard-prize">🏆 Leading The Race</div>` : ""}
                 <div class="leaderboard-progress-wrap">
                   <div class="leaderboard-progress-top">
-                    <div class="leaderboard-target">
-                      ${pointsLeft} points left to win
-                    </div>
-                    <div class="leaderboard-progress-pill">
-                      ${Math.round(progress)}%
-                    </div>
+                    <div class="leaderboard-target">${pointsLeft} points left to win</div>
+                    <div class="leaderboard-progress-pill">${Math.round(progress)}%</div>
                   </div>
                   <div class="leaderboard-progress-bar">
-                    <div
-                      class="leaderboard-progress-fill"
-                      style="width:${progress}%;">
-                    </div>
+                    <div class="leaderboard-progress-fill" style="width:${progress}%;"></div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="leaderboard-score">
-              ${trophy}
-            </div>
-          </div>
-        `;
+            <div class="leaderboard-score">${trophy}</div>
+          </div>`;
       });
     }).catch(error => {
       console.log("Leaderboard Error:", error);
@@ -8024,39 +7657,24 @@ backdrop-filter: blur(6px);
   }
 
   function selectNetwork(network, element){
-    const cn = document.getElementById("creditNetwork");
-    if (cn) cn.value = network;
-
-    document.querySelectorAll(".network-card").forEach(card =>
-      card.classList.remove("active")
-    );
-
+    document.getElementById("creditNetwork").value = network;
+    document.querySelectorAll(".network-card").forEach(card => card.classList.remove("active"));
     element.classList.add("active");
   }
 
   function openCreditPurchase(){
     const profileName = document.getElementById("profileName")?.value || "";
-    const cn = document.getElementById("creditName");
-    if (cn) cn.value = profileName;
-
-    const cps = document.getElementById("creditPurchaseScreen");
-    const sp = document.getElementById("sidePanel");
+    document.getElementById("creditName").value = profileName;
+    document.getElementById("creditPurchaseScreen").style.display = "block";
+    document.getElementById("sidePanel").style.display = "none";
     const menuOverlay = document.getElementById("menuOverlay");
-
-    if (cps) cps.style.display = "block";
-    if (sp) sp.style.display = "none";
-
-    if(menuOverlay){
-      menuOverlay.style.display = "none";
-    }
+    if(menuOverlay) menuOverlay.style.display = "none";
   }
 
   function closeCreditPurchase() {
-    const cps = document.getElementById("creditPurchaseScreen");
+    document.getElementById("creditPurchaseScreen").style.display = "none";
     const sidePanel = document.getElementById("sidePanel");
     const menuOverlay = document.getElementById("menuOverlay");
-
-    if (cps) cps.style.display = "none";
     if(sidePanel) sidePanel.style.display = "";
     if(menuOverlay) menuOverlay.style.display = "";
   }
@@ -8067,50 +7685,29 @@ backdrop-filter: blur(6px);
     const amount = parseFloat(document.getElementById("creditAmount").value);
     const name = document.getElementById("creditName").value.trim();
 
-    if (!name) {
-      alert("Please enter your name.");
-      return;
-    }
-
-    if (!phone) {
-      alert("Please enter a phone number.");
-      return;
-    }
-
-    if (!amount || amount <= 0) {
-      alert("Please enter a valid amount.");
-      return;
-    }
+    if (!name) { alert("Please enter your name."); return; }
+    if (!phone) { alert("Please enter a phone number."); return; }
+    if (!amount || amount <= 0) { alert("Please enter a valid amount."); return; }
 
     const total = amount + 1;
-    const cs = document.getElementById("creditSummary");
+    document.getElementById("creditSummary").innerHTML = `
+      <div style="background:#fafafa; padding:15px; border-radius:16px; line-height:1.8;">
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Network:</strong> ${network}</p>
+        <p><strong>Phone:</strong> ${phone}</p>
+        <p><strong>Credit:</strong> $${amount.toFixed(2)}</p>
+        <p><strong>Service Fee:</strong> $1.00</p>
+        <p style="color:#ff6a00; font-size:18px; font-weight:900;">Total Transfer: $${total.toFixed(2)}</p>
+      </div>
+    `;
 
-    if (cs) {
-      cs.innerHTML = `
-        <div style="background:#fafafa; padding:15px; border-radius:16px; line-height:1.8;">
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Network:</strong> ${network}</p>
-          <p><strong>Phone:</strong> ${phone}</p>
-          <p><strong>Credit:</strong> $${amount.toFixed(2)}</p>
-          <p><strong>Service Fee:</strong> $1.00</p>
-          <p style="color:#ff6a00; font-size:18px; font-weight:900;">
-            Total Transfer: $${total.toFixed(2)}
-          </p>
-        </div>
-      `;
-    }
-
-    const cps = document.getElementById("creditPurchaseScreen");
-    const ccs = document.getElementById("creditConfirmScreen");
-    if (cps) cps.style.display = "none";
-    if (ccs) ccs.style.display = "block";
+    document.getElementById("creditPurchaseScreen").style.display = "none";
+    document.getElementById("creditConfirmScreen").style.display = "block";
   }
 
   function closeCreditConfirm() {
-    const ccs = document.getElementById("creditConfirmScreen");
-    const cps = document.getElementById("creditPurchaseScreen");
-    if (ccs) ccs.style.display = "none";
-    if (cps) cps.style.display = "block";
+    document.getElementById("creditConfirmScreen").style.display = "none";
+    document.getElementById("creditPurchaseScreen").style.display = "block";
   }
 
   function sendCreditWhatsapp() {
@@ -8147,17 +7744,13 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
     const firstNet = document.querySelector(".network-card");
     if (firstNet) firstNet.classList.add("active");
 
-    const fp = document.getElementById("feePreview");
-    if (fp) fp.innerHTML = "Total Transfer: $0.00";
-
-    const ccs = document.getElementById("creditConfirmScreen");
-    if (ccs) ccs.style.display = "none";
+    document.getElementById("feePreview").innerHTML = "Total Transfer: $0.00";
+    document.getElementById("creditConfirmScreen").style.display = "none";
   }
 </script>
 
 </body>
 </html>
-
 
 
 
