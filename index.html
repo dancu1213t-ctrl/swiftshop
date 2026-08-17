@@ -7562,10 +7562,7 @@ function enterApp() {
 const [deliveryZone, fee] = selectedValue.split("|");
     const deliveryFee = parseFloat(fee);
     const itemsTotal = total;
-    
-    // Fix: Add deliveryFee once and include tipAmount
     const grandTotal = itemsTotal + deliveryFee + tipAmount;
-
     const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
 
     if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
