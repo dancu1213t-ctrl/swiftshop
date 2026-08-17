@@ -4038,6 +4038,83 @@ backdrop-filter: blur(6px);
   padding-bottom: 1px !important;
   background: transparent !important;
 }
+
+    /* ================= FLOATING BOTTOM BANNER ================= */
+.floating-promo-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  max-width: 480px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 12px 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 99999;
+  cursor: pointer;
+  animation: floatBannerUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.floating-promo-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: #f2f2f2;
+}
+
+.floating-promo-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.floating-promo-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #111;
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.floating-promo-price {
+  font-size: 13px;
+  font-weight: 700;
+  color: #ff6a00;
+  margin: 0;
+}
+
+.floating-promo-close {
+  background: rgba(0,0,0,0.06);
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.floating-promo-close:hover {
+  background: rgba(0,0,0,0.12);
+}
+
+@keyframes floatBannerUp {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
   </style>
 </head>
 
@@ -7182,7 +7259,7 @@ backdrop-filter: blur(6px);
     document.getElementById("profileOverlay").style.display = "none";
   }
 
-  function enterApp() {
+function enterApp() {
     const appScr = document.getElementById("appScreen");
     if (appScr && appScr.style.display === "block") return;
     const authScr = document.getElementById("authScreen");
@@ -7206,6 +7283,9 @@ backdrop-filter: blur(6px);
 
     const welcome = document.getElementById("welcomeScreen");
     if (welcome) welcome.remove();
+
+    // 🔥 Trigger Supabase floating promo banner
+    checkAndShowFloatingPromo();
   }
     
   /* AUTO LOGIN */
@@ -8751,6 +8831,56 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
     const cConfirm = document.getElementById("creditConfirmScreen");
     if (cConfirm) cConfirm.style.display = "none";
   }
+
+  // Fetch active promo from Supabase and render the floating banner
+async function checkAndShowFloatingPromo() {
+  const container = document.getElementById("floatingPromoContainer");
+  if (!container) return;
+
+  // Query your Supabase table 'promos'
+  const { data, error } = await supabaseClient
+    .from('promos')
+    .select('*')
+    .limit(1); // Grabs the top promo item
+
+  if (error || !data || data.length === 0) return;
+
+  const promo = data[0];
+
+  // Optional: check if user closed this specific promo ID during this session
+  if (sessionStorage.getItem("dismissedPromo") === String(promo.id)) return;
+
+  container.innerHTML = `
+    <div class="floating-promo-banner" id="floatingPromoCard" onclick="handlePromoClick('${promo.category || ''}')">
+      <img src="${promo.image || 'https://i.imgur.com/WHXTIpe.png'}" class="floating-promo-img" alt="Promo">
+      <div class="floating-promo-info">
+        <h4 class="floating-promo-title">${promo.name}</h4>
+        <p class="floating-promo-price">$${Number(promo.price).toFixed(2)} BZD ${promo.was ? `<span style="text-decoration:line-through;color:#888;font-size:11px;margin-left:4px;">$${Number(promo.was).toFixed(2)}</span>` : ''}</p>
+      </div>
+      <button class="floating-promo-close" onclick="event.stopPropagation(); closeFloatingPromo(${promo.id})">✕</button>
+    </div>
+  `;
+}
+
+function closeFloatingPromo(promoId) {
+  const card = document.getElementById("floatingPromoCard");
+  if (card) {
+    card.style.transition = "all 0.3s ease";
+    card.style.opacity = "0";
+    card.style.transform = "translate(-50%, 20px)";
+    setTimeout(() => card.remove(), 300);
+  }
+  sessionStorage.setItem("dismissedPromo", String(promoId));
+}
+
+function handlePromoClick(category) {
+  if (category && typeof setCategory === 'function') {
+    setCategory(category);
+  }
+}
+
+// Call this function inside your enterApp() function so it fires when users log in
+// checkAndShowFloatingPromo();
 </script>
 
 <!-- 📝 SUGGEST ITEM MODAL -->
@@ -9096,7 +9226,8 @@ function selectTip(amount, element) {
   if (tipInput) tipInput.value = amount;
 }
 </script>
-
+<!-- Container for the Supabase Floating Banner -->
+<div id="floatingPromoContainer"></div>
 </body>
 </html>
 
