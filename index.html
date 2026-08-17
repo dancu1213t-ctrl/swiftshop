@@ -5949,1888 +5949,1047 @@ backdrop-filter: blur(6px);
 
 
 <script>
+  // Your live Google Apps Script Web App URL
+  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbySDAPLbLqzS6sBfElhD6k69vLfLDKfKu6m0u2xrAfretsEzWsUnFikrvjtqKN8_8pveQ/exec";
+
+  async function callBackend(action, params = {}) {
+    let url = `${WEB_APP_URL}?action=${action}`;
+    Object.keys(params).forEach(key => {
+      url += `&${key}=${encodeURIComponent(params[key])}`;
+    });
+    
+    try {
+      const response = await fetch(url);
+      return await response.json();
+    } catch (error) {
+      console.error(`Error calling ${action}:`, error);
+      return null;
+    }
+  }
+
   function buzz(ms = 30) {
-  if (navigator.vibrate) navigator.vibrate(ms);
-}
-
-  
- const translations = {
-  en: {
-    slogan: "Browse Items • Order • Earn Points • Get it Delivered",
-    suggest: "➕ Suggest Item",
-    searchPlaceholder: "Search for items...",
-    cartTitle: "Your Cart",
-    orderBtn: "Next",
-    checkoutBtn: "Order on WhatsApp"
-  },
-  es: {
-    slogan: "Ver Productos • Pedir • Puntos • Entrega a Domicilio",
-    suggest: "➕ Sugerir Producto",
-    searchPlaceholder: "Que Busca😊?...",
-    cartTitle: "Tu Carrito",
-    orderBtn: "Siguiente",
-    checkoutBtn: "Pedir por WhatsApp"
-  }
-};
-console.log("SCRIPT LOADED");
-
-/* EVERYTHING BELOW IS YOUR ORIGINAL LOGIC - UNCHANGED */
-/************* 👑 ADMIN ACCESS *************/
-const ADMIN_NAME = "Danilo Cu";
-const ADMIN_PHONE = "6080205";
-
-
-/************* ⏰ BUSINESS HOURS LOCK *************/
-function checkBusinessHoursLock(isAdminAttempt = false) {
-  const now = new Date();
-
-  const hour = now.getHours();
-  const minute = now.getMinutes();
-
-  // OPEN: 7:30 AM
-  const openHour = 7;
-  const openMinute = 30;
-
-  // CLOSE: 9:00 PM
-  const closeHour = 21;
-  const closeMinute = 0;
-
-  let isOpen = false;
-
-  if (
-    (hour > openHour || (hour === openHour && minute >= openMinute)) &&
-    (hour < closeHour || (hour === closeHour && minute < closeMinute))
-  ) {
-    isOpen = true;
+    if (navigator.vibrate) navigator.vibrate(ms);
   }
 
-  const loginBox = document.getElementById("loginBox");
-  const closedBox = document.getElementById("closedBox");
-
-  // ⛔ closed for normal users
-  if (!isOpen && !isAdminAttempt) {
-    if (loginBox) loginBox.style.display = "none";
-    if (closedBox) closedBox.style.display = "block";
-    return false;
-  }
-
-  // ✅ open or admin
-  if (loginBox) loginBox.style.display = "block";
-  if (closedBox) closedBox.style.display = "none";
-
-  return true;
-}
-
-// --- LIVE TEXT SLIDER LOGIC ---
-function updateLiveSlider() {
-  const comments = [
-    "🌽Grab a Snack, with Krazy Corn, Best of the Best",
-    "🍕Two 16 inch Pizza with Drinks at 35 Points",
-    "🌮 Mercy's Place Now Available on Tacos Order Box",
-    "🍅 Get Fresh Vegetables at Emanuel's Frutas y Verduras(Don Tito)",
-    "🌮 Elma's Tacos Now Available",
-    "🌮 Lilly Tacos Now Available",
-    "🌯 Get Your Burritos and Tostadas from around FireStation- ALicia's",
-    "🚚 You Shop, We Deliver Seh the Word",
-    "🔵Free Delivery when you purchase 🔵",
-    "🔵Check out ADD TO CART, Get Your Gift Cards🔵",
-    "🛒ADD TO CART, Now Available🔵",
-    "💅🏻Check out Bree's Nail Supply!",
-    "🥐 MeatPies, With Ketchup?!",
-    "🍴If Negrito seh suh, then dah suh, ya tu sabe rite?😮‍💨",
-    "💳 Virtual Cash top-ups are Available",
-    "🚚 Tacos, Tacos Get yuh Tacos 6 to 12P.M",
-    "🫵🏻 One Click, and Yuh Set!",
-    "🏃🏻‍♂️‍➡️ 🍔Food, Drinks, If we nuh gat it, We mek sure we have it",
-    "📲Follow Us on Facebook and Instagram‼️🛍️",
-    "🍔Love noh fill belly, food an drink do di job🍟",
-    "💘No need ask, check di Hygiene top section",
-    "📌Snack an drink ready fi yuh",
-    "😮‍💨Mi diet start… afta dis order",
-    "🙂‍↕️Hungry first, decision later",
-    "📦You can now Request Pickups with Live Maps📍",
-    "🌟Earn a Point Per Order, Redeem Rewards🌟",
-    "💸Help Us GROW, Do you sell items? Give us a Text 6080205📞",
-  ];
-  
-  const track = document.getElementById("textSlider");
-  if(track) {
-    // Clear and re-populate to keep it fresh every time they login
-    track.innerHTML = comments.map(c => `<span>${c}</span>`).join('');
-  }
-}
-
-// Call this inside your enterApp() function or at the end of the script
-window.addEventListener('load', updateLiveSlider);
-
-const title = document.getElementById("title");
-const text = title.innerText;
-title.innerHTML = "";
-
-[...text].forEach((c, i) => {
-  const s = document.createElement("span");
-  s.textContent = c === " " ? "\u00A0" : c;
-  s.style.animationDelay = `${i * 0.1}s`;
-  title.appendChild(s);
-});
-
-let allProducts=[], cart={}, total=0, cat="Snack";
-
-let customerName = "";
-let customerPhone = "";
-
-let customerEmail = "";
-let rewardPoints = 0;
-
-// ===== REQUEST RIDE LOGIC =====
-
-let rideLocation = null;
-
-function openRequestRide(el) {
-  document.querySelectorAll(".cat-btn").forEach(b =>
-    b.classList.remove("active")
-  );
-  el.classList.add("active");
-
-  if (document.getElementById("products"))
-    document.getElementById("products").style.display = "none";
-
-  if (document.getElementById("pickupOrderBox"))
-    document.getElementById("pickupOrderBox").style.display = "none";
-
-  if (document.getElementById("tacoOrderBox"))
-    document.getElementById("tacoOrderBox").style.display = "none";
-
-  document.getElementById("requestRideBox").style.display = "block";
-
-  document.getElementById("rideName").value =
-    localStorage.getItem("userName") || "Customer";
-}
-
-
-function getRideLocation() {
-  if (!navigator.geolocation) {
-    alert("Location not supported");
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    pos => {
-      rideLocation = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude
-      };
-
-      // Update text
-      document.getElementById("rideLocationText").innerText =
-        "Location pinned";
-
-      // Show Google Map on site
-      const mapUrl =
-        "https://www.google.com/maps?q=" +
-        rideLocation.lat + "," + rideLocation.lng +
-        "&output=embed";
-
-      const iframe = document.getElementById("rideMap");
-      iframe.src = mapUrl;
-
-      document.getElementById("rideMapWrapper").style.display = "block";
+  const translations = {
+    en: {
+      slogan: "Browse Items • Order • Earn Points • Get it Delivered",
+      suggest: "➕ Suggest Item",
+      searchPlaceholder: "Search for items...",
+      cartTitle: "Your Cart",
+      orderBtn: "Next",
+      checkoutBtn: "Order on WhatsApp"
     },
-    () => alert("Please enable location access"),
-    { enableHighAccuracy: true }
-  );
-}
-let cartMap, cartMarker;
-
-function initCartMap() {
-  const mapDiv = document.getElementById("cartDeliveryMap");
-  if (!mapDiv || cartMap) return; 
-
-  const owCenter = { lat: 18.0777, lng: -88.5667 };
-
-  cartMap = new google.maps.Map(mapDiv, {
-    center: owCenter,
-    zoom: 15,
-    disableDefaultUI: true,
-    gestureHandling: "greedy",
-    styles: [{ "featureType": "poi", "stylers": [{ "visibility": "off" }] }] 
-  });
-
-  cartMarker = new google.maps.Marker({
-    position: owCenter,
-    map: cartMap,
-    draggable: true,
-    animation: google.maps.Animation.DROP,
-    icon: {
-      path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-      scale: 6,
-      fillColor: "#ff6a00",
-      fillOpacity: 1,
-      strokeWeight: 2,
-      strokeColor: "#fff"
+    es: {
+      slogan: "Ver Productos • Pedir • Puntos • Entrega a Domicilio",
+      suggest: "➕ Sugerir Producto",
+      searchPlaceholder: "Que Busca😊?...",
+      cartTitle: "Tu Carrito",
+      orderBtn: "Siguiente",
+      checkoutBtn: "Pedir por WhatsApp"
     }
-  });
-
-  const input = document.getElementById("cartMapSearch");
-  const autocomplete = new google.maps.places.Autocomplete(input);
-  autocomplete.bindTo('bounds', cartMap);
-
-  autocomplete.addListener("place_changed", () => {
-    const place = autocomplete.getPlace();
-    if (!place.geometry) return;
-    snapPinTo(place.geometry.location);
-  });
-
-  cartMarker.addListener("dragend", () => {
-    updateCartGPSFee(cartMarker.getPosition());
-  });
-}
-
-function getCurrentLocation() {
-  const btn = document.getElementById("geoBtn");
-  
-  // 1. Initial Loading State
-  btn.innerText = "Located✅...";
-  btn.style.pointerEvents = "none"; 
-  btn.style.opacity = "0.7";
-
-  const geoOptions = {
-    enableHighAccuracy: true, 
-    timeout: 5000,           
-    maximumAge: 10000        
   };
+  console.log("SCRIPT LOADED");
 
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-      // 2. TRIGGER SNAP: This function now forces the "Located" text instantly
-      snapPinTo(latLng); 
-    }, (err) => {
-      // Fallback: Try fast-track if high accuracy is slow
-      navigator.geolocation.getCurrentPosition((pos) => {
-        const latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
-        snapPinTo(latLng);
-      }, () => {
-        alert("GPS is slow. Please drag the pin manually!");
-        resetGeoBtn();
-      }, { enableHighAccuracy: false, timeout: 3000 });
-    }, geoOptions);
-  }
-}
+  /************* 👑 ADMIN ACCESS *************/
+  const ADMIN_NAME = "Danilo Cu";
+  const ADMIN_PHONE = "6080205";
 
-// 🎯 THE FIX: Helper to move pin and show "LOCATED" instantly
-function snapPinTo(latLng) {
-  const btn = document.getElementById("geoBtn");
-  
-  if (cartMap) {
-    cartMap.panTo(latLng);
-    cartMap.setZoom(17);
-  }
-  if (cartMarker) {
-    cartMarker.setPosition(latLng);
-  }
-  
-  updateCartGPSFee(latLng); 
+  /************* ⏰ BUSINESS HOURS LOCK *************/
+  function checkBusinessHoursLock(isAdminAttempt = false) {
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
 
-  // ✅ UI Update: Change text to "LOCATED" immediately
-  btn.innerHTML = "📍 LOCATED";
-  btn.style.background = "#1ebe57"; // Turns green for success
-  btn.style.opacity = "1";
-  btn.style.pointerEvents = "auto";
-  
-  // Return to original prompt after 3 seconds
-  setTimeout(() => {
-    btn.innerHTML = "📍 TAP HERE TO PIN LOCATION";
-    btn.style.background = "#ff6a00";
-  }, 3000);
-}
+    const openHour = 7;
+    const openMinute = 30;
+    const closeHour = 21;
+    const closeMinute = 0;
 
-// Simple reset function if GPS fails entirely
-function resetGeoBtn() {
-  const btn = document.getElementById("geoBtn");
-  btn.innerHTML = "📍 TAP HERE TO PIN LOCATION";
-  btn.style.background = "#ff6a00";
-  btn.style.opacity = "1";
-  btn.style.pointerEvents = "auto";
-}
-function updateCartGPSFee(latLng) {
-  const lat = latLng.lat().toFixed(6);
-  const lng = latLng.lng().toFixed(6);
-  
-  // 1. Save coords for the WhatsApp link
-  window.lastCartCoords = `${lat},${lng}`; 
+    let isOpen = false;
 
-  // 2. Calculate Distance from OW Center
-  const center = new google.maps.LatLng(18.0777, -88.5667);
-  const dist = google.maps.geometry.spherical.computeDistanceBetween(latLng, center) / 1000;
-
- // ONLY store coordinates — pricing comes from dropdown
-window.lastCartCoords = `${lat},${lng}`;
-
-  // 4. 🔥 THE LIVE CHANGE: This forces the screen to update right now
-  refreshCartTotals(); 
-}
-
-function refreshCartTotals() {
-  // Find the text elements on your screen
-  const feeText = document.getElementById("cartDeliveryFee");
-  const grandTotalText = document.getElementById("cartGrandTotal");
-
-  if (feeText) {
-    // This updates the $3 or $4 text live
-    feeText.innerHTML = `🚚 Delivery (${window.lastCartZone}): <b>$${window.lastCartFee.toFixed(2)} BZD</b>`;
-  }
-
-  if (grandTotalText) {
-    // This updates the Final Total live
-    const itemsTotal = window.total || 0;
-    const finalAmount = itemsTotal + window.lastCartFee;
-    grandTotalText.innerText = `Grand Total: $${finalAmount.toFixed(2)} BZD`;
-  }
-}
-function sendRideRequest() {
-  if (!rideLocation) {
-    alert("Please pin your location first");
-    return;
-  }
-
-  const name = document.getElementById("rideName").value;
-  const vehicle = document.getElementById("vehicleType").value;
-
-  const mapLink =
-    "https://www.google.com/maps?q=" +
-    rideLocation.lat + "," + rideLocation.lng;
-
-  const msg =
-    "REQUEST RIDE\n\n" +
-    "Name: " + name + "\n" +
-    "Vehicle Type: " + vehicle + "\n\n" +
-    "Location:\n" + mapLink;
-
-  window.open(
-    "https://wa.me/5016080205?text=" + encodeURIComponent(msg),
-    "_blank"
-  );
-}
-
-
-function setCategory(c, e) {
-
-  /* 1. HIDE EVERYTHING */
-  const elementsToHide = [
-    "requestRideBox",
-    "pickupOrderBox",
-    "tacoOrderBox",
-    "products",
-    "map",
-    "subcategory-bar"
-  ];
-
-  elementsToHide.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
-
-  /* 2. RESET ACTIVE BUTTONS */
-  document.querySelectorAll(".cat-btn").forEach(btn => btn.classList.remove("active"));
-
-  /* 3. SAVE CURRENT CATEGORY */
-  cat = c;
-
-  /* 4. CHECK IF STORE */
-  let isStore = false;
-  if (e && e.dataset.store === "true") {
-    isStore = true;
-  }
-
-  /* 5. SHOW CORRECT SECTION */
-
-  if (c === "RequestRide") {
-
-    const rideBox = document.getElementById("requestRideBox");
-    const map = document.getElementById("map");
-
-    if (rideBox) rideBox.style.display = "block";
-    if (map) map.style.display = "block";
-
-  }
-
-  else if (c === "Pickup") {
-
-    const pickupBox = document.getElementById("pickupOrderBox");
-
-    if (pickupBox) pickupBox.style.display = "block";
-
-  }
-
-  else {
-
-    const products = document.getElementById("products");
-
-    if (products) {
-
-      products.style.display = "grid";
-
-      /* STORE MENU WITH SUBCATEGORIES */
-      if (isStore && typeof loadStoreMenu === "function") {
-        loadStoreMenu(c);
-      }
-
-      /* NORMAL CATEGORY */
-      else {
-        render();
-      }
-
-      /* Smooth scroll after layout updates */
-      setTimeout(() => {
-        products.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }, 120);
-
+    if (
+      (hour > openHour || (hour === openHour && minute >= openMinute)) &&
+      (hour < closeHour || (hour === closeHour && minute < closeMinute))
+    ) {
+      isOpen = true;
     }
 
+    const loginBox = document.getElementById("loginBox");
+    const closedBox = document.getElementById("closedBox");
+
+    if (!isOpen && !isAdminAttempt) {
+      if (loginBox) loginBox.style.display = "none";
+      if (closedBox) closedBox.style.display = "block";
+      return false;
+    }
+
+    if (loginBox) loginBox.style.display = "block";
+    if (closedBox) closedBox.style.display = "none";
+
+    return true;
   }
 
-  /* 6. ACTIVATE BUTTON */
+  // --- LIVE TEXT SLIDER LOGIC ---
+  function updateLiveSlider() {
+    const comments = [
+      "🌽Grab a Snack, with Krazy Corn, Best of the Best",
+      "🍕Two 16 inch Pizza with Drinks at 35 Points",
+      "🌮 Mercy's Place Now Available on Tacos Order Box",
+      "🍅 Get Fresh Vegetables at Emanuel's Frutas y Verduras(Don Tito)",
+      "🌮 Elma's Tacos Now Available",
+      "🌮 Lilly Tacos Now Available",
+      "🌯 Get Your Burritos and Tostadas from around FireStation- ALicia's",
+      "🚚 You Shop, We Deliver Seh the Word",
+      "🔵Free Delivery when you purchase 🔵",
+      "🔵Check out ADD TO CART, Get Your Gift Cards🔵",
+      "🛒ADD TO CART, Now Available🔵",
+      "💅🏻Check out Bree's Nail Supply!",
+      "🥐 MeatPies, With Ketchup?!",
+      "🍴If Negrito seh suh, then dah suh, ya tu sabe rite?😮‍💨",
+      "💳 Virtual Cash top-ups are Available",
+      "🚚 Tacos, Tacos Get yuh Tacos 6 to 12P.M",
+      "🫵🏻 One Click, and Yuh Set!",
+      "🏃🏻‍♂️‍➡️ 🍔Food, Drinks, If we nuh gat it, We mek sure we have it",
+      "📲Follow Us on Facebook and Instagram‼️🛍️",
+      "🍔Love noh fill belly, food an drink do di job🍟",
+      "💘No need ask, check di Hygiene top section",
+      "📌Snack an drink ready fi yuh",
+      "😮‍💨Mi diet start… afta dis order",
+      "🙂‍↕️Hungry first, decision later",
+      "📦You can now Request Pickups with Live Maps📍",
+      "🌟Earn a Point Per Order, Redeem Rewards🌟",
+      "💸Help Us GROW, Do you sell items? Give us a Text 6080205📞",
+    ];
+    
+    const track = document.getElementById("textSlider");
+    if(track) {
+      track.innerHTML = comments.map(c => `<span>${c}</span>`).join('');
+    }
+  }
 
-  if (e) {
+  window.addEventListener('load', updateLiveSlider);
 
-    /* Manual button click */
-    e.classList.add("active");
+  const title = document.getElementById("title");
+  if (title) {
+    const text = title.innerText;
+    title.innerHTML = "";
+    [...text].forEach((c, i) => {
+      const s = document.createElement("span");
+      s.textContent = c === " " ? "\u00A0" : c;
+      s.style.animationDelay = `${i * 0.1}s`;
+      title.appendChild(s);
+    });
+  }
 
-    const container = e.closest('.categories');
+  let allProducts=[], cart={}, total=0, cat="Snack";
+  let customerName = "";
+  let customerPhone = "";
+  let customerEmail = "";
+  let rewardPoints = 0;
 
-    if (container) {
-      const elLeft = e.offsetLeft;
-      const elWidth = e.offsetWidth;
-      const containerWidth = container.offsetWidth;
+  // ===== REQUEST RIDE LOGIC =====
+  let rideLocation = null;
 
-      const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+  function openRequestRide(el) {
+    document.querySelectorAll(".cat-btn").forEach(b =>
+      b.classList.remove("active")
+    );
+    el.classList.add("active");
 
-      container.scrollTo({
-        left: scrollTo,
-        behavior: "smooth"
+    if (document.getElementById("products"))
+      document.getElementById("products").style.display = "none";
+
+    if (document.getElementById("pickupOrderBox"))
+      document.getElementById("pickupOrderBox").style.display = "none";
+
+    if (document.getElementById("tacoOrderBox"))
+      document.getElementById("tacoOrderBox").style.display = "none";
+
+    document.getElementById("requestRideBox").style.display = "block";
+    document.getElementById("rideName").value = localStorage.getItem("userName") || "Customer";
+  }
+
+  function getRideLocation() {
+    if (!navigator.geolocation) {
+      alert("Location not supported");
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        rideLocation = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        };
+
+        document.getElementById("rideLocationText").innerText = "Location pinned";
+
+        const mapUrl = "https://www.google.com/maps?q=" + rideLocation.lat + "," + rideLocation.lng + "&output=embed";
+        const iframe = document.getElementById("rideMap");
+        iframe.src = mapUrl;
+
+        document.getElementById("rideMapWrapper").style.display = "block";
+      },
+      () => alert("Please enable location access"),
+      { enableHighAccuracy: true }
+    );
+  }
+
+  let cartMap, cartMarker;
+
+  function initCartMap() {
+    const mapDiv = document.getElementById("cartDeliveryMap");
+    if (!mapDiv || cartMap) return; 
+
+    const owCenter = { lat: 18.0777, lng: -88.5667 };
+
+    cartMap = new google.maps.Map(mapDiv, {
+      center: owCenter,
+      zoom: 15,
+      disableDefaultUI: true,
+      gestureHandling: "greedy",
+      styles: [{ "featureType": "poi", "stylers": [{ "visibility": "off" }] }] 
+    });
+
+    cartMarker = new google.maps.Marker({
+      position: owCenter,
+      map: cartMap,
+      draggable: true,
+      animation: google.maps.Animation.DROP,
+      icon: {
+        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+        scale: 6,
+        fillColor: "#ff6a00",
+        fillOpacity: 1,
+        strokeWeight: 2,
+        strokeColor: "#fff"
+      }
+    });
+
+    const input = document.getElementById("cartMapSearch");
+    if (input) {
+      const autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.bindTo('bounds', cartMap);
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) return;
+        snapPinTo(place.geometry.location);
       });
     }
 
-  } 
-  
-  else {
+    cartMarker.addListener("dragend", () => {
+      updateCartGPSFee(cartMarker.getPosition());
+    });
+  }
 
-    /* Automatic trigger (slider banners etc) */
-    document.querySelectorAll(".cat-btn").forEach(btn => {
+  function getCurrentLocation() {
+    const btn = document.getElementById("geoBtn");
+    if (!btn) return;
+    
+    btn.innerText = "Located✅...";
+    btn.style.pointerEvents = "none"; 
+    btn.style.opacity = "0.7";
 
-      const btnText = btn.innerText.toLowerCase();
-      const categoryTarget = c.toLowerCase();
+    const geoOptions = {
+      enableHighAccuracy: true, 
+      timeout: 5000,           
+      maximumAge: 10000        
+    };
 
-      if (btnText.includes(categoryTarget)) {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        const latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+        snapPinTo(latLng); 
+      }, () => {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          const latLng = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+          snapPinTo(latLng);
+        }, () => {
+          alert("GPS is slow. Please drag the pin manually!");
+          resetGeoBtn();
+        }, { enableHighAccuracy: false, timeout: 3000 });
+      }, geoOptions);
+    }
+  }
 
-        btn.classList.add("active");
+  function snapPinTo(latLng) {
+    const btn = document.getElementById("geoBtn");
+    
+    if (cartMap) {
+      cartMap.panTo(latLng);
+      cartMap.setZoom(17);
+    }
+    if (cartMarker) {
+      cartMarker.setPosition(latLng);
+    }
+    
+    updateCartGPSFee(latLng); 
 
-        const container = btn.closest('.categories');
+    if (btn) {
+      btn.innerHTML = "📍 LOCATED";
+      btn.style.background = "#1ebe57";
+      btn.style.opacity = "1";
+      btn.style.pointerEvents = "auto";
+      
+      setTimeout(() => {
+        btn.innerHTML = "📍 TAP HERE TO PIN LOCATION";
+        btn.style.background = "#ff6a00";
+      }, 3000);
+    }
+  }
 
-        if (container) {
-          const elLeft = btn.offsetLeft;
-          const elWidth = btn.offsetWidth;
-          const containerWidth = container.offsetWidth;
+  function resetGeoBtn() {
+    const btn = document.getElementById("geoBtn");
+    if (!btn) return;
+    btn.innerHTML = "📍 TAP HERE TO PIN LOCATION";
+    btn.style.background = "#ff6a00";
+    btn.style.opacity = "1";
+    btn.style.pointerEvents = "auto";
+  }
 
-          const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+  function updateCartGPSFee(latLng) {
+    const lat = latLng.lat().toFixed(6);
+    const lng = latLng.lng().toFixed(6);
+    
+    window.lastCartCoords = `${lat},${lng}`; 
+    refreshCartTotals();
+  }
 
-          container.scrollTo({
-            left: scrollTo,
-            behavior: "smooth"
-          });
+  function refreshCartTotals() {
+    const feeText = document.getElementById("cartDeliveryFee");
+    const grandTotalText = document.getElementById("cartGrandTotal");
+
+    if (feeText) {
+      feeText.innerHTML = `🚚 Delivery (${window.lastCartZone || "In-Town"}): <b>$${(window.lastCartFee || 3).toFixed(2)} BZD</b>`;
+    }
+
+    if (grandTotalText) {
+      const itemsTotal = window.total || 0;
+      const finalAmount = itemsTotal + (window.lastCartFee || 3);
+      grandTotalText.innerText = `Grand Total: $${finalAmount.toFixed(2)} BZD`;
+    }
+  }
+
+  function sendRideRequest() {
+    if (!rideLocation) {
+      alert("Please pin your location first");
+      return;
+    }
+
+    const name = document.getElementById("rideName").value;
+    const vehicle = document.getElementById("vehicleType").value;
+
+    const mapLink = "https://www.google.com/maps?q=" + rideLocation.lat + "," + rideLocation.lng;
+
+    const msg =
+      "REQUEST RIDE\n\n" +
+      "Name: " + name + "\n" +
+      "Vehicle Type: " + vehicle + "\n\n" +
+      "Location:\n" + mapLink;
+
+    window.open("https://wa.me/5016080205?text=" + encodeURIComponent(msg), "_blank");
+  }
+
+  function setCategory(c, e) {
+    const elementsToHide = [
+      "requestRideBox",
+      "pickupOrderBox",
+      "tacoOrderBox",
+      "products",
+      "map",
+      "subcategory-bar"
+    ];
+
+    elementsToHide.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+
+    document.querySelectorAll(".cat-btn").forEach(btn => btn.classList.remove("active"));
+    cat = c;
+
+    let isStore = false;
+    if (e && e.dataset.store === "true") {
+      isStore = true;
+    }
+
+    if (c === "RequestRide") {
+      const rideBox = document.getElementById("requestRideBox");
+      const map = document.getElementById("map");
+      if (rideBox) rideBox.style.display = "block";
+      if (map) map.style.display = "block";
+    } else if (c === "Pickup") {
+      const pickupBox = document.getElementById("pickupOrderBox");
+      if (pickupBox) pickupBox.style.display = "block";
+    } else {
+      const products = document.getElementById("products");
+      if (products) {
+        products.style.display = "grid";
+        if (isStore && typeof loadStoreMenu === "function") {
+          loadStoreMenu(c);
+        } else {
+          render();
         }
 
+        setTimeout(() => {
+          products.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 120);
       }
-
-    });
-
-  }
-
-}
-
-
-
-
-// 🌮 OPEN TACO ORDER SCREEN (NOT FROM SHEETS)
-function openTacoOrder(btn){
-
-  // highlight active button
-  document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-
-  // hide products, show taco box
-  document.getElementById("products").style.display = "none";
-  document.getElementById("tacoOrderBox").style.display = "block";
-
-  const user = localStorage.getItem("userName") || "Customer";
-  document.getElementById("tacoUserTitle").innerText = "🌮 Order For " + user;
-}
-
-
-// ➜ GO FROM TACOS TO NORMAL ORDER FLOW
-function goToOrderFromTacos(){
-
-  const place = document.getElementById("tacoPlace").value;
-  const details = document.getElementById("tacoDetails").value.trim();
-  const zone = document.getElementById("tacoDeliveryZone").value;
-
-  if(!place || !details || !zone){
-    alert("Please select taco place, delivery area, and enter your order.");
-    return;
-  }
-
-  // ✅ save taco info
-  localStorage.setItem("tacoPlace", place);
-  localStorage.setItem("tacoOrder", details);
-  localStorage.setItem("tacoZone", zone); // ✅ SAVE DELIVERY AREA
-
-  // ✅ close taco order box
-  document.getElementById("tacoOrderBox").style.display = "none";
-
-  // ✅ SKIP CART → OPEN ORDER BOX DIRECTLY
-  goToOrder();
-}
-
-function openPickupOrder(btn){
-  document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
-
-  // Hide everything else
-  document.getElementById("products").style.display = "none";
-  document.getElementById("tacoOrderBox").style.display = "none";
-  
-  // Show only pickup
-  document.getElementById("pickupOrderBox").style.display = "block";
-  
-  fillPickupName();   
-  setTimeout(initPickupMap, 300);
-}
-
-
-
-
-let pickupMap, pickupMarker, pickupLatLng;
-let dropoffMap, dropoffMarker, dropoffLatLng;
-let directionsService, directionsRenderer;
-
-
-function initPickupMap() {
-  if (pickupMap) return;
-
-  directionsService = new google.maps.DirectionsService();
-  directionsRenderer = new google.maps.DirectionsRenderer({
-    suppressMarkers: true,
-    polylineOptions: {
-      strokeWeight: 5
     }
-  });
 
-
-
-// 🏪 STORE LOCATION (POINT A)
-const STORE_LOCATION = { lat: 18.081, lng: -88.563 };
-
-  // DEFAULT (Orange Walk)
-  pickupLatLng = { lat: 18.081, lng: -88.563 };
-
-  pickupMap = new google.maps.Map(document.getElementById("pickupMap"), {
-    center: pickupLatLng,
-    zoom: 14,
-    disableDefaultUI: true
-  });
-
-
-
-
-
-  directionsRenderer.setMap(pickupMap);
-
- pickupMarker = new google.maps.Marker({
-  position: STORE_LOCATION,
-  map: pickupMap,
-  label: "A"
-});
-
-
-  dropoffMarker = new google.maps.Marker({
-    map: pickupMap,
-    label: "B"
-  });
-
-  // 📍 CURRENT LOCATION = DROPOFF
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(pos => {
-      dropoffLatLng = {
-        lat: pos.coords.latitude,
-        lng: pos.coords.longitude
-      };
-
-      dropoffMarker.setPosition(dropoffLatLng);
-drawPickupRoute();
-
-
-    });
-  }
-
-  // 🔍 AUTOCOMPLETE = PICKUP LOCATION
-  const input = document.getElementById("pickupSearch");
-  const autocomplete = new google.maps.places.Autocomplete(input);
-  autocomplete.bindTo("bounds", pickupMap);
-
-
-
-  autocomplete.addListener("place_changed", () => {
-  const place = autocomplete.getPlace();
-  if (!place.geometry) return;
-
-  // ✅ UPDATE PICKUP LOCATION (A)
-  pickupLatLng = {
-    lat: place.geometry.location.lat(),
-    lng: place.geometry.location.lng()
-  };
-
-  // ✅ MOVE MARKER A
-  pickupMarker.setPosition(pickupLatLng);
-
-  // ✅ CENTER MAP
-  pickupMap.panTo(pickupLatLng);
-
-  // ✅ REDRAW ROUTE
-  drawPickupRoute();
-});
-
-
-    
-
-}
-
-function drawPickupRoute() {
-  if (!pickupLatLng || !dropoffLatLng) return;
-
-  directionsService.route({
-    origin: pickupLatLng,
-    destination: dropoffLatLng,
-    travelMode: google.maps.TravelMode.DRIVING
-  }, (result, status) => {
-    if (status === "OK") {
-      directionsRenderer.setDirections(result);
-    }
-  });
-}
-
-
-
-
-function sendPickupWhatsApp() {
-  // 1. Get the Dropdown element
-  var requestDropdown = document.getElementById("requestType");
-  // 2. Get the specific text of the selected option (e.g., "Standard Pickup")
-  var selectedService = requestDropdown ? requestDropdown.options[requestDropdown.selectedIndex].text : "Pickup";
-  // Remove the emoji from the text for a cleaner message header if desired, 
-  // or leave it as is to keep the emoji in the WhatsApp header.
-  var cleanService = selectedService.replace(/[^\x00-\x7F]/g, "").trim(); 
-
-  var name = document.getElementById("pickupName") ? document.getElementById("pickupName").value : "Customer";
-  var type = document.getElementById("pickupType") ? document.getElementById("pickupType").value : "General";
-  var from = document.getElementById("pickupSearch") ? document.getElementById("pickupSearch").value : "";
-  
-  var orderFor = document.getElementById("pickupOrderFor") ? document.getElementById("pickupOrderFor").value : "Myself";
-  var description = document.getElementById("pickupDescription") ? document.getElementById("pickupDescription").value : "No details provided";
-
-  if (!from) {
-    alert("Please enter a pickup location.");
-    return;
-  }
-
-  var phoneNumber = "5016080205";
-  var pickupMapURL = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(from);
-  
-  // 3. Update the Header to reflect the specific choice
-  var msg = "*📍 " + cleanService.toUpperCase() + "*\n\n" +
-            "*Name:* " + name + "\n" +
-            "*Order For:* " + orderFor + "\n" +
-            "*Category:* " + type + "\n\n" +
-            "*📦 ITEMS:*\n" + description + "\n\n" +
-            "*🚩 FROM:*\n" + from + "\n" +
-            "*Map:* " + pickupMapURL + "\n\n" +
-            "*🏠 DELIVER TO:*";
-
-  // --- REST OF YOUR ORIGINAL FLOW (iOS/Android Logic) ---
-  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-  if (isIOS) {
-    msg += "\nCustomer location\n📍 _Please tap “Attach → Location” to share live location_";
-    var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-    window.open(waURL, '_blank');
-  } else {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          var lat = position.coords.latitude;
-          var lng = position.coords.longitude;
-          var liveMap = "https://www.google.com/maps?q=" + lat + "," + lng;
-          msg += "\nCustomer Live Location\n*Map:* " + liveMap;
-          
-          var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-          window.open(waURL, '_blank');
-        },
-        function(error) {
-          msg += "\nCustomer location (GPS disabled)";
-          var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-          window.open(waURL, '_blank');
-        },
-        { timeout: 5000 }
-      );
+    if (e) {
+      e.classList.add("active");
+      const container = e.closest('.categories');
+      if (container) {
+        const elLeft = e.offsetLeft;
+        const elWidth = e.offsetWidth;
+        const containerWidth = container.offsetWidth;
+        const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+        container.scrollTo({ left: scrollTo, behavior: "smooth" });
+      }
     } else {
-      msg += "\nCustomer location";
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        const btnText = btn.innerText.toLowerCase();
+        const categoryTarget = c.toLowerCase();
+        if (btnText.includes(categoryTarget)) {
+          btn.classList.add("active");
+          const container = btn.closest('.categories');
+          if (container) {
+            const elLeft = btn.offsetLeft;
+            const elWidth = btn.offsetWidth;
+            const containerWidth = container.offsetWidth;
+            const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+            container.scrollTo({ left: scrollTo, behavior: "smooth" });
+          }
+        }
+      });
+    }
+  }
+
+  function openTacoOrder(btn){
+    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    document.getElementById("products").style.display = "none";
+    document.getElementById("tacoOrderBox").style.display = "block";
+
+    const user = localStorage.getItem("userName") || "Customer";
+    document.getElementById("tacoUserTitle").innerText = "🌮 Order For " + user;
+  }
+
+  function goToOrderFromTacos(){
+    const place = document.getElementById("tacoPlace").value;
+    const details = document.getElementById("tacoDetails").value.trim();
+    const zone = document.getElementById("tacoDeliveryZone").value;
+
+    if(!place || !details || !zone){
+      alert("Please select taco place, delivery area, and enter your order.");
+      return;
+    }
+
+    localStorage.setItem("tacoPlace", place);
+    localStorage.setItem("tacoOrder", details);
+    localStorage.setItem("tacoZone", zone);
+
+    document.getElementById("tacoOrderBox").style.display = "none";
+    goToOrder();
+  }
+
+  function openPickupOrder(btn){
+    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    document.getElementById("products").style.display = "none";
+    document.getElementById("tacoOrderBox").style.display = "none";
+    document.getElementById("pickupOrderBox").style.display = "block";
+    
+    fillPickupName();   
+    setTimeout(initPickupMap, 300);
+  }
+
+  let pickupMap, pickupMarker, pickupLatLng;
+  let dropoffMap, dropoffMarker, dropoffLatLng;
+  let directionsService, directionsRenderer;
+
+  function initPickupMap() {
+    if (pickupMap) return;
+
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+      suppressMarkers: true,
+      polylineOptions: { strokeWeight: 5 }
+    });
+
+    const STORE_LOCATION = { lat: 18.081, lng: -88.563 };
+    pickupLatLng = { lat: 18.081, lng: -88.563 };
+
+    pickupMap = new google.maps.Map(document.getElementById("pickupMap"), {
+      center: pickupLatLng,
+      zoom: 14,
+      disableDefaultUI: true
+    });
+
+    directionsRenderer.setMap(pickupMap);
+
+    pickupMarker = new google.maps.Marker({
+      position: STORE_LOCATION,
+      map: pickupMap,
+      label: "A"
+    });
+
+    dropoffMarker = new google.maps.Marker({
+      map: pickupMap,
+      label: "B"
+    });
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(pos => {
+        dropoffLatLng = {
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude
+        };
+        dropoffMarker.setPosition(dropoffLatLng);
+        drawPickupRoute();
+      });
+    }
+
+    const input = document.getElementById("pickupSearch");
+    if (input) {
+      const autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.bindTo("bounds", pickupMap);
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) return;
+
+        pickupLatLng = {
+          lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()
+        };
+
+        pickupMarker.setPosition(pickupLatLng);
+        pickupMap.panTo(pickupLatLng);
+        drawPickupRoute();
+      });
+    }
+  }
+
+  function drawPickupRoute() {
+    if (!pickupLatLng || !dropoffLatLng) return;
+
+    directionsService.route({
+      origin: pickupLatLng,
+      destination: dropoffLatLng,
+      travelMode: google.maps.TravelMode.DRIVING
+    }, (result, status) => {
+      if (status === "OK") {
+        directionsRenderer.setDirections(result);
+      }
+    });
+  }
+
+  function sendPickupWhatsApp() {
+    var requestDropdown = document.getElementById("requestType");
+    var selectedService = requestDropdown ? requestDropdown.options[requestDropdown.selectedIndex].text : "Pickup";
+    var cleanService = selectedService.replace(/[^\x00-\x7F]/g, "").trim(); 
+
+    var name = document.getElementById("pickupName") ? document.getElementById("pickupName").value : "Customer";
+    var type = document.getElementById("pickupType") ? document.getElementById("pickupType").value : "General";
+    var from = document.getElementById("pickupSearch") ? document.getElementById("pickupSearch").value : "";
+    
+    var orderFor = document.getElementById("pickupOrderFor") ? document.getElementById("pickupOrderFor").value : "Myself";
+    var description = document.getElementById("pickupDescription") ? document.getElementById("pickupDescription").value : "No details provided";
+
+    if (!from) {
+      alert("Please enter a pickup location.");
+      return;
+    }
+
+    var phoneNumber = "5016080205";
+    var pickupMapURL = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(from);
+    
+    var msg = "*📍 " + cleanService.toUpperCase() + "*\n\n" +
+              "*Name:* " + name + "\n" +
+              "*Order For:* " + orderFor + "\n" +
+              "*Category:* " + type + "\n\n" +
+              "*📦 ITEMS:*\n" + description + "\n\n" +
+              "*🚩 FROM:*\n" + from + "\n" +
+              "*Map:* " + pickupMapURL + "\n\n" +
+              "*🏠 DELIVER TO:*";
+
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    if (isIOS) {
+      msg += "\nCustomer location\n📍 _Please tap “Attach → Location” to share live location_";
       var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
       window.open(waURL, '_blank');
+    } else {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            var lat = position.coords.latitude;
+            var lng = position.coords.longitude;
+            var liveMap = "https://www.google.com/maps?q=" + lat + "," + lng;
+            msg += "\nCustomer Live Location\n*Map:* " + liveMap;
+            
+            var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
+            window.open(waURL, '_blank');
+          },
+          function(error) {
+            msg += "\nCustomer location (GPS disabled)";
+            var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
+            window.open(waURL, '_blank');
+          },
+          { timeout: 5000 }
+        );
+      } else {
+        msg += "\nCustomer location";
+        var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
+        window.open(waURL, '_blank');
+      }
     }
   }
-}
 
+  function handleLogin() {
+    const name = document.getElementById("userName").value.trim();
+    const phone = document.getElementById("userPhone").value.trim();
 
+    const isAdmin = name === ADMIN_NAME && phone === ADMIN_PHONE;
 
-function handleLogin() {
-  const name = document.getElementById("userName").value.trim();
-  const phone = document.getElementById("userPhone").value.trim();
+    if (!checkBusinessHoursLock(isAdmin)) {
+      alert("Sorry, SwiftShop is currently closed.\nOpening time: 7:30 AM");
+      return;
+    }
 
-  // 👑 ADMIN CHECK
-  const isAdmin = name === ADMIN_NAME && phone === ADMIN_PHONE;
+    if (!phone) {
+      alert("Enter phone number");
+      return;
+    }
 
-  // ⏰ TIME LOCK (allow admin when closed)
-  if (!checkBusinessHoursLock(isAdmin)) {
-    alert("Sorry, SwiftShop is currently closed.\nOpening time: 7:30 AM");
-    return;
-  }
+    customerName = name || "Customer";
+    customerPhone = phone;
+    customerEmail = document.getElementById("email")?.value || "";
 
-  if (!phone) {
-    alert("Enter phone number");
-    return;
-  }
-
-  customerName = name || "Customer";
-  customerPhone = phone;
-  
-  // Keep your existing email logic
-  customerEmail = document.getElementById("email")?.value || "";
-
-  // 🔥 IF NOT RUNNING IN APPS SCRIPT (GitHub / domain)
-  if (typeof google === "undefined" || !google.script) {
-    localStorage.setItem("userName", name || "Customer");
-    localStorage.setItem("userPhone", phone);
-    localStorage.setItem("loggedIn", "true");
-    
-    enterApp();
-    
-    // Show the ad after the screen switches
-    setTimeout(() => {
-        showPromoAd();
-    }, 500);
-    
-    return;
-  }
-
-  // ✅ Apps Script path
-  google.script.run.withSuccessHandler(res => {
-    if (res.exists) {
-      localStorage.setItem("userName", res.name);
-      localStorage.setItem("userPhone", phone);
-      
-      // ✅ SYNC POINTS FROM COLUMN E (manual points)
-      localStorage.setItem("points", res.points || 0); 
-      
-      localStorage.setItem("loggedIn", "true");
-      
-      enterApp();
-      
-      // Show the ad after login success
-      setTimeout(() => {
-          showPromoAd();
-      }, 500);
-
-    } else {
-      // NEW USER: saves with 0 points initially
-      google.script.run.withSuccessHandler(() => {
-        localStorage.setItem("userName", name);
+    // ✅ Replaced google.script.run with callBackend API Bridge
+    callBackend("checkUser", { phone }).then(res => {
+      if (res && res.exists) {
+        localStorage.setItem("userName", res.name);
         localStorage.setItem("userPhone", phone);
-        localStorage.setItem("points", 0); 
+        localStorage.setItem("points", res.points || 0); 
         localStorage.setItem("loggedIn", "true");
         
         enterApp();
         
-        // Show the ad for the new user
         setTimeout(() => {
             showPromoAd();
         }, 500);
 
-      }).saveUser(name, phone, customerEmail); 
-    }
-  }).checkUser(phone);
-}
-function updateDeliveryFee() {
-  const zoneEl = document.getElementById("deliveryZone");
-  const zone = zoneEl ? zoneEl.value : "";
-
-  const feeLine = document.getElementById("cartDeliveryFee");
-  const cartGrand = document.getElementById("cartGrandTotal");
-
-  if (!zone) {
-    feeLine.textContent = "";
-    cartGrand.textContent = "";
-    return;
-  }
-
-  const fee = getServiceFee(zone);
-
-  // ✅ REMOVED PLATFORM FEE: Now it's just the cart total + the delivery fee
-  const grand = total + fee;
-
-  // ✅ SHOW DELIVERY FEE ABOVE GRAND TOTAL
-  feeLine.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
-
-  // ✅ GRAND TOTAL BELOW IT
-  cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
-}
-
-
-
-function updateCartBubble() {
-  const bubble = document.getElementById("cartBubble");
-  if (!bubble) return;
-
-  const count = Object.values(cart).reduce((a, b) => a + b.q, 0);
-  bubble.style.display = count > 0 ? "flex" : "none";
-
-
-}
-
-function openCart() {
-  const panel = document.getElementById("cartPanel");
-  const bubble = document.getElementById("cartBubble");
-
-  const isOpen = panel.style.bottom === "0px";
-
-  if (isOpen) {
-    panel.style.bottom = "-100%";
-    bubble.classList.remove("active");
-  } else {
-    panel.style.bottom = "0";             // 🔥 OPEN FIRST
-    bubble.classList.add("active");
-
-    requestAnimationFrame(() => {
-      renderCartPanel();                  // 🔥 RENDER ITEMS
-      
-      // ✅ ADDED: Trigger the map initialization
-      // We use a small timeout so the panel is visible before the map loads
-      setTimeout(() => {
-        if (typeof initCartMap === "function") {
-          initCartMap();
-        }
-      }, 350); 
+      } else {
+        callBackend("saveUser", { name, phone, email: customerEmail }).then(() => {
+          localStorage.setItem("userName", name);
+          localStorage.setItem("userPhone", phone);
+          localStorage.setItem("points", 0); 
+          localStorage.setItem("loggedIn", "true");
+          
+          enterApp();
+          
+          setTimeout(() => {
+              showPromoAd();
+          }, 500);
+        });
+      }
     });
   }
-}
-// 🌮 TACO DELIVERY FEE (same zones & prices as grocery)
-function updateTacoDeliveryFee() {
 
-  const zone = document.getElementById("tacoDeliveryZone").value;
-  const feeText = document.getElementById("tacoFeeText");
+  function updateDeliveryFee() {
+    const zoneEl = document.getElementById("deliveryZone");
+    const zone = zoneEl ? zoneEl.value : "";
 
-  if (!zone) {
-    feeText.textContent = "";
-    return;
-  }
+    const feeLine = document.getElementById("cartDeliveryFee");
+    const cartGrand = document.getElementById("cartGrandTotal");
 
-  const fee = getServiceFee(zone);
+    if (!zone || !feeLine || !cartGrand) return;
 
-  feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
+    const fee = getServiceFee ? getServiceFee(zone) : 3;
+    const grand = total + fee;
 
-}
-
-
-function closeCart() {
-  document.getElementById("cartPanel").style.bottom = "-100%";
-  document.getElementById("cartBubble").classList.remove("active");
-}
-
-
-function renderCartPanel() {
-  const cartTitle = document.getElementById("cartTitle");
-  const userName = localStorage.getItem("userName");
-
-  if (cartTitle && userName) {
-    cartTitle.innerHTML =
-      `Your Cart <span style="color:#ff6a00; font-weight:700;">(${userName})</span>`;
-  }
-
-  const itemsDiv = document.getElementById("cartPanelItems");
-  itemsDiv.innerHTML = "";
-
-  let sum = 0;
-  let totalSavings = 0; 
-  let html = "";
-
-  for (let name in cart) {
-    const item = cart[name];
-    const subtotal = item.q * item.p;
-    sum += subtotal;
-
-    if (item.w && item.w > item.p) {
-      totalSavings += (item.w - item.p) * item.q;
-    }
-
-    html += `
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding:10px; border-radius:14px; background:#f7f7f7;">
-        <div>
-          <strong>${name}</strong><br>
-          <small>
-            ${item.w ? `<span class="price-was" style="font-size:10px;">$${item.w.toFixed(2)}</span> ` : ''}
-            ${item.q} × $${item.p.toFixed(2)} BZD
-          </small>
-        </div>
-        <div style="display:flex; align-items:center; gap:10px;">
-          <span style="font-weight:700;">$${subtotal.toFixed(2)} BZD</span>
-          ${item.q >= 1 ? `<button onclick="remove('${name}')" class="minus-btn">−</button>` : ""}
-        </div>
-      </div>
-    `;
-  }
-
-  itemsDiv.innerHTML = html;
-
-  // Track global total for checkout
-  window.total = sum;
-
-  const savingsDisplay = totalSavings > 0 
-    ? `<div style="color:#1ebe57; font-weight:700; font-size:14px; margin-bottom:5px;">You're saving $${totalSavings.toFixed(2)} BZD!</div>` 
-    : "";
-
-  const totalDiv = document.getElementById("cartPanelTotal");
-  totalDiv.innerHTML = savingsDisplay + "Items Total: $" + sum.toFixed(2) + " BZD";
-
-  // --- MAP FEE INTEGRATION ---
-  const feeLine = document.getElementById("cartDeliveryFee");
-  const cartGrand = document.getElementById("cartGrandTotal");
-
-  if (feeLine && cartGrand) {
-    // Uses the values set by the Map Pin dragging
-    const fee = window.lastCartFee || 3;
-    const zone = window.lastCartZone || "In-Town";
-    const grand = sum + fee;
-
-    feeLine.innerHTML = `Delivery Fee (${zone}): $${fee.toFixed(2)} BZD`;
+    feeLine.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
     cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
   }
-}
 
+  function updateCartBubble() {
+    const bubble = document.getElementById("cartBubble");
+    if (!bubble) return;
 
-
-function openAdminLogin() {
-  document.getElementById("adminLoginBox").style.display = "flex";
-}
-
-function closeAdminLogin() {
-  document.getElementById("adminLoginBox").style.display = "none";
-}
-
-function submitAdminLogin() {
-  const name = document.getElementById("adminName").value.trim();
-  const phone = document.getElementById("adminPhone").value.trim();
-
-  const isAdmin =
-    name === ADMIN_NAME &&
-    phone === ADMIN_PHONE;
-
-  if (!isAdmin) {
-    alert("Invalid admin credentials");
-    return;
+    const count = Object.values(cart).reduce((a, b) => a + b.q, 0);
+    bubble.style.display = count > 0 ? "flex" : "none";
   }
 
-  // Save admin session
-  localStorage.setItem("userName", name);
-  localStorage.setItem("userPhone", phone);
-  localStorage.setItem("loggedIn", "true");
-
-  enterApp();
-}
-
-
-
-function goToOrder() {
-  closeCart();
-
-  const box = document.getElementById("orderBox");
-  box.style.display = "block";   // ✅ SHOW ORDER BOX
-}
-
-function fillPickupName() {
-  const name = localStorage.getItem("userName") || "Customer";
-  const input = document.getElementById("pickupName");
-  if (input) input.value = name;
-}
-
-
-function getInitials(name) {
-  return name
-    .split(" ")
-    .map(w => w[0])
-    .join("")
-    .substring(0,2)
-    .toUpperCase();
-}
-
-function openProfile() {
-  document.getElementById("profileOverlay").style.display = "flex";
-
-  const name = localStorage.getItem("userName") || "Customer";
-  const phone = localStorage.getItem("userPhone") || "—";
-  const points = localStorage.getItem("points") || "0";
-
-  document.getElementById("profileName").innerText = name;
-  document.getElementById("profilePhone").innerText = phone;
-  document.getElementById("profilePoints").innerText = points;
-  document.getElementById("profileInitials").innerText = getInitials(name);
-}
-
-
-function closeProfile() {
-  document.getElementById("profileOverlay").style.display = "none";
-}
-
-
-
-function enterApp() {
-   if (document.getElementById("appScreen").style.display === "block") return;
-  document.getElementById("authScreen").style.display = "none";
-  document.getElementById("appScreen").style.display = "block";
-  const initials = getInitials(localStorage.getItem("userName") || "U");
-document.getElementById("profileInitials").innerText = initials;
-  // 🔐 Sync phone to window + fetch balance
-  window.userPhone = localStorage.getItem("userPhone");
-  fetchUserBalance();
-
-
-  // Ensure the buttons show up side-by-side
-  const wrap = document.getElementById("installWrap");
-  if(wrap) {
-    wrap.hidden = false;
-    wrap.style.display = "flex";
-  }
-
-  const welcome = document.getElementById("welcomeScreen");
-  if (welcome) welcome.remove();
-}
-  
-/* AUTO LOGIN */
-document.addEventListener("DOMContentLoaded", () => {
-    checkBusinessHoursLock(false); // default: treat as normal user
-
-
-  // 🔁 Restore saved user info
-  const savedName = localStorage.getItem("userName");
-  const savedPhone = localStorage.getItem("userPhone");
-
-  if (savedName) document.getElementById("userName").value = savedName;
-  if (savedPhone) document.getElementById("userPhone").value = savedPhone;
-
-
-  // Auto login ONLY if phone exists
-const isAdminAuto =
-  savedName === ADMIN_NAME &&
-  savedPhone === ADMIN_PHONE;
-
-if (savedPhone && checkBusinessHoursLock(isAdminAuto)) {
-  localStorage.setItem("loggedIn", "true");
-  enterApp();
-}
-
-
-
-
-  // Order time toggle
-  document.querySelectorAll('input[name="orderTime"]').forEach(radio => {
-    radio.addEventListener("change", () => {
-      const timeInput = document.getElementById("scheduleTime");
-      if (!timeInput) return;
-
-      if (radio.value === "later" && radio.checked) {
-        timeInput.style.display = "block";
-      } else {
-        timeInput.style.display = "none";
-        timeInput.value = "";
-      }
-    });
-  });
-
-});
-
-
-const subIcons = {
-
-  "Drink": "🥤",
-  "Drinks": "🥤",
-
-  "Food": "🍔",
-  "Meals": "🍔",
-
-  "Dessert": "🍰",
-  "Desserts": "🍰",
-
-  "Coffee": "☕",
-  "Tea": "🍵",
-
-  "Breakfast": "🍳",
-  "Lunch": "🍽️",
-  "Dinner": "🍽️",
-
-  "Pastries": "🥐",
-  "Ice Cream": "🍦",
-
-  "Items": "🛒"
-
-};
-
-function render() {
-
-  const box = document.getElementById("products");
-  if (!box) return;
-
-  box.innerHTML = "";
-
-  const filteredItems = allProducts.filter(p => p.category === cat);
-
-  if (filteredItems.length === 0) {
-
-    box.innerHTML = `
-      <div style="text-align:center; padding:50px 20px; color:#555;">
-        <div style="font-size:50px; margin-bottom:15px;">🔒</div>
-        <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
-      </div>`;
-
-    return;
-  }
-
-  /* GROUP BY SUBCATEGORY */
-const grouped = {};
-
-filteredItems.forEach(p => {
-
-  if(!p.subcategory) return;   // skip items without subcategory
-
-  const sub = p.subcategory;
-
-  if (!grouped[sub]) grouped[sub] = [];
-
-  grouped[sub].push(p);
-
-});
-
-  /* RENDER GROUPS */
-
-  Object.keys(grouped).forEach(sub => {
-
-    box.innerHTML += `
-      <div class="subcategory-title">${sub}</div>
-    `;
-
-    grouped[sub].forEach(p => {
-
-      let badgeHTML = "";
-      let wasPriceHTML = "";
-
-      if (p.was) {
-
-        const isNumeric = !isNaN(parseFloat(p.was)) && isFinite(p.was);
-
-        if (isNumeric && Number(p.was) > p.price) {
-
-          const savings = Math.round(((p.was - p.price) / p.was) * 100);
-
-          badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
-
-          wasPriceHTML = `<span class="price-was">$${Number(p.was).toFixed(2)}</span>`;
-
-        }
-
-      }
-
-      const displayPrice =
-        (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
-
-      box.innerHTML += `
-
-        <div class="product">
-
-          ${badgeHTML}
-
-          <img src="${p.image}" onclick="openImage(this.src)">
-
-          <div class="product-info">
-            <strong>${p.name}</strong>
-
-            <div class="price">
-              ${wasPriceHTML}
-              $${displayPrice} BZD
-            </div>
-          </div>
-
-          <button onclick="add('${p.name}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
-            Add
-          </button>
-
-        </div>
-
-      `;
-
-    });
-
-  });
-
-}
-
-let searchIdleTimer = null;
-let lastSearchValue = "";
-
-function handleSearchInput(value) {
-  document.body.classList.add("searching");
-
-  lastSearchValue = value;
-
-  if (searchIdleTimer) clearTimeout(searchIdleTimer);
-
-  searchIdleTimer = setTimeout(() => {
-    document.body.classList.remove("searching");
-    runSearchSafely();
-  }, 200);
-}
-
-
-function runSearchSafely() {
-  const value = lastSearchValue.trim();
-
-  // 🧠 Skip if same value
-  if (value === runSearchSafely.lastValue) return;
-  runSearchSafely.lastValue = value;
-
-  // 🚀 Run search in next paint cycle (no input lag)
-  requestAnimationFrame(() => {
-    searchProducts(value);
-  });
-}
-
-
-
-
-
-
-function searchProducts(query) {
-  // 👈 ADD THIS LINE: Hide pickup when searching
-  document.getElementById("pickupOrderBox").style.display = "none";
-  const box = document.getElementById("products");
-  box.innerHTML = "";
-
-  const q = query.toLowerCase();
-
-  // If search is empty, go back to category view
-  if (!q) {
-    render();
-    return;
-  }
-
-  const matches = allProducts.filter(p =>
-    p.name.toLowerCase().includes(q)
-  );
-
-  // Auto-select category if a match exists
-  if (matches.length > 0) {
-    cat = matches[0].category;
-    document.querySelectorAll(".cat-btn").forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.cat === cat);
-    });
-  }
-
- matches.forEach(p => {
-    // 💡 CALCULATION LOGIC
-    let badgeHTML = "";
-    if (p.was && p.was > p.price) {
-      const savings = Math.round(((p.was - p.price) / p.was) * 100);
-      badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
-    }
-
-    box.innerHTML += `
-      <div class="product">
-        ${badgeHTML} <img src="${p.image}">
-        <div class="product-info">
-          <strong>${p.name}</strong>
-          <div class="price">
-            ${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''}
-            $${p.price.toFixed(2)} BZD
-          </div>
-        </div>
-        <button onclick="add('${p.name}', ${p.price}, this, ${p.was || 'null'})">Add</button>
-      </div>`;
-  });
-}
-function add(n, p, btn, w) {
-  buzz(30); 
-
-  if (btn) showAddCheck(btn);
-
-  // Check if item is already in cart; if not, create it 
-  // AND save the current category 'cat' (e.g., "Burga", "TFC")
-  if (!cart[n]) {
-    cart[n] = { 
-      q: 0, 
-      p: p, 
-      w: w || null, 
-      cat: cat // <--- ADD THIS LINE: It tags the item with the active store
-    };
-  }
-  
-  cart[n].q++;
-  total += p;
-
-  update();
-  updateCartBubble();
-  renderCartPanel();
-}
-
-
-function remove(n){
-  buzz(20); // softer vibration
-
-  if(!cart[n]) return;
-
-  cart[n].q--;
-  total -= cart[n].p;
-
-  if(cart[n].q <= 0){
-    delete cart[n];
-  }
-
-  update();
-  updateCartBubble();
-  renderCartPanel();
-}
-
-
-
-function update() {
-  // Cart UI now handled by floating cart only
-}
-
-function backToCart(){
-
-  document.getElementById("orderBox").style.display = "none";
-
-  const hasTacos = localStorage.getItem("tacoOrder");
-
-  if (hasTacos) {
-    // go back to taco order screen
-    document.getElementById("tacoOrderBox").style.display = "block";
-    document.getElementById("products").style.display = "none";
-  } else {
-    // normal grocery flow
-    openCart();
-  }
-}
-
-
-function getWalletBalance() {
-  const el = document.getElementById("userBalance");
-  return Number(el ? el.textContent : 0);
-}
-
- 
-// 📍 Store Coordinates Lookup Map
-const storeLocations = {
-  "SNACK": "18.084406,-88.565955",
-  "BREAKFAST": "18.084406,-88.565955",
-  "LUNCH": "18.084406,-88.565955",
-  "DRINK": "18.084406,-88.565955",
-  "HOUSEHOLD": "18.084406,-88.565955",
-  "HYGIENE": "18.084406,-88.565955",
-  "VEGETABLES": "18.080916,-88.562782",
-  "TREATS": "18.084406,-88.565955",
-  "ELECTRONICS": "18.079305,-88.562638",
-  "GENERAL": "18.084406,-88.565955",
-  "SARITAS": "18.084406,-88.565955",
-  "URBAN": "18.068463,-88.570723",
-  "AROMA": "18.081116,-88.566835",
-  "BREW": "18.095398,-88.563983",
-  "MARIA": "18.084044,-88.561874",
-  "LEO": "18.074679,-88.568029",
-  "SHAKEN": "18.081813,-88.564966",
-  "DAILY MENU": "18.084406,-88.565955",
-  "DUMPLING": "18.066928,-88.570507",
-  "FONDA": "18.084406,-88.565955",
-  "SALSAS": "18.088220,-88.567619",
-  "BURGA": "18.084406,-88.565955",
-  "TFC": "18.082771,-88.562183",
-  "GUERRERO": "18.092639,-88.561030",
-  "COSMETICS": "18.084406,-88.565955",
-  "FAYE": "18.084406,-88.565955",
-  "SISTER": "18.084406,-88.565955",
-  "ADDCART": "18.079520,-88.564390",
-  "NEEYA": "18.086068,-88.568782",
-  "FLOWER": "18.084406,-88.565955"
-};
-
-function order() {
-  let forcedTotal = 0;
-
-  for (let name in cart) {
-    forcedTotal += cart[name].q * cart[name].p;
-  }
-
-  total = forcedTotal;
-
-  const userName = localStorage.getItem("userName") || "";
-  const userPhone = localStorage.getItem("userPhone") || "";
-  const tacoPlace = localStorage.getItem("tacoPlace");
-  const tacoOrder = localStorage.getItem("tacoOrder");
-  const hasTacos = !!tacoOrder;
-
-  const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
-  const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
-  const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
-
-  const orderNum = Math.floor(100 + Math.random() * 900);
-
-  if (forcedTotal <= 0 && !hasTacos) {
-    alert("Your cart is empty");
-    return;
-  }
-
-  if (!window.lastCartCoords && total > 0) {
-    alert("Please pin your location on the map!");
-    return;
-  }
-
-  if (!window.lastCartZone) {
-    alert("Please select your delivery area");
-    return;
-  }
-
-  const deliverySelect = document.getElementById("deliveryZoneSelect");
-  const selectedValue = deliverySelect?.value;
-
-  if (!selectedValue) {
-    alert("Please select your delivery area");
-    return;
-  }
-
-  const [deliveryZone, fee] = selectedValue.split("|");
-  const deliveryFee = parseFloat(fee);
-  const itemsTotal = total;
-  const grandTotal = itemsTotal + deliveryFee;
-
-  const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
-
-  if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
-    alert(`Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`);
-    return;
-  }
-
-  let msg = `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
-
-  const groupedCart = {};
-  const activeBusinesses = new Set();
-
-  if (itemsTotal > 0) {
-    msg += `ITEMS%0A`;
-    msg += `----------------------------%0A`;
-
-    for (let i in cart) {
-      const biz = (cart[i].cat || "GENERAL").toUpperCase();
-      activeBusinesses.add(biz);
-      if (!groupedCart[biz]) groupedCart[biz] = [];
-      groupedCart[biz].push({ name: i, details: cart[i] });
-    }
-
-    for (let bizName in groupedCart) {
-      msg += `${bizName}%0A`;
-
-      groupedCart[bizName].forEach(item => {
-        const price = item.details.p.toFixed(2);
-        msg += `- ${item.name}%0A`;
-        msg += `   Qty: ${item.details.q} x $${price} BZD%0A`;
+  function openCart() {
+    const panel = document.getElementById("cartPanel");
+    const bubble = document.getElementById("cartBubble");
+
+    const isOpen = panel.style.bottom === "0px";
+
+    if (isOpen) {
+      panel.style.bottom = "-100%";
+      bubble.classList.remove("active");
+    } else {
+      panel.style.bottom = "0";             
+      bubble.classList.add("active");
+
+      requestAnimationFrame(() => {
+        renderCartPanel();                  
+        setTimeout(() => {
+          if (typeof initCartMap === "function") {
+            initCartMap();
+          }
+        }, 350); 
       });
+    }
+  }
 
-      msg += `----------------------------%0A`;
+  function updateTacoDeliveryFee() {
+    const zone = document.getElementById("tacoDeliveryZone").value;
+    const feeText = document.getElementById("tacoFeeText");
+
+    if (!zone || !feeText) return;
+    const fee = getServiceFee ? getServiceFee(zone) : 3;
+    feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
+  }
+
+  function closeCart() {
+    document.getElementById("cartPanel").style.bottom = "-100%";
+    document.getElementById("cartBubble").classList.remove("active");
+  }
+
+  function renderCartPanel() {
+    const cartTitle = document.getElementById("cartTitle");
+    const userName = localStorage.getItem("userName");
+
+    if (cartTitle && userName) {
+      cartTitle.innerHTML = `Your Cart <span style="color:#ff6a00; font-weight:700;">(${userName})</span>`;
     }
 
-    msg += `%0A`;
+    const itemsDiv = document.getElementById("cartPanelItems");
+    itemsDiv.innerHTML = "";
+
+    let sum = 0;
+    let totalSavings = 0; 
+    let html = "";
+
+    for (let name in cart) {
+      const item = cart[name];
+      const subtotal = item.q * item.p;
+      sum += subtotal;
+
+      if (item.w && item.w > item.p) {
+        totalSavings += (item.w - item.p) * item.q;
+      }
+
+      html += `
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding:10px; border-radius:14px; background:#f7f7f7;">
+          <div>
+            <strong>${name}</strong><br>
+            <small>
+              ${item.w ? `<span class="price-was" style="font-size:10px;">$${item.w.toFixed(2)}</span> ` : ''}
+              ${item.q} × $${item.p.toFixed(2)} BZD
+            </small>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-weight:700;">$${subtotal.toFixed(2)} BZD</span>
+            ${item.q >= 1 ? `<button onclick="remove('${name}')" class="minus-btn">−</button>` : ""}
+          </div>
+        </div>
+      `;
+    }
+
+    itemsDiv.innerHTML = html;
+    window.total = sum;
+
+    const savingsDisplay = totalSavings > 0 
+      ? `<div style="color:#1ebe57; font-weight:700; font-size:14px; margin-bottom:5px;">You're saving $${totalSavings.toFixed(2)} BZD!</div>` 
+      : "";
+
+    const totalDiv = document.getElementById("cartPanelTotal");
+    if(totalDiv) totalDiv.innerHTML = savingsDisplay + "Items Total: $" + sum.toFixed(2) + " BZD";
+
+    const feeLine = document.getElementById("cartDeliveryFee");
+    const cartGrand = document.getElementById("cartGrandTotal");
+
+    if (feeLine && cartGrand) {
+      const fee = window.lastCartFee || 3;
+      const zone = window.lastCartZone || "In-Town";
+      const grand = sum + fee;
+
+      feeLine.innerHTML = `Delivery Fee (${zone}): $${fee.toFixed(2)} BZD`;
+      cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
+    }
   }
 
-  if (hasTacos) {
-    msg += `TACO ORDER%0A`;
-    msg += `PLACE: ${tacoPlace}%0A`;
-    msg += `----------------------------%0A`;
-    msg += `${tacoOrder}%0A`;
-    msg += `----------------------------%0A`;
-
-    msg += `RUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A`;
-    msg += `----------------------------%0A%0A`;
+  function openAdminLogin() {
+    document.getElementById("adminLoginBox").style.display = "flex";
   }
 
-  if (itemsTotal > 0) {
-    msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
-    msg += `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
+  function closeAdminLogin() {
+    document.getElementById("adminLoginBox").style.display = "none";
+  }
+
+  function submitAdminLogin() {
+    const name = document.getElementById("adminName").value.trim();
+    const phone = document.getElementById("adminPhone").value.trim();
+
+    const isAdmin = name === ADMIN_NAME && phone === ADMIN_PHONE;
+
+    if (!isAdmin) {
+      alert("Invalid admin credentials");
+      return;
+    }
+
+    localStorage.setItem("userName", name);
+    localStorage.setItem("userPhone", phone);
+    localStorage.setItem("loggedIn", "true");
+
+    enterApp();
+  }
+
+  function goToOrder() {
+    closeCart();
+    const box = document.getElementById("orderBox");
+    if(box) box.style.display = "block";
+  }
+
+  function fillPickupName() {
+    const name = localStorage.getItem("userName") || "Customer";
+    const input = document.getElementById("pickupName");
+    if (input) input.value = name;
+  }
+
+  function getInitials(name) {
+    return name
+      .split(" ")
+      .map(w => w[0])
+      .join("")
+      .substring(0,2)
+      .toUpperCase();
+  }
+
+  function openProfile() {
+    const overlay = document.getElementById("profileOverlay");
+    if (overlay) overlay.style.display = "flex";
+
+    const name = localStorage.getItem("userName") || "Customer";
+    const phone = localStorage.getItem("userPhone") || "—";
+    const points = localStorage.getItem("points") || "0";
+
+    const pName = document.getElementById("profileName");
+    const pPhone = document.getElementById("profilePhone");
+    const pPoints = document.getElementById("profilePoints");
+    const pInit = document.getElementById("profileInitials");
+
+    if (pName) pName.innerText = name;
+    if (pPhone) pPhone.innerText = phone;
+    if (pPoints) pPoints.innerText = points;
+    if (pInit) pInit.innerText = getInitials(name);
+  }
+
+  function closeProfile() {
+    const overlay = document.getElementById("profileOverlay");
+    if (overlay) overlay.style.display = "none";
+  }
+
+  function enterApp() {
+    const appScreen = document.getElementById("appScreen");
+    const authScreen = document.getElementById("authScreen");
+    if (appScreen && appScreen.style.display === "block") return;
+    if (authScreen) authScreen.style.display = "none";
+    if (appScreen) appScreen.style.display = "block";
     
-    if (tipAmount > 0) {
-      msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
+    const initials = getInitials(localStorage.getItem("userName") || "U");
+    const pInit = document.getElementById("profileInitials");
+    if (pInit) pInit.innerText = initials;
+
+    window.userPhone = localStorage.getItem("userPhone");
+    fetchUserBalance();
+
+    const wrap = document.getElementById("installWrap");
+    if(wrap) {
+      wrap.hidden = false;
+      wrap.style.display = "flex";
     }
 
-    msg += `----------------------------%0A`;
-    msg += `GRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
-    msg += `PAYMENT METHOD: ${paymentMethod}%0A`;
-
-    if (paymentMethod.includes("Online")) {
-      msg += `Bank: Belize Bank%0A`;
-      msg += `Account Name: Danilo Cu%0A`;
-      msg += `Account Number: 275378010160000%0A`;
-    }
-
-    msg += `%0A`;
+    const welcome = document.getElementById("welcomeScreen");
+    if (welcome) welcome.remove();
   }
-
-  // 📍 DYNAMIC MULTI-STORE MAP LINKS WITH "RUNNER ROUTE" LABEL & BLACK LINE SEPARATOR
-  if (itemsTotal > 0) {
-    msg += `----------------------------%0A`;
-    msg += `RUNNER ROUTE:%0A`;
     
-    activeBusinesses.forEach(bizName => {
-      const storeCoords = storeLocations[bizName] || storeLocations["GENERAL"];
-      const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
-      
-      msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
+  document.addEventListener("DOMContentLoaded", () => {
+    checkBusinessHoursLock(false);
+
+    const savedName = localStorage.getItem("userName");
+    const savedPhone = localStorage.getItem("userPhone");
+
+    const nameInput = document.getElementById("userName");
+    const phoneInput = document.getElementById("userPhone");
+
+    if (savedName && nameInput) nameInput.value = savedName;
+    if (savedPhone && phoneInput) phoneInput.value = savedPhone;
+
+    const isAdminAuto = savedName === ADMIN_NAME && savedPhone === ADMIN_PHONE;
+
+    if (savedPhone && checkBusinessHoursLock(isAdminAuto)) {
+      localStorage.setItem("loggedIn", "true");
+      enterApp();
+    }
+
+    document.querySelectorAll('input[name="orderTime"]').forEach(radio => {
+      radio.addEventListener("change", () => {
+        const timeInput = document.getElementById("scheduleTime");
+        if (!timeInput) return;
+
+        if (radio.value === "later" && radio.checked) {
+          timeInput.style.display = "block";
+        } else {
+          timeInput.style.display = "none";
+          timeInput.value = "";
+        }
+      });
     });
-  }
-
-  msg += `CUSTOMER: ${userName}%0A`;
-  msg += `PHONE: ${userPhone}`;
-
-  const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
-  window.open(waUrl, "_blank");
-}
-function doneOrder() {
-  // 1. Clear Taco Data from Storage
-  localStorage.removeItem("tacoPlace");
-  localStorage.removeItem("tacoOrder");
-  localStorage.removeItem("tacoZone");
-
-  // 2. Reset Taco UI Fields
-  const tp = document.getElementById("tacoPlace");
-  if (tp) tp.value = "";
-  const td = document.getElementById("tacoDetails");
-  if (td) td.value = "";
-  const tz = document.getElementById("tacoDeliveryZone");
-  if (tz) tz.value = "";
-  const tf = document.getElementById("tacoFeeText");
-  if (tf) tf.textContent = "";
-
-  // 3. Reset Cart Data
-  cart = {};
-  total = 0;
-  
-  // 4. IMPORTANT: Clear the last pinned location so next order is fresh
-  window.lastCartCoords = null;
-  window.lastCartFee = 3.00;
-  window.lastCartZone = "In-Town";
-
-  // 5. Reset Payment Dropdown
-  const pm = document.getElementById("paymentMethod");
-  if (pm) pm.selectedIndex = 0;
-
-  // 6. Update UI
-  update(); 
-  if (typeof updateCartBubble === "function") {
-    updateCartBubble();
-  }
-
-  // 7. Close the Order Box
-  const ob = document.getElementById("orderBox");
-  const cp = document.getElementById("cartPanel");
-  if (ob) ob.style.display = "none";
-  if (cp) cp.style.bottom = "-100%"; // Also close the cart panel
-
-  // 8. Show Thank You Message
-  const toast = document.getElementById("thankYouToast");
-  if (toast) {
-    toast.classList.add("show");
-    setTimeout(() => {
-      toast.classList.remove("show");
-    }, 2500);
-  } else {
-    alert("Order Processed Successfully");
-  }
-}
-
-google.script.run.withSuccessHandler(d => {
-  allProducts = d;
-  render();
-  updateCategoryStatusDots(); // ✨ Update the dots as soon as data arrives
-}).getProducts();
-
-
-document.addEventListener("click", function(e){
-  const btn = e.target.closest("button, .cat-btn");
-  if(!btn) return;
-  btn.classList.remove("btn-bounce");
-  void btn.offsetWidth;
-  btn.classList.add("btn-bounce");
-});
-
-let deferredPrompt;
-const installBtn = document.getElementById("installBtn");
-const installWrap = document.getElementById("installWrap");
-
-window.addEventListener("beforeinstallprompt",(e)=>{
-  e.preventDefault();
-  deferredPrompt=e;
-  installWrap.hidden = false;
-
-});
-installBtn.addEventListener("click", async () => {
-  // Android native install available
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    await deferredPrompt.userChoice;
-    deferredPrompt = null;
-    installWrap.hidden = true;
-
-  } 
-  // iOS or fallback
-  else {
-    showInstallInstructions();
-  }
-});
-
-const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-
-// Show install button manually on iOS
-if (isIOS) {
-  installWrap.hidden = false;
-}
-
-
-
-if (window.matchMedia('(display-mode: standalone)').matches) {
-  installWrap.hidden = true;
-}
-
-// Remove welcome screen after animation finishes
-setTimeout(() => {
-  const welcome = document.getElementById("welcomeScreen");
-  if (welcome) welcome.remove();
-}, 2600); // 2s display + fade
-
-
-
-function openSuggest() {
-  document.getElementById("suggestOverlay").style.display = "flex";
-}
-
-function closeSuggest() {
-  document.getElementById("suggestOverlay").style.display = "none";
-  document.getElementById("suggestInput").value = "";
-}
-
-function submitSuggestion() {
-  const item = document.getElementById("suggestInput").value.trim();
-  if (!item) return alert("Please enter an item name");
-
-  google.script.run.saveSuggestion(item);
-
-  alert("✅ Your suggestion will be added soon!");
-  closeSuggest();
-}
-
-// Close suggest modal when clicking outside the box
-document.getElementById("suggestOverlay").addEventListener("click", e => {
-  if (e.target.id === "suggestOverlay") closeSuggest();
-});
-
-function showAddCheck(btn){
-  const check = document.createElement("div");
-  check.className = "add-check";
-  check.textContent = "✓";
-
-  const rect = btn.getBoundingClientRect();
-
-  check.style.left = rect.left + rect.width / 2 - 17 + "px";
-  check.style.top = rect.top + window.scrollY - 10 + "px";
-
-
-  document.body.appendChild(check);
-
-  setTimeout(() => check.remove(), 600);
-}
-
-
-function toggleSettings() {
-  const menu = document.getElementById("settingsDropdown");
-  menu.style.display = menu.style.display === "block" ? "none" : "block";
-}
-
-// LOGOUT: Clears data and reloads the app to the login screen
-function handleLogout() {
-  if (confirm("Are you sure you want to logout?")) {
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userPhone");
-    localStorage.removeItem("loggedIn");
-    location.reload(); // Re-runs the login check
-  }
-}
-
-function changeLang(lang) {
-  const dict = translations[lang];
-  if (!dict) return;
-
-  // Update Slogan
-  const slogan = document.querySelector(".header p");
-  if (slogan) slogan.innerText = dict.slogan;
-
-  // Update Suggest Button
-  const suggestBtn = document.querySelector(".suggest-btn");
-  if (suggestBtn) suggestBtn.innerText = dict.suggest;
-
-  // Update Search Placeholder
-  const searchBar = document.querySelector(".search-bar");
-  if (searchBar) searchBar.placeholder = dict.searchPlaceholder;
-
-  // Update Cart Header
-  const cartTitle = document.querySelector("#cartTitle");
-  if (cartTitle) cartTitle.innerText = dict.cartTitle;
-
-  // Update the 'Next' button (make sure yours has class="next-btn")
-  const nextBtn = document.querySelector(".next-btn");
-  if (nextBtn) nextBtn.innerText = dict.orderBtn;
-
-  // Update WhatsApp Button
-  const waBtn = document.querySelector(".whatsapp");
-  if (waBtn) waBtn.innerText = dict.checkoutBtn;
-
-  // Save selection
-  localStorage.setItem("selectedLang", lang);
-  
-  // Close menu
-  toggleSettings();
-}
-
-function fetchUserBalance() {
-  if (!window.userPhone) return;
-
-  google.script.run
-    .withSuccessHandler(balance => {
-      const el = document.getElementById("userBalance");
-      if (el) el.textContent = Number(balance || 0).toFixed(2);
-    })
-    .withFailureHandler(() => {
-      const el = document.getElementById("userBalance");
-      if (el) el.textContent = "0.00";
-    })
-    .getUserBalance(window.userPhone);
-}
-
-function openImage(src) {
-  buzz(25); // light tap feedback
-
-  const overlay = document.getElementById("imageOverlay");
-  const img = document.getElementById("overlayImg");
-
-  img.src = src;
-  overlay.style.display = "flex";
-}
-function closeImage() {
-  const overlay = document.getElementById("imageOverlay");
-  overlay.style.display = "none";
-}
-
-
-function showPromoAd() {
-    const overlay = document.getElementById('promoOverlay');
-    if (overlay) {
-        overlay.style.display = 'flex';
-    }
-}
-
-function closeAd() {
-    const overlay = document.getElementById('promoOverlay');
-    if (overlay) {
-        overlay.style.display = 'none';
-    }
-}
-
-function showNextAd(button) {
-    // 1. Find the promo-card container, no matter where the button is inside it
-    const currentCard = button.closest('.promo-card');
-    
-    // 2. Find the next card in the HTML structure
-    const nextCard = currentCard.nextElementSibling;
-    const overlay = document.getElementById('promoOverlay');
-
-    // 3. Hide the current card
-    currentCard.style.display = 'none';
-
-    // 4. If there is a next card with the right class, show it. 
-    // Otherwise, close the whole overlay.
-    if (nextCard && nextCard.classList.contains('promo-card')) {
-        nextCard.style.display = 'block';
-    } else if (overlay) {
-        overlay.style.display = 'none';
-    }
-}
-function fetchAndShowPromos() {
-  buzz(45);
-  const box = document.getElementById("products");
-  
-  // 1. Show loading state
-  box.innerHTML = `<div id="loadingDeals" style="text-align:center; padding:40px;"><p>Loading exclusive deals... 🔥</p></div>`;
-  
-  // 2. Hide other modules
-  const sections = ["pickupOrderBox", "tacoOrderBox", "requestRideBox", "orderBox"];
-  sections.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
   });
-  box.style.display = "block";
 
-  // 3. AUTO-SCROLL to the loading message so they know it's happening
-  box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const subIcons = {
+    "Drink": "🥤", "Drinks": "🥤",
+    "Food": "🍔", "Meals": "🍔",
+    "Dessert": "🍰", "Desserts": "🍰",
+    "Coffee": "☕", "Tea": "🍵",
+    "Breakfast": "🍳", "Lunch": "🍽️", "Dinner": "🍽️",
+    "Pastries": "🥐", "Ice Cream": "🍦",
+    "Items": "🛒"
+  };
 
-  // 4. Call the backend
-  google.script.run.withSuccessHandler(promoItems => {
-    if (!promoItems || promoItems.length === 0) {
+  function render() {
+    const box = document.getElementById("products");
+    if (!box) return;
+
+    box.innerHTML = "";
+
+    const filteredItems = allProducts.filter(p => p.category === cat);
+
+    if (filteredItems.length === 0) {
       box.innerHTML = `
-        <div style="text-align:center; padding:50px 20px; color:#888;">
-          <h3>No Promos Active</h3>
-          <p>Check back later for today's special deals!</p>
-          <button onclick="render()" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; background:#eee;">Back to Shop</button>
+        <div style="text-align:center; padding:50px 20px; color:#555;">
+          <div style="font-size:50px; margin-bottom:15px;">🔒</div>
+          <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
         </div>`;
       return;
     }
 
-    // 5. Build the HTML
-    let html = `<h2 id="dealsHeader" style="text-align:center; color:#ff5a1f; margin:15px 0;">🔥 LIVE DEALS</h2>`;
+    const grouped = {};
+    filteredItems.forEach(p => {
+      if(!p.subcategory) return;
+      const sub = p.subcategory;
+      if (!grouped[sub]) grouped[sub] = [];
+      grouped[sub].push(p);
+    });
 
-    promoItems.forEach(p => {
+    Object.keys(grouped).forEach(sub => {
+      box.innerHTML += `<div class="subcategory-title">${sub}</div>`;
+
+      grouped[sub].forEach(p => {
+        let badgeHTML = "";
+        let wasPriceHTML = "";
+
+        if (p.was) {
+          const isNumeric = !isNaN(parseFloat(p.was)) && isFinite(p.was);
+          if (isNumeric && Number(p.was) > p.price) {
+            const savings = Math.round(((p.was - p.price) / p.was) * 100);
+            badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
+            wasPriceHTML = `<span class="price-was">$${Number(p.was).toFixed(2)}</span>`;
+          }
+        }
+
+        const displayPrice = (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
+
+        box.innerHTML += `
+          <div class="product">
+            ${badgeHTML}
+            <img src="${p.image}" onclick="openImage(this.src)">
+            <div class="product-info">
+              <strong>${p.name}</strong>
+              <div class="price">
+                ${wasPriceHTML}
+                $${displayPrice} BZD
+              </div>
+            </div>
+            <button onclick="add('${p.name}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
+              Add
+            </button>
+          </div>
+        `;
+      });
+    });
+  }
+
+  let searchIdleTimer = null;
+  let lastSearchValue = "";
+
+  function handleSearchInput(value) {
+    document.body.classList.add("searching");
+    lastSearchValue = value;
+
+    if (searchIdleTimer) clearTimeout(searchIdleTimer);
+
+    searchIdleTimer = setTimeout(() => {
+      document.body.classList.remove("searching");
+      runSearchSafely();
+    }, 200);
+  }
+
+  function runSearchSafely() {
+    const value = lastSearchValue.trim();
+    if (value === runSearchSafely.lastValue) return;
+    runSearchSafely.lastValue = value;
+
+    requestAnimationFrame(() => {
+      searchProducts(value);
+    });
+  }
+
+  function searchProducts(query) {
+    const pickupBox = document.getElementById("pickupOrderBox");
+    if (pickupBox) pickupBox.style.display = "none";
+    
+    const box = document.getElementById("products");
+    if (!box) return;
+    box.innerHTML = "";
+
+    const q = query.toLowerCase();
+
+    if (!q) {
+      render();
+      return;
+    }
+
+    const matches = allProducts.filter(p => p.name.toLowerCase().includes(q));
+
+    if (matches.length > 0) {
+      cat = matches[0].category;
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.cat === cat);
+      });
+    }
+
+    matches.forEach(p => {
       let badgeHTML = "";
-      if (p.was && !isNaN(p.was) && p.was > p.price) {
+      if (p.was && p.was > p.price) {
         const savings = Math.round(((p.was - p.price) / p.was) * 100);
         badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
       }
 
-      html += `
+      box.innerHTML += `
         <div class="product">
-          ${badgeHTML}
-          <img src="${p.image}" onclick="openImage(this.src)">
+          ${badgeHTML} <img src="${p.image}">
           <div class="product-info">
             <strong>${p.name}</strong>
             <div class="price">
@@ -7841,566 +7000,991 @@ function fetchAndShowPromos() {
           <button onclick="add('${p.name}', ${p.price}, this, ${p.was || 'null'})">Add</button>
         </div>`;
     });
-
-    box.innerHTML = html;
-
-    // 6. FINAL SCROLL: Ensure the "LIVE DEALS" header is at the very top of the screen
-    setTimeout(() => {
-        document.getElementById("dealsHeader").scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
-
-  }).getPromos(); 
-}
-
-
-function updateCategoryStatusDots() {
-  const buttons = document.querySelectorAll(".cat-btn");
-
-  buttons.forEach(btn => {
-    // 1. Identify category
-    const match = btn.getAttribute("onclick").match(/'([^']+)'/);
-    if (!match) return;
-    const categoryName = match[1];
-
-    // 2. Check if category has active items
-    const isOpen = allProducts.some(p => p.category === categoryName);
-
-    // 3. Remove existing dot if present
-    const existingDot = btn.querySelector(".status-dot");
-    if (existingDot) existingDot.remove();
-
-    // 4. Create the dot
-    const dot = document.createElement("span");
-    dot.className = isOpen ? "status-dot dot-open" : "status-dot dot-closed";
-    
-    // 5. Append (Absolute positioning keeps it from messing with styles)
-    btn.appendChild(dot);
-  });
-}
-
-function toggleExpressNotice() {
-  var type = document.getElementById("requestType").value;
-  var notice = document.getElementById("expressNotice");
-  
-  if (type === "Express") {
-    notice.style.display = "block";
-  } else {
-    notice.style.display = "none";
   }
-}
 
-function scrollToProducts() {
-  const productSection = document.getElementById("products");
+  function add(n, p, btn, w) {
+    buzz(30); 
+    if (btn) showAddCheck(btn);
 
-  if (productSection) {
-    const yOffset = -20; // adjust if you have sticky headers
-    const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+    if (!cart[n]) {
+      cart[n] = { 
+        q: 0, 
+        p: p, 
+        w: w || null, 
+        cat: cat 
+      };
+    }
+    
+    cart[n].q++;
+    total += p;
 
-    window.scrollTo({
-      top: y,
-      behavior: "smooth"
+    update();
+    updateCartBubble();
+    renderCartPanel();
+  }
+
+  function remove(n){
+    buzz(20); 
+    if(!cart[n]) return;
+
+    cart[n].q--;
+    total -= cart[n].p;
+
+    if(cart[n].q <= 0){
+      delete cart[n];
+    }
+
+    update();
+    updateCartBubble();
+    renderCartPanel();
+  }
+
+  function update() {}
+
+  function backToCart(){
+    const orderBox = document.getElementById("orderBox");
+    if (orderBox) orderBox.style.display = "none";
+
+    const hasTacos = localStorage.getItem("tacoOrder");
+
+    if (hasTacos) {
+      document.getElementById("tacoOrderBox").style.display = "block";
+      document.getElementById("products").style.display = "none";
+    } else {
+      openCart();
+    }
+  }
+
+  function getWalletBalance() {
+    const el = document.getElementById("userBalance");
+    return Number(el ? el.textContent : 0);
+  }
+
+  const storeLocations = {
+    "SNACK": "18.084406,-88.565955",
+    "BREAKFAST": "18.084406,-88.565955",
+    "LUNCH": "18.084406,-88.565955",
+    "DRINK": "18.084406,-88.565955",
+    "HOUSEHOLD": "18.084406,-88.565955",
+    "HYGIENE": "18.084406,-88.565955",
+    "VEGETABLES": "18.080916,-88.562782",
+    "TREATS": "18.084406,-88.565955",
+    "ELECTRONICS": "18.079305,-88.562638",
+    "GENERAL": "18.084406,-88.565955",
+    "SARITAS": "18.084406,-88.565955",
+    "URBAN": "18.068463,-88.570723",
+    "AROMA": "18.081116,-88.566835",
+    "BREW": "18.095398,-88.563983",
+    "MARIA": "18.084044,-88.561874",
+    "LEO": "18.074679,-88.568029",
+    "SHAKEN": "18.081813,-88.564966",
+    "DAILY MENU": "18.084406,-88.565955",
+    "DUMPLING": "18.066928,-88.570507",
+    "FONDA": "18.084406,-88.565955",
+    "SALSAS": "18.088220,-88.567619",
+    "BURGA": "18.084406,-88.565955",
+    "TFC": "18.082771,-88.562183",
+    "GUERRERO": "18.092639,-88.561030",
+    "COSMETICS": "18.084406,-88.565955",
+    "FAYE": "18.084406,-88.565955",
+    "SISTER": "18.084406,-88.565955",
+    "ADDCART": "18.079520,-88.564390",
+    "NEEYA": "18.086068,-88.568782",
+    "FLOWER": "18.084406,-88.565955"
+  };
+
+  function order() {
+    let forcedTotal = 0;
+
+    for (let name in cart) {
+      forcedTotal += cart[name].q * cart[name].p;
+    }
+
+    total = forcedTotal;
+
+    const userName = localStorage.getItem("userName") || "";
+    const userPhone = localStorage.getItem("userPhone") || "";
+    const tacoPlace = localStorage.getItem("tacoPlace");
+    const tacoOrder = localStorage.getItem("tacoOrder");
+    const hasTacos = !!tacoOrder;
+
+    const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
+    const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
+    const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
+
+    const orderNum = Math.floor(100 + Math.random() * 900);
+
+    if (forcedTotal <= 0 && !hasTacos) {
+      alert("Your cart is empty");
+      return;
+    }
+
+    if (!window.lastCartCoords && total > 0) {
+      alert("Please pin your location on the map!");
+      return;
+    }
+
+    if (!window.lastCartZone) {
+      alert("Please select your delivery area");
+      return;
+    }
+
+    const deliverySelect = document.getElementById("deliveryZoneSelect");
+    const selectedValue = deliverySelect?.value;
+
+    let deliveryFee = window.lastCartFee || 3;
+    let deliveryZone = window.lastCartZone || "In-Town";
+
+    if (selectedValue && selectedValue.includes("|")) {
+      const parts = selectedValue.split("|");
+      deliveryZone = parts[0];
+      deliveryFee = parseFloat(parts[1]);
+    }
+
+    const itemsTotal = total;
+    const grandTotal = itemsTotal + deliveryFee;
+    const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
+
+    if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
+      alert(`Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`);
+      return;
+    }
+
+    let msg = `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
+
+    const groupedCart = {};
+    const activeBusinesses = new Set();
+
+    if (itemsTotal > 0) {
+      msg += `ITEMS%0A`;
+      msg += `----------------------------%0A`;
+
+      for (let i in cart) {
+        const biz = (cart[i].cat || "GENERAL").toUpperCase();
+        activeBusinesses.add(biz);
+        if (!groupedCart[biz]) groupedCart[biz] = [];
+        groupedCart[biz].push({ name: i, details: cart[i] });
+      }
+
+      for (let bizName in groupedCart) {
+        msg += `${bizName}%0A`;
+
+        groupedCart[bizName].forEach(item => {
+          const price = item.details.p.toFixed(2);
+          msg += `- ${item.name}%0A`;
+          msg += `    Qty: ${item.details.q} x $${price} BZD%0A`;
+        });
+
+        msg += `----------------------------%0A`;
+      }
+
+      msg += `%0A`;
+    }
+
+    if (hasTacos) {
+      msg += `TACO ORDER%0A`;
+      msg += `PLACE: ${tacoPlace}%0A`;
+      msg += `----------------------------%0A`;
+      msg += `${tacoOrder}%0A`;
+      msg += `----------------------------%0A`;
+      msg += `RUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A`;
+      msg += `----------------------------%0A%0A`;
+    }
+
+    if (itemsTotal > 0) {
+      msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
+      msg += `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
+      
+      if (tipAmount > 0) {
+        msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
+      }
+
+      msg += `----------------------------%0A`;
+      msg += `GRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
+      msg += `PAYMENT METHOD: ${paymentMethod}%0A`;
+
+      if (paymentMethod.includes("Online")) {
+        msg += `Bank: Belize Bank%0A`;
+        msg += `Account Name: Danilo Cu%0A`;
+        msg += `Account Number: 275378010160000%0A`;
+      }
+
+      msg += `%0A`;
+    }
+
+    if (itemsTotal > 0) {
+      msg += `----------------------------%0A`;
+      msg += `RUNNER ROUTE:%0A`;
+      
+      activeBusinesses.forEach(bizName => {
+        const storeCoords = storeLocations[bizName] || storeLocations["GENERAL"];
+        const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
+        msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
+      });
+    }
+
+    msg += `CUSTOMER: ${userName}%0A`;
+    msg += `PHONE: ${userPhone}`;
+
+    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
+    window.open(waUrl, "_blank");
+  }
+
+  function doneOrder() {
+    localStorage.removeItem("tacoPlace");
+    localStorage.removeItem("tacoOrder");
+    localStorage.removeItem("tacoZone");
+
+    const tp = document.getElementById("tacoPlace");
+    if (tp) tp.value = "";
+    const td = document.getElementById("tacoDetails");
+    if (td) td.value = "";
+    const tz = document.getElementById("tacoDeliveryZone");
+    if (tz) tz.value = "";
+    const tf = document.getElementById("tacoFeeText");
+    if (tf) tf.textContent = "";
+
+    cart = {};
+    total = 0;
+    
+    window.lastCartCoords = null;
+    window.lastCartFee = 3.00;
+    window.lastCartZone = "In-Town";
+
+    const pm = document.getElementById("paymentMethod");
+    if (pm) pm.selectedIndex = 0;
+
+    update(); 
+    if (typeof updateCartBubble === "function") {
+      updateCartBubble();
+    }
+
+    const ob = document.getElementById("orderBox");
+    const cp = document.getElementById("cartPanel");
+    if (ob) ob.style.display = "none";
+    if (cp) cp.style.bottom = "-100%"; 
+
+    const toast = document.getElementById("thankYouToast");
+    if (toast) {
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2500);
+    } else {
+      alert("Order Processed Successfully");
+    }
+  }
+
+  // ✅ Replaced startup getProducts with callBackend
+  callBackend("getProducts").then(d => {
+    allProducts = d || [];
+    render();
+    updateCategoryStatusDots(); 
+  });
+
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest("button, .cat-btn");
+    if(!btn) return;
+    btn.classList.remove("btn-bounce");
+    void btn.offsetWidth;
+    btn.classList.add("btn-bounce");
+  });
+
+  let deferredPrompt;
+  const installBtn = document.getElementById("installBtn");
+  const installWrap = document.getElementById("installWrap");
+
+  window.addEventListener("beforeinstallprompt",(e)=>{
+    e.preventDefault();
+    deferredPrompt=e;
+    if (installWrap) installWrap.hidden = false;
+  });
+
+  if (installBtn) {
+    installBtn.addEventListener("click", async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        if (installWrap) installWrap.hidden = true;
+      } else {
+        if(typeof showInstallInstructions === "function") showInstallInstructions();
+      }
     });
   }
-}
 
-function bannerCategory(category){
-
-  const btn = document.querySelector(`.cat-btn[data-cat="${category}"]`);
-
-  if(btn){
-    btn.click();   // triggers the real category button
-  } else {
-    setCategory(category);
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  if (isIOS && installWrap) {
+    installWrap.hidden = false;
   }
 
-}
+  if (window.matchMedia('(display-mode: standalone)').matches && installWrap) {
+    installWrap.hidden = true;
+  }
 
-function openStore(storeName, logoUrl) {
-  localStorage.removeItem("tacoPlace");
-  localStorage.removeItem("tacoOrder");
+  setTimeout(() => {
+    const welcome = document.getElementById("welcomeScreen");
+    if (welcome) welcome.remove();
+  }, 2600); 
 
-  cat = storeName; 
+  function openSuggest() {
+    const overlay = document.getElementById("suggestOverlay");
+    if (overlay) overlay.style.display = "flex";
+  }
 
-  document.getElementById('main-view').style.display = 'none';
-  document.getElementById('store-detail-view').style.display = 'block';
-  document.getElementById('detail-name').innerText = storeName;
-  document.getElementById('detail-logo').src = logoUrl;
-  
-  const container = document.getElementById('items-container');
-  container.innerHTML = "<div style='text-align:center; padding:20px;'>Loading " + storeName + "...</div>";
+  function closeSuggest() {
+    const overlay = document.getElementById("suggestOverlay");
+    const input = document.getElementById("suggestInput");
+    if (overlay) overlay.style.display = "none";
+    if (input) input.value = "";
+  }
 
-  google.script.run
-    .withSuccessHandler(function(items) {
+  function submitSuggestion() {
+    const input = document.getElementById("suggestInput");
+    if (!input) return;
+    const item = input.value.trim();
+    if (!item) return alert("Please enter an item name");
+
+    // ✅ Replaced google.script.run with callBackend
+    callBackend("saveSuggestion", { item });
+
+    alert("✅ Your suggestion will be added soon!");
+    closeSuggest();
+  }
+
+  const suggestOverlay = document.getElementById("suggestOverlay");
+  if (suggestOverlay) {
+    suggestOverlay.addEventListener("click", e => {
+      if (e.target.id === "suggestOverlay") closeSuggest();
+    });
+  }
+
+  function showAddCheck(btn){
+    const check = document.createElement("div");
+    check.className = "add-check";
+    check.textContent = "✓";
+
+    const rect = btn.getBoundingClientRect();
+    check.style.left = rect.left + rect.width / 2 - 17 + "px";
+    check.style.top = rect.top + window.scrollY - 10 + "px";
+
+    document.body.appendChild(check);
+    setTimeout(() => check.remove(), 600);
+  }
+
+  function toggleSettings() {
+    const menu = document.getElementById("settingsDropdown");
+    if (menu) menu.style.display = menu.style.display === "block" ? "none" : "block";
+  }
+
+  function handleLogout() {
+    if (confirm("Are you sure you want to logout?")) {
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userPhone");
+      localStorage.removeItem("loggedIn");
+      location.reload(); 
+    }
+  }
+
+  function changeLang(lang) {
+    const dict = translations[lang];
+    if (!dict) return;
+
+    const slogan = document.querySelector(".header p");
+    if (slogan) slogan.innerText = dict.slogan;
+
+    const suggestBtn = document.querySelector(".suggest-btn");
+    if (suggestBtn) suggestBtn.innerText = dict.suggest;
+
+    const searchBar = document.querySelector(".search-bar");
+    if (searchBar) searchBar.placeholder = dict.searchPlaceholder;
+
+    const cartTitle = document.querySelector("#cartTitle");
+    if (cartTitle) cartTitle.innerText = dict.cartTitle;
+
+    const nextBtn = document.querySelector(".next-btn");
+    if (nextBtn) nextBtn.innerText = dict.orderBtn;
+
+    const waBtn = document.querySelector(".whatsapp");
+    if (waBtn) waBtn.innerText = dict.checkoutBtn;
+
+    localStorage.setItem("selectedLang", lang);
+    toggleSettings();
+  }
+
+  // ✅ Replaced fetchUserBalance with callBackend
+  function fetchUserBalance() {
+    if (!window.userPhone) return;
+
+    callBackend("getUserBalance", { phone: window.userPhone }).then(res => {
+      const el = document.getElementById("userBalance");
+      if (el) el.textContent = Number(res?.balance || 0).toFixed(2);
+    }).catch(() => {
+      const el = document.getElementById("userBalance");
+      if (el) el.textContent = "0.00";
+    });
+  }
+
+  function openImage(src) {
+    buzz(25); 
+    const overlay = document.getElementById("imageOverlay");
+    const img = document.getElementById("overlayImg");
+
+    if (img) img.src = src;
+    if (overlay) overlay.style.display = "flex";
+  }
+
+  function closeImage() {
+    const overlay = document.getElementById("imageOverlay");
+    if (overlay) overlay.style.display = "none";
+  }
+
+  function showPromoAd() {
+    const overlay = document.getElementById('promoOverlay');
+    if (overlay) {
+      overlay.style.display = 'flex';
+    }
+  }
+
+  function closeAd() {
+    const overlay = document.getElementById('promoOverlay');
+    if (overlay) {
+      overlay.style.display = 'none';
+    }
+  }
+
+  function showNextAd(button) {
+    const currentCard = button.closest('.promo-card');
+    if (!currentCard) return;
+    const nextCard = currentCard.nextElementSibling;
+    const overlay = document.getElementById('promoOverlay');
+
+    currentCard.style.display = 'none';
+
+    if (nextCard && nextCard.classList.contains('promo-card')) {
+      nextCard.style.display = 'block';
+    } else if (overlay) {
+      overlay.style.display = 'none';
+    }
+  }
+
+  // ✅ Replaced fetchAndShowPromos with callBackend
+  function fetchAndShowPromos() {
+    buzz(45);
+    const box = document.getElementById("products");
+    if (!box) return;
+    
+    box.innerHTML = `<div id="loadingDeals" style="text-align:center; padding:40px;"><p>Loading exclusive deals... 🔥</p></div>`;
+    
+    const sections = ["pickupOrderBox", "tacoOrderBox", "requestRideBox", "orderBox"];
+    sections.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
+    box.style.display = "block";
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    callBackend("getPromos").then(promoItems => {
+      if (!promoItems || promoItems.length === 0) {
+        box.innerHTML = `
+          <div style="text-align:center; padding:50px 20px; color:#888;">
+            <h3>No Promos Active</h3>
+            <p>Check back later for today's special deals!</p>
+            <button onclick="render()" style="margin-top:15px; padding:10px 20px; border-radius:10px; border:none; background:#eee;">Back to Shop</button>
+          </div>`;
+        return;
+      }
+
+      let html = `<h2 id="dealsHeader" style="text-align:center; color:#ff5a1f; margin:15px 0;">🔥 LIVE DEALS</h2>`;
+
+      promoItems.forEach(p => {
+        let badgeHTML = "";
+        if (p.was && !isNaN(p.was) && p.was > p.price) {
+          const savings = Math.round(((p.was - p.price) / p.was) * 100);
+          badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
+        }
+
+        html += `
+          <div class="product">
+            ${badgeHTML}
+            <img src="${p.image}" onclick="openImage(this.src)">
+            <div class="product-info">
+              <strong>${p.name}</strong>
+              <div class="price">
+                ${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''}
+                $${p.price.toFixed(2)} BZD
+              </div>
+            </div>
+            <button onclick="add('${p.name}', ${p.price}, this, ${p.was || 'null'})">Add</button>
+          </div>`;
+      });
+
+      box.innerHTML = html;
+
+      setTimeout(() => {
+        const dh = document.getElementById("dealsHeader");
+        if(dh) dh.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    });
+  }
+
+  function updateCategoryStatusDots() {
+    const buttons = document.querySelectorAll(".cat-btn");
+
+    buttons.forEach(btn => {
+      const onclickAttr = btn.getAttribute("onclick");
+      if (!onclickAttr) return;
+      const match = onclickAttr.match(/'([^']+)'/);
+      if (!match) return;
+      const categoryName = match[1];
+
+      const isOpen = allProducts.some(p => p.category === categoryName);
+
+      const existingDot = btn.querySelector(".status-dot");
+      if (existingDot) existingDot.remove();
+
+      const dot = document.createElement("span");
+      dot.className = isOpen ? "status-dot dot-open" : "status-dot dot-closed";
+      
+      btn.appendChild(dot);
+    });
+  }
+
+  function toggleExpressNotice() {
+    var type = document.getElementById("requestType").value;
+    var notice = document.getElementById("expressNotice");
+    if (!notice) return;
+    
+    if (type === "Express") {
+      notice.style.display = "block";
+    } else {
+      notice.style.display = "none";
+    }
+  }
+
+  function scrollToProducts() {
+    const productSection = document.getElementById("products");
+
+    if (productSection) {
+      const yOffset = -20; 
+      const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({
+        top: y,
+        behavior: "smooth"
+      });
+    }
+  }
+
+  function bannerCategory(category){
+    const btn = document.querySelector(`.cat-btn[data-cat="${category}"]`);
+    if(btn){
+      btn.click();   
+    } else {
+      setCategory(category);
+    }
+  }
+
+  // ✅ Replaced openStore data fetch with callBackend
+  function openStore(storeName, logoUrl) {
+    localStorage.removeItem("tacoPlace");
+    localStorage.removeItem("tacoOrder");
+
+    cat = storeName; 
+
+    const mainView = document.getElementById('main-view');
+    const detailView = document.getElementById('store-detail-view');
+    if (mainView) mainView.style.display = 'none';
+    if (detailView) detailView.style.display = 'block';
+
+    const dName = document.getElementById('detail-name');
+    const dLogo = document.getElementById('detail-logo');
+    if (dName) dName.innerText = storeName;
+    if (dLogo) dLogo.src = logoUrl;
+    
+    const container = document.getElementById('items-container');
+    if (!container) return;
+    container.innerHTML = "<div style='text-align:center; padding:20px;'>Loading " + storeName + "...</div>";
+
+    callBackend("getStoreData", { store: storeName }).then(items => {
       container.innerHTML = ""; 
+
+      if(!items || items.length === 0) {
+        container.innerHTML = "<div style='text-align:center; padding:20px;'>No items found.</div>";
+        return;
+      }
 
       items.forEach(function(item) {
         const safeName = item.name.replace(/'/g, "\\'");
         
-        // 🎀 Logic for the Badge (only shows if comment exists)
         let badgeHTML = "";
         if (item.comment && item.comment.trim() !== "") {
            badgeHTML = `<div style="position:absolute; top:8px; left:8px; background:#ff6a00; color:white; padding:4px 8px; font-size:10px; font-weight:bold; border-radius:4px; box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index:1;">
-                          ${item.comment}
-                        </div>`;
+                        ${item.comment}
+                      </div>`;
         }
 
         container.innerHTML += `
           <div class="item-card" style="position:relative;">
             ${badgeHTML}
-            <img 
-  src="${item.image || 'https://via.placeholder.com/150'}"
-  style="width:100%; border-radius:10px; cursor:pointer;"
-  onclick="openImage(this.src)"
->
+            <img src="${item.image || 'https://via.placeholder.com/150'}" style="width:100%; border-radius:10px; cursor:pointer;" onclick="openImage(this.src)">
             <div class="item-info">
               <div style="font-weight:bold; height:40px; overflow:hidden; margin-top:5px;">${item.name}</div>
               <div style="color:#ff6a00; font-weight:bold; margin:5px 0;">$${Number(item.price).toFixed(2)}</div>
-              
-              <button class="store-add-btn"
-  onclick="add('${safeName}', ${item.price}, this)">
-  Add to Cart
-</button>
+              <button class="store-add-btn" onclick="add('${safeName}', ${item.price}, this)">Add to Cart</button>
             </div>
           </div>`;
       });
-    })
-    .getStoreData(storeName);
-}
-function closeStore() {
-  // 1. Show the main category/marketplace view
-  document.getElementById('main-view').style.display = 'block';
-  
-  // 2. Hide the specific store detail view
-  document.getElementById('store-detail-view').style.display = 'none';
-  
-  // 3. Reset 'cat' to a default so grocery adds don't get tagged as a store
-  cat = "Grocery"; 
-  
-  // 4. Scroll to top so they start at the beginning of the list
-  window.scrollTo(0, 0);
-}
-function loadStoreMenu(store){
-
-  const productsBox = document.getElementById("products");
-  const subBar = document.getElementById("subcategory-bar");
-
-  productsBox.innerHTML = "";
-  subBar.innerHTML = "";
-
-  const url = scriptURL + "?action=getProducts";
-
-  fetch(url)
-  .then(function(res){
-    return res.json();
-  })
-  .then(function(data){
-
-    /* FILTER ONLY THIS STORE */
-    const storeItems = data.filter(function(p){
-      return p.category === store;
     });
+  }
 
-    if(storeItems.length === 0){
-      productsBox.innerHTML = "<p>No items yet</p>";
-      return;
-    }
+  function closeStore() {
+    const mainView = document.getElementById('main-view');
+    const detailView = document.getElementById('store-detail-view');
+    if (mainView) mainView.style.display = 'block';
+    if (detailView) detailView.style.display = 'none';
+    cat = "Grocery"; 
+    window.scrollTo(0, 0);
+  }
 
-    /* GET UNIQUE SUBCATEGORIES */
-    const subs = [...new Set(storeItems.map(function(p){
-      return p.subcategory;
-    }))];
+  function loadStoreMenu(store){
+    const productsBox = document.getElementById("products");
+    const subBar = document.getElementById("subcategory-bar");
 
-    subs.forEach(function(sub,i){
+    if(!productsBox || !subBar) return;
 
-      const btn = document.createElement("div");
-      btn.className = "sub-btn";
-      btn.innerText = sub;
+    productsBox.innerHTML = "";
+    subBar.innerHTML = "";
 
-      if(i === 0) btn.classList.add("active");
+    callBackend("getProducts").then(data => {
+      const storeItems = (data || []).filter(function(p){
+        return p.category === store;
+      });
 
-      btn.onclick = function(){
-        renderSubcategory(storeItems, sub, btn);
-      };
+      if(storeItems.length === 0){
+        productsBox.innerHTML = "<p>No items yet</p>";
+        return;
+      }
 
-      subBar.appendChild(btn);
+      const subs = [...new Set(storeItems.map(function(p){
+        return p.subcategory;
+      }))];
 
+      subs.forEach(function(sub,i){
+        const btn = document.createElement("div");
+        btn.className = "sub-btn";
+        btn.innerText = sub;
+
+        if(i === 0) btn.classList.add("active");
+
+        btn.onclick = function(){
+          renderSubcategory(storeItems, sub, btn);
+        };
+
+        subBar.appendChild(btn);
+      });
+
+      subBar.style.display = "flex";
+      if (typeof renderSubcategory === "function") {
+        renderSubcategory(storeItems, subs[0]);
+      }
+    }).catch(err => {
+      console.error(err);
+      productsBox.innerHTML = "Error loading menu";
     });
+  }
 
-    subBar.style.display = "flex";
+  const track = document.getElementById("featureTrack");
+  if (track) {
+    const cards = Array.from(track.children);
+    let index = 0;
+    const visibleCount = 4;
 
-    /* SHOW FIRST SUBCATEGORY */
-    renderSubcategory(storeItems, subs[0]);
+    function rotateFeatures() {
+      track.classList.add("fade-out");
 
-  })
-  .catch(function(err){
+      setTimeout(() => {
+        track.innerHTML = "";
 
-    console.error(err);
-    productsBox.innerHTML = "Error loading menu";
+        for (let i = 0; i < visibleCount; i++) {
+          const item = cards[(index + i) % cards.length];
+          track.appendChild(item.cloneNode(true));
+        }
 
-  });
+        index = (index + visibleCount) % cards.length;
 
-}
-
-const track = document.getElementById("featureTrack");
-const cards = Array.from(track.children);
-
-let index = 0;
-const visibleCount = 4; // how many boxes show at once
-
-function rotateFeatures() {
-  // fade out
-  track.classList.add("fade-out");
-
-  setTimeout(() => {
-    track.innerHTML = "";
-
-    for (let i = 0; i < visibleCount; i++) {
-      const item = cards[(index + i) % cards.length];
-      track.appendChild(item.cloneNode(true));
+        track.classList.remove("fade-out");
+        track.classList.add("fade-in");
+      }, 500); 
     }
 
-    index = (index + visibleCount) % cards.length;
+    setInterval(rotateFeatures, 3000);
+  }
 
-    // fade in
-    track.classList.remove("fade-out");
-    track.classList.add("fade-in");
+  const track2 = document.getElementById("featureTrack2");
+  if (track2) {
+    const cards2 = Array.from(track2.children);
+    let index2 = 0;
+    const visibleCount2 = 3;
 
-  }, 500); // match CSS duration
-}
+    function rotateFeatures2() {
+      track2.classList.add("fade-out");
 
-// start loop
-setInterval(rotateFeatures, 3000);
+      setTimeout(() => {
+        track2.innerHTML = "";
 
+        for (let i = 0; i < visibleCount2; i++) {
+          const item = cards2[(index2 + i) % cards2.length];
+          track2.appendChild(item.cloneNode(true));
+        }
 
-const track2 = document.getElementById("featureTrack2");
-const cards2 = Array.from(track2.children);
+        index2 = (index2 + visibleCount2) % cards2.length;
 
-let index2 = 0;
-const visibleCount2 = 3;
-
-function rotateFeatures2() {
-  track2.classList.add("fade-out");
-
-  setTimeout(() => {
-    track2.innerHTML = "";
-
-    for (let i = 0; i < visibleCount2; i++) {
-      const item = cards2[(index2 + i) % cards2.length];
-      track2.appendChild(item.cloneNode(true));
+        track2.classList.remove("fade-out");
+        track2.classList.add("fade-in");
+      }, 500);
     }
 
-    index2 = (index2 + visibleCount2) % cards2.length;
+    rotateFeatures2();
+    setInterval(rotateFeatures2, 3000);
+  }
 
-    track2.classList.remove("fade-out");
-    track2.classList.add("fade-in");
-
-  }, 500);
-}
-
-rotateFeatures2();
-setInterval(rotateFeatures2, 3000);
-function setDeliveryZone(val) {
-  const [zone, fee] = val.split("|");
-
-  window.lastCartZone = zone;
-  window.lastCartFee = parseFloat(fee);
-
-  refreshCartTotals();
-}
-function toggleMenu() {
-  const panel = document.getElementById("sidePanel");
-  const overlay = document.getElementById("overlay");
-
-  panel.classList.toggle("open");
-  overlay.classList.toggle("show");
-}
-document.querySelectorAll(".toggle-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-  });
-});
-
-
-window.addEventListener("DOMContentLoaded", () => {
-
-  let orderType = "Delivery";
+  function setDeliveryZone(val) {
+    const [zone, fee] = val.split("|");
+    window.lastCartZone = zone;
+    window.lastCartFee = parseFloat(fee);
+    refreshCartTotals();
+  }
 
   document.querySelectorAll(".toggle-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-
       document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-
-      orderType = btn.textContent.trim();
-
-      if (orderType === "Pickup") {
-        const pickupBtn = document.getElementById("pickupSection");
-
-        if (pickupBtn) {
-          openPickupOrder(pickupBtn);
-
-          // ✅ SCROLL TO FORM (REAL FIX)
-          setTimeout(() => {
-            const form = document.getElementById("pickupOrderBox");
-
-            if (form) {
-              const yOffset = -90;
-              const y = form.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-              window.scrollTo({
-                top: y,
-                behavior: "smooth"
-              });
-            }
-          }, 400);
-        }
-      }
-
     });
   });
 
-});
+  window.addEventListener("DOMContentLoaded", () => {
+    let orderType = "Delivery";
 
+    document.querySelectorAll(".toggle-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
 
-document.querySelectorAll(".media-card video").forEach(video => {
-  video.addEventListener("mouseenter", () => video.play());
-  video.addEventListener("mouseleave", () => video.pause());
-});
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   MENU & SIDE PANEL LOGIC
-━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-function toggleMenu() {
-  document.getElementById("sidePanel").classList.toggle("active");
-  document.getElementById("menuOverlay").classList.toggle("active");
-}
+        orderType = btn.textContent.trim();
 
-/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   PROFILE SCREEN LOGIC
-━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
-function openProfile() {
-  // Show the profile screen
-  document.getElementById("profileScreen").classList.add("active");
-  
-  // Load saved data from LocalStorage
-  const name = localStorage.getItem("userName") || "";
-  const phone = localStorage.getItem("userPhone") || "";
-  
-  document.getElementById("profileName").value = name;
-  document.getElementById("profilePhone").value = phone;
-  updateAvatar(name);
+        if (orderType === "Pickup") {
+          const pickupBtn = document.querySelector('.cat-btn[onclick*="openPickupOrder"]');
 
-  // Close the side menu
-  toggleMenu(); 
-}
+          if (pickupBtn) {
+            openPickupOrder(pickupBtn);
 
-function closeProfile() {
-  document.getElementById("profileScreen").classList.remove("active");
-}
-
-/* DATA PERSISTENCE */
-function saveProfile() {
-  const name = document.getElementById("profileName").value;
-  const phone = document.getElementById("profilePhone").value;
-  
-  localStorage.setItem("userName", name);
-  localStorage.setItem("userPhone", phone);
-  
-  updateAvatar(name);
-}
-
-function updateAvatar(name) {
-  const initial = name ? name.charAt(0).toUpperCase() : "?";
-  document.getElementById("profileInitial").innerText = initial;
-}
-function quickAdd(name, price, wasPrice = null) {
-  // Make sure cart exists
-  if (!window.cart) window.cart = {};
-
-  // Add or increase quantity
-  if (cart[name]) {
-    cart[name].q += 1;
-  } else {
-    cart[name] = {
-      q: 1,
-      p: price,
-      w: wasPrice // optional (for discounts)
-    };
-  }
-
-  // Update cart bubble count
-  if (typeof updateCartBubble === "function") {
-    updateCartBubble();
-  }
-
-  // Open cart automatically (your existing flow)
-  if (typeof openCart === "function") {
-    openCart();
-  }
-}
-
-function openFoodMap() {
-  const screen = document.getElementById("foodMapScreen");
-  const mapFrame = document.getElementById("foodMapFrame");
-
-  // Show screen
-  screen.style.display = "block";
-
-  // Load map (only if not already loaded to avoid reload flicker)
-  if (!mapFrame.src) {
-    mapFrame.src =
-      "https://www.google.com/maps?q=food+drink+cafes+restaurants+bars+in+Orange+Walk+District+Belize&z=13&output=embed";
-  }
-
-  // Load suggestions
-  renderSuggestions();
-}
-
-function closeFoodMap() {
-  document.getElementById("foodMapScreen").style.display = "none";
-}
-
-
-function renderSuggestions() {
-  const list = document.getElementById("suggestionsList");
-  list.innerHTML = "";
-
-  const suggestions = [
-    { name: "TFC: 10 PC Wings", price: 23, image: "https://i.imgur.com/AeYUFed.png" },
-    { name: "Dumpling Kings: Japanese Dumplings", price: 11, image: "https://i.imgur.com/aaCuA71.png" },
-    { name: "Maria's: Salted Caramel", price: 12.50, image: "https://i.imgur.com/P8sjMJQ.png" },
-    { name: "Guerreros: 3 Cheese Burger Combo", price: 26.50, image: "https://i.imgur.com/c14NCA3.png" }
-  ];
-
-  suggestions.forEach(item => {
-
-    const card = document.createElement("div");
-    card.className = "suggestion-card";
-
-    const img = document.createElement("img");
-    img.src = item.image;
-
-    const info = document.createElement("div");
-    info.className = "suggestion-info";
-    info.innerHTML = `
-      <strong>${item.name}</strong>
-      <span>$${item.price.toFixed(2)} BZD</span>
-    `;
-
-    const btn = document.createElement("button");
-    btn.className = "suggestion-add-btn";
-    btn.textContent = "Add";
-
-    // 🔥 Each button ONLY controls its own item
-   btn.onclick = function () {
-  cat = "Suggestions"; // 🔥 force category name
-  add(item.name, item.price, btn, null);
-};
-
-    card.appendChild(img);
-    card.appendChild(info);
-    card.appendChild(btn);
-
-    list.appendChild(card);
+            setTimeout(() => {
+              const form = document.getElementById("pickupOrderBox");
+              if (form) {
+                const yOffset = -90;
+                const y = form.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({ top: y, behavior: "smooth" });
+              }
+            }, 400);
+          }
+        }
+      });
+    });
   });
-}
 
-function toggleSuggestions() {
-  const box = document.getElementById("mapSuggestions");
-  const btn = document.getElementById("toggleSuggestionsBtn");
+  document.querySelectorAll(".media-card video").forEach(video => {
+    video.addEventListener("mouseenter", () => video.play());
+    video.addEventListener("mouseleave", () => video.pause());
+  });
 
-  if (!box || !btn) return;
-
-  box.classList.toggle("collapsed");
-
-  // Update arrow
-  btn.textContent = box.classList.contains("collapsed") ? "⬆️" : "⬇️";
-}
-
-// 🔥 Ensure button always works
-window.addEventListener("load", () => {
-  const btn = document.getElementById("toggleSuggestionsBtn");
-  if (btn) {
-    btn.addEventListener("click", toggleSuggestions);
+  function toggleMenu() {
+    const sidePanel = document.getElementById("sidePanel");
+    const menuOverlay = document.getElementById("menuOverlay");
+    if (sidePanel) sidePanel.classList.toggle("active");
+    if (menuOverlay) menuOverlay.classList.toggle("active");
   }
-});
 
-function openLeaderBoard() {
+  function openProfile() {
+    const screen = document.getElementById("profileScreen");
+    if (screen) screen.classList.add("active");
+    
+    const name = localStorage.getItem("userName") || "";
+    const phone = localStorage.getItem("userPhone") || "";
+    
+    const pName = document.getElementById("profileName");
+    const pPhone = document.getElementById("profilePhone");
+    if (pName) pName.value = name;
+    if (pPhone) pPhone.value = phone;
+    updateAvatar(name);
 
-  document.getElementById(
-    "leaderBoardScreen"
-  ).style.display = "block";
+    toggleMenu(); 
+  }
 
-  toggleMenu();
+  function closeProfile() {
+    const screen = document.getElementById("profileScreen");
+    if (screen) screen.classList.remove("active");
+  }
 
-  fetchLeaderBoard();
-}
+  function saveProfile() {
+    const name = document.getElementById("profileName").value;
+    const phone = document.getElementById("profilePhone").value;
+    
+    localStorage.setItem("userName", name);
+    localStorage.setItem("userPhone", phone);
+    
+    updateAvatar(name);
+  }
 
-function closeLeaderBoard() {
+  function updateAvatar(name) {
+    const initial = name ? name.charAt(0).toUpperCase() : "?";
+    const pi = document.getElementById("profileInitial");
+    if (pi) pi.innerText = initial;
+  }
 
-  document.getElementById(
-    "leaderBoardScreen"
-  ).style.display = "none";
-}
+  function quickAdd(name, price, wasPrice = null) {
+    if (!window.cart) window.cart = {};
 
-function fetchLeaderBoard() {
+    if (cart[name]) {
+      cart[name].q += 1;
+    } else {
+      cart[name] = {
+        q: 1,
+        p: price,
+        w: wasPrice 
+      };
+    }
 
-  google.script.run
+    if (typeof updateCartBubble === "function") {
+      updateCartBubble();
+    }
 
-    .withSuccessHandler(function(data) {
+    if (typeof openCart === "function") {
+      openCart();
+    }
+  }
 
-      const container =
-        document.getElementById(
-          "leaderBoardContainer"
-        );
+  function openFoodMap() {
+    const screen = document.getElementById("foodMapScreen");
+    const mapFrame = document.getElementById("foodMapFrame");
 
+    if (screen) screen.style.display = "block";
+
+    if (mapFrame && !mapFrame.src) {
+      mapFrame.src = "https://www.google.com/maps?q=food+drink+cafes+restaurants+bars+in+Orange+Walk+District+Belize&z=13&output=embed";
+    }
+
+    renderSuggestions();
+  }
+
+  function closeFoodMap() {
+    const screen = document.getElementById("foodMapScreen");
+    if (screen) screen.style.display = "none";
+  }
+
+  function renderSuggestions() {
+    const list = document.getElementById("suggestionsList");
+    if (!list) return;
+    list.innerHTML = "";
+
+    const suggestions = [
+      { name: "TFC: 10 PC Wings", price: 23, image: "https://i.imgur.com/AeYUFed.png" },
+      { name: "Dumpling Kings: Japanese Dumplings", price: 11, image: "https://i.imgur.com/aaCuA71.png" },
+      { name: "Maria's: Salted Caramel", price: 12.50, image: "https://i.imgur.com/P8sjMJQ.png" },
+      { name: "Guerreros: 3 Cheese Burger Combo", price: 26.50, image: "https://i.imgur.com/c14NCA3.png" }
+    ];
+
+    suggestions.forEach(item => {
+      const card = document.createElement("div");
+      card.className = "suggestion-card";
+
+      const img = document.createElement("img");
+      img.src = item.image;
+
+      const info = document.createElement("div");
+      info.className = "suggestion-info";
+      info.innerHTML = `
+        <strong>${item.name}</strong>
+        <span>$${item.price.toFixed(2)} BZD</span>
+      `;
+
+      const btn = document.createElement("button");
+      btn.className = "suggestion-add-btn";
+      btn.textContent = "Add";
+
+      btn.onclick = function () {
+        cat = "Suggestions"; 
+        add(item.name, item.price, btn, null);
+      };
+
+      card.appendChild(img);
+      card.appendChild(info);
+      card.appendChild(btn);
+
+      list.appendChild(card);
+    });
+  }
+
+  function toggleSuggestions() {
+    const box = document.getElementById("mapSuggestions");
+    const btn = document.getElementById("toggleSuggestionsBtn");
+
+    if (!box || !btn) return;
+
+    box.classList.toggle("collapsed");
+    btn.textContent = box.classList.contains("collapsed") ? "⬆️" : "⬇️";
+  }
+
+  window.addEventListener("load", () => {
+    const btn = document.getElementById("toggleSuggestionsBtn");
+    if (btn) {
+      btn.addEventListener("click", toggleSuggestions);
+    }
+  });
+
+  function openLeaderBoard() {
+    const lbScreen = document.getElementById("leaderBoardScreen");
+    if (lbScreen) lbScreen.style.display = "block";
+    toggleMenu();
+    fetchLeaderBoard();
+  }
+
+  function closeLeaderBoard() {
+    const lbScreen = document.getElementById("leaderBoardScreen");
+    if (lbScreen) lbScreen.style.display = "none";
+  }
+
+  // ✅ Replaced fetchLeaderBoard with callBackend
+  function fetchLeaderBoard() {
+    callBackend("getLeaderBoard").then(data => {
+      const container = document.getElementById("leaderBoardContainer");
+      if (!container) return;
       container.innerHTML = "";
 
-      data.forEach(function(user) {
-
-        const points =
-          Number(user.points) || 0;
-
+      (data || []).forEach(function(user) {
+        const points = Number(user.points) || 0;
         const target = 500;
-
-        const progress =
-          Math.min(
-            (points / target) * 100,
-            100
-          );
-
-        const pointsLeft =
-          Math.max(
-            target - points,
-            0
-          );
+        const progress = Math.min((points / target) * 100, 100);
+        const pointsLeft = Math.max(target - points, 0);
 
         let trophy = "🏆";
-
         if (user.rank == 1) trophy = "🥇";
         if (user.rank == 2) trophy = "🥈";
         if (user.rank == 3) trophy = "🥉";
 
         container.innerHTML += `
-
           <div class="leaderboard-card">
-
             <div class="leaderboard-left">
-
               <div class="leaderboard-rank">
                 #${user.rank}
               </div>
-
               <div class="leaderboard-user">
-
                 <div class="leaderboard-name">
                   ${user.name}
                 </div>
-
                 <div class="leaderboard-points">
                   ${points} Points
                 </div>
-
                 ${
                   user.rank == 1
                   ? `
@@ -8410,197 +7994,133 @@ function fetchLeaderBoard() {
                   `
                   : ""
                 }
-
-                <!-- PROGRESS -->
                 <div class="leaderboard-progress-wrap">
-
                   <div class="leaderboard-progress-top">
-
                     <div class="leaderboard-target">
                       ${pointsLeft} points left to win
                     </div>
-
                     <div class="leaderboard-progress-pill">
                       ${Math.round(progress)}%
                     </div>
-
                   </div>
-
                   <div class="leaderboard-progress-bar">
-
                     <div
                       class="leaderboard-progress-fill"
                       style="width:${progress}%;">
                     </div>
-
                   </div>
-
                 </div>
-
               </div>
-
             </div>
-
             <div class="leaderboard-score">
               ${trophy}
             </div>
-
           </div>
-
         `;
       });
+    }).catch(error => {
+      console.log("Leaderboard Error:", error);
+    });
+  }
 
-    })
+  function selectNetwork(network, element){
+    const cn = document.getElementById("creditNetwork");
+    if (cn) cn.value = network;
 
-    .withFailureHandler(function(error) {
-
-      console.log(
-        "Leaderboard Error:",
-        error
-      );
-
-    })
-
-    .getLeaderBoard();
-}
-function selectNetwork(network, element){
-
-  document.getElementById("creditNetwork").value =
-    network;
-
-  document
-    .querySelectorAll(".network-card")
-    .forEach(card =>
+    document.querySelectorAll(".network-card").forEach(card =>
       card.classList.remove("active")
     );
 
-  element.classList.add("active");
-}
-function openCreditPurchase(){
-
-  const profileName =
-    document.getElementById("profileName")?.value || "";
-
-  document.getElementById("creditName").value =
-    profileName;
-
-  document.getElementById(
-    "creditPurchaseScreen"
-  ).style.display = "block";
-
-  document.getElementById(
-    "sidePanel"
-  ).style.display = "none";
-
-  const menuOverlay =
-    document.getElementById("menuOverlay");
-
-  if(menuOverlay){
-    menuOverlay.style.display = "none";
-  }
-}
-
-function closeCreditPurchase() {
-
-  document.getElementById("creditPurchaseScreen").style.display = "none";
-
-  const sidePanel = document.getElementById("sidePanel");
-  const menuOverlay = document.getElementById("menuOverlay");
-
-  if(sidePanel){
-    sidePanel.style.display = "";
+    element.classList.add("active");
   }
 
-  if(menuOverlay){
-    menuOverlay.style.display = "";
-  }
-}
+  function openCreditPurchase(){
+    const profileName = document.getElementById("profileName")?.value || "";
+    const cn = document.getElementById("creditName");
+    if (cn) cn.value = profileName;
 
-function showCreditConfirmation() {
+    const cps = document.getElementById("creditPurchaseScreen");
+    const sp = document.getElementById("sidePanel");
+    const menuOverlay = document.getElementById("menuOverlay");
 
-  const network =
-    document.getElementById("creditNetwork").value;
+    if (cps) cps.style.display = "block";
+    if (sp) sp.style.display = "none";
 
-  const phone =
-    document.getElementById("creditPhone").value.trim();
-
-  const amount =
-    parseFloat(
-      document.getElementById("creditAmount").value
-    );
-
-  const name =
-    document.getElementById("creditName").value.trim();
-
-  if (!name) {
-    alert("Please enter your name.");
-    return;
+    if(menuOverlay){
+      menuOverlay.style.display = "none";
+    }
   }
 
-  if (!phone) {
-    alert("Please enter a phone number.");
-    return;
+  function closeCreditPurchase() {
+    const cps = document.getElementById("creditPurchaseScreen");
+    const sidePanel = document.getElementById("sidePanel");
+    const menuOverlay = document.getElementById("menuOverlay");
+
+    if (cps) cps.style.display = "none";
+    if(sidePanel) sidePanel.style.display = "";
+    if(menuOverlay) menuOverlay.style.display = "";
   }
 
-  if (!amount || amount <= 0) {
-    alert("Please enter a valid amount.");
-    return;
+  function showCreditConfirmation() {
+    const network = document.getElementById("creditNetwork").value;
+    const phone = document.getElementById("creditPhone").value.trim();
+    const amount = parseFloat(document.getElementById("creditAmount").value);
+    const name = document.getElementById("creditName").value.trim();
+
+    if (!name) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    if (!phone) {
+      alert("Please enter a phone number.");
+      return;
+    }
+
+    if (!amount || amount <= 0) {
+      alert("Please enter a valid amount.");
+      return;
+    }
+
+    const total = amount + 1;
+    const cs = document.getElementById("creditSummary");
+
+    if (cs) {
+      cs.innerHTML = `
+        <div style="background:#fafafa; padding:15px; border-radius:16px; line-height:1.8;">
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Network:</strong> ${network}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Credit:</strong> $${amount.toFixed(2)}</p>
+          <p><strong>Service Fee:</strong> $1.00</p>
+          <p style="color:#ff6a00; font-size:18px; font-weight:900;">
+            Total Transfer: $${total.toFixed(2)}
+          </p>
+        </div>
+      `;
+    }
+
+    const cps = document.getElementById("creditPurchaseScreen");
+    const ccs = document.getElementById("creditConfirmScreen");
+    if (cps) cps.style.display = "none";
+    if (ccs) ccs.style.display = "block";
   }
 
-  const total = amount + 1;
+  function closeCreditConfirm() {
+    const ccs = document.getElementById("creditConfirmScreen");
+    const cps = document.getElementById("creditPurchaseScreen");
+    if (ccs) ccs.style.display = "none";
+    if (cps) cps.style.display = "block";
+  }
 
-  document.getElementById("creditSummary").innerHTML = `
-    <div style="
-      background:#fafafa;
-      padding:15px;
-      border-radius:16px;
-      line-height:1.8;
-    ">
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Network:</strong> ${network}</p>
-      <p><strong>Phone:</strong> ${phone}</p>
-      <p><strong>Credit:</strong> $${amount.toFixed(2)}</p>
-      <p><strong>Service Fee:</strong> $1.00</p>
-      <p style="
-        color:#ff6a00;
-        font-size:18px;
-        font-weight:900;
-      ">
-        Total Transfer: $${total.toFixed(2)}
-      </p>
-    </div>
-  `;
+  function sendCreditWhatsapp() {
+    const name = document.getElementById("creditName").value;
+    const network = document.getElementById("creditNetwork").value;
+    const phone = document.getElementById("creditPhone").value;
+    const amount = parseFloat(document.getElementById("creditAmount").value || 0);
+    const total = amount + 1;
 
-  document.getElementById("creditPurchaseScreen").style.display = "none";
-  document.getElementById("creditConfirmScreen").style.display = "block";
-}
-
-function closeCreditConfirm() {
-
-  document.getElementById("creditConfirmScreen").style.display = "none";
-
-  document.getElementById("creditPurchaseScreen").style.display = "block";
-}
-
-function sendCreditWhatsapp() {
-
-  const name =
-    document.getElementById("creditName").value;
-
-  const network =
-    document.getElementById("creditNetwork").value;
-
-  const phone =
-    document.getElementById("creditPhone").value;
-
-  const amount =
-    parseFloat(
-      document.getElementById("creditAmount").value || 0
-    );
-
-  const total = amount + 1;
-
-  const message = `SwiftShop Credit Purchase
+    const message = `SwiftShop Credit Purchase
 
 Name: ${name}
 Network: ${network}
@@ -8616,394 +8136,23 @@ Account Number: 275378010160000
 ----------------------------------------
 I have completed the Instant Fund Transfer and will attach my screenshot.`;
 
-window.open(
-  "https://wa.me/5016080205?text=" +
-  encodeURIComponent(message),
-  "_blank"
-);
-
-// RESET FORM
-
-document.getElementById("creditName").value = "";
-document.getElementById("creditPhone").value = "";
-document.getElementById("creditAmount").value = "";
-
-document.getElementById("creditNetwork").value =
-  "SMART";
-
-document
-  .querySelectorAll(".network-card")
-  .forEach(card =>
-    card.classList.remove("active")
-  );
-
-document
-  .querySelector(".network-card")
-  .classList.add("active");
-
-document.getElementById(
-  "feePreview"
-).innerHTML =
-  "Total Transfer: $0.00";
-
-document.getElementById(
-  "creditConfirmScreen"
-).style.display = "none";
-}
-</script>
-
-
-<!-- 📝 SUGGEST ITEM MODAL -->
-<div id="suggestOverlay" class="suggest-overlay">
-  <div class="suggest-box">
-    <button class="close-btn" onclick="closeSuggest()">✕</button>
-    <h3>Suggest an Item</h3>
-    <input id="suggestInput" type="text" placeholder="Item name">
-    <button class="submit-btn" onclick="submitSuggestion()">Submit</button>
-  </div>
-</div>
-
-</div>
-<div id="thankYouToast">✅ Thank you for your order!</div>
-
-
-<!-- 🛒 Floating Cart Button -->
-<div id="cartBubble" onclick="openCart()" style="
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#ff9000;
-  color:white;
-  width:64px;
-  height:64px;
-  border-radius:50%;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  font-size:26px;
-  font-weight:900;
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
-  z-index:1000;
-">
-  🛒
-</div>
-
-
-
-
-
-<!-- 🧾 Cart Panel -->
-<div id="cartPanel" style="
-
-  position:fixed;
-  bottom:-100%;
-  left:0;
-  width:100%;
-  height:70%;
-  background:white;
-  border-radius:24px 24px 0 0;
-  box-shadow:0 -10px 30px rgba(0,0,0,0.2);
-  transition:bottom 0.35s ease;
-  z-index:999;
-  padding:20px;
-  overflow-y:auto;
-">
-<!-- ❌ CLOSE BUTTON -->
-  <button onclick="closeCart()" style="
-    position:absolute;
-    top:14px;
-    right:16px;
-    background:none;
-    border:none;
-    font-size:22px;
-    font-weight:900;
-    cursor:pointer;
-  ">
-    ✕
-  </button>
-
-
- <h2 id="cartTitle">Your Cart</h2>
-
-
-
-  <div id="cartPanelItems"></div>
-
-  <hr>
-
-  <h3 id="cartPanelTotal"></h3>
-  <div id="cartDeliveryFee" style="
-  margin-top:6px;
-  font-weight:700;
-  color:#ff5a1f;
-  text-align:center;
-"></div>
-<div id="cartDeliveryFee" style="font-weight:700; margin-bottom:6px; color:#ff6a00;"></div>
-<div id="cartGrandTotal" style="
-  margin-top:6px;
-  font-weight:900;
-  font-size:18px;
-  text-align:center;
-"></div>
-
- <div style="
-  font-size:10px;
-  color:#777;
-  text-align:center;
-  margin-top:6px;
-  line-height:1.4;
-">
-
-<label style="font-weight:700; margin-top:14px; display:block;">
-  Delivery Location
-</label>
-
-<div id="cartMapSection" style="margin-top: 15px; padding: 12px; background: #fff; border-radius: 18px; border: 1px solid #eee;">
-  <button id="geoBtn" onclick="getCurrentLocation()" style="width:100%; padding:15px; background:#ff6a00; color:white; border:none; border-radius:12px; font-weight:800; font-size:16px; margin-bottom:12px; box-shadow: 0 4px 15px rgba(255,106,0,0.3); cursor:pointer; transition: 0.3s;">
-    📍 TAP HERE TO PIN LOCATION
-  </button>
-
-  <input id="cartMapSearch" type="text" placeholder="Or search street name..." 
-    style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-bottom:10px; outline:none; font-size:14px; background:#f9f9f9;">
-
-  <div id="cartDeliveryMap" style="width:100%; height:220px; border-radius:15px; background:#eee;"></div>
-  
-  <div id="cartDeliveryFee" style="margin-top:10px; font-weight:700; color:#ff6a00; text-align:center; font-size:14px;">
-    Pin your house for accurate delivery 🏠
-  </div>
-</div>
-
-<div id="deliveryFeeText" style="margin-top:8px; font-weight:700; color:#ff5a1f; text-align:center;"></div>
-
-  SwiftShop purchases items on your behalf from local stores.<br>
-  Prices and availability may vary.
-</div>
-
-
-
- <div class="next-btn-outer" onclick="goToOrder()">
-  <button class="next-btn-inner">
-    Next ➔
-  </button>
-</div>
-
-</div>
-<!-- 👤 PROFILE MODAL -->
-<div id="profileOverlay" class="suggest-overlay" onclick="closeProfile()">
-  <div class="profile-card" onclick="event.stopPropagation()">
-
-    <!-- TOP / IDENTITY -->
-    <div class="profile-top">
-      <div class="profile-avatar">
-        <span id="profileInitials">U</span>
-      </div>
-
-      <div class="profile-main">
-        <div id="profileName" class="profile-name">Customer Name</div>
-        <div id="profilePhone" class="profile-phone">+501 000-0000</div>
-      </div>
-    </div>
-
-    <!-- POINTS -->
-    <div class="profile-points">
-      <div id="profilePoints" class="points-number">0</div>
-      <div class="points-label">Reward Points</div>
-    </div>
-
-    <!-- REWARDS -->
-    <div class="profile-rewards">
-      <div class="reward">🚚 <span>5 pts</span><br>Free Run</div>
-      <div class="reward">☕ <span>10 pts</span><br>Frappe</div>
-      <div class="reward">🍔 <span>15 pts</span><br>Meal + Drink</div>
-      <div class="reward">🍕 <span>35 pts</span><br>Family Pizza + Drinks</div>
-    </div>
-
-    <button class="profile-close" onclick="closeProfile()">Done</button>
-
-  </div>
-</div>
-
-<div id="imageOverlay" onclick="closeImage()">
-  <img id="overlayImg">
-</div>
-
-
-
-<script>
-  let currentCategoryName = "Snack"; // Default category when app loads
-  document.addEventListener("DOMContentLoaded", () => {
-    const track = document.getElementById("adTrack");
-    if (!track) return;
-
-    const slides = track.children.length;
-    const slideHeight = 250; // 👈 Updated to match your CSS height
-    let index = 0;
-    let lastTime = 0;
-    const interval = 4000;
-
-    function slideLoop(timestamp) {
-      if (!lastTime) lastTime = timestamp;
-
-      if (timestamp - lastTime >= interval) {
-        index = (index + 1) % slides;
-        // Moves the track up exactly 250px
-        track.style.transform = `translateY(-${index * slideHeight}px)`;
-        lastTime = timestamp;
-      }
-
-      requestAnimationFrame(slideLoop);
-    }
-
-    document.addEventListener("visibilitychange", () => {
-      if (!document.hidden) lastTime = 0;
-    });
-
-    requestAnimationFrame(slideLoop);
-  });
-</script>
-<script>
-  (function() {
-    const track = document.getElementById("pillTrackV2");
-    const dotContainer = document.getElementById("pillDotsV2");
-    if (!track || !dotContainer) return;
-
-    const slides = track.children.length;
-    let index = 0;
-
-    // Create dots dynamically
-    for (let i = 0; i < slides; i++) {
-      const dot = document.createElement("div");
-      dot.classList.add("dot-v2");
-      if (i === 0) dot.classList.add("active");
-      dotContainer.appendChild(dot);
-    }
-
-    const allDots = dotContainer.querySelectorAll(".dot-v2");
-
-    function updatePillSlider() {
-      index = (index + 1) % slides;
-      
-      // ⬅️ Slide the images
-      track.style.transform = `translateX(-${index * 100}%)`;
-
-      // ✨ Swooze the dots
-      allDots.forEach((dot, i) => {
-        dot.classList.toggle("active", i === index);
-      });
-    }
-
-    setInterval(updatePillSlider, 5000);
-  })();
-</script>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const promoOverlay = document.getElementById("promoOverlay");
-    const promoCards = Array.from(promoOverlay.querySelectorAll(".promo-card"));
-
-    let currentIndex = 0;
-
-    function showAd(index) {
-      promoCards.forEach((card, i) => {
-        card.style.display = i === index ? "block" : "none";
-      });
-    }
-
-    function nextAd() {
-      currentIndex++;
-
-      if (currentIndex >= promoCards.length) {
-        promoOverlay.style.display = "none";
-      } else {
-        showAd(currentIndex);
-      }
-    }
-
-    // Expose globally for ❌ buttons
-    window.showNextAd = function (e) {
-      if (e && e.stopPropagation) e.stopPropagation();
-      nextAd();
-    };
-
-    // Tap background = next ad
-    promoOverlay.addEventListener("click", () => {
-      nextAd();
-    });
-
-    // Tap inside promo card = do nothing
-    promoCards.forEach(card => {
-      card.addEventListener("click", e => {
-        e.stopPropagation();
-      });
-    });
-
-    // Init
-    showAd(currentIndex);
-  });
-</script>
-<script>
-
-// WAIT until page fully loads ✅
-window.addEventListener("DOMContentLoaded", () => {
-
-  // =======================
-  // DELIVERY / PICKUP
-  // =======================
-  let orderType = "Delivery";
-
-  document.querySelectorAll(".toggle-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-
-      document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      orderType = btn.textContent.trim();
-
-      console.log("Clicked:", orderType);
-
-      if (orderType === "Pickup") {
-        const pickupBtn = document.querySelector('.cat-btn[onclick*="openPickupOrder"]');
-
-        if (pickupBtn) {
-          openPickupOrder(pickupBtn);
-        } else {
-          console.log("Pickup button NOT found ❌");
-        }
-      }
-    });
-  });
-
-});
-
-
-// =======================
-// LOCATION MODAL (GLOBAL)
-// =======================
-function openLocationModal() {
-  console.log("Opening location modal");
-  document.getElementById("locationModal").style.display = "flex";
-}
-
-function closeLocationModal() {
-  document.getElementById("locationModal").style.display = "none";
-}
-
-function saveLocation() {
-  const input = document.getElementById("locationInput").value;
-
-  if (!input.trim()) return;
-
-  document.getElementById("locationText").textContent = input;
-  closeLocationModal();
-
-  console.log("Saved location:", input);
-}
-function selectTip(amount, element) {
-  document.querySelectorAll('.tip-btn').forEach(btn => btn.classList.remove('active'));
-  element.classList.add('active');
-  document.getElementById('selectedTipAmount').value = amount;
-}
-
+    window.open("https://wa.me/5016080205?text=" + encodeURIComponent(message), "_blank");
+
+    document.getElementById("creditName").value = "";
+    document.getElementById("creditPhone").value = "";
+    document.getElementById("creditAmount").value = "";
+    document.getElementById("creditNetwork").value = "SMART";
+
+    document.querySelectorAll(".network-card").forEach(card => card.classList.remove("active"));
+    const firstNet = document.querySelector(".network-card");
+    if (firstNet) firstNet.classList.add("active");
+
+    const fp = document.getElementById("feePreview");
+    if (fp) fp.innerHTML = "Total Transfer: $0.00";
+
+    const ccs = document.getElementById("creditConfirmScreen");
+    if (ccs) ccs.style.display = "none";
+  }
 </script>
 
 </body>
