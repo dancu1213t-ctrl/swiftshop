@@ -3967,6 +3967,77 @@ backdrop-filter: blur(6px);
 
   text-align:center;
 }
+
+    /* ================= UBER EATS 3D CATEGORY STYLE ================= */
+.uber-eats-row {
+  display: flex !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  gap: 36px !important; /* Spaced out even more horizontally */
+  padding: 14px 20px !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
+  align-items: center !important;
+}
+
+.uber-eats-row::-webkit-scrollbar {
+  display: none !important;
+}
+
+.uber-eats-row .cat-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: none !important;
+  height: auto !important;
+  padding: 4px !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  flex-shrink: 0 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.uber-3d-icon {
+  width: 58px !important;
+  height: 58px !important;
+  object-fit: contain !important;
+  margin-bottom: 6px !important;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12)) !important;
+  transition: transform 0.2s ease, filter 0.2s ease !important;
+}
+
+.uber-eats-row .cat-btn span {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #111111 !important; /* Solid black text */
+  text-align: center !important;
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.uber-eats-row .cat-btn:hover .uber-3d-icon {
+  transform: translateY(-3px) scale(1.05) !important;
+}
+
+.uber-eats-row .cat-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.uber-eats-row .cat-btn.active .uber-3d-icon {
+  transform: scale(1.12) !important;
+  filter: drop-shadow(0 8px 16px rgba(255, 106, 0, 0.3)) !important;
+}
+
+.uber-eats-row .cat-btn.active span {
+  color: #ff6a00 !important;
+  font-weight: 800 !important;
+  border-bottom: 2px solid #ff6a00 !important;
+  padding-bottom: 1px !important;
+  background: transparent !important;
+}
   </style>
 </head>
 
@@ -5523,29 +5594,67 @@ backdrop-filter: blur(6px);
 
 
 <div class="categories-wrapper">
+  <h3 class="category-label">🛒 Categories</h3>
 
-  <!-- 🔹 NORMAL CATEGORIES -->
-  <h3 class="category-label">🛒 Normal Categories</h3>
+  <div class="categories uber-eats-row">
 
-  <div class="categories text-row">
+    <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack',this)">
+      <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
+      <span>Snacks</span>
+    </div>
 
-    <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack',this)">🍿 Snacks</div>
-    <div class="cat-btn" data-cat="Breakfast" onclick="setCategory('Breakfast',this)"> 🧇Breakfast</div>
-    <div class="cat-btn" data-cat="Lunch" onclick="setCategory('Lunch',this)"> 🍗Lunch</div>
-    <div class="cat-btn" data-cat="Drink" onclick="setCategory('Drink',this)">🥤 Drinks</div>
-    <div class="cat-btn" data-cat="Household" onclick="setCategory('Household',this)">🏠 Household</div>
-    <div class="cat-btn" data-cat="Hygiene" onclick="setCategory('Hygiene',this)">🧼 Hygiene</div>
-    <div class="cat-btn" data-cat="Vegetables" onclick="setCategory('Vegetables',this)">🥕 Veggies</div>
+    <div class="cat-btn" data-cat="Breakfast" onclick="setCategory('Breakfast',this)">
+      <img src="https://i.imgur.com/0TtohPG.png" class="uber-3d-icon" alt="Breakfast">
+      <span>Breakfast</span>
+    </div>
 
-    <div class="cat-btn" onclick="openTacoOrder(this)">🌮 Tacos</div>
-    <div class="cat-btn" data-cat="Treats" onclick="setCategory('Treats',this)">🍔 Treats</div>
-    <div class="cat-btn" data-cat="Electronics" onclick="setCategory('Electronics',this)">Electronics🤳🏻</div>
+    <div class="cat-btn" data-cat="Lunch" onclick="setCategory('Lunch',this)">
+      <img src="https://i.imgur.com/p8vx8Nz.png" class="uber-3d-icon" alt="Lunch">
+      <span>Lunch</span>
+    </div>
 
-    <div id="pickupSection" class="cat-btn" onclick="openPickupOrder(this)">
-      Pickup Food
+    <div class="cat-btn" data-cat="Drink" onclick="setCategory('Drink',this)">
+      <img src="https://i.imgur.com/Bkge0pn.png" class="uber-3d-icon" alt="Drinks">
+      <span>Drinks</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Household" onclick="setCategory('Household',this)">
+      <img src="https://i.imgur.com/j2GmDW5.png" class="uber-3d-icon" alt="Household">
+      <span>Household</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Hygiene" onclick="setCategory('Hygiene',this)">
+      <img src="https://i.imgur.com/V5giTO5.png" class="uber-3d-icon" alt="Hygiene">
+      <span>Hygiene</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Vegetables" onclick="setCategory('Vegetables',this)">
+      <img src="https://i.imgur.com/YSC5fdN.png" class="uber-3d-icon" alt="Veggies">
+      <span>Veggies</span>
+    </div>
+
+    <div class="cat-btn" onclick="openTacoOrder(this)">
+      <img src="https://i.imgur.com/hnzB4IP.png" class="uber-3d-icon" alt="Tacos">
+      <span>Tacos</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Treats" onclick="setCategory('Treats',this)">
+      <img src="https://i.imgur.com/yX4SJvY.png" class="uber-3d-icon" alt="Treats">
+      <span>Treats</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Electronics" onclick="setCategory('Electronics',this)">
+      <img src="https://i.imgur.com/5jEUdc4.png" class="uber-3d-icon" alt="Electronics">
+      <span>Electronics</span>
+    </div>
+
+    <div class="cat-btn" id="pickupSection" onclick="openPickupOrder(this)">
+      <img src="https://i.imgur.com/cMPdTPr.png" class="uber-3d-icon" alt="Pickup">
+      <span>Pickup Food</span>
     </div>
 
   </div>
+</div>
 
   <div class="category-divider"></div>
 
