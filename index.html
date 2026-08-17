@@ -7747,6 +7747,195 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
     document.getElementById("feePreview").innerHTML = "Total Transfer: $0.00";
     document.getElementById("creditConfirmScreen").style.display = "none";
   }
+
+  // 1. Delivery Fee Calculation
+function getServiceFee(zone) {
+  const fees = {
+    "town": 3.00,
+    "muffles": 3.50,
+    "trial_farm": 4.00,
+    "black_water": 4.50,
+    "san_lorenzo": 4.00,
+    "pasadita": 3.00,
+    "palmar": 4.50,
+    "petville": 4.50,
+    "chan_pine_ridge": 5.00,
+    "yo_creek": 6.00,
+    "san_estevan": 6.00,
+    "carmelita": 6.00,
+    "san_jose": 7.00,
+    "san_pablo": 7.00
+  };
+  return fees[zone] || 3.00;
+}
+
+// 2. Subcategory Rendering for Stores
+function renderSubcategory(items, subcategory, btnElement) {
+  if (btnElement) {
+    document.querySelectorAll(".sub-btn").forEach(b => b.classList.remove("active"));
+    btnElement.classList.add("active");
+  }
+  const productsBox = document.getElementById("products");
+  if (!productsBox) return;
+  productsBox.innerHTML = "";
+  
+  const filtered = items.filter(p => p.subcategory === subcategory);
+  filtered.forEach(p => {
+    const safeName = p.name.replace(/'/g, "\\'");
+    productsBox.innerHTML += `
+      <div class="product">
+        <img src="${p.image}" onclick="openImage(this.src)">
+        <div class="product-info">
+          <strong>${p.name}</strong>
+          <div class="price">$${Number(p.price).toFixed(2)} BZD</div>
+        </div>
+        <button onclick="add('${safeName}', ${p.price}, this)">Add</button>
+      </div>
+    `;
+  });
+}
+
+// 3. Location Modal Handlers
+function openLocationModal() {
+  const modal = document.getElementById("locationModal");
+  if (modal) modal.style.display = "flex";
+}
+
+function closeLocationModal() {
+  const modal = document.getElementById("locationModal");
+  if (modal) modal.style.display = "none";
+}
+
+function saveLocation() {
+  const input = document.getElementById("locationInput");
+  const locText = document.getElementById("locationText");
+  if (input && input.value.trim() && locText) {
+    locText.textContent = input.value.trim();
+  }
+  closeLocationModal();
+}
+
+// 4. Tip Selection Handler
+function selectTip(amount, btnElement) {
+  document.querySelectorAll(".tip-btn").forEach(b => b.classList.remove("active"));
+  if (btnElement) btnElement.classList.add("active");
+  const tipInput = document.getElementById("selectedTipAmount");
+  if (tipInput) tipInput.value = amount;
+  refreshCartTotals();
+}
+
+  // 1. Safe Cart State & UI Refresh
+let cart = [];
+
+function add(name, price, btn) {
+  const existing = cart.find(item => item.name === name);
+  if (existing) {
+    existing.qty += 1;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
+  update(); // Now correctly triggers UI refresh
+}
+
+function update() {
+  const cartCountEl = document.getElementById("cartCount");
+  const cartItemsEl = document.getElementById("cartItems");
+  const subtotalEl = document.getElementById("subtotal");
+  const grandTotalEl = document.getElementById("grandTotal");
+
+  let totalQty = 0;
+  let subtotal = 0;
+
+  if (cartItemsEl) cartItemsEl.innerHTML = "";
+
+  cart.forEach((item, index) => {
+    totalQty += item.qty;
+    subtotal += item.price * item.qty;
+
+    if (cartItemsEl) {
+      cartItemsEl.innerHTML += `
+        <div class="cart-item">
+          <span>${item.name} (x${item.qty})</span>
+          <span>$${(item.price * item.qty).toFixed(2)}</span>
+          <button onclick="changeQty(${index}, 1)">+</button>
+          <button onclick="changeQty(${index}, -1)">-</button>
+        </div>
+      `;
+    }
+  });
+
+  if (cartCountEl) cartCountEl.textContent = totalQty;
+  if (subtotalEl) subtotalEl.textContent = subtotal.toFixed(2);
+  
+  const serviceFee = typeof getServiceFee === "function" ? getServiceFee(selectedZone) : 3.00;
+  const grandTotal = subtotal + serviceFee;
+  if (grandTotalEl) grandTotalEl.textContent = grandTotal.toFixed(2);
+}
+
+function changeQty(index, delta) {
+  cart[index].qty += delta;
+  if (cart[index].qty <= 0) {
+    cart.splice(index, 1);
+  }
+  update();
+}
+
+// 2. Robust WhatsApp Checkout Generator
+function sendWhatsAppOrder(storePhone) {
+  if (!cart.length) {
+    alert("Your cart is empty!");
+    return;
+  }
+
+  let message = "🛍️ *New Order Details*:\n\n";
+  let subtotal = 0;
+
+  cart.forEach(item => {
+    const itemTotal = item.price * item.qty;
+    subtotal += itemTotal;
+    message += `• ${item.name} x${item.qty} - $${itemTotal.toFixed(2)}\n`;
+  });
+
+  const serviceFee = typeof getServiceFee === "function" ? getServiceFee(selectedZone) : 3.00;
+  const total = subtotal + serviceFee;
+
+  message += `\nSubtotal: $${subtotal.toFixed(2)}`;
+  message += `\nDelivery Fee: $${serviceFee.toFixed(2)}`;
+  message += `\n*Total: $${total.toFixed(2)}*`;
+
+  const encodedMessage = encodeURIComponent(message);
+  const cleanPhone = storePhone ? storePhone.replace(/\D/g, '') : '';
+  
+  if (!cleanPhone) {
+    alert("Store phone number is missing.");
+    return;
+  }
+
+  const whatsappURL = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+  window.open(whatsappURL, '_blank');
+}
+
+// 3. Safe Google Apps Script Fetch Wrapper
+async function postDataToAppsScript(url, payload) {
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      redirect: "follow",
+      body: JSON.stringify(payload)
+    });
+    
+    const text = await response.text();
+    try {
+      return JSON.parse(text);
+    } catch (err) {
+      console.error("Server returned non-JSON response:", text);
+      throw new Error("Server error or invalid response format.");
+    }
+  } catch (error) {
+    console.error("Network or script execution failed:", error);
+    alert("Could not complete the request. Please check your connection.");
+  }
+}
 </script>
 
 </body>
