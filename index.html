@@ -4039,34 +4039,41 @@ backdrop-filter: blur(6px);
   background: transparent !important;
 }
 
-    /* ================= FLOATING BOTTOM BANNER ================= */
+   /* ================= FLOATING BOTTOM BANNER ================= */
 .floating-promo-banner {
   position: fixed;
-  bottom: 20px;
+  bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  width: 92%;
-  max-width: 480px;
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 12px 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border: 1px solid #eee;
+  width: 90%;
+  max-width: 440px;
+  background: linear-gradient(135deg, #ffffff 0%, #fff9f5 100%);
+  border-radius: 22px;
+  padding: 10px 14px;
+  box-shadow: 0 12px 35px rgba(255, 106, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1.5px solid rgba(255, 144, 0, 0.3);
   display: flex;
   align-items: center;
   gap: 12px;
   z-index: 99999;
   cursor: pointer;
   animation: floatBannerUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.floating-promo-banner:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 16px 40px rgba(255, 106, 0, 0.25), 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .floating-promo-img {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   border-radius: 14px;
   object-fit: cover;
   flex-shrink: 0;
   background: #f2f2f2;
+  border: 1px solid rgba(0,0,0,0.06);
 }
 
 .floating-promo-info {
@@ -4075,10 +4082,10 @@ backdrop-filter: blur(6px);
 }
 
 .floating-promo-title {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 800;
   color: #111;
-  margin: 0 0 2px 0;
+  margin: 0 0 3px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -4089,26 +4096,29 @@ backdrop-filter: blur(6px);
   font-weight: 700;
   color: #ff6a00;
   margin: 0;
+  display: flex;
+  align-items: center;
 }
 
 .floating-promo-close {
-  background: rgba(0,0,0,0.06);
+  background: rgba(0,0,0,0.05);
   border: none;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
-  font-size: 14px;
-  color: #444;
+  font-size: 13px;
+  color: #666;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .floating-promo-close:hover {
-  background: rgba(0,0,0,0.12);
+  background: rgba(255,106,0,0.15);
+  color: #ff6a00;
 }
 
 @keyframes floatBannerUp {
@@ -8832,55 +8842,79 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
     if (cConfirm) cConfirm.style.display = "none";
   }
 
-  // Fetch active promo from Supabase and render the floating banner
-async function checkAndShowFloatingPromo() {
-  const container = document.getElementById("floatingPromoContainer");
-  if (!container) return;
 
-  // Query your Supabase table 'promos'
-  const { data, error } = await supabaseClient
-    .from('promos')
-    .select('*')
-    .limit(1); // Grabs the top promo item
+  async function loadSupabasePromos() {
+    try {
+      // Queries the exact schema columns: id, timestamp, name, price, image, category, was, status
+      const { data, error } = await supabase
+        .from('promos')
+        .select('*')
+        .limit(10);
 
-  if (error || !data || data.length === 0) return;
+      if (error) {
+        console.error('Error fetching promos:', error);
+        return;
+      }
 
-  const promo = data[0];
+      if (data && data.length > 0) {
+        // Pick a random promo row from your Supabase table
+        const randomPromo = data[Math.floor(Math.random() * data.length)];
+        renderFloatingPromo(randomPromo);
+      }
+    } catch (err) {
+      console.error('Unexpected error loading promos:', err);
+    }
+  }
 
-  // Optional: check if user closed this specific promo ID during this session
-  if (sessionStorage.getItem("dismissedPromo") === String(promo.id)) return;
+  function renderFloatingPromo(promo) {
+    const container = document.getElementById('floatingPromoContainer');
+    if (!container) return;
 
-  container.innerHTML = `
-    <div class="floating-promo-banner" id="floatingPromoCard" onclick="handlePromoClick('${promo.category || ''}')">
-      <img src="${promo.image || 'https://i.imgur.com/WHXTIpe.png'}" class="floating-promo-img" alt="Promo">
-      <div class="floating-promo-info">
-        <h4 class="floating-promo-title">${promo.name}</h4>
-        <p class="floating-promo-price">$${Number(promo.price).toFixed(2)} BZD ${promo.was ? `<span style="text-decoration:line-through;color:#888;font-size:11px;margin-left:4px;">$${Number(promo.was).toFixed(2)}</span>` : ''}</p>
+    // Mapping columns directly from your database schema
+    const name = promo.name || 'Special Deal';
+    const price = promo.price !== undefined ? `$${Number(promo.price).toFixed(2)} BZD` : '';
+    const image = promo.image || 'https://i.imgur.com/cIBhlR2.png';
+
+    container.innerHTML = `
+      <div class="floating-promo-banner" onclick="openLivePromosSection()">
+        <img src="${image}" class="floating-promo-img" alt="Promo">
+        <div class="floating-promo-info">
+          <h4 class="floating-promo-title">${name}</h4>
+          <p class="floating-promo-price">${price} • Tap to view Live Promos</p>
+        </div>
+        <button class="floating-promo-close" onclick="closeFloatingPromo(event)">✕</button>
       </div>
-      <button class="floating-promo-close" onclick="event.stopPropagation(); closeFloatingPromo(${promo.id})">✕</button>
-    </div>
-  `;
-}
-
-function closeFloatingPromo(promoId) {
-  const card = document.getElementById("floatingPromoCard");
-  if (card) {
-    card.style.transition = "all 0.3s ease";
-    card.style.opacity = "0";
-    card.style.transform = "translate(-50%, 20px)";
-    setTimeout(() => card.remove(), 300);
+    `;
   }
-  sessionStorage.setItem("dismissedPromo", String(promoId));
-}
 
-function handlePromoClick(category) {
-  if (category && typeof setCategory === 'function') {
-    setCategory(category);
+  function openLivePromosSection() {
+    // Closes the floating banner and redirects/opens the Live Promos view (sidebar feature)
+    const container = document.getElementById('floatingPromoContainer');
+    if (container) container.innerHTML = '';
+
+    // Trigger your app's existing Live Promos sidebar/modal function
+    if (typeof fetchAndShowPromos === 'function') {
+      fetchAndShowPromos();
+    } else {
+      console.log('Redirecting to Live Promos view...');
+    }
   }
-}
 
-// Call this function inside your enterApp() function so it fires when users log in
-// checkAndShowFloatingPromo();
+  function closeFloatingPromo(event) {
+    event.stopPropagation(); // Prevents opening the Live Promos view when clicking 'X'
+    const container = document.getElementById('floatingPromoContainer');
+    if (container) {
+      container.innerHTML = '';
+    }
+  }
+
+  // Trigger automatically when the page loads
+  window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      loadSupabasePromos();
+    }, 3000);
+  });
+
 </script>
 
 <!-- 📝 SUGGEST ITEM MODAL -->
@@ -9226,8 +9260,15 @@ function selectTip(amount, element) {
   if (tipInput) tipInput.value = amount;
 }
 </script>
-<!-- Container for the Supabase Floating Banner -->
-<div id="floatingPromoContainer"></div>
+<!-- Floating Promo Banner Container -->
+  <div id="floatingPromoContainer"></div>
+
+  <div style="padding: 40px; text-align: center;">
+    <h1>SwiftShop OW</h1>
+    <button onclick="loadSupabasePromos()" style="padding: 14px 24px; background: #ff6a00; color: #fff; border: none; border-radius: 14px; font-weight: 700; cursor: pointer;">
+      🔥 Fetch Supabase Promo Banner
+    </button>
+  </div>
 </body>
 </html>
 
