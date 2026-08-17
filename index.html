@@ -5950,8 +5950,7 @@ backdrop-filter: blur(6px);
 
 
 
-<script>
-  // ==========================================
+// ==========================================
   // SUPABASE CONFIGURATION (LIVE)
   // ==========================================
   const SUPABASE_URL = "https://sbjadbqlmkktljfpqowc.supabase.co";
@@ -6077,7 +6076,7 @@ backdrop-filter: blur(6px);
   }
 
   // ==========================================
-  // ORIGINAL APP LOGIC
+  // ORIGINAL APP LOGIC & HELPERS
   // ==========================================
 
   function buzz(ms = 30) {
@@ -6618,16 +6617,16 @@ backdrop-filter: blur(6px);
     const cartGrand = document.getElementById("cartGrandTotal");
 
     if (!zone) {
-      feeLine.textContent = "";
-      cartGrand.textContent = "";
+      if (feeLine) feeLine.textContent = "";
+      if (cartGrand) cartGrand.textContent = "";
       return;
     }
 
     const fee = getServiceFee(zone);
     const grand = total + fee;
 
-    feeLine.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
-    cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
+    if (feeLine) feeLine.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
+    if (cartGrand) cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
   }
 
   function updateCartBubble() {
@@ -6683,6 +6682,7 @@ backdrop-filter: blur(6px);
     }
 
     const itemsDiv = document.getElementById("cartPanelItems");
+    if (!itemsDiv) return;
     itemsDiv.innerHTML = "";
 
     let sum = 0, totalSavings = 0, html = "";
@@ -6696,6 +6696,7 @@ backdrop-filter: blur(6px);
         totalSavings += (item.w - item.p) * item.q;
       }
 
+      const safeName = name.replace(/'/g, "\\'");
       html += `
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding:10px; border-radius:14px; background:#f7f7f7;">
           <div>
@@ -6707,7 +6708,7 @@ backdrop-filter: blur(6px);
           </div>
           <div style="display:flex; align-items:center; gap:10px;">
             <span style="font-weight:700;">$${subtotal.toFixed(2)} BZD</span>
-            ${item.q >= 1 ? `<button onclick="remove('${name}')" class="minus-btn">−</button>` : ""}
+            ${item.q >= 1 ? `<button onclick="remove('${safeName}')" class="minus-btn">−</button>` : ""}
           </div>
         </div>
       `;
@@ -6721,7 +6722,7 @@ backdrop-filter: blur(6px);
       : "";
 
     const totalDiv = document.getElementById("cartPanelTotal");
-    totalDiv.innerHTML = savingsDisplay + "Items Total: $" + sum.toFixed(2) + " BZD";
+    if (totalDiv) totalDiv.innerHTML = savingsDisplay + "Items Total: $" + sum.toFixed(2) + " BZD";
 
     const feeLine = document.getElementById("cartDeliveryFee");
     const cartGrand = document.getElementById("cartGrandTotal");
@@ -6773,20 +6774,28 @@ backdrop-filter: blur(6px);
     const phone = localStorage.getItem("userPhone") || "—";
     const points = localStorage.getItem("points") || "0";
 
-    document.getElementById("profileName").innerText = name;
-    document.getElementById("profilePhone").innerText = phone;
-    document.getElementById("profilePoints").innerText = points;
-    document.getElementById("profileInitials").innerText = getInitials(name);
+    const profileNameEl = document.getElementById("profileName");
+    const profilePhoneEl = document.getElementById("profilePhone");
+    const profilePointsEl = document.getElementById("profilePoints");
+    const profileInitialsEl = document.getElementById("profileInitials");
+
+    if (profileNameEl) profileNameEl.innerText = name;
+    if (profilePhoneEl) profilePhoneEl.innerText = phone;
+    if (profilePointsEl) profilePointsEl.innerText = points;
+    if (profileInitialsEl) profileInitialsEl.innerText = getInitials(name);
   }
 
   function closeProfile() { document.getElementById("profileOverlay").style.display = "none"; }
 
   function enterApp() {
-    if (document.getElementById("appScreen").style.display === "block") return;
-    document.getElementById("authScreen").style.display = "none";
-    document.getElementById("appScreen").style.display = "block";
+    const appScreen = document.getElementById("appScreen");
+    if (appScreen && appScreen.style.display === "block") return;
+    const authScreen = document.getElementById("authScreen");
+    if (authScreen) authScreen.style.display = "none";
+    if (appScreen) appScreen.style.display = "block";
     
-    document.getElementById("profileInitials").innerText = getInitials(localStorage.getItem("userName") || "U");
+    const profileInitialsEl = document.getElementById("profileInitials");
+    if (profileInitialsEl) profileInitialsEl.innerText = getInitials(localStorage.getItem("userName") || "U");
     window.userPhone = localStorage.getItem("userPhone");
     fetchUserBalance();
 
@@ -6802,8 +6811,10 @@ backdrop-filter: blur(6px);
     const savedName = localStorage.getItem("userName");
     const savedPhone = localStorage.getItem("userPhone");
 
-    if (savedName) document.getElementById("userName").value = savedName;
-    if (savedPhone) document.getElementById("userPhone").value = savedPhone;
+    const userNameInput = document.getElementById("userName");
+    const userPhoneInput = document.getElementById("userPhone");
+    if (savedName && userNameInput) userNameInput.value = savedName;
+    if (savedPhone && userPhoneInput) userPhoneInput.value = savedPhone;
 
     const isAdminAuto = savedName === ADMIN_NAME && savedPhone === ADMIN_PHONE;
     if (savedPhone && checkBusinessHoursLock(isAdminAuto)) {
@@ -6864,6 +6875,7 @@ backdrop-filter: blur(6px);
         }
 
         const displayPrice = (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
+        const safeName = p.name.replace(/'/g, "\\'");
         box.innerHTML += `
           <div class="product">
             ${badgeHTML}
@@ -6872,7 +6884,7 @@ backdrop-filter: blur(6px);
               <strong>${p.name}</strong>
               <div class="price">${wasPriceHTML} $${displayPrice} BZD</div>
             </div>
-            <button onclick="add('${p.name}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">Add</button>
+            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">Add</button>
           </div>
         `;
       });
@@ -6900,8 +6912,10 @@ backdrop-filter: blur(6px);
   }
 
   function searchProducts(query) {
-    document.getElementById("pickupOrderBox").style.display = "none";
+    const pickupBox = document.getElementById("pickupOrderBox");
+    if (pickupBox) pickupBox.style.display = "none";
     const box = document.getElementById("products");
+    if (!box) return;
     box.innerHTML = "";
 
     const q = query.toLowerCase();
@@ -6922,6 +6936,7 @@ backdrop-filter: blur(6px);
         badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
       }
 
+      const safeName = p.name.replace(/'/g, "\\'");
       box.innerHTML += `
         <div class="product">
           ${badgeHTML} <img src="${p.image}">
@@ -6929,7 +6944,7 @@ backdrop-filter: blur(6px);
             <strong>${p.name}</strong>
             <div class="price">${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''} $${p.price.toFixed(2)} BZD</div>
           </div>
-          <button onclick="add('${p.name}', ${p.price}, this, ${p.was || 'null'})">Add</button>
+          <button onclick="add('${safeName}', ${p.price}, this, ${p.was || 'null'})">Add</button>
         </div>`;
     });
   }
@@ -6958,7 +6973,9 @@ backdrop-filter: blur(6px);
     renderCartPanel();
   }
 
-  function update() {}
+  function update() {
+    renderCartPanel();
+  }
 
   function backToCart(){
     document.getElementById("orderBox").style.display = "none";
@@ -7264,6 +7281,7 @@ backdrop-filter: blur(6px);
   function fetchAndShowPromos() {
     buzz(45);
     const box = document.getElementById("products");
+    if (!box) return;
     box.innerHTML = `<div id="loadingDeals" style="text-align:center; padding:40px;"><p>Loading exclusive deals... 🔥</p></div>`;
     
     ["pickupOrderBox", "tacoOrderBox", "requestRideBox", "orderBox"].forEach(id => {
@@ -7287,6 +7305,7 @@ backdrop-filter: blur(6px);
           badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
         }
 
+        const safeName = p.name.replace(/'/g, "\\'");
         html += `
           <div class="product">
             ${badgeHTML}
@@ -7295,7 +7314,7 @@ backdrop-filter: blur(6px);
               <strong>${p.name}</strong>
               <div class="price">${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''} $${p.price.toFixed(2)} BZD</div>
             </div>
-            <button onclick="add('${p.name}', ${p.price}, this, ${p.was || 'null'})">Add</button>
+            <button onclick="add('${safeName}', ${p.price}, this, ${p.was || 'null'})">Add</button>
           </div>`;
       });
 
@@ -7306,7 +7325,9 @@ backdrop-filter: blur(6px);
 
   function updateCategoryStatusDots() {
     document.querySelectorAll(".cat-btn").forEach(btn => {
-      const match = btn.getAttribute("onclick").match(/'([^']+)'/);
+      const onclickAttr = btn.getAttribute("onclick");
+      if (!onclickAttr) return;
+      const match = onclickAttr.match(/'([^']+)'/);
       if (!match) return;
       const categoryName = match[1];
 
@@ -7408,7 +7429,7 @@ backdrop-filter: blur(6px);
       });
 
       subBar.style.display = "flex";
-      if (typeof renderSubcategory === "function") {
+      if (subs.length > 0) {
         renderSubcategory(storeItems, subs[0]);
       }
     });
@@ -7503,21 +7524,11 @@ backdrop-filter: blur(6px);
   });
 
   function toggleMenu() {
-    document.getElementById("sidePanel").classList.toggle("active");
-    document.getElementById("menuOverlay").classList.toggle("active");
+    const sidePanel = document.getElementById("sidePanel");
+    const menuOverlay = document.getElementById("menuOverlay");
+    if (sidePanel) sidePanel.classList.toggle("active");
+    if (menuOverlay) menuOverlay.classList.toggle("active");
   }
-
-  function openProfile() {
-    document.getElementById("profileScreen").classList.add("active");
-    const name = localStorage.getItem("userName") || "";
-    const phone = localStorage.getItem("userPhone") || "";
-    document.getElementById("profileName").value = name;
-    document.getElementById("profilePhone").value = phone;
-    updateAvatar(name);
-    toggleMenu();
-  }
-
-  function closeProfile() { document.getElementById("profileScreen").classList.remove("active"); }
 
   function saveProfile() {
     const name = document.getElementById("profileName").value;
@@ -7547,8 +7558,8 @@ backdrop-filter: blur(6px);
   function openFoodMap() {
     const screen = document.getElementById("foodMapScreen");
     const mapFrame = document.getElementById("foodMapFrame");
-    screen.style.display = "block";
-    if (!mapFrame.src) {
+    if (screen) screen.style.display = "block";
+    if (mapFrame && !mapFrame.src) {
       mapFrame.src = "https://www.google.com/maps?q=food+drink+cafes+restaurants+bars+in+Orange+Walk+District+Belize&z=13&output=embed";
     }
     renderSuggestions();
@@ -7582,9 +7593,10 @@ backdrop-filter: blur(6px);
       const btn = document.createElement("button");
       btn.className = "suggestion-add-btn";
       btn.textContent = "Add";
+      const safeName = item.name.replace(/'/g, "\\'");
       btn.onclick = function () {
         cat = "Suggestions";
-        add(item.name, item.price, btn, null);
+        add(safeName, item.price, btn, null);
       };
 
       card.appendChild(img);
@@ -7608,7 +7620,8 @@ backdrop-filter: blur(6px);
   });
 
   function openLeaderBoard() {
-    document.getElementById("leaderBoardScreen").style.display = "block";
+    const lbScreen = document.getElementById("leaderBoardScreen");
+    if (lbScreen) lbScreen.style.display = "block";
     toggleMenu();
     fetchLeaderBoard();
   }
@@ -7657,22 +7670,27 @@ backdrop-filter: blur(6px);
   }
 
   function selectNetwork(network, element){
-    document.getElementById("creditNetwork").value = network;
+    const cn = document.getElementById("creditNetwork");
+    if (cn) cn.value = network;
     document.querySelectorAll(".network-card").forEach(card => card.classList.remove("active"));
-    element.classList.add("active");
+    if (element) element.classList.add("active");
   }
 
   function openCreditPurchase(){
     const profileName = document.getElementById("profileName")?.value || "";
-    document.getElementById("creditName").value = profileName;
-    document.getElementById("creditPurchaseScreen").style.display = "block";
-    document.getElementById("sidePanel").style.display = "none";
+    const creditNameEl = document.getElementById("creditName");
+    if (creditNameEl) creditNameEl.value = profileName;
+    const creditScreen = document.getElementById("creditPurchaseScreen");
+    if (creditScreen) creditScreen.style.display = "block";
+    const sidePanel = document.getElementById("sidePanel");
+    if (sidePanel) sidePanel.style.display = "none";
     const menuOverlay = document.getElementById("menuOverlay");
     if(menuOverlay) menuOverlay.style.display = "none";
   }
 
   function closeCreditPurchase() {
-    document.getElementById("creditPurchaseScreen").style.display = "none";
+    const creditScreen = document.getElementById("creditPurchaseScreen");
+    if (creditScreen) creditScreen.style.display = "none";
     const sidePanel = document.getElementById("sidePanel");
     const menuOverlay = document.getElementById("menuOverlay");
     if(sidePanel) sidePanel.style.display = "";
@@ -7689,25 +7707,32 @@ backdrop-filter: blur(6px);
     if (!phone) { alert("Please enter a phone number."); return; }
     if (!amount || amount <= 0) { alert("Please enter a valid amount."); return; }
 
-    const total = amount + 1;
-    document.getElementById("creditSummary").innerHTML = `
-      <div style="background:#fafafa; padding:15px; border-radius:16px; line-height:1.8;">
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Network:</strong> ${network}</p>
-        <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>Credit:</strong> $${amount.toFixed(2)}</p>
-        <p><strong>Service Fee:</strong> $1.00</p>
-        <p style="color:#ff6a00; font-size:18px; font-weight:900;">Total Transfer: $${total.toFixed(2)}</p>
-      </div>
-    `;
+    const totalTransfer = amount + 1;
+    const summary = document.getElementById("creditSummary");
+    if (summary) {
+      summary.innerHTML = `
+        <div style="background:#fafafa; padding:15px; border-radius:16px; line-height:1.8;">
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Network:</strong> ${network}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Credit:</strong> $${amount.toFixed(2)}</p>
+          <p><strong>Service Fee:</strong> $1.00</p>
+          <p style="color:#ff6a00; font-size:18px; font-weight:900;">Total Transfer: $${totalTransfer.toFixed(2)}</p>
+        </div>
+      `;
+    }
 
-    document.getElementById("creditPurchaseScreen").style.display = "none";
-    document.getElementById("creditConfirmScreen").style.display = "block";
+    const creditScreen = document.getElementById("creditPurchaseScreen");
+    const creditConfirm = document.getElementById("creditConfirmScreen");
+    if (creditScreen) creditScreen.style.display = "none";
+    if (creditConfirm) creditConfirm.style.display = "block";
   }
 
   function closeCreditConfirm() {
-    document.getElementById("creditConfirmScreen").style.display = "none";
-    document.getElementById("creditPurchaseScreen").style.display = "block";
+    const creditConfirm = document.getElementById("creditConfirmScreen");
+    const creditScreen = document.getElementById("creditPurchaseScreen");
+    if (creditConfirm) creditConfirm.style.display = "none";
+    if (creditScreen) creditScreen.style.display = "block";
   }
 
   function sendCreditWhatsapp() {
@@ -7715,7 +7740,7 @@ backdrop-filter: blur(6px);
     const network = document.getElementById("creditNetwork").value;
     const phone = document.getElementById("creditPhone").value;
     const amount = parseFloat(document.getElementById("creditAmount").value || 0);
-    const total = amount + 1;
+    const totalTransfer = amount + 1;
 
     const message = `SwiftShop Credit Purchase
 
@@ -7725,7 +7750,7 @@ Phone Number: ${phone}
 ----------------------------------------
 Credit Amount: $${amount.toFixed(2)}
 Service Fee: $1.00
-Total Transfer: $${total.toFixed(2)}
+Total Transfer: $${totalTransfer.toFixed(2)}
 ----------------------------------------
 Belize Bank
 Account Name: SwiftShop
@@ -7744,198 +7769,84 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
     const firstNet = document.querySelector(".network-card");
     if (firstNet) firstNet.classList.add("active");
 
-    document.getElementById("feePreview").innerHTML = "Total Transfer: $0.00";
-    document.getElementById("creditConfirmScreen").style.display = "none";
+    const feePreview = document.getElementById("feePreview");
+    if (feePreview) feePreview.innerHTML = "Total Transfer: $0.00";
+    const creditConfirm = document.getElementById("creditConfirmScreen");
+    if (creditConfirm) creditConfirm.style.display = "none";
   }
 
-  // 1. Delivery Fee Calculation
-function getServiceFee(zone) {
-  const fees = {
-    "town": 3.00,
-    "muffles": 3.50,
-    "trial_farm": 4.00,
-    "black_water": 4.50,
-    "san_lorenzo": 4.00,
-    "pasadita": 3.00,
-    "palmar": 4.50,
-    "petville": 4.50,
-    "chan_pine_ridge": 5.00,
-    "yo_creek": 6.00,
-    "san_estevan": 6.00,
-    "carmelita": 6.00,
-    "san_jose": 7.00,
-    "san_pablo": 7.00
-  };
-  return fees[zone] || 3.00;
-}
-
-// 2. Subcategory Rendering for Stores
-function renderSubcategory(items, subcategory, btnElement) {
-  if (btnElement) {
-    document.querySelectorAll(".sub-btn").forEach(b => b.classList.remove("active"));
-    btnElement.classList.add("active");
+  // --- SERVICE FEE & MODAL HELPERS ---
+  function getServiceFee(zone) {
+    const fees = {
+      "town": 3.00,
+      "muffles": 3.50,
+      "trial_farm": 4.00,
+      "black_water": 4.50,
+      "san_lorenzo": 4.00,
+      "pasadita": 3.00,
+      "palmar": 4.50,
+      "petville": 4.50,
+      "chan_pine_ridge": 5.00,
+      "yo_creek": 6.00,
+      "san_estevan": 6.00,
+      "carmelita": 6.00,
+      "san_jose": 7.00,
+      "san_pablo": 7.00
+    };
+    return fees[zone] || 3.00;
   }
-  const productsBox = document.getElementById("products");
-  if (!productsBox) return;
-  productsBox.innerHTML = "";
-  
-  const filtered = items.filter(p => p.subcategory === subcategory);
-  filtered.forEach(p => {
-    const safeName = p.name.replace(/'/g, "\\'");
-    productsBox.innerHTML += `
-      <div class="product">
-        <img src="${p.image}" onclick="openImage(this.src)">
-        <div class="product-info">
-          <strong>${p.name}</strong>
-          <div class="price">$${Number(p.price).toFixed(2)} BZD</div>
-        </div>
-        <button onclick="add('${safeName}', ${p.price}, this)">Add</button>
-      </div>
-    `;
-  });
-}
 
-// 3. Location Modal Handlers
-function openLocationModal() {
-  const modal = document.getElementById("locationModal");
-  if (modal) modal.style.display = "flex";
-}
-
-function closeLocationModal() {
-  const modal = document.getElementById("locationModal");
-  if (modal) modal.style.display = "none";
-}
-
-function saveLocation() {
-  const input = document.getElementById("locationInput");
-  const locText = document.getElementById("locationText");
-  if (input && input.value.trim() && locText) {
-    locText.textContent = input.value.trim();
-  }
-  closeLocationModal();
-}
-
-// 4. Tip Selection Handler
-function selectTip(amount, btnElement) {
-  document.querySelectorAll(".tip-btn").forEach(b => b.classList.remove("active"));
-  if (btnElement) btnElement.classList.add("active");
-  const tipInput = document.getElementById("selectedTipAmount");
-  if (tipInput) tipInput.value = amount;
-  refreshCartTotals();
-}
-
-  // 1. Safe Cart State & UI Refresh
-let cart = [];
-
-function add(name, price, btn) {
-  const existing = cart.find(item => item.name === name);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ name, price, qty: 1 });
-  }
-  update(); // Now correctly triggers UI refresh
-}
-
-function update() {
-  const cartCountEl = document.getElementById("cartCount");
-  const cartItemsEl = document.getElementById("cartItems");
-  const subtotalEl = document.getElementById("subtotal");
-  const grandTotalEl = document.getElementById("grandTotal");
-
-  let totalQty = 0;
-  let subtotal = 0;
-
-  if (cartItemsEl) cartItemsEl.innerHTML = "";
-
-  cart.forEach((item, index) => {
-    totalQty += item.qty;
-    subtotal += item.price * item.qty;
-
-    if (cartItemsEl) {
-      cartItemsEl.innerHTML += `
-        <div class="cart-item">
-          <span>${item.name} (x${item.qty})</span>
-          <span>$${(item.price * item.qty).toFixed(2)}</span>
-          <button onclick="changeQty(${index}, 1)">+</button>
-          <button onclick="changeQty(${index}, -1)">-</button>
+  function renderSubcategory(items, subcategory, btnElement) {
+    if (btnElement) {
+      document.querySelectorAll(".sub-btn").forEach(b => b.classList.remove("active"));
+      btnElement.classList.add("active");
+    }
+    const productsBox = document.getElementById("products");
+    if (!productsBox) return;
+    productsBox.innerHTML = "";
+    
+    const filtered = items.filter(p => p.subcategory === subcategory);
+    filtered.forEach(p => {
+      const safeName = p.name.replace(/'/g, "\\'");
+      productsBox.innerHTML += `
+        <div class="product">
+          <img src="${p.image}" onclick="openImage(this.src)">
+          <div class="product-info">
+            <strong>${p.name}</strong>
+            <div class="price">$${Number(p.price).toFixed(2)} BZD</div>
+          </div>
+          <button onclick="add('${safeName}', ${p.price}, this)">Add</button>
         </div>
       `;
-    }
-  });
-
-  if (cartCountEl) cartCountEl.textContent = totalQty;
-  if (subtotalEl) subtotalEl.textContent = subtotal.toFixed(2);
-  
-  const serviceFee = typeof getServiceFee === "function" ? getServiceFee(selectedZone) : 3.00;
-  const grandTotal = subtotal + serviceFee;
-  if (grandTotalEl) grandTotalEl.textContent = grandTotal.toFixed(2);
-}
-
-function changeQty(index, delta) {
-  cart[index].qty += delta;
-  if (cart[index].qty <= 0) {
-    cart.splice(index, 1);
-  }
-  update();
-}
-
-// 2. Robust WhatsApp Checkout Generator
-function sendWhatsAppOrder(storePhone) {
-  if (!cart.length) {
-    alert("Your cart is empty!");
-    return;
-  }
-
-  let message = "🛍️ *New Order Details*:\n\n";
-  let subtotal = 0;
-
-  cart.forEach(item => {
-    const itemTotal = item.price * item.qty;
-    subtotal += itemTotal;
-    message += `• ${item.name} x${item.qty} - $${itemTotal.toFixed(2)}\n`;
-  });
-
-  const serviceFee = typeof getServiceFee === "function" ? getServiceFee(selectedZone) : 3.00;
-  const total = subtotal + serviceFee;
-
-  message += `\nSubtotal: $${subtotal.toFixed(2)}`;
-  message += `\nDelivery Fee: $${serviceFee.toFixed(2)}`;
-  message += `\n*Total: $${total.toFixed(2)}*`;
-
-  const encodedMessage = encodeURIComponent(message);
-  const cleanPhone = storePhone ? storePhone.replace(/\D/g, '') : '';
-  
-  if (!cleanPhone) {
-    alert("Store phone number is missing.");
-    return;
-  }
-
-  const whatsappURL = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
-  window.open(whatsappURL, '_blank');
-}
-
-// 3. Safe Google Apps Script Fetch Wrapper
-async function postDataToAppsScript(url, payload) {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      redirect: "follow",
-      body: JSON.stringify(payload)
     });
-    
-    const text = await response.text();
-    try {
-      return JSON.parse(text);
-    } catch (err) {
-      console.error("Server returned non-JSON response:", text);
-      throw new Error("Server error or invalid response format.");
-    }
-  } catch (error) {
-    console.error("Network or script execution failed:", error);
-    alert("Could not complete the request. Please check your connection.");
   }
-}
+
+  function openLocationModal() {
+    const modal = document.getElementById("locationModal");
+    if (modal) modal.style.display = "flex";
+  }
+
+  function closeLocationModal() {
+    const modal = document.getElementById("locationModal");
+    if (modal) modal.style.display = "none";
+  }
+
+  function saveLocation() {
+    const input = document.getElementById("locationInput");
+    const locText = document.getElementById("locationText");
+    if (input && input.value.trim() && locText) {
+      locText.textContent = input.value.trim();
+    }
+    closeLocationModal();
+  }
+
+  function selectTip(amount, btnElement) {
+    document.querySelectorAll(".tip-btn").forEach(b => b.classList.remove("active"));
+    if (btnElement) btnElement.classList.add("active");
+    const tipInput = document.getElementById("selectedTipAmount");
+    if (tipInput) tipInput.value = amount;
+    refreshCartTotals();
+  }
 </script>
 
 </body>
