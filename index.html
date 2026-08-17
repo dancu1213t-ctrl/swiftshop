@@ -7556,7 +7556,7 @@ backdrop-filter: blur(6px);
     const [deliveryZone, fee] = selectedValue.split("|");
     const deliveryFee = parseFloat(fee);
     const itemsTotal = total;
-    const grandTotal = itemsTotal + deliveryFee;
+    const grandTotal = itemsTotal + deliveryFee + deliveryFee;
 
     const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
 
