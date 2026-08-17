@@ -7299,8 +7299,8 @@ function enterApp() {
     const welcome = document.getElementById("welcomeScreen");
     if (welcome) welcome.remove();
 
-    // 🔥 Trigger Supabase floating promo banner
-    checkAndShowFloatingPromo();
+    // 🔥 Trigger Supabase floating promo banner using loadSupabasePromos()
+    loadSupabasePromos();
   }
     
   /* AUTO LOGIN */
@@ -7358,6 +7358,72 @@ function enterApp() {
     "Ice Cream": "🍦",
     "Items": "🛒"
   };
+
+  // ================= SUPABASE FLOATING PROMO LOGIC =================
+  async function loadSupabasePromos() {
+    try {
+      // Queries your exact Supabase columns: id, timestamp, name, price, image, category, was, status
+      const { data, error } = await supabase
+        .from('promos')
+        .select('*')
+        .limit(10);
+
+      if (error) {
+        console.error('Error fetching promos:', error);
+        return;
+      }
+
+      if (data && data.length > 0) {
+        // Pick a random promo row from your Supabase table
+        const randomPromo = data[Math.floor(Math.random() * data.length)];
+        renderFloatingPromo(randomPromo);
+      }
+    } catch (err) {
+      console.error('Unexpected error loading promos:', err);
+    }
+  }
+
+  function renderFloatingPromo(promo) {
+    const container = document.getElementById('floatingPromoContainer');
+    if (!container) return;
+
+    // Mapping columns directly from your database schema
+    const name = promo.name || 'Special Deal';
+    const price = promo.price !== undefined ? `$${Number(promo.price).toFixed(2)} BZD` : '';
+    const image = promo.image || 'https://i.imgur.com/cIBhlR2.png';
+
+    container.innerHTML = `
+      <div class="floating-promo-banner" onclick="openLivePromosSection()">
+        <img src="${image}" class="floating-promo-img" alt="Promo">
+        <div class="floating-promo-info">
+          <h4 class="floating-promo-title">${name}</h4>
+          <p class="floating-promo-price">${price ? price + ' • ' : ''}Tap to view Live Promos</p>
+        </div>
+        <button class="floating-promo-close" onclick="closeFloatingPromo(event)">✕</button>
+      </div>
+    `;
+  }
+
+  function openLivePromosSection() {
+    // 1. Remove the floating banner ad container
+    const container = document.getElementById('floatingPromoContainer');
+    if (container) container.innerHTML = '';
+
+    // 2. Open your existing Live Promos sidebar/modal function
+    if (typeof fetchAndShowPromos === 'function') {
+      fetchAndShowPromos();
+    } else {
+      console.log('Live Promos triggered from floating banner.');
+    }
+  }
+
+  function closeFloatingPromo(event) {
+    event.stopPropagation(); // Stops click from triggering the banner link/redirect
+    const container = document.getElementById('floatingPromoContainer');
+    if (container) {
+      container.innerHTML = ''; // Removes the banner element completely
+    }
+  }
 
   function render() {
     const box = document.getElementById("products");
@@ -8849,79 +8915,7 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
 
 
 
-  async function loadSupabasePromos() {
-    try {
-      // Queries your exact Supabase columns: id, timestamp, name, price, image, category, was, status
-      const { data, error } = await supabase
-        .from('promos')
-        .select('*')
-        .limit(10);
-
-      if (error) {
-        console.error('Error fetching promos from Supabase:', error);
-        return;
-      }
-
-      if (data && data.length > 0) {
-        // Pick a random promo row from your Supabase table
-        const randomPromo = data[Math.floor(Math.random() * data.length)];
-        renderFloatingPromo(randomPromo);
-      }
-    } catch (err) {
-      console.error('Unexpected error loading promos:', err);
-    }
-  }
-
-  function renderFloatingPromo(promo) {
-    const container = document.getElementById('floatingPromoContainer');
-    if (!container) return;
-
-    // Mapping columns directly from your database schema
-    const name = promo.name || 'Special Deal';
-    const price = promo.price !== undefined ? `$${Number(promo.price).toFixed(2)} BZD` : '';
-    const image = promo.image || 'https://i.imgur.com/cIBhlR2.png';
-
-    container.innerHTML = `
-      <div class="floating-promo-banner" onclick="openLivePromosSection()">
-        <img src="${image}" class="floating-promo-img" alt="Promo">
-        <div class="floating-promo-info">
-          <h4 class="floating-promo-title">${name}</h4>
-          <p class="floating-promo-price">${price ? price + ' • ' : ''}Tap to view Live Promos</p>
-        </div>
-        <button class="floating-promo-close" onclick="closeFloatingPromo(event)">✕</button>
-      </div>
-    `;
-  }
-
-  function openLivePromosSection() {
-    // 1. Remove the floating banner ad container
-    const container = document.getElementById('floatingPromoContainer');
-    if (container) container.innerHTML = '';
-
-    // 2. Open your existing Live Promos sidebar/modal function
-    if (typeof fetchAndShowPromos === 'function') {
-      fetchAndShowPromos();
-    } else {
-      console.log('Live Promos triggered from floating banner.');
-    }
-  }
-
-  function closeFloatingPromo(event) {
-    event.stopPropagation(); // Stops click from triggering the banner link/redirect
-    const container = document.getElementById('floatingPromoContainer');
-    if (container) {
-      container.innerHTML = ''; // Removes the banner element completely
-    }
-  }
-
-  // Automatically trigger the fetch 3 seconds after page load
-  window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      loadSupabasePromos();
-    }, 3000);
-  });
-
-
+  
 </script>
 
 <!-- 📝 SUGGEST ITEM MODAL -->
