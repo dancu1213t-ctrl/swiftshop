@@ -4041,6 +4041,29 @@ backdrop-filter: blur(6px);
   background: transparent !important;
 }
 
+/* ==========================================
+   ✨ EXCLUSIVE QUICK-ADD FLOAT ANIMATION
+   ========================================== */
+.add-check-exclusive {
+  position: absolute;
+  background: #111;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 20px;
+  pointer-events: none;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  z-index: 99999;
+  letter-spacing: 0.3px;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(0.8); opacity: 0; }
+  30% { transform: translateY(-12px) scale(1); opacity: 1; }
+  100% { transform: translateY(-40px) scale(0.95); opacity: 0; }
+}
   </style>
 </head>
 
@@ -9135,6 +9158,18 @@ function openImage(src) {
     const overlay = document.getElementById("imageOverlay");
     if (overlay) overlay.style.display = "none";
   }
+  function showAddCheck(btn) {
+  const check = document.createElement("div");
+  check.className = "add-check-exclusive";
+  check.textContent = "+1 Added";
+
+  const rect = btn.getBoundingClientRect();
+  check.style.left = `${rect.left + rect.width / 2 - 30}px`;
+  check.style.top = `${rect.top + window.scrollY - 10}px`;
+
+  document.body.appendChild(check);
+  setTimeout(() => check.remove(), 800);
+}
 </script>
 
 <!-- 📝 SUGGEST ITEM MODAL -->
