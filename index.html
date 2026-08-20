@@ -7,6 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpkP-1hNTsxKVNmPhPP_J-SawsNZi3TIQ&libraries=places"></script>
 
+
   <title>SwiftShop OW</title>
 
   <!-- PWA / iOS -->
@@ -19,6 +20,7 @@
 
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="favicon.png">
 
   <style>
     html {
@@ -4038,7 +4040,39 @@ backdrop-filter: blur(6px);
   padding-bottom: 1px !important;
   background: transparent !important;
 }
+/* 🤍❤️ HEART / LIKE BUTTON */
+.product {
+  position: relative !important; /* ensures heart stays pinned to the card */
+}
 
+.heart-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+  z-index: 15;
+}
+
+.heart-btn:active {
+  transform: scale(0.75);
+}
+
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.35); }
+  100% { transform: scale(1); }
+}
 
   </style>
 </head>
@@ -7277,7 +7311,7 @@ function enterApp() {
   };
 
  
-  function render() {
+function render() {
     const box = document.getElementById("products");
     if (!box) return;
 
@@ -7327,9 +7361,14 @@ function enterApp() {
           (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
         const safeName = p.name.replace(/'/g, "\\'");
 
+        // 💖 Check if item is already liked
+        const likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
+        const isLiked = likedItems[p.id] ? "❤️" : "🤍";
+
         box.innerHTML += `
           <div class="product">
             ${badgeHTML}
+            <button class="heart-btn" onclick="toggleLike('${p.id}', this)">${isLiked}</button>
             <img src="${p.image}" onclick="openImage(this.src)">
             <div class="product-info">
               <strong>${p.name}</strong>
@@ -7346,7 +7385,6 @@ function enterApp() {
       });
     });
   }
-
   let searchIdleTimer = null;
   let lastSearchValue = "";
 
@@ -9091,6 +9129,30 @@ async function adminUpdateProduct(id) {
 function closeImage() {
   const overlay = document.getElementById("imageOverlay");
   if (overlay) overlay.style.display = "none";
+}
+  // 💖 TOGGLE LIKE / HEART ITEM
+function toggleLike(productId, btnElement) {
+  if (typeof buzz === "function") buzz(25);
+
+  let likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
+
+  if (likedItems[productId]) {
+    delete likedItems[productId];
+    btnElement.innerHTML = "🤍";
+    btnElement.classList.remove("liked");
+  } else {
+    likedItems[productId] = true;
+    btnElement.innerHTML = "❤️";
+    btnElement.classList.add("liked");
+    
+    // Play the pop animation
+    btnElement.style.animation = "heartPop 0.3s ease";
+    setTimeout(() => {
+      btnElement.style.animation = "";
+    }, 300);
+  }
+
+  localStorage.setItem("likedItems", JSON.stringify(likedItems));
 }
 </script>
 
