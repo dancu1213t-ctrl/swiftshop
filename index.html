@@ -4040,47 +4040,75 @@ backdrop-filter: blur(6px);
   padding-bottom: 1px !important;
   background: transparent !important;
 }
-/* 🤍❤️ MODERN INLINE HEART BUTTON */
-.price-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 4px;
-}
-
-.heart-btn-inline {
-  background: #f4f5f7;
-  border: 1px solid #e2e8f0;
-  border-radius: 999px; /* Makes it a cute pill shape */
-  font-size: 10px;
-  padding: 3px 6px;
-  cursor: pointer;
-  display: inline-flex;
+/* 🖼️ IMAGE OVERLAY MODAL */
+#imageOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(6px);
+  display: none;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  color: #64748b;
-  font-weight: 600;
+  z-index: 999999;
+  padding: 20px;
+}
+
+.overlay-content {
+  position: relative;
+  background: #fff;
+  border-radius: 24px;
+  padding: 20px;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  animation: imagePop 0.25s ease;
+}
+
+.overlay-content img {
+  width: 100%;
+  height: 260px;
+  object-type: cover;
+  border-radius: 16px;
+}
+
+.close-overlay-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0,0,0,0.1);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* 💖 MODAL LIKE BUTTON */
+.modal-like-btn {
+  width: 100%;
+  padding: 12px;
+  background: #f4f5f7;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #4b5563;
+  cursor: pointer;
   transition: all 0.2s ease;
 }
 
-/* Liked state style */
-.heart-btn-inline.liked {
+.modal-like-btn.liked {
   background: #fff1f2;
   border-color: #fecdd3;
   color: #e11d48;
 }
 
-.heart-btn-inline:active {
-  transform: scale(0.85);
+.modal-like-btn:active {
+  transform: scale(0.96);
 }
-
-@keyframes heartPop {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.35); }
-  100% { transform: scale(1); }
-}
-
   </style>
 </head>
 
@@ -7368,22 +7396,15 @@ function render() {
           (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
         const safeName = p.name.replace(/'/g, "\\'");
 
-        // 💖 Check if item is already liked
-        const likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
-        const isLiked = likedItems[p.id] ? "❤️" : "🤍";
-
         box.innerHTML += `
           <div class="product">
             ${badgeHTML}
-            <img src="${p.image}" onclick="openImage(this.src)">
+            <img src="${p.image}" onclick="openImage('${p.image}', '${p.id}')">
             <div class="product-info">
               <strong>${p.name}</strong>
-              <div class="price-row">
-                <div class="price" style="margin-top:0;">
-                  ${wasPriceHTML}
-                  $${displayPrice} BZD
-                </div>
-                <button class="heart-btn-inline" onclick="toggleLike('${p.id}', this)">${isLiked}</button>
+              <div class="price">
+                ${wasPriceHTML}
+                $${displayPrice} BZD
               </div>
             </div>
             <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
@@ -7928,20 +7949,63 @@ const [deliveryZone, fee] = selectedValue.split("|");
     });
   }
 
-  function openImage(src) {
-    buzz(25); // light tap feedback
+let currentOpenProductId = null;
 
-    const overlay = document.getElementById("imageOverlay");
-    const img = document.getElementById("overlayImg");
+function openImage(src, productId) {
+  if (typeof buzz === "function") buzz(25);
 
-    if (img) img.src = src;
-    if (overlay) overlay.style.display = "flex";
+  currentOpenProductId = productId;
+
+  const overlay = document.getElementById("imageOverlay");
+  const img = document.getElementById("overlayImg");
+  const modalBtn = document.getElementById("modalLikeBtn");
+
+  if (img) img.src = src;
+
+  // Check if item is already liked
+  if (modalBtn && productId) {
+    let likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
+    if (likedItems[productId]) {
+      modalBtn.innerHTML = "❤️ Liked";
+      modalBtn.classList.add("liked");
+    } else {
+      modalBtn.innerHTML = "🤍 Like Item";
+      modalBtn.classList.remove("liked");
+    }
   }
 
-  function closeImage() {
-    const overlay = document.getElementById("imageOverlay");
-    if (overlay) overlay.style.display = "none";
+  if (overlay) overlay.style.display = "flex";
+}
+
+function closeImage() {
+  const overlay = document.getElementById("imageOverlay");
+  if (overlay) overlay.style.display = "none";
+  currentOpenProductId = null;
+}
+
+function toggleModalLike() {
+  if (!currentOpenProductId) return;
+  if (typeof buzz === "function") buzz(25);
+
+  let likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
+  const modalBtn = document.getElementById("modalLikeBtn");
+
+  if (likedItems[currentOpenProductId]) {
+    delete likedItems[currentOpenProductId];
+    if (modalBtn) {
+      modalBtn.innerHTML = "🤍 Like Item";
+      modalBtn.classList.remove("liked");
+    }
+  } else {
+    likedItems[currentOpenProductId] = true;
+    if (modalBtn) {
+      modalBtn.innerHTML = "❤️ Liked";
+      modalBtn.classList.add("liked");
+    }
   }
+
+  localStorage.setItem("likedItems", JSON.stringify(likedItems));
+}
 
   function showPromoAd() {
     const overlay = document.getElementById('promoOverlay');
@@ -9139,30 +9203,7 @@ function closeImage() {
   const overlay = document.getElementById("imageOverlay");
   if (overlay) overlay.style.display = "none";
 }
-// 💖 TOGGLE LIKE / HEART ITEM
-  function toggleLike(productId, btnElement) {
-    if (typeof buzz === "function") buzz(25);
 
-    let likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
-
-    if (likedItems[productId]) {
-      delete likedItems[productId];
-      btnElement.innerHTML = "🤍 Like";
-      btnElement.classList.remove("liked");
-    } else {
-      likedItems[productId] = true;
-      btnElement.innerHTML = "❤️ Liked";
-      btnElement.classList.add("liked");
-      
-      // Play the pop animation
-      btnElement.style.animation = "heartPop 0.3s ease";
-      setTimeout(() => {
-        btnElement.style.animation = "";
-      }, 300);
-    }
-
-    localStorage.setItem("likedItems", JSON.stringify(likedItems));
-  }
 </script>
 
 <!-- 📝 SUGGEST ITEM MODAL -->
@@ -9646,7 +9687,17 @@ function selectTip(amount, element) {
 </div>
 <!-- 🖼️ IMAGE POP-UP OVERLAY -->
 <div id="imageOverlay" onclick="closeImage()">
-  <img id="overlayImg" src="" alt="Zoomed Item">
+  <div class="overlay-content" onclick="event.stopPropagation()">
+    <button class="close-overlay-btn" onclick="closeImage()">✕</button>
+    <img id="overlayImg" src="" alt="Zoomed Item">
+    
+    <!-- 💖 LIKE BUTTON INSIDE MODAL -->
+    <div style="margin-top: 15px;">
+      <button id="modalLikeBtn" class="modal-like-btn" onclick="toggleModalLike()">
+        🤍 Like Item
+      </button>
+    </div>
+  </div>
 </div>
 
 </body>
