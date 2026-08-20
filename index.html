@@ -4040,37 +4040,33 @@ backdrop-filter: blur(6px);
   padding-bottom: 1px !important;
   background: transparent !important;
 }
-/* 🤍❤️ HEART / LIKE BUTTON */
-.product {
-  position: relative !important; /* ensures heart stays pinned to the card */
-}
-
-.heart-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: rgba(255, 255, 255, 0.95);
-  border: none;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+/* 🤍❤️ SMALL HEART BESIDE PRICE */
+.price-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 16px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease;
-  z-index: 15;
+  gap: 8px;
+  margin-top: 4px;
 }
 
-.heart-btn:active {
-  transform: scale(0.75);
+.heart-btn-inline {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.heart-btn-inline:active {
+  transform: scale(0.7);
 }
 
 @keyframes heartPop {
   0% { transform: scale(1); }
-  50% { transform: scale(1.35); }
+  50% { transform: scale(1.4); }
   100% { transform: scale(1); }
 }
 
@@ -7368,13 +7364,15 @@ function render() {
         box.innerHTML += `
           <div class="product">
             ${badgeHTML}
-            <button class="heart-btn" onclick="toggleLike('${p.id}', this)">${isLiked}</button>
             <img src="${p.image}" onclick="openImage(this.src)">
             <div class="product-info">
               <strong>${p.name}</strong>
-              <div class="price">
-                ${wasPriceHTML}
-                $${displayPrice} BZD
+              <div class="price-row">
+                <div class="price" style="margin-top:0;">
+                  ${wasPriceHTML}
+                  $${displayPrice} BZD
+                </div>
+                <button class="heart-btn-inline" onclick="toggleLike('${p.id}', this)">${isLiked}</button>
               </div>
             </div>
             <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
