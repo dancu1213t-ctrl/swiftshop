@@ -8950,6 +8950,102 @@ async function fetchAdminSuggestions() {
 }
 
 
+
+  // SWITCH TABS (Updated with 'manage' inventory tab support)
+function switchAdminTab(tabName) {
+  document.querySelectorAll(".admin-tab-content").forEach(el => el.style.display = "none");
+  document.querySelectorAll(".admin-tab-btn").forEach(btn => {
+    btn.style.background = "#fff";
+    btn.style.color = "#555";
+    btn.style.boxShadow = "0 2px 6px rgba(0,0,0,0.04)";
+  });
+
+  const targetTab = document.getElementById("adminTab" + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+  if (targetTab) targetTab.style.display = "block";
+
+  event.currentTarget.style.background = "#ff6a00";
+  event.currentTarget.style.color = "#fff";
+  event.currentTarget.style.boxShadow = "0 4px 12px rgba(255,106,0,0.25)";
+
+  if (tabName === 'orders') fetchAdminOrders();
+  if (tabName === 'users') fetchAdminUsers();
+  if (tabName === 'suggestions') fetchAdminSuggestions();
+  if (tabName === 'manage') fetchAdminInventory();
+}
+
+// 📋 FETCH ALL PRODUCTS FOR ADMIN INVENTORY MANAGEMENT
+async function fetchAdminInventory() {
+  const container = document.getElementById("adminProductInventoryList");
+  container.innerHTML = "Loading products...";
+
+  const { data, error } = await supabaseClient
+    .from('products')
+    .select('*')
+    .order('category', { ascending: true });
+
+  if (error || !data) {
+    container.innerHTML = "Failed to load products.";
+    return;
+  }
+
+  if (data.length === 0) {
+    container.innerHTML = "No products found in database.";
+    return;
+  }
+
+  container.innerHTML = data.map(p => `
+    <div style="background:#fff; padding:16px; border-radius:18px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.05); border:1px solid #eaeaea; display:flex; gap:14px; align-items:center;">
+      <img src="${p.image || 'https://via.placeholder.com/60'}" style="width:55px; height:55px; border-radius:12px; object-fit:cover; flex-shrink:0;">
+      <div style="flex:1; min-width:0;">
+        <strong style="font-size:15px; color:#111; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.name}</strong>
+        <small style="color:#888; font-weight:600;">Category: ${p.category}</small>
+        
+        <div style="display:flex; gap:10px; margin-top:10px; align-items:center;">
+          <div style="flex:1;">
+            <label style="font-size:10px; font-weight:700; color:#aaa; text-transform:uppercase; display:block;">Price ($)</label>
+            <input id="edit_price_${p.id}" type="number" step="0.01" value="${p.price}" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid #ddd; font-weight:700; font-size:13px; outline:none; box-sizing:border-box;">
+          </div>
+          <div style="flex:1;">
+            <label style="font-size:10px; font-weight:700; color:#aaa; text-transform:uppercase; display:block;">Active Status</label>
+            <select id="edit_active_${p.id}" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid #ddd; font-weight:700; font-size:13px; background:#fff; outline:none; box-sizing:border-box;">
+              <option value="yes" ${p.active === 'yes' ? 'selected' : ''}>Yes (Active)</option>
+              <option value="no" ${p.active === 'no' ? 'selected' : ''}>No (Hidden)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button onclick="adminUpdateProduct('${p.id}')" style="padding:10px 16px; background:#ff6a00; color:#fff; border:none; border-radius:10px; font-weight:800; font-size:13px; cursor:pointer; box-shadow:0 4px 12px rgba(255,106,0,0.2);">Save</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 💾 SAVE PRICE & AVAILABILITY CHANGES TO SUPABASE
+async function adminUpdateProduct(id) {
+  const newPrice = parseFloat(document.getElementById(`edit_price_${id}`).value);
+  const newActive = document.getElementById(`edit_active_${id}`).value;
+
+  if (isNaN(newPrice)) {
+    alert("Please enter a valid price.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from('products')
+    .update({ price: newPrice, active: newActive })
+    .eq('id', id);
+
+  if (error) {
+    alert("Error updating product: " + error.message);
+  } else {
+    alert("✅ Product updated successfully!");
+    if (typeof getProducts === 'function') {
+      getProducts().then(d => { allProducts = d || []; if (typeof render === 'function') render(); });
+    }
+  }
+}
+
   
 </script>
 
@@ -9274,6 +9370,7 @@ function selectTip(amount, element) {
     <!-- Modern Tabs Header -->
     <div style="display:flex; gap:8px; margin-bottom:24px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none;">
       <button onclick="switchAdminTab('products')" class="admin-tab-btn active" style="flex:1; min-width:90px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#ff6a00; color:#fff; box-shadow:0 4px 12px rgba(255,106,0,0.25); transition:all 0.2s;">📦 Products</button>
+      <button onclick="switchAdminTab('manage')" class="admin-tab-btn" style="flex:1; min-width:95px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#555; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:all 0.2s;">📋 Inventory</button>
       <button onclick="switchAdminTab('orders')" class="admin-tab-btn" style="flex:1; min-width:80px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#555; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:all 0.2s;">🛒 Orders</button>
       <button onclick="switchAdminTab('users')" class="admin-tab-btn" style="flex:1; min-width:70px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#555; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:all 0.2s;">👥 Users</button>
       <button onclick="switchAdminTab('promos')" class="admin-tab-btn" style="flex:1; min-width:80px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#555; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:all 0.2s;">🔥 Promos</button>
@@ -9339,6 +9436,12 @@ function selectTip(amount, element) {
         
         <button onclick="adminAddProduct()" style="width:100%; padding:16px; background:linear-gradient(135deg, #ff9a00, #ff5a1f); color:#fff; border:none; border-radius:14px; font-weight:800; font-size:15px; cursor:pointer; box-shadow:0 6px 20px rgba(255,106,0,0.3); transition: transform 0.1s;">Save Product to Database</button>
       </div>
+    </div>
+
+    <!-- TAB: MANAGE / EDIT PRODUCTS -->
+    <div id="adminTabManage" class="admin-tab-content" style="display:none;">
+      <h3 style="font-size:18px; font-weight:800; color:#111; margin-bottom:14px;">Manage Existing Products</h3>
+      <div id="adminProductInventoryList" style="color:#666; font-size:14px;">Loading products...</div>
     </div>
 
     <!-- TAB 2: ORDERS VIEW -->
