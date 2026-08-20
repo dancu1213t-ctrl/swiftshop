@@ -4098,6 +4098,13 @@ backdrop-filter: blur(6px);
       <span>Contact Us</span>
     </button>
 
+
+
+    <button class="panel-item" onclick="openAdminPortal()" id="adminMenuButton">
+  <span class="menu-icon">⚙️</span>
+  <span>Admin Portal</span>
+</button>
+
   </div>
 
 </div>
@@ -8756,7 +8763,191 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
     const cConfirm = document.getElementById("creditConfirmScreen");
     if (cConfirm) cConfirm.style.display = "none";
   }
+// 👑 OPEN & CLOSE ADMIN PORTAL
+function openAdminPortal() {
+  const savedName = localStorage.getItem("userName");
+  const savedPhone = localStorage.getItem("userPhone");
 
+  if (savedName !== ADMIN_NAME || savedPhone !== ADMIN_PHONE) {
+    alert("Unauthorized Access");
+    return;
+  }
+
+  toggleMenu(); // Close side menu
+  document.getElementById("adminScreen").style.display = "block";
+  switchAdminTab('products');
+}
+
+function closeAdminPortal() {
+  document.getElementById("adminScreen").style.display = "none";
+}
+
+// SWITCH TABS
+function switchAdminTab(tabName) {
+  document.querySelectorAll(".admin-tab-content").forEach(el => el.style.display = "none");
+  document.querySelectorAll(".admin-tab-btn").forEach(btn => {
+    btn.style.background = "#eee";
+    btn.style.color = "#333";
+  });
+
+  const targetTab = document.getElementById("adminTab" + tabName.charAt(0).toUpperCase() + tabName.slice(1));
+  if (targetTab) targetTab.style.display = "block";
+
+  event.currentTarget.style.background = "#ff6a00";
+  event.currentTarget.style.color = "#fff";
+
+  if (tabName === 'orders') fetchAdminOrders();
+  if (tabName === 'users') fetchAdminUsers();
+  if (tabName === 'suggestions') fetchAdminSuggestions();
+}
+
+// 📦 INSERT PRODUCT DIRECTLY TO SUPABASE
+async function adminAddProduct() {
+  const name = document.getElementById("adminProdName").value.trim();
+  const category = document.getElementById("adminProdCategory").value.trim();
+  const subcategory = document.getElementById("adminProdSubcategory").value.trim() || "Items";
+  const price = parseFloat(document.getElementById("adminProdPrice").value);
+  const wasVal = document.getElementById("adminProdWas").value;
+  const was = wasVal ? parseFloat(wasVal) : null;
+  const image = document.getElementById("adminProdImage").value.trim();
+
+  if (!name || !category || isNaN(price)) {
+    alert("Please fill in Name, Category, and Price.");
+    return;
+  }
+
+  const { error } = await supabaseClient.from('products').insert([{
+    id: 'prod_' + Date.now(),
+    name,
+    category,
+    subcategory,
+    price,
+    was,
+    image,
+    active: 'yes'
+  }]);
+
+  if (error) {
+    alert("Error adding product: " + error.message);
+  } else {
+    alert("✅ Product added successfully to your database!");
+    document.getElementById("adminProdName").value = "";
+    document.getElementById("adminProdPrice").value = "";
+    document.getElementById("adminProdWas").value = "";
+    document.getElementById("adminProdImage").value = "";
+  }
+}
+
+// 🔥 INSERT PROMO DIRECTLY TO SUPABASE
+async function adminAddPromo() {
+  const name = document.getElementById("adminPromoName").value.trim();
+  const category = document.getElementById("adminPromoCategory").value.trim();
+  const price = parseFloat(document.getElementById("adminPromoPrice").value);
+  const wasVal = document.getElementById("adminPromoWas").value;
+  const was = wasVal ? parseFloat(wasVal) : null;
+  const image = document.getElementById("adminPromoImage").value.trim();
+
+  if (!name || isNaN(price)) {
+    alert("Please fill in Name and Price.");
+    return;
+  }
+
+  const { error } = await supabaseClient.from('promos').insert([{
+    name,
+    category,
+    price,
+    was,
+    image,
+    status: 'ACTIVE'
+  }]);
+
+  if (error) {
+    alert("Error adding promo: " + error.message);
+  } else {
+    alert("🔥 Promo published successfully!");
+    document.getElementById("adminPromoName").value = "";
+    document.getElementById("adminPromoPrice").value = "";
+    document.getElementById("adminPromoWas").value = "";
+    document.getElementById("adminPromoImage").value = "";
+  }
+}
+
+// 🛒 FETCH ORDERS FOR ADMIN
+async function fetchAdminOrders() {
+  const container = document.getElementById("adminOrdersList");
+  container.innerHTML = "Loading...";
+
+  const { data, error } = await supabaseClient
+    .from('orders')
+    .select('*')
+    .order('timestamp', { ascending: false })
+    .limit(20);
+
+  if (error || !data) {
+    container.innerHTML = "Failed to load orders.";
+    return;
+  }
+
+  container.innerHTML = data.map(o => `
+    <div style="background:#fff; padding:15px; border-radius:12px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+      <strong>Order #${o.order_id}</strong> - ${o.customer_name || 'Customer'} (${o.phone || 'No phone'})<br>
+      <small>Type: ${o.order_type || 'Delivery'} | Status: ${o.status || 'Active'}</small><br>
+      <small style="color:#777;">Time: ${new Date(o.timestamp).toLocaleString()}</small>
+    </div>
+  `).join('');
+}
+
+// 👥 FETCH USERS FOR ADMIN
+async function fetchAdminUsers() {
+  const container = document.getElementById("adminUsersList");
+  container.innerHTML = "Loading...";
+
+  const { data, error } = await supabaseClient
+    .from('swiftshop_users')
+    .select('*')
+    .order('timestamp', { ascending: false });
+
+  if (error || !data) {
+    container.innerHTML = "Failed to load users.";
+    return;
+  }
+
+  container.innerHTML = data.map(u => `
+    <div style="background:#fff; padding:15px; border-radius:12px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05); display:flex; justify-content:space-between; align-items:center;">
+      <div>
+        <strong>${u.name}</strong><br>
+        <small>📞 ${u.phone} | ✉️ ${u.email || 'No email'}</small>
+      </div>
+      <div style="text-align:right;">
+        <span style="background:#fff2e7; color:#ff6a00; padding:4px 10px; border-radius:8px; font-weight:bold;">${u.points || 0} pts</span><br>
+        <small style="font-weight:bold;">Bal: $${Number(u.balance || 0).toFixed(2)}</small>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 💡 FETCH SUGGESTIONS FOR ADMIN
+async function fetchAdminSuggestions() {
+  const container = document.getElementById("adminSuggestionsList");
+  container.innerHTML = "Loading...";
+
+  const { data, error } = await supabaseClient
+    .from('suggestions')
+    .select('*')
+    .order('timestamp', { ascending: false });
+
+  if (error || !data) {
+    container.innerHTML = "Failed to load suggestions.";
+    return;
+  }
+
+  container.innerHTML = data.map(s => `
+    <div style="background:#fff; padding:12px; border-radius:12px; margin-bottom:8px; box-shadow:0 2px 8px rgba(0,0,0,0.05); display:flex; justify-content:space-between; align-items:center;">
+      <span>💡 <strong>${s.item_name}</strong></span>
+      <small style="color:#777;">${new Date(s.timestamp).toLocaleDateString()}</small>
+    </div>
+  `).join('');
+}
 
 
   
@@ -9068,7 +9259,70 @@ function selectTip(amount, element) {
 }
 </script>
 
+<!-- ⚙️ ADMIN PORTAL SCREEN -->
+<div id="adminScreen" class="screen">
+  <div style="padding:14px; background:#111; color:#fff; display:flex; justify-content:space-between; align-items:center;">
+    <button class="panel-item" style="width:auto; background:#ff6a00; color:#fff;" onclick="closeAdminPortal()">← Back to App</button>
+    <h2 style="margin:0; font-size:18px;">👑 SwiftShop Admin Portal</h2>
+    <div></div>
+  </div>
 
+  <div style="padding:16px; max-width:800px; margin:0 auto;">
+    <!-- Tabs Header -->
+    <div style="display:flex; gap:10px; margin-bottom:20px; overflow-x:auto; padding-bottom:5px;">
+      <button onclick="switchAdminTab('products')" class="admin-tab-btn active" style="flex:1; padding:12px; border-radius:12px; border:none; font-weight:700; cursor:pointer;">📦 Products</button>
+      <button onclick="switchAdminTab('orders')" class="admin-tab-btn" style="flex:1; padding:12px; border-radius:12px; border:none; font-weight:700; cursor:pointer;">🛒 Orders</button>
+      <button onclick="switchAdminTab('users')" class="admin-tab-btn" style="flex:1; padding:12px; border-radius:12px; border:none; font-weight:700; cursor:pointer;">👥 Users</button>
+      <button onclick="switchAdminTab('promos')" class="admin-tab-btn" style="flex:1; padding:12px; border-radius:12px; border:none; font-weight:700; cursor:pointer;">🔥 Promos</button>
+      <button onclick="switchAdminTab('suggestions')" class="admin-tab-btn" style="flex:1; padding:12px; border-radius:12px; border:none; font-weight:700; cursor:pointer;">💡 Suggestions</button>
+    </div>
+
+    <!-- TAB 1: PRODUCTS MANAGEMENT -->
+    <div id="adminTabProducts" class="admin-tab-content">
+      <div style="background:#fff; padding:20px; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,0.05); margin-bottom:20px;">
+        <h3>Add New Product</h3>
+        <input id="adminProdName" placeholder="Product Name" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input id="adminProdCategory" placeholder="Category (e.g. Snack, Drink, Breakfast)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input id="adminProdSubcategory" placeholder="Subcategory (e.g. Items)" value="Items" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input id="adminProdPrice" type="number" step="0.01" placeholder="Price ($ BZD)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input id="adminProdWas" type="number" step="0.01" placeholder="Was Price (Optional Sale Price)" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input id="adminProdImage" placeholder="Image URL (Imgur link)" style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd;">
+        <button onclick="adminAddProduct()" style="width:100%; padding:14px; background:#ff6a00; color:#fff; border:none; border-radius:12px; font-weight:800; cursor:pointer;">Save Product to Database</button>
+      </div>
+    </div>
+
+    <!-- TAB 2: ORDERS VIEW -->
+    <div id="adminTabOrders" class="admin-tab-content" style="display:none;">
+      <h3>Recent Orders</h3>
+      <div id="adminOrdersList">Loading orders...</div>
+    </div>
+
+    <!-- TAB 3: USERS VIEW -->
+    <div id="adminTabUsers" class="admin-tab-content" style="display:none;">
+      <h3>SwiftShop Customers</h3>
+      <div id="adminUsersList">Loading users...</div>
+    </div>
+
+    <!-- TAB 4: PROMOS VIEW -->
+    <div id="adminTabPromos" class="admin-tab-content" style="display:none;">
+      <div style="background:#fff; padding:20px; border-radius:20px; box-shadow:0 4px 15px rgba(0,0,0,0.05); margin-bottom:20px;">
+        <h3>Add Live Promo</h3>
+        <input id="adminPromoName" placeholder="Promo Name" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input id="adminPromoCategory" placeholder="Category" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input id="adminPromoPrice" type="number" step="0.01" placeholder="Price" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input id="adminPromoWas" type="number" step="0.01" placeholder="Was Price" style="width:100%; padding:12px; margin-bottom:10px; border-radius:10px; border:1px solid #ddd;">
+        <input id="adminPromoImage" placeholder="Image URL" style="width:100%; padding:12px; margin-bottom:15px; border-radius:10px; border:1px solid #ddd;">
+        <button onclick="adminAddPromo()" style="width:100%; padding:14px; background:#ff6a00; color:#fff; border:none; border-radius:12px; font-weight:800; cursor:pointer;">Publish Live Promo</button>
+      </div>
+    </div>
+
+    <!-- TAB 5: SUGGESTIONS VIEW -->
+    <div id="adminTabSuggestions" class="admin-tab-content" style="display:none;">
+      <h3>Customer Suggestions</h3>
+      <div id="adminSuggestionsList">Loading suggestions...</div>
+    </div>
+  </div>
+</div>
 
 
 </body>
