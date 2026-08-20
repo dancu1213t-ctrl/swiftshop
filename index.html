@@ -8991,7 +8991,7 @@ function filterAdminInventory() {
   }
 }
 
-// 🎨 HELPER TO RENDER THE PRODUCTS HTML
+// 🎨 HELPER TO RENDER THE PRODUCTS HTML (With Image Link Input)
 function renderAdminInventoryList(items) {
   const container = document.getElementById("adminProductInventoryList");
 
@@ -9007,6 +9007,7 @@ function renderAdminInventoryList(items) {
         <strong style="font-size:15px; color:#111; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${p.name}</strong>
         <small style="color:#888; font-weight:600;">Category: ${p.category}</small>
         
+        <!-- PRICE & ACTIVE STATUS -->
         <div style="display:flex; gap:10px; margin-top:10px; align-items:center;">
           <div style="flex:1;">
             <label style="font-size:10px; font-weight:700; color:#aaa; text-transform:uppercase; display:block;">Price ($)</label>
@@ -9020,6 +9021,13 @@ function renderAdminInventoryList(items) {
             </select>
           </div>
         </div>
+
+        <!-- IMAGE LINK INPUT -->
+        <div style="margin-top:8px;">
+          <label style="font-size:10px; font-weight:700; color:#aaa; text-transform:uppercase; display:block;">Image URL</label>
+          <input id="edit_image_${p.id}" type="text" value="${p.image || ''}" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid #ddd; font-size:12px; outline:none; box-sizing:border-box;">
+        </div>
+
       </div>
       <div>
         <button onclick="adminUpdateProduct('${p.id}')" style="padding:10px 16px; background:#ff6a00; color:#fff; border:none; border-radius:10px; font-weight:800; font-size:13px; cursor:pointer; box-shadow:0 4px 12px rgba(255,106,0,0.2);">Save</button>
@@ -9029,9 +9037,11 @@ function renderAdminInventoryList(items) {
 }
 
 // 💾 SAVE PRICE & AVAILABILITY CHANGES TO SUPABASE
+// 💾 SAVE PRICE, AVAILABILITY & IMAGE CHANGES TO SUPABASE
 async function adminUpdateProduct(id) {
   const newPrice = parseFloat(document.getElementById(`edit_price_${id}`).value);
   const newActive = document.getElementById(`edit_active_${id}`).value;
+  const newImage = document.getElementById(`edit_image_${id}`).value.trim();
 
   if (isNaN(newPrice)) {
     alert("Please enter a valid price.");
@@ -9040,7 +9050,11 @@ async function adminUpdateProduct(id) {
 
   const { error } = await supabaseClient
     .from('products')
-    .update({ price: newPrice, active: newActive })
+    .update({ 
+      price: newPrice, 
+      active: newActive, 
+      image: newImage 
+    })
     .eq('id', id);
 
   if (error) {
@@ -9048,12 +9062,16 @@ async function adminUpdateProduct(id) {
   } else {
     alert("✅ Product updated successfully!");
     
-    // Update local data array so filtering stays accurate without re-fetching
+    // Update local data array so filtering/viewing stays accurate without re-fetching
     const index = adminInventoryData.findIndex(p => p.id === id);
     if (index !== -1) {
       adminInventoryData[index].price = newPrice;
       adminInventoryData[index].active = newActive;
+      adminInventoryData[index].image = newImage;
     }
+
+    // Refresh the list view to show the new thumbnail right away
+    filterAdminInventory();
 
     if (typeof getProducts === 'function') {
       getProducts().then(d => { allProducts = d || []; if (typeof render === 'function') render(); });
