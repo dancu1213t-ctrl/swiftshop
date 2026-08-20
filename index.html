@@ -9046,7 +9046,20 @@ async function adminUpdateProduct(id) {
   }
 }
 
-  
+  function openImage(src) {
+  if (typeof buzz === "function") buzz(25); // light tap feedback
+
+  const overlay = document.getElementById("imageOverlay");
+  const img = document.getElementById("overlayImg");
+
+  if (img) img.src = src;
+  if (overlay) overlay.style.display = "flex";
+}
+
+function closeImage() {
+  const overlay = document.getElementById("imageOverlay");
+  if (overlay) overlay.style.display = "none";
+}
 </script>
 
 <!-- 📝 SUGGEST ITEM MODAL -->
@@ -9492,7 +9505,10 @@ function selectTip(amount, element) {
     </div>
   </div>
 </div>
-
+<!-- 🖼️ IMAGE POP-UP OVERLAY -->
+<div id="imageOverlay" onclick="closeImage()">
+  <img id="overlayImg" src="" alt="Zoomed Item">
+</div>
 
 </body>
 </html>
