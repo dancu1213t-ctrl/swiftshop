@@ -4040,75 +4040,7 @@ backdrop-filter: blur(6px);
   padding-bottom: 1px !important;
   background: transparent !important;
 }
-/* 🖼️ IMAGE OVERLAY MODAL */
-#imageOverlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(6px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 999999;
-  padding: 20px;
-}
 
-.overlay-content {
-  position: relative;
-  background: #fff;
-  border-radius: 24px;
-  padding: 20px;
-  max-width: 360px;
-  width: 100%;
-  text-align: center;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-  animation: imagePop 0.25s ease;
-}
-
-.overlay-content img {
-  width: 100%;
-  height: 260px;
-  object-type: cover;
-  border-radius: 16px;
-}
-
-.close-overlay-btn {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  background: rgba(0,0,0,0.1);
-  border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 10;
-}
-
-/* 💖 MODAL LIKE BUTTON */
-.modal-like-btn {
-  width: 100%;
-  padding: 12px;
-  background: #f4f5f7;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #4b5563;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.modal-like-btn.liked {
-  background: #fff1f2;
-  border-color: #fecdd3;
-  color: #e11d48;
-}
-
-.modal-like-btn:active {
-  transform: scale(0.96);
-}
   </style>
 </head>
 
@@ -7399,7 +7331,7 @@ function render() {
         box.innerHTML += `
           <div class="product">
             ${badgeHTML}
-            <img src="${p.image}" onclick="openImage('${p.image}', '${p.id}')">
+            <img src="${p.image}" onclick="openImage(this.src)">
             <div class="product-info">
               <strong>${p.name}</strong>
               <div class="price">
@@ -9189,21 +9121,20 @@ async function adminUpdateProduct(id) {
     }
   }
 }
-  function openImage(src) {
-  if (typeof buzz === "function") buzz(25); // light tap feedback
+function openImage(src) {
+    if (typeof buzz === "function") buzz(25); // light tap feedback
 
-  const overlay = document.getElementById("imageOverlay");
-  const img = document.getElementById("overlayImg");
+    const overlay = document.getElementById("imageOverlay");
+    const img = document.getElementById("overlayImg");
 
-  if (img) img.src = src;
-  if (overlay) overlay.style.display = "flex";
-}
+    if (img) img.src = src;
+    if (overlay) overlay.style.display = "flex";
+  }
 
-function closeImage() {
-  const overlay = document.getElementById("imageOverlay");
-  if (overlay) overlay.style.display = "none";
-}
-
+  function closeImage() {
+    const overlay = document.getElementById("imageOverlay");
+    if (overlay) overlay.style.display = "none";
+  }
 </script>
 
 <!-- 📝 SUGGEST ITEM MODAL -->
@@ -9690,13 +9621,6 @@ function selectTip(amount, element) {
   <div class="overlay-content" onclick="event.stopPropagation()">
     <button class="close-overlay-btn" onclick="closeImage()">✕</button>
     <img id="overlayImg" src="" alt="Zoomed Item">
-    
-    <!-- 💖 LIKE BUTTON INSIDE MODAL -->
-    <div style="margin-top: 15px;">
-      <button id="modalLikeBtn" class="modal-like-btn" onclick="toggleModalLike()">
-        🤍 Like Item
-      </button>
-    </div>
   </div>
 </div>
 
