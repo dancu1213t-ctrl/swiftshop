@@ -8951,27 +8951,8 @@ async function fetchAdminSuggestions() {
 
 
 
-  // SWITCH TABS (Updated with 'manage' inventory tab support)
-function switchAdminTab(tabName) {
-  document.querySelectorAll(".admin-tab-content").forEach(el => el.style.display = "none");
-  document.querySelectorAll(".admin-tab-btn").forEach(btn => {
-    btn.style.background = "#fff";
-    btn.style.color = "#555";
-    btn.style.boxShadow = "0 2px 6px rgba(0,0,0,0.04)";
-  });
-
-  const targetTab = document.getElementById("adminTab" + tabName.charAt(0).toUpperCase() + tabName.slice(1));
-  if (targetTab) targetTab.style.display = "block";
-
-  event.currentTarget.style.background = "#ff6a00";
-  event.currentTarget.style.color = "#fff";
-  event.currentTarget.style.boxShadow = "0 4px 12px rgba(255,106,0,0.25)";
-
-  if (tabName === 'orders') fetchAdminOrders();
-  if (tabName === 'users') fetchAdminUsers();
-  if (tabName === 'suggestions') fetchAdminSuggestions();
-  if (tabName === 'manage') fetchAdminInventory();
-}
+// Store the full inventory globally so we can filter locally
+let adminInventoryData = [];
 
 // 📋 FETCH ALL PRODUCTS FOR ADMIN INVENTORY MANAGEMENT
 async function fetchAdminInventory() {
@@ -8988,12 +8969,32 @@ async function fetchAdminInventory() {
     return;
   }
 
-  if (data.length === 0) {
-    container.innerHTML = "No products found in database.";
+  adminInventoryData = data; // Save globally
+  renderAdminInventoryList(adminInventoryData);
+}
+
+// 🗂️ FILTER INVENTORY BY SELECTED CATEGORY
+function filterAdminInventory() {
+  const selectedCategory = document.getElementById("adminInventoryFilter").value;
+
+  if (selectedCategory === "ALL") {
+    renderAdminInventoryList(adminInventoryData);
+  } else {
+    const filtered = adminInventoryData.filter(p => p.category === selectedCategory);
+    renderAdminInventoryList(filtered);
+  }
+}
+
+// 🎨 HELPER TO RENDER THE PRODUCTS HTML
+function renderAdminInventoryList(items) {
+  const container = document.getElementById("adminProductInventoryList");
+
+  if (!items || items.length === 0) {
+    container.innerHTML = "No products found in this category.";
     return;
   }
 
-  container.innerHTML = data.map(p => `
+  container.innerHTML = items.map(p => `
     <div style="background:#fff; padding:16px; border-radius:18px; margin-bottom:12px; box-shadow:0 4px 15px rgba(0,0,0,0.05); border:1px solid #eaeaea; display:flex; gap:14px; align-items:center;">
       <img src="${p.image || 'https://via.placeholder.com/60'}" style="width:55px; height:55px; border-radius:12px; object-fit:cover; flex-shrink:0;">
       <div style="flex:1; min-width:0;">
@@ -9040,12 +9041,17 @@ async function adminUpdateProduct(id) {
     alert("Error updating product: " + error.message);
   } else {
     alert("✅ Product updated successfully!");
+    // Update local data array so filtering stays accurate without re-fetching
+    const index = adminInventoryData.findIndex(p => p.id === id);
+    if (index !== -1) {
+      adminInventoryData[index].price = newPrice;
+      adminInventoryData[index].active = newActive;
+    }
     if (typeof getProducts === 'function') {
       getProducts().then(d => { allProducts = d || []; if (typeof render === 'function') render(); });
     }
   }
 }
-
   function openImage(src) {
   if (typeof buzz === "function") buzz(25); // light tap feedback
 
@@ -9451,11 +9457,47 @@ function selectTip(amount, element) {
       </div>
     </div>
 
-    <!-- TAB: MANAGE / EDIT PRODUCTS -->
-    <div id="adminTabManage" class="admin-tab-content" style="display:none;">
-      <h3 style="font-size:18px; font-weight:800; color:#111; margin-bottom:14px;">Manage Existing Products</h3>
-      <div id="adminProductInventoryList" style="color:#666; font-size:14px;">Loading products...</div>
-    </div>
+<!-- TAB: MANAGE / EDIT PRODUCTS -->
+<div id="adminTabManage" class="admin-tab-content" style="display:none;">
+  <h3 style="font-size:18px; font-weight:800; color:#111; margin-bottom:10px;">Manage Existing Products</h3>
+  
+  <!-- 🗂️ CATEGORY FILTER DROPDOWN -->
+  <div style="margin-bottom: 16px;">
+    <label style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; display: block; margin-bottom: 6px;">Filter by Category</label>
+    <select id="adminInventoryFilter" onchange="filterAdminInventory()" style="width: 100%; padding: 12px 14px; border-radius: 12px; border: 1.5px solid #e5e7eb; background: #fff; font-size: 14px; font-weight: 600; outline: none; box-sizing: border-box;">
+      <option value="ALL">🌐 All Categories</option>
+      <option value="Snack">Snack</option>
+      <option value="Drink">Drink</option>
+      <option value="Household">Household</option>
+      <option value="Hygiene">Hygiene</option>
+      <option value="Pastries">Pastries</option>
+      <option value="Treats">Treats</option>
+      <option value="Daily Menu">Daily Menu</option>
+      <option value="Aroma">Aroma</option>
+      <option value="Guerrero">Guerrero</option>
+      <option value="AddToCart">AddToCart</option>
+      <option value="Cosmetics">Cosmetics</option>
+      <option value="Leo Meatpies">Leo Meatpies</option>
+      <option value="TFC">TFC</option>
+      <option value="Neeyas Backyard">Neeyas Backyard</option>
+      <option value="Burger But">Burger But</option>
+      <option value="Vegetables">Vegetables</option>
+      <option value="Faye">Faye</option>
+      <option value="Maria">Maria</option>
+      <option value="Shaken">Shaken</option>
+      <option value="Sister">Sister</option>
+      <option value="Brew">Brew</option>
+      <option value="Dumpling">Dumpling</option>
+      <option value="Salsas">Salsas</option>
+      <option value="Lunch">Lunch</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Breakfast">Breakfast</option>
+      <option value="Urban">Urban</option>
+    </select>
+  </div>
+
+  <div id="adminProductInventoryList" style="color:#666; font-size:14px;">Loading products...</div>
+</div>
 
     <!-- TAB 2: ORDERS VIEW -->
     <div id="adminTabOrders" class="admin-tab-content" style="display:none;">
