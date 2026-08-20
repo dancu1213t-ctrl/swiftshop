@@ -8782,23 +8782,28 @@ function closeAdminPortal() {
   document.getElementById("adminScreen").style.display = "none";
 }
 
-// SWITCH TABS
+// 🔀 SWITCH TABS
 function switchAdminTab(tabName) {
   document.querySelectorAll(".admin-tab-content").forEach(el => el.style.display = "none");
   document.querySelectorAll(".admin-tab-btn").forEach(btn => {
-    btn.style.background = "#eee";
-    btn.style.color = "#333";
+    btn.style.background = "#fff";
+    btn.style.color = "#555";
+    btn.style.boxShadow = "0 2px 6px rgba(0,0,0,0.04)";
   });
 
   const targetTab = document.getElementById("adminTab" + tabName.charAt(0).toUpperCase() + tabName.slice(1));
   if (targetTab) targetTab.style.display = "block";
 
-  event.currentTarget.style.background = "#ff6a00";
-  event.currentTarget.style.color = "#fff";
+  if (event && event.currentTarget) {
+    event.currentTarget.style.background = "#ff6a00";
+    event.currentTarget.style.color = "#fff";
+    event.currentTarget.style.boxShadow = "0 4px 12px rgba(255,106,0,0.25)";
+  }
 
   if (tabName === 'orders') fetchAdminOrders();
   if (tabName === 'users') fetchAdminUsers();
   if (tabName === 'suggestions') fetchAdminSuggestions();
+  if (tabName === 'manage') fetchAdminInventory();
 }
 
 // 📦 INSERT PRODUCT DIRECTLY TO SUPABASE
@@ -8949,9 +8954,9 @@ async function fetchAdminSuggestions() {
   `).join('');
 }
 
-
-
-// Store the full inventory globally so we can filter locally
+// ==========================================
+// 🗂️ INVENTORY MANAGEMENT & CATEGORY FILTER
+// ==========================================
 let adminInventoryData = [];
 
 // 📋 FETCH ALL PRODUCTS FOR ADMIN INVENTORY MANAGEMENT
@@ -8970,12 +8975,13 @@ async function fetchAdminInventory() {
   }
 
   adminInventoryData = data; // Save globally
-  renderAdminInventoryList(adminInventoryData);
+  filterAdminInventory(); // Render based on active dropdown filter selection
 }
 
-// 🗂️ FILTER INVENTORY BY SELECTED CATEGORY
+// 🔍 FILTER INVENTORY BY SELECTED CATEGORY
 function filterAdminInventory() {
-  const selectedCategory = document.getElementById("adminInventoryFilter").value;
+  const dropdown = document.getElementById("adminInventoryFilter");
+  const selectedCategory = dropdown ? dropdown.value : "ALL";
 
   if (selectedCategory === "ALL") {
     renderAdminInventoryList(adminInventoryData);
@@ -9041,12 +9047,14 @@ async function adminUpdateProduct(id) {
     alert("Error updating product: " + error.message);
   } else {
     alert("✅ Product updated successfully!");
+    
     // Update local data array so filtering stays accurate without re-fetching
     const index = adminInventoryData.findIndex(p => p.id === id);
     if (index !== -1) {
       adminInventoryData[index].price = newPrice;
       adminInventoryData[index].active = newActive;
     }
+
     if (typeof getProducts === 'function') {
       getProducts().then(d => { allProducts = d || []; if (typeof render === 'function') render(); });
     }
