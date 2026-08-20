@@ -9139,30 +9139,30 @@ function closeImage() {
   const overlay = document.getElementById("imageOverlay");
   if (overlay) overlay.style.display = "none";
 }
-  // 💖 TOGGLE LIKE / HEART ITEM
-function toggleLike(productId, btnElement) {
-  if (typeof buzz === "function") buzz(25);
+// 💖 TOGGLE LIKE / HEART ITEM
+  function toggleLike(productId, btnElement) {
+    if (typeof buzz === "function") buzz(25);
 
-  let likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
+    let likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
 
-  if (likedItems[productId]) {
-    delete likedItems[productId];
-    btnElement.innerHTML = "🤍";
-    btnElement.classList.remove("liked");
-  } else {
-    likedItems[productId] = true;
-    btnElement.innerHTML = "❤️";
-    btnElement.classList.add("liked");
-    
-    // Play the pop animation
-    btnElement.style.animation = "heartPop 0.3s ease";
-    setTimeout(() => {
-      btnElement.style.animation = "";
-    }, 300);
+    if (likedItems[productId]) {
+      delete likedItems[productId];
+      btnElement.innerHTML = "🤍 Like";
+      btnElement.classList.remove("liked");
+    } else {
+      likedItems[productId] = true;
+      btnElement.innerHTML = "❤️ Liked";
+      btnElement.classList.add("liked");
+      
+      // Play the pop animation
+      btnElement.style.animation = "heartPop 0.3s ease";
+      setTimeout(() => {
+        btnElement.style.animation = "";
+      }, 300);
+    }
+
+    localStorage.setItem("likedItems", JSON.stringify(likedItems));
   }
-
-  localStorage.setItem("likedItems", JSON.stringify(likedItems));
-}
 </script>
 
 <!-- 📝 SUGGEST ITEM MODAL -->
