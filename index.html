@@ -8088,7 +8088,7 @@ function toggleModalLike() {
         html += `
           <div class="product">
             ${badgeHTML}
-            <img src="${p.image}" onclick="openImage(this.src)">
+            <img src="${p.image}" onclick="openImage('${p.image}', '${p.id}')">
             <div class="product-info">
               <strong>${p.name}</strong>
               <div class="price">
