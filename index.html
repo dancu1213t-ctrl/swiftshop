@@ -295,16 +295,17 @@
 }
 
 
-/* 🫧 Custom Image Cart Bubble */
+/* 🫧 Custom White Image Cart Bubble with Outer Ring */
+/* 🫧 Custom White Image Cart Bubble with Outer Ring */
 #cartBubble {
   position: fixed;
   bottom: 24px;
   right: 24px;
   width: 68px;
   height: 68px;
-  background-color: #ff6a00;
+  background-color: #ffffff;
   background-image: url('https://i.imgur.com/7NRRAN0.png');
-  background-size: 65%; /* Scales your cart graphic nicely inside the circle */
+  background-size: 55%;
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 50%;
@@ -313,8 +314,8 @@
   justify-content: center;
   z-index: 1000;
   cursor: pointer;
-  box-shadow: 0 10px 25px rgba(255, 90, 31, 0.45);
-  border: 3px solid #ffffff;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 2px solid #eaeaea;
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -322,8 +323,34 @@
   transform: scale(0.92);
 }
 
-#cartBubble.active {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+/* 🟠 Outer Ring Effect (Glowing when closed/minimized) */
+#cartBubble::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 106, 0, 0.6);
+  box-shadow: 0 0 12px rgba(255, 106, 0, 0.3);
+  animation: cartRingPulse 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Ring Pulse Animation */
+@keyframes cartRingPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.3;
+  }
+}
+
+/* Stop glowing/pulsing when the cart panel IS OPEN (.active) */
+#cartBubble.active::before {
+  animation: none;
+  opacity: 0.2;
 }
 /* ================= LOGO SLIDER (BUMP, GLOW & VERIFIED) ================= */
 .logo-slider-container {
@@ -7002,7 +7029,7 @@ function updateCartBubble() {
   }
 }
 
-  function openCart() {
+ function openCart() {
     const panel = document.getElementById("cartPanel");
     const bubble = document.getElementById("cartBubble");
     if (!panel) return;
@@ -7011,15 +7038,16 @@ function updateCartBubble() {
 
     if (isOpen) {
       panel.style.bottom = "-100%";
-      if (bubble) bubble.classList.remove("active");
+      // Show bubble again when closing
+      if (bubble) bubble.style.display = "flex"; 
     } else {
-      panel.style.bottom = "0";             // 🔥 OPEN FIRST
-      if (bubble) bubble.classList.add("active");
+      panel.style.bottom = "0";             // Open cart panel
+      // Completely hide the bubble while the cart is open
+      if (bubble) bubble.style.display = "none"; 
 
       requestAnimationFrame(() => {
-        renderCartPanel();                  // 🔥 RENDER ITEMS
+        renderCartPanel();                  // Render items
         
-        // ✅ ADDED: Trigger the map initialization
         setTimeout(() => {
           if (typeof initCartMap === "function") {
             initCartMap();
@@ -7043,11 +7071,14 @@ function updateCartBubble() {
     if (feeText) feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
   }
 
-  function closeCart() {
+function closeCart() {
     const cp = document.getElementById("cartPanel");
     const cb = document.getElementById("cartBubble");
     if (cp) cp.style.bottom = "-100%";
-    if (cb) cb.classList.remove("active");
+    // Make sure the bubble reappears when closed/minimized
+    if (cb && Object.values(cart).reduce((a, b) => a + b.q, 0) > 0) {
+      cb.style.display = "flex";
+    }
   }
 
   function renderCartPanel() {
