@@ -8851,45 +8851,44 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
 
   if (statusEl) {
     statusEl.style.display = "block";
-    statusEl.innerText = removeBg ? "⏳ Resizing photo for AI..." : "⏳ Converting Image...";
+    statusEl.innerText = removeBg ? "⏳ AI Removing Background..." : "⏳ Processing Image...";
   }
 
   try {
     let finalBlob;
 
     if (removeBg) {
-      if (typeof imglyRemoveBackground !== "function") {
-        throw new Error("IMG.LY library CDN script missing in <head>");
+      // 1. Prepare image for API
+      const formData = new FormData();
+      formData.append("image_file", file);
+      formData.append("size", "auto");
+
+      // 2. Call remove.bg API using your key
+      const response = await fetch("https://api.remove.bg/v1.0/removebg", {
+        method: "POST",
+        headers: {
+          "X-Api-Key": "noQWWKgBB4ueiskEhj78tQbG"
+        },
+        body: formData
+      });
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.statusText}`);
       }
 
-      // 1. Resize photo down so mobile memory doesn't crash
-      const resizedBlob = await resizeImageForAI(file, 1024);
-      const arrayBuffer = await resizedBlob.arrayBuffer();
-
-      if (statusEl) statusEl.innerText = "⏳ AI Removing Background...";
-
-      // 2. Fetch assets explicitly from unpkg CDN
-      finalBlob = await imglyRemoveBackground(arrayBuffer, {
-        publicPath: "https://static.imgly.com/packages/background-removal-data/1.4.5/dist/",
-        output: { format: 'image/png' },
-        progress: (key, current, total) => {
-          if (statusEl && total) {
-            const pct = Math.round((current / total) * 100);
-            statusEl.innerText = `⏳ AI Processing: ${pct}%`;
-          }
-        }
-      });
+      finalBlob = await response.blob();
     } else {
       finalBlob = await convertFileToPngBlob(file);
     }
 
-    // Show Preview
+    // 3. Local Preview
     const previewUrl = URL.createObjectURL(finalBlob);
     if (previewImg) previewImg.src = previewUrl;
     if (previewWrapper) previewWrapper.style.display = "block";
 
     if (statusEl) statusEl.innerText = "⏳ Saving to Supabase...";
 
+    // 4. Upload transparent PNG to Supabase
     const fileName = `uploads/${Date.now()}_${Math.random().toString(36).substring(7)}.png`;
 
     const { data, error } = await supabaseClient.storage
@@ -8901,6 +8900,7 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
 
     if (error) throw error;
 
+    // 5. Retrieve Public Link
     const { data: publicUrlData } = supabaseClient.storage
       .from('product-images')
       .getPublicUrl(fileName);
@@ -8914,12 +8914,13 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
 
   } catch (err) {
     console.error("Image processing error details:", err);
-    if (statusEl) statusEl.innerText = "⚠️ AI Model Failed. Saving raw image...";
-    
+    if (statusEl) statusEl.innerText = "⚠️ API failed. Uploading raw image...";
+
+    // Fallback: Upload raw image if API quota is reached or network fails
     try {
       const fallbackBlob = await convertFileToPngBlob(file);
       const fileName = `uploads/${Date.now()}_raw.png`;
-      
+
       await supabaseClient.storage
         .from('product-images')
         .upload(fileName, fallbackBlob, { contentType: 'image/png', upsert: true });
