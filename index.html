@@ -8839,7 +8839,6 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
     if (cConfirm) cConfirm.style.display = "none";
   }
 
-// 📸 HANDLE IMAGE UPLOADS, PNG CONVERSION, BG REMOVAL & SUPABASE STORAGE
 async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewImgId) {
   const file = inputEl.files[0];
   if (!file) return;
@@ -8852,14 +8851,29 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
 
   if (statusEl) {
     statusEl.style.display = "block";
-    statusEl.innerText = removeBg ? "⏳ Removing background..." : "⏳ Converting to PNG...";
+    statusEl.innerText = removeBg ? "⏳ AI Removing Background... (Please wait)" : "⏳ Converting Image...";
   }
 
   try {
     let finalBlob;
 
-    if (removeBg && typeof imglyRemoveBackground === "function") {
-      finalBlob = await imglyRemoveBackground(file, { output: { format: 'image/png' } });
+    if (removeBg) {
+      if (typeof imglyRemoveBackground !== "function") {
+        throw new Error("IMG.LY library is not loaded in <head>");
+      }
+
+      // Convert file to ArrayBuffer to ensure clean memory handling on mobile cameras
+      const arrayBuffer = await file.arrayBuffer();
+
+      finalBlob = await imglyRemoveBackground(arrayBuffer, {
+        output: { format: 'image/png' },
+        progress: (key, current, total) => {
+          if (statusEl && total) {
+            const pct = Math.round((current / total) * 100);
+            statusEl.innerText = `⏳ AI Processing Background: ${pct}%`;
+          }
+        }
+      });
     } else {
       finalBlob = await convertFileToPngBlob(file);
     }
@@ -8871,27 +8885,55 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
 
     if (statusEl) statusEl.innerText = "⏳ Uploading to Supabase Storage...";
 
-    // Upload Blob to Supabase Storage bucket ('product-images')
+    // Generate unique filename
     const fileName = `uploads/${Date.now()}_${Math.random().toString(36).substring(7)}.png`;
-    const { data, error } = await supabaseClient.storage.from('product-images').upload(fileName, finalBlob, {
-      contentType: 'image/png',
-      upsert: true
-    });
+
+    // Upload Blob to Supabase Storage
+    const { data, error } = await supabaseClient.storage
+      .from('product-images')
+      .upload(fileName, finalBlob, {
+        contentType: 'image/png',
+        upsert: true
+      });
 
     if (error) throw error;
 
     // Retrieve public link
-    const { data: publicUrlData } = supabaseClient.storage.from('product-images').getPublicUrl(fileName);
-    
+    const { data: publicUrlData } = supabaseClient.storage
+      .from('product-images')
+      .getPublicUrl(fileName);
+
     if (targetInput) targetInput.value = publicUrlData.publicUrl;
+
     if (statusEl) {
-      statusEl.innerText = "✅ Image processed & saved!";
+      statusEl.innerText = "✅ Background Removed & Uploaded!";
       setTimeout(() => { statusEl.style.display = "none"; }, 2500);
     }
 
   } catch (err) {
-    console.error("Image processing error:", err);
-    if (statusEl) statusEl.innerText = "⚠️ Upload failed. You can paste a URL manually.";
+    console.error("Image processing error details:", err);
+    if (statusEl) {
+      statusEl.innerText = "⚠️ Background removal failed. Uploading raw image instead...";
+    }
+    
+    // Fallback upload if AI removal errors out
+    try {
+      const fallbackBlob = await convertFileToPngBlob(file);
+      const fileName = `uploads/${Date.now()}_raw.png`;
+      
+      const { data } = await supabaseClient.storage
+        .from('product-images')
+        .upload(fileName, fallbackBlob, { contentType: 'image/png', upsert: true });
+
+      const { data: publicUrlData } = supabaseClient.storage
+        .from('product-images')
+        .getPublicUrl(fileName);
+
+      if (targetInput) targetInput.value = publicUrlData.publicUrl;
+      if (statusEl) statusEl.innerText = "✅ Raw Image Uploaded!";
+    } catch (fallbackErr) {
+      if (statusEl) statusEl.innerText = "⚠️ Upload failed entirely. Paste URL manually.";
+    }
   }
 }
 
