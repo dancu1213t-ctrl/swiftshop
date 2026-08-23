@@ -7291,75 +7291,93 @@ function enterApp() {
   };
 
  
-function render() {
-    const box = document.getElementById("products");
-    if (!box) return;
+async function render() {
+  const box = document.getElementById("products");
+  if (!box) return;
 
-    box.innerHTML = "";
+  box.innerHTML = "";
 
-    const filteredItems = allProducts.filter(p => p.category === cat);
+  // 1. Check if store is open in Supabase before rendering
+  const { data: storeData } = await supabaseClient
+    .from('stores')
+    .select('is_open')
+    .eq('category', cat)
+    .single();
 
-    if (filteredItems.length === 0) {
-      box.innerHTML = `
-        <div style="text-align:center; padding:50px 20px; color:#555;">
-          <div style="font-size:50px; margin-bottom:15px;">🔒</div>
-          <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
-        </div>`;
-      return;
-    }
+  const isOpen = storeData ? storeData.is_open : 'yes';
 
-    /* GROUP BY SUBCATEGORY */
-    const grouped = {};
-
-    filteredItems.forEach(p => {
-      if(!p.subcategory) return;   // skip items without subcategory
-      const sub = p.subcategory;
-      if (!grouped[sub]) grouped[sub] = [];
-      grouped[sub].push(p);
-    });
-
-    /* RENDER GROUPS */
-    Object.keys(grouped).forEach(sub => {
-      box.innerHTML += `
-        <div class="subcategory-title">${sub}</div>
-      `;
-
-      grouped[sub].forEach(p => {
-        let badgeHTML = "";
-        let wasPriceHTML = "";
-
-        if (p.was) {
-          const isNumeric = !isNaN(parseFloat(p.was)) && isFinite(p.was);
-          if (isNumeric && Number(p.was) > p.price) {
-            const savings = Math.round(((p.was - p.price) / p.was) * 100);
-            badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
-            wasPriceHTML = `<span class="price-was">$${Number(p.was).toFixed(2)}</span>`;
-          }
-        }
-
-        const displayPrice =
-          (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
-        const safeName = p.name.replace(/'/g, "\\'");
-
-        box.innerHTML += `
-          <div class="product">
-            ${badgeHTML}
-            <img src="${p.image}" onclick="openImage(this.src)">
-            <div class="product-info">
-              <strong>${p.name}</strong>
-              <div class="price">
-                ${wasPriceHTML}
-                $${displayPrice} BZD
-              </div>
-            </div>
-            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
-              Add
-            </button>
-          </div>
-        `;
-      });
-    });
+  if (isOpen === 'no') {
+    box.innerHTML = `
+      <div style="text-align:center; padding:50px 20px; color:#555;">
+        <div style="font-size:50px; margin-bottom:15px;">🔴</div>
+        <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
+        <p style="font-size:13px; color:#666; margin-top:5px;">This vendor is not accepting orders right now.</p>
+      </div>`;
+    return;
   }
+
+  const filteredItems = allProducts.filter(p => p.category === cat);
+
+  if (filteredItems.length === 0) {
+    box.innerHTML = `
+      <div style="text-align:center; padding:50px 20px; color:#555;">
+        <div style="font-size:50px; margin-bottom:15px;">🔒</div>
+        <h2 style="font-weight:900; color:#222;">No Items Available</h2>
+      </div>`;
+    return;
+  }
+
+  /* GROUP BY SUBCATEGORY */
+  const grouped = {};
+
+  filteredItems.forEach(p => {
+    if(!p.subcategory) return;   
+    const sub = p.subcategory;
+    if (!grouped[sub]) grouped[sub] = [];
+    grouped[sub].push(p);
+  });
+
+  /* RENDER GROUPS */
+  Object.keys(grouped).forEach(sub => {
+    box.innerHTML += `
+      <div class="subcategory-title">${sub}</div>
+    `;
+
+    grouped[sub].forEach(p => {
+      let badgeHTML = "";
+      let wasPriceHTML = "";
+
+      if (p.was) {
+        const isNumeric = !isNaN(parseFloat(p.was)) && isFinite(p.was);
+        if (isNumeric && Number(p.was) > p.price) {
+          const savings = Math.round(((p.was - p.price) / p.was) * 100);
+          badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
+          wasPriceHTML = `<span class="price-was">$${Number(p.was).toFixed(2)}</span>`;
+        }
+      }
+
+      const displayPrice = (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
+      const safeName = p.name.replace(/'/g, "\\'");
+
+      box.innerHTML += `
+        <div class="product">
+          ${badgeHTML}
+          <img src="${p.image}" onclick="openImage(this.src)">
+          <div class="product-info">
+            <strong>${p.name}</strong>
+            <div class="price">
+              ${wasPriceHTML}
+              $${displayPrice} BZD
+            </div>
+          </div>
+          <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
+            Add
+          </button>
+        </div>
+      `;
+    });
+  });
+}
   let searchIdleTimer = null;
   let lastSearchValue = "";
 
