@@ -8851,7 +8851,7 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
 
   if (statusEl) {
     statusEl.style.display = "block";
-    statusEl.innerText = removeBg ? "⏳ AI Removing Background... (Please wait)" : "⏳ Converting Image...";
+    statusEl.innerText = removeBg ? "⏳ Resizing photo for AI..." : "⏳ Converting Image...";
   }
 
   try {
@@ -8859,18 +8859,23 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
 
     if (removeBg) {
       if (typeof imglyRemoveBackground !== "function") {
-        throw new Error("IMG.LY library is not loaded in <head>");
+        throw new Error("IMG.LY library CDN script missing in <head>");
       }
 
-      // Convert file to ArrayBuffer to ensure clean memory handling on mobile cameras
-      const arrayBuffer = await file.arrayBuffer();
+      // 1. Resize photo down so mobile memory doesn't crash
+      const resizedBlob = await resizeImageForAI(file, 1024);
+      const arrayBuffer = await resizedBlob.arrayBuffer();
 
+      if (statusEl) statusEl.innerText = "⏳ AI Removing Background...";
+
+      // 2. Fetch assets explicitly from unpkg CDN
       finalBlob = await imglyRemoveBackground(arrayBuffer, {
+        publicPath: "https://static.imgly.com/packages/background-removal-data/1.4.5/dist/",
         output: { format: 'image/png' },
         progress: (key, current, total) => {
           if (statusEl && total) {
             const pct = Math.round((current / total) * 100);
-            statusEl.innerText = `⏳ AI Processing Background: ${pct}%`;
+            statusEl.innerText = `⏳ AI Processing: ${pct}%`;
           }
         }
       });
@@ -8878,17 +8883,15 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
       finalBlob = await convertFileToPngBlob(file);
     }
 
-    // Show Local Preview
+    // Show Preview
     const previewUrl = URL.createObjectURL(finalBlob);
     if (previewImg) previewImg.src = previewUrl;
     if (previewWrapper) previewWrapper.style.display = "block";
 
-    if (statusEl) statusEl.innerText = "⏳ Uploading to Supabase Storage...";
+    if (statusEl) statusEl.innerText = "⏳ Saving to Supabase...";
 
-    // Generate unique filename
     const fileName = `uploads/${Date.now()}_${Math.random().toString(36).substring(7)}.png`;
 
-    // Upload Blob to Supabase Storage
     const { data, error } = await supabaseClient.storage
       .from('product-images')
       .upload(fileName, finalBlob, {
@@ -8898,7 +8901,6 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
 
     if (error) throw error;
 
-    // Retrieve public link
     const { data: publicUrlData } = supabaseClient.storage
       .from('product-images')
       .getPublicUrl(fileName);
@@ -8906,22 +8908,19 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
     if (targetInput) targetInput.value = publicUrlData.publicUrl;
 
     if (statusEl) {
-      statusEl.innerText = "✅ Background Removed & Uploaded!";
+      statusEl.innerText = "✅ Background Removed & Saved!";
       setTimeout(() => { statusEl.style.display = "none"; }, 2500);
     }
 
   } catch (err) {
     console.error("Image processing error details:", err);
-    if (statusEl) {
-      statusEl.innerText = "⚠️ Background removal failed. Uploading raw image instead...";
-    }
+    if (statusEl) statusEl.innerText = "⚠️ AI Model Failed. Saving raw image...";
     
-    // Fallback upload if AI removal errors out
     try {
       const fallbackBlob = await convertFileToPngBlob(file);
       const fileName = `uploads/${Date.now()}_raw.png`;
       
-      const { data } = await supabaseClient.storage
+      await supabaseClient.storage
         .from('product-images')
         .upload(fileName, fallbackBlob, { contentType: 'image/png', upsert: true });
 
@@ -8930,13 +8929,12 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
         .getPublicUrl(fileName);
 
       if (targetInput) targetInput.value = publicUrlData.publicUrl;
-      if (statusEl) statusEl.innerText = "✅ Raw Image Uploaded!";
+      if (statusEl) statusEl.innerText = "✅ Raw Image Saved!";
     } catch (fallbackErr) {
-      if (statusEl) statusEl.innerText = "⚠️ Upload failed entirely. Paste URL manually.";
+      if (statusEl) statusEl.innerText = "⚠️ Upload failed. Paste URL manually.";
     }
   }
 }
-
 // Convert File object to pure PNG Blob via Canvas
 function convertFileToPngBlob(file) {
   return new Promise((resolve) => {
@@ -9293,6 +9291,132 @@ function openImage(src) {
 
   document.body.appendChild(check);
   setTimeout(() => check.remove(), 800);
+}
+  // Helper to downscale huge camera images before AI processing to prevent RAM crashes
+function resizeImageForAI(file, maxDimension = 1024) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      let width = img.width;
+      let height = img.height;
+
+      if (width > maxDimension || height > maxDimension) {
+        if (width > height) {
+          height = Math.round((height * maxDimension) / width);
+          width = maxDimension;
+        } else {
+          width = Math.round((width * maxDimension) / height);
+          height = maxDimension;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob((blob) => resolve(blob), 'image/png');
+    };
+  });
+}
+
+async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewImgId) {
+  const file = inputEl.files[0];
+  if (!file) return;
+
+  const prefix = targetInputId === 'adminProdImage' ? 'adminProd' : 'adminPromo';
+  const statusEl = document.getElementById(`${prefix}Status`);
+  const previewWrapper = document.getElementById(`${prefix}PreviewWrapper`);
+  const previewImg = document.getElementById(previewImgId);
+  const targetInput = document.getElementById(targetInputId);
+
+  if (statusEl) {
+    statusEl.style.display = "block";
+    statusEl.innerText = removeBg ? "⏳ Resizing photo for AI..." : "⏳ Converting Image...";
+  }
+
+  try {
+    let finalBlob;
+
+    if (removeBg) {
+      if (typeof imglyRemoveBackground !== "function") {
+        throw new Error("IMG.LY library CDN script missing in <head>");
+      }
+
+      // Step 1: Scale down huge camera image to prevent mobile browser RAM crash
+      const resizedBlob = await resizeImageForAI(file, 1024);
+      const arrayBuffer = await resizedBlob.arrayBuffer();
+
+      if (statusEl) statusEl.innerText = "⏳ AI Removing Background...";
+
+      // Step 2: Run AI removal with explicit public asset path
+      finalBlob = await imglyRemoveBackground(arrayBuffer, {
+        publicPath: "https://static.imgly.com/packages/background-removal-data/1.4.5/dist/",
+        output: { format: 'image/png' },
+        progress: (key, current, total) => {
+          if (statusEl && total) {
+            const pct = Math.round((current / total) * 100);
+            statusEl.innerText = `⏳ AI Processing: ${pct}%`;
+          }
+        }
+      });
+    } else {
+      finalBlob = await convertFileToPngBlob(file);
+    }
+
+    // Local Preview
+    const previewUrl = URL.createObjectURL(finalBlob);
+    if (previewImg) previewImg.src = previewUrl;
+    if (previewWrapper) previewWrapper.style.display = "block";
+
+    if (statusEl) statusEl.innerText = "⏳ Saving to Supabase...";
+
+    const fileName = `uploads/${Date.now()}_${Math.random().toString(36).substring(7)}.png`;
+
+    const { data, error } = await supabaseClient.storage
+      .from('product-images')
+      .upload(fileName, finalBlob, {
+        contentType: 'image/png',
+        upsert: true
+      });
+
+    if (error) throw error;
+
+    const { data: publicUrlData } = supabaseClient.storage
+      .from('product-images')
+      .getPublicUrl(fileName);
+
+    if (targetInput) targetInput.value = publicUrlData.publicUrl;
+
+    if (statusEl) {
+      statusEl.innerText = "✅ Background Removed & Saved!";
+      setTimeout(() => { statusEl.style.display = "none"; }, 2500);
+    }
+
+  } catch (err) {
+    console.error("Image processing error details:", err);
+    if (statusEl) statusEl.innerText = "⚠️ AI Model Failed. Saving raw image...";
+    
+    try {
+      const fallbackBlob = await convertFileToPngBlob(file);
+      const fileName = `uploads/${Date.now()}_raw.png`;
+      
+      await supabaseClient.storage
+        .from('product-images')
+        .upload(fileName, fallbackBlob, { contentType: 'image/png', upsert: true });
+
+      const { data: publicUrlData } = supabaseClient.storage
+        .from('product-images')
+        .getPublicUrl(fileName);
+
+      if (targetInput) targetInput.value = publicUrlData.publicUrl;
+      if (statusEl) statusEl.innerText = "✅ Raw Image Saved!";
+    } catch (fallbackErr) {
+      if (statusEl) statusEl.innerText = "⚠️ Upload failed. Paste URL manually.";
+    }
+  }
 }
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
