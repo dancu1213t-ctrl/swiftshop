@@ -2442,6 +2442,9 @@ box-shadow:
   padding: 15px 0;
 
   -webkit-overflow-scrolling: touch; /* smooth iPhone scroll */
+  scroll-snap-type: x mandatory;
+  padding-left: 16px;
+  padding-right: 16px;
 }
 
 /* hide scrollbar */
@@ -2455,17 +2458,15 @@ box-shadow:
   gap: 16px;
 
   min-width: max-content; /* prevents shrinking */
-
-  transition: opacity 0.5s ease-in-out;
 }
 
 /* 🔥 BIGGER VIDEO CARDS */
 .feature2-card {
   position: relative;
 
- width: 78%;
-max-width: 260px;
-height: 170px;
+  width: 78%;
+  max-width: 260px;
+  height: 170px;
 
   flex: 0 0 auto; /* 🔥 prevents shrinking */
 
@@ -2473,7 +2474,7 @@ height: 170px;
   overflow: hidden;
   cursor: pointer;
 
- box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   transition: transform 0.25s ease;
 
   background-color: #000;
@@ -2483,19 +2484,11 @@ height: 170px;
   background-size: cover;
   background-position: center;
 
-  
+  scroll-snap-align: start;
 }
 
 .feature2-card:active {
   transform: scale(0.98);
-}
-
-.feature2-slider {
-  scroll-snap-type: x mandatory;
-}
-
-.feature2-card {
-  scroll-snap-align: start;
 }
 
 
@@ -2519,8 +2512,8 @@ height: 170px;
   left: 10px;
   z-index: 3;
 
- background: rgba(0,0,0,0.75);
-backdrop-filter: blur(6px);
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
   color: white;
 
   font-size: 12px;
@@ -2529,15 +2522,6 @@ backdrop-filter: blur(6px);
 
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-/* FADE */
-.feature2-track.fade-out {
-  opacity: 0;
-}
-
-.feature2-track.fade-in {
-  opacity: 1;
 }
 
 /* 🔥 POP EFFECT */
@@ -2551,10 +2535,7 @@ backdrop-filter: blur(6px);
     opacity: 1;
   }
 }
-.feature2-slider {
-  padding-left: 16px;
-  padding-right: 16px;
-}
+
 .header,
 .hero,
 .top-banner {
