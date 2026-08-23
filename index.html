@@ -6,6 +6,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpkP-1hNTsxKVNmPhPP_J-SawsNZi3TIQ&libraries=places"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/imgly-background-removal.min.js"></script>
 
 
   <title>SwiftShop OW</title>
@@ -6459,7 +6460,7 @@ box-shadow:
     const geoOptions = {
       enableHighAccuracy: true, 
       timeout: 5000,            
-      maximumAge: 10000        
+      maximumAge: 10000         
     };
 
     if (navigator.geolocation) {
@@ -7597,7 +7598,7 @@ async function render() {
       return;
     }
 
-const [deliveryZone, fee] = selectedValue.split("|");
+    const [deliveryZone, fee] = selectedValue.split("|");
     const deliveryFee = parseFloat(fee);
     const itemsTotal = total;
     const grandTotal = itemsTotal + deliveryFee + tipAmount;
@@ -8416,7 +8417,7 @@ function toggleModalLike() {
   });
 
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-     PROFILE SCREEN LOGIC
+      PROFILE SCREEN LOGIC
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
   function openProfile() {
     // Show the profile screen
@@ -8837,6 +8838,79 @@ I have completed the Instant Fund Transfer and will attach my screenshot.`;
     const cConfirm = document.getElementById("creditConfirmScreen");
     if (cConfirm) cConfirm.style.display = "none";
   }
+
+// 📸 HANDLE IMAGE UPLOADS, PNG CONVERSION, BG REMOVAL & SUPABASE STORAGE
+async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewImgId) {
+  const file = inputEl.files[0];
+  if (!file) return;
+
+  const prefix = targetInputId === 'adminProdImage' ? 'adminProd' : 'adminPromo';
+  const statusEl = document.getElementById(`${prefix}Status`);
+  const previewWrapper = document.getElementById(`${prefix}PreviewWrapper`);
+  const previewImg = document.getElementById(previewImgId);
+  const targetInput = document.getElementById(targetInputId);
+
+  if (statusEl) {
+    statusEl.style.display = "block";
+    statusEl.innerText = removeBg ? "⏳ Removing background..." : "⏳ Converting to PNG...";
+  }
+
+  try {
+    let finalBlob;
+
+    if (removeBg && typeof imglyRemoveBackground === "function") {
+      finalBlob = await imglyRemoveBackground(file, { output: { format: 'image/png' } });
+    } else {
+      finalBlob = await convertFileToPngBlob(file);
+    }
+
+    // Show Local Preview
+    const previewUrl = URL.createObjectURL(finalBlob);
+    if (previewImg) previewImg.src = previewUrl;
+    if (previewWrapper) previewWrapper.style.display = "block";
+
+    if (statusEl) statusEl.innerText = "⏳ Uploading to Supabase Storage...";
+
+    // Upload Blob to Supabase Storage bucket ('product-images')
+    const fileName = `uploads/${Date.now()}_${Math.random().toString(36).substring(7)}.png`;
+    const { data, error } = await supabaseClient.storage.from('product-images').upload(fileName, finalBlob, {
+      contentType: 'image/png',
+      upsert: true
+    });
+
+    if (error) throw error;
+
+    // Retrieve public link
+    const { data: publicUrlData } = supabaseClient.storage.from('product-images').getPublicUrl(fileName);
+    
+    if (targetInput) targetInput.value = publicUrlData.publicUrl;
+    if (statusEl) {
+      statusEl.innerText = "✅ Image processed & saved!";
+      setTimeout(() => { statusEl.style.display = "none"; }, 2500);
+    }
+
+  } catch (err) {
+    console.error("Image processing error:", err);
+    if (statusEl) statusEl.innerText = "⚠️ Upload failed. You can paste a URL manually.";
+  }
+}
+
+// Convert File object to pure PNG Blob via Canvas
+function convertFileToPngBlob(file) {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      canvas.toBlob((blob) => resolve(blob), 'image/png');
+    };
+  });
+}
+
 // 👑 OPEN & CLOSE ADMIN PORTAL
 function openAdminPortal() {
   const savedName = localStorage.getItem("userName");
@@ -9179,7 +9253,6 @@ function openImage(src) {
   setTimeout(() => check.remove(), 800);
 }
 </script>
-
 <!-- 📝 SUGGEST ITEM MODAL -->
 <div id="suggestOverlay" class="suggest-overlay">
   <div class="suggest-box">
@@ -9563,8 +9636,21 @@ function selectTip(amount, element) {
           </div>
         </div>
 
-        <label style="display:block; font-size:11px; font-weight:700; color:#888; text-transform:uppercase; margin-bottom:6px;">Image Link</label>
-        <input id="adminProdImage" placeholder="https://i.imgur.com/..." style="width:100%; padding:14px; margin-bottom:20px; border-radius:12px; border:1.5px solid #e5e7eb; font-size:14px; outline:none; box-sizing:border-box;">
+      <label style="display:block; font-size:11px; font-weight:700; color:#888; text-transform:uppercase; margin-bottom:6px;">Product Image</label>
+        <div style="display:flex; gap:8px; margin-bottom:10px;">
+          <button type="button" onclick="document.getElementById('adminProdCamera').click()" style="flex:1; padding:10px; background:#111; color:#fff; border:none; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer;">📷 Camera (BG Removal)</button>
+          <button type="button" onclick="document.getElementById('adminProdFile').click()" style="flex:1; padding:10px; background:#f0f0f0; color:#333; border:none; border-radius:10px; font-weight:700; font-size:12px; cursor:pointer;">📁 Device Upload</button>
+        </div>
+
+        <input type="file" id="adminProdCamera" accept="image/*" capture="environment" style="display:none;" onchange="handleAdminImageUpload(this, true, 'adminProdImage', 'adminProdPreview')">
+        <input type="file" id="adminProdFile" accept="image/*" style="display:none;" onchange="handleAdminImageUpload(this, false, 'adminProdImage', 'adminProdPreview')">
+
+        <input id="adminProdImage" placeholder="https://i.imgur.com/..." style="width:100%; padding:14px; margin-bottom:10px; border-radius:12px; border:1.5px solid #e5e7eb; font-size:14px; outline:none; box-sizing:border-box;">
+
+        <div id="adminProdStatus" style="display:none; font-size:12px; color:#ff6a00; font-weight:700; margin-bottom:10px; text-align:center;">Processing image...</div>
+        <div id="adminProdPreviewWrapper" style="display:none; text-align:center; margin-bottom:14px;">
+          <img id="adminProdPreview" src="" style="width:100px; height:100px; object-fit:contain; border-radius:12px; border:1px solid #ddd; background:#f9f9f9;">
+        </div>
         
         <button onclick="adminAddProduct()" style="width:100%; padding:16px; background:linear-gradient(135deg, #ff9a00, #ff5a1f); color:#fff; border:none; border-radius:14px; font-weight:800; font-size:15px; cursor:pointer; box-shadow:0 6px 20px rgba(255,106,0,0.3); transition: transform 0.1s;">Save Product to Database</button>
       </div>
