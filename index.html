@@ -295,76 +295,30 @@
 }
 
 
-/* 🫧 Floating Cart Glow + Border Ring */
+/* 🫧 Custom Image Cart Bubble */
 #cartBubble {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  background: linear-gradient(135deg, #ff9000, #ff5a1f);
-  color: white;
-  width: 62px;
-  height: 62px;
+  width: 68px;
+  height: 68px;
+  background-image: url('https://i.imgur.com/7NRRAN0.png');
+  background-size: cover;
+  background-position: center;
   border-radius: 50%;
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
-  font-weight: 900;
   z-index: 1000;
   cursor: pointer;
-  overflow: visible;
-  animation: cartGlow 3s ease-in-out infinite;
-  box-shadow: 0 8px 24px rgba(255, 90, 31, 0.4);
+  box-shadow: 0 10px 25px rgba(255, 90, 31, 0.45);
+  border: 3px solid rgba(255, 255, 255, 0.9);
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 #cartBubble:active {
   transform: scale(0.92);
 }
-
-@keyframes cartGlow {
-  0%, 100% {
-    box-shadow: 0 8px 24px rgba(255, 90, 31, 0.4);
-    transform: scale(1);
-  }
-  50% {
-    box-shadow: 0 12px 30px rgba(255, 140, 0, 0.6);
-    transform: scale(1.04);
-  }
-}
-
-/* Stop glow when cart is open */
-#cartBubble.active {
-  animation: none;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-}
-
-/* 🟠 Outer ring */
-#cartBubble::before {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 170, 60, 0.6);
-  box-shadow: 0 0 10px rgba(255, 140, 0, 0.25);
-  animation: cartRingPulse 3s ease-in-out infinite;
-  pointer-events: none;
-}
-
-/* Ring pulse */
-@keyframes cartRingPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-  50% {
-    transform: scale(1.12);
-    opacity: 0.3;
-  }
-}
-
-
-
 /* ================= LOGO SLIDER (BUMP, GLOW & VERIFIED) ================= */
 .logo-slider-container {
   width: 100%;
@@ -7020,12 +6974,17 @@ backdrop-filter: blur(6px);
 
 function updateCartBubble() {
   const bubble = document.getElementById("cartBubble");
+  const countBadge = document.getElementById("cartItemCount");
   if (!bubble) return;
 
   const count = Object.values(cart).reduce((a, b) => a + b.q, 0);
   
   if (count > 0) {
     bubble.style.display = "flex";
+    if (countBadge) {
+      countBadge.style.display = "flex";
+      countBadge.textContent = count;
+    }
     
     // Trigger the pop animation whenever the count changes
     bubble.classList.remove("bubble-pop");
@@ -7033,6 +6992,7 @@ function updateCartBubble() {
     bubble.classList.add("bubble-pop");
   } else {
     bubble.style.display = "none";
+    if (countBadge) countBadge.style.display = "none";
   }
 }
 
@@ -9197,24 +9157,25 @@ function openImage(src) {
 <div id="thankYouToast">✅ Thank you for your order!</div>
 
 <!-- 🛒 Floating Cart Button -->
-<div id="cartBubble" onclick="openCart()" style="
-  position:fixed;
-  bottom:20px;
-  right:20px;
-  background:#ff9000;
-  color:white;
-  width:64px;
-  height:64px;
-  border-radius:50%;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  font-size:26px;
-  font-weight:900;
-  box-shadow:0 10px 25px rgba(0,0,0,0.3);
-  z-index:1000;
-">
-  🛒
+<div id="cartBubble" onclick="openCart()">
+  <span id="cartItemCount" style="
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #111;
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    display: none;
+  ">0</span>
 </div>
 
 <!-- 🧾 Cart Panel -->
