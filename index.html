@@ -7749,144 +7749,150 @@ async function render() {
     "FLOWER": "18.084406,-88.565955"
   };
 
-  function order() {
-    let forcedTotal = 0;
+  async function order() {
+  let forcedTotal = 0;
 
-    for (let name in cart) {
-      forcedTotal += cart[name].q * cart[name].p;
-    }
+  for (let name in cart) {
+    forcedTotal += cart[name].q * cart[name].p;
+  }
 
-    total = forcedTotal;
+  total = forcedTotal;
 
-    const userName = localStorage.getItem("userName") || "";
-    const userPhone = localStorage.getItem("userPhone") || "";
-    const tacoPlace = localStorage.getItem("tacoPlace");
-    const tacoOrder = localStorage.getItem("tacoOrder");
-    const hasTacos = !!tacoOrder;
+  const userName = localStorage.getItem("userName") || "";
+  const userPhone = localStorage.getItem("userPhone") || "";
+  const tacoPlace = localStorage.getItem("tacoPlace");
+  const tacoOrder = localStorage.getItem("tacoOrder");
+  const hasTacos = !!tacoOrder;
 
-    const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
-    const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
-    const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
+  const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
+  const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
+  const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
 
-    const orderNum = Math.floor(100 + Math.random() * 900);
+  const orderNum = Math.floor(100 + Math.random() * 900);
 
-    if (forcedTotal <= 0 && !hasTacos) {
-      alert("Your cart is empty");
-      return;
-    }
+  if (forcedTotal <= 0 && !hasTacos) {
+    alert("Your cart is empty");
+    return;
+  }
 
-    if (!window.lastCartCoords && total > 0) {
-      alert("Please pin your location on the map!");
-      return;
-    }
+  if (!window.lastCartCoords && total > 0) {
+    alert("Please pin your location on the map!");
+    return;
+  }
 
-    if (!window.lastCartZone) {
-      alert("Please select your delivery area");
-      return;
-    }
+  if (!window.lastCartZone) {
+    alert("Please select your delivery area");
+    return;
+  }
 
-    const deliverySelect = document.getElementById("deliveryZoneSelect");
-    const selectedValue = deliverySelect?.value;
+  const deliverySelect = document.getElementById("deliveryZoneSelect");
+  const selectedValue = deliverySelect?.value;
 
-    if (!selectedValue) {
-      alert("Please select your delivery area");
-      return;
-    }
+  if (!selectedValue) {
+    alert("Please select your delivery area");
+    return;
+  }
 
-    const [deliveryZone, fee] = selectedValue.split("|");
-    const deliveryFee = parseFloat(fee);
-    const itemsTotal = total;
-    const grandTotal = itemsTotal + deliveryFee + tipAmount;
-    const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
+  const [deliveryZone, fee] = selectedValue.split("|");
+  const deliveryFee = parseFloat(fee);
+  const itemsTotal = total;
+  const grandTotal = itemsTotal + deliveryFee + tipAmount;
+  const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
 
-    if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
-      alert(`Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`);
-      return;
-    }
+  if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
+    alert(`Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`);
+    return;
+  }
 
-    let msg = `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
-
-    const groupedCart = {};
+  // -------------------------------------------------------------
+  // 💾 1. BUILD & SUBMIT TO SUPABASE (Direct Database Order)
+  // -------------------------------------------------------------
+  try {
     const activeBusinesses = new Set();
+    const groupedCart = {};
 
-    if (itemsTotal > 0) {
-      msg += `ITEMS%0A`;
-      msg += `----------------------------%0A`;
-
-      for (let i in cart) {
-        const biz = (cart[i].cat || "GENERAL").toUpperCase();
-        activeBusinesses.add(biz);
-        if (!groupedCart[biz]) groupedCart[biz] = [];
-        groupedCart[biz].push({ name: i, details: cart[i] });
-      }
-
-      for (let bizName in groupedCart) {
-        msg += `${bizName}%0A`;
-
-        groupedCart[bizName].forEach(item => {
-          const price = item.details.p.toFixed(2);
-          msg += `- ${item.name}%0A`;
-          msg += `    Qty: ${item.details.q} x $${price} BZD%0A`;
-        });
-
-        msg += `----------------------------%0A`;
-      }
-
-      msg += `%0A`;
+    for (let i in cart) {
+      const biz = (cart[i].cat || "GENERAL").toUpperCase();
+      activeBusinesses.add(biz);
+      if (!groupedCart[biz]) groupedCart[biz] = [];
+      groupedCart[biz].push({ name: i, details: cart[i] });
     }
 
-    if (hasTacos) {
-      msg += `TACO ORDER%0A`;
-      msg += `PLACE: ${tacoPlace}%0A`;
-      msg += `----------------------------%0A`;
-      msg += `${tacoOrder}%0A`;
-      msg += `----------------------------%0A`;
+    const supabaseInserts = [];
 
-      msg += `RUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A`;
-      msg += `----------------------------%0A%0A`;
-    }
-
-    if (itemsTotal > 0) {
-      msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
-      msg += `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
-      
-      if (tipAmount > 0) {
-        msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
-      }
-
-      msg += `----------------------------%0A`;
-      msg += `GRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
-      msg += `PAYMENT METHOD: ${paymentMethod}%0A`;
-
-      if (paymentMethod.includes("Online")) {
-        msg += `Bank: Belize Bank%0A`;
-        msg += `Account Name: Danilo Cu%0A`;
-        msg += `Account Number: 275378010160000%0A`;
-      }
-
-      msg += `%0A`;
-    }
-
-    // 📍 DYNAMIC MULTI-STORE MAP LINKS WITH "RUNNER ROUTE" LABEL & BLACK LINE SEPARATOR
-    if (itemsTotal > 0) {
-      msg += `----------------------------%0A`;
-      msg += `RUNNER ROUTE:%0A`;
-      
+    if (activeBusinesses.size > 0) {
       activeBusinesses.forEach(bizName => {
-        const storeCoords = storeLocations[bizName] || storeLocations["GENERAL"];
-        const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
+        const storeCoords = (typeof storeLocations !== 'undefined' && storeLocations[bizName]) ? storeLocations[bizName] : "18.0777,-88.5667";
+        const mapRouteLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
         
-        msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
+        // Formats item list for merchant reading
+        let itemList = groupedCart[bizName].map(item => `- ${item.name} (Qty: ${item.details.q} x $${item.details.p.toFixed(2)})`).join("\n");
+
+        const storeOrderId = `ORD-${orderNum}-${bizName.substring(0, 3)}-${Date.now().toString().slice(-4)}`;
+
+        supabaseInserts.push({
+          order_id: storeOrderId,
+          customer_name: userName || 'Guest Customer',
+          phone: userPhone,
+          email: localStorage.getItem("userEmail") || null,
+          status: 'Pending',
+          active_status: 'Unassigned',
+          order_type: `Delivery from ${bizName} (${deliveryZone}) | ${itemList} | Total: $${grandTotal.toFixed(2)} BZD`,
+          gps_link: mapRouteLink
+        });
+      });
+    } else if (hasTacos) {
+      const tacoOrderId = `ORD-${orderNum}-TACO-${Date.now().toString().slice(-4)}`;
+      supabaseInserts.push({
+        order_id: tacoOrderId,
+        customer_name: userName || 'Guest Customer',
+        phone: userPhone,
+        email: localStorage.getItem("userEmail") || null,
+        status: 'Pending',
+        active_status: 'Unassigned',
+        order_type: `Taco Order from ${tacoPlace} (${deliveryZone}) | Details: ${tacoOrder}`,
+        gps_link: `https://www.google.com/maps/search/?api=1&query=${customerCoords}`
       });
     }
 
-    msg += `CUSTOMER: ${userName}%0A`;
-    msg += `PHONE: ${userPhone}`;
+    if (typeof supabaseClient === 'undefined') {
+      alert("Error: Supabase client is not initialized.");
+      return;
+    }
 
-    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
-    window.open(waUrl, "_blank");
+    const { error } = await supabaseClient
+      .from('orders')
+      .insert(supabaseInserts);
+
+    if (error) {
+      alert("Failed to submit order: " + error.message);
+      return;
+    }
+
+    // Save phone number locally so customer order history automatically filters
+    if (userPhone) {
+      localStorage.setItem('customerPhone', userPhone);
+    }
+
+    // Clear cart and local taco order upon success
+    if (typeof cart !== 'undefined') {
+      for (let member in cart) delete cart[member];
+    }
+    localStorage.removeItem("tacoOrder");
+    localStorage.removeItem("tacoPlace");
+
+    alert(`🎉 Order placed successfully! (Order #${orderNum})\n\nThe merchant has been notified and is preparing your order.`);
+
+    // Automatically launch customer "My Orders" tracker view
+    if (typeof openOrders === 'function') {
+      openOrders();
+    }
+
+  } catch (err) {
+    console.error("Failed to place order:", err);
+    alert("There was an error processing your order. Please try again.");
   }
-
+}
   function doneOrder() {
     // 1. Clear Taco Data from Storage
     localStorage.removeItem("tacoPlace");
