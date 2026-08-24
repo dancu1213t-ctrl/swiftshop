@@ -9614,59 +9614,71 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
     }
   }
 }
+// Safe string escape utility
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+
 // 🔊 AUDIO & STATE MANAGEMENT
 const alertSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
 let ordersSubscription = null;
 let isAudioMuted = false;
 
 async function openOrders() {
-  let screen = document.getElementById('orders-screen');
-  if (!screen) {
-    screen = document.createElement('div');
-    screen.id = 'orders-screen';
-    screen.className = 'orders-screen-overlay';
-    document.body.appendChild(screen);
+  try {
+    let screen = document.getElementById('orders-screen');
+    
+    // Create screen container if it doesn't exist
+    if (!screen) {
+      screen = document.createElement('div');
+      screen.id = 'orders-screen';
+      screen.className = 'orders-screen-overlay';
+      document.body.appendChild(screen);
+    }
+
+    const savedPhone = localStorage.getItem('customerPhone') || '';
+
+    // Render screen layout
+    screen.innerHTML = `
+      <div class="orders-header">
+        <div class="orders-header-title">
+          <button class="back-btn" onclick="closeOrders()">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          </button>
+          <h2>My Active Orders</h2>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button id="audioToggleBtn" class="refresh-btn" onclick="toggleAudioMute()">${isAudioMuted ? '🔕 Sound Off' : '🔔 Sound On'}</button>
+          <button class="refresh-btn" onclick="loadActiveOrders()">🔄 Refresh</button>
+        </div>
+      </div>
+
+      <div class="orders-filter-bar">
+        <input type="tel" id="customerPhoneFilter" placeholder="Enter phone # to filter..." value="${escapeHtml(savedPhone)}" oninput="saveAndFilterPhone(this.value)">
+      </div>
+
+      <div class="orders-content" id="orders-list-container">
+        <div class="orders-loading">Loading orders...</div>
+      </div>
+    `;
+
+    // Force screen visible first
+    screen.classList.add('active');
+
+    // Fetch orders and setup listeners
+    await loadActiveOrders();
+    listenToOrderUpdates();
+
+  } catch (err) {
+    console.error("Error launching My Orders screen:", err);
   }
-
-  // Get saved customer phone number if stored during checkout/login
-  const savedPhone = localStorage.getItem('customerPhone') || '';
-
-  screen.innerHTML = `
-    <div class="orders-header">
-      <div class="orders-header-title">
-        <button class="back-btn" onclick="closeOrders()">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        </button>
-        <h2>My Active Orders</h2>
-      </div>
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <button id="audioToggleBtn" class="refresh-btn" onclick="toggleAudioMute()">🔔 Sound On</button>
-        <button class="refresh-btn" onclick="loadActiveOrders()">🔄 Refresh</button>
-      </div>
-    </div>
-
-    <!-- Phone Filter Bar -->
-    <div class="orders-filter-bar">
-      <input type="tel" id="customerPhoneFilter" placeholder="Enter phone # to filter..." value="${escapeHtml(savedPhone)}" oninput="saveAndFilterPhone(this.value)">
-    </div>
-
-    <div class="orders-content" id="orders-list-container">
-      <div class="orders-loading">Loading orders...</div>
-    </div>
-  `;
-
-  screen.classList.add('active');
-
-  // Load orders and subscribe to real-time status updates
-  await loadActiveOrders();
-  listenToOrderUpdates();
 }
 
 function closeOrders() {
   const screen = document.getElementById('orders-screen');
   if (screen) screen.classList.remove('active');
   
-  if (ordersSubscription) {
+  if (ordersSubscription && typeof supabaseClient !== 'undefined') {
     supabaseClient.removeChannel(ordersSubscription);
     ordersSubscription = null;
   }
@@ -9688,16 +9700,22 @@ function saveAndFilterPhone(phone) {
 
 async function loadActiveOrders() {
   const container = document.getElementById('orders-list-container');
+  if (!container) return;
+
   const userPhone = (localStorage.getItem('customerPhone') || '').trim();
   
   try {
+    if (typeof supabaseClient === 'undefined') {
+      container.innerHTML = `<div class="orders-error">Supabase client is not connected.</div>`;
+      return;
+    }
+
     let query = supabaseClient
       .from('orders')
       .select('*')
       .neq('status', 'Delivered')
       .order('timestamp', { ascending: false });
 
-    // Filter by customer phone if entered
     if (userPhone.length > 0) {
       query = query.ilike('phone', `%${userPhone}%`);
     }
@@ -9743,11 +9761,12 @@ async function loadActiveOrders() {
 
   } catch (err) {
     console.error('Error fetching orders:', err);
-    container.innerHTML = `<div class="orders-error">Failed to load orders: ${err.message}</div>`;
+    container.innerHTML = `<div class="orders-error">Failed to load orders: ${escapeHtml(err.message)}</div>`;
   }
 }
 
 function listenToOrderUpdates() {
+  if (typeof supabaseClient === 'undefined') return;
   if (ordersSubscription) supabaseClient.removeChannel(ordersSubscription);
 
   ordersSubscription = supabaseClient
@@ -9762,12 +9781,10 @@ function listenToOrderUpdates() {
         const newStatus = (updatedOrder.status || '').toLowerCase();
         const oldStatus = (previousOrder.status || '').toLowerCase();
 
-        // Check if runner clicked "On the Way"
         if (newStatus.includes('way') && !oldStatus.includes('way')) {
           playAlertSound();
         }
 
-        // Re-render UI live
         loadActiveOrders();
       }
     )
@@ -9776,13 +9793,8 @@ function listenToOrderUpdates() {
 
 function playAlertSound() {
   if (isAudioMuted) return;
-  
   alertSound.currentTime = 0;
   alertSound.play().catch(err => console.warn('Autoplay prevented by browser:', err));
-}
-
-function escapeHtml(str) {
-  return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
 }
   
           
