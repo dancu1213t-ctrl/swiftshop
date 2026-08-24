@@ -4038,24 +4038,6 @@ box-shadow:
 .bubble-pop {
   animation: bubblePop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-    .orders-filter-bar {
-  padding: 8px 16px;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.orders-filter-bar input {
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid #cbd5e1;
-  font-size: 0.875rem;
-  outline: none;
-}
-
-.orders-filter-bar input:focus {
-  border-color: #059669;
-}
 /* Modern Customer Orders Screen Overhaul */
 .orders-screen-overlay {
   position: fixed;
@@ -4064,11 +4046,14 @@ box-shadow:
   width: 100vw;
   height: 100vh;
   background-color: #f8fafc;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.04) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.04) 0px, transparent 50%);
   z-index: 99999;
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   visibility: hidden;
 }
 
@@ -4077,65 +4062,132 @@ box-shadow:
   visibility: visible;
 }
 
+/* Header & Glass Control Bar */
 .orders-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 1.5rem;
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  padding: 1.25rem 1.75rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.orders-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .orders-header-title h2 {
   font-size: 1.25rem;
   font-weight: 800;
   color: #0f172a;
+  letter-spacing: -0.02em;
+  margin: 0;
 }
 
-.orders-filter-bar {
-  padding: 1rem 1.5rem;
+.back-btn {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 0.5rem;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background: #ea580c;
+  color: #ffffff;
+  border-color: #ea580c;
+  transform: translateX(-2px);
+}
+
+.refresh-btn {
   background: #ffffff;
+  border: 1px solid #cbd5e1;
+  padding: 0.5rem 0.85rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #334155;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.refresh-btn:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+}
+
+/* Premium Phone Filter Bar */
+.orders-filter-bar {
+  padding: 1rem 1.75rem;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
   border-bottom: 1px solid #e2e8f0;
 }
 
 .orders-filter-container {
   position: relative;
-  max-w: 600px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
 .orders-filter-container input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
-  border-radius: 0.85rem;
-  border: 1px solid #cbd5e1;
-  background: #f8fafc;
+  padding: 0.85rem 1rem 0.85rem 2.75rem;
+  border-radius: 1rem;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
+  color: #0f172a;
   outline: none;
-  transition: all 0.2s;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.orders-filter-container input::placeholder {
+  color: #94a3b8;
+  font-weight: 600;
 }
 
 .orders-filter-container input:focus {
   border-color: #ea580c;
   background: #ffffff;
-  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.12), 0 4px 12px rgba(0,0,0,0.05);
 }
 
 .orders-filter-icon {
   position: absolute;
-  left: 0.85rem;
+  left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: #94a3b8;
+  font-size: 1rem;
+  pointer-events: none;
+  opacity: 0.8;
 }
 
+/* Container & Cards Stack */
 .orders-content {
   flex: 1;
   overflow-y: auto;
-  padding: 1.5rem;
-  max-width: 800px;
+  padding: 1.75rem;
+  max-width: 720px;
   width: 100%;
   margin: 0 auto;
   display: flex;
@@ -4143,102 +4195,136 @@ box-shadow:
   gap: 1.25rem;
 }
 
-/* Card Visual Design */
 .order-card {
   background: #ffffff;
-  border-radius: 1.25rem;
-  padding: 1.25rem;
+  border-radius: 1.5rem;
+  padding: 1.35rem;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
-  transition: border-color 0.2s;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .order-card:hover {
   border-color: #fdba74;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px -10px rgba(234, 88, 12, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
 }
 
 .order-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 0.85rem;
+  padding-bottom: 0.9rem;
   border-bottom: 1px solid #f1f5f9;
 }
 
 .order-id-badge {
   font-weight: 800;
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   color: #ea580c;
   background: #fff7ed;
-  padding: 0.25rem 0.65rem;
-  border-radius: 0.5rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.65rem;
   border: 1px solid #ffedd5;
+  letter-spacing: 0.02em;
 }
 
+/* Status Chips */
 .order-status {
-  padding: 0.35rem 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.85rem;
   border-radius: 9999px;
   font-size: 0.725rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.04em;
+  border: 1px solid transparent;
 }
 
-.order-status.status-pending { background: #fef3c7; color: #b45309; }
-.order-status.status-preparing { background: #f3e8ff; color: #6b21a8; }
-.order-status.status-ready { background: #d1fae5; color: #047857; }
-.order-status.status-on-the-way { background: #dbeafe; color: #1d4ed8; }
+.order-status.status-pending {
+  background: #fef3c7;
+  color: #b45309;
+  border-color: #fde68a;
+}
 
+.order-status.status-preparing {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border-color: #e9d5ff;
+}
+
+.order-status.status-ready {
+  background: #d1fae5;
+  color: #047857;
+  border-color: #a7f3d0;
+}
+
+.order-status.status-on-the-way {
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+/* Metadata Grid */
 .order-info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
   margin: 1rem 0;
-  font-size: 0.825rem;
 }
 
 .info-item {
   background: #f8fafc;
-  padding: 0.65rem 0.85rem;
-  border-radius: 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.85rem;
   border: 1px solid #f1f5f9;
 }
 
 .info-label {
-  font-size: 0.7rem;
-  font-weight: 700;
+  font-size: 0.675rem;
+  font-weight: 800;
   color: #94a3b8;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .info-val {
   font-weight: 700;
-  color: #1e293b;
-  margin-top: 0.15rem;
+  color: #0f172a;
+  font-size: 0.825rem;
+  margin-top: 0.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-/* Parsed Items List UI */
+/* Items Breakdown */
 .order-items-wrapper {
   background: #f8fafc;
-  border-radius: 0.85rem;
-  padding: 0.85rem;
+  border-radius: 1rem;
+  padding: 1rem;
   border: 1px solid #f1f5f9;
-  margin-bottom: 1rem;
+  margin-bottom: 1.15rem;
 }
 
 .order-items-title {
-  font-size: 0.7rem;
+  font-size: 0.675rem;
   font-weight: 800;
   color: #64748b;
   text-transform: uppercase;
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.65rem;
 }
 
 .item-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.35rem 0;
+  padding: 0.45rem 0;
   font-size: 0.85rem;
   border-bottom: 1px dashed #e2e8f0;
 }
@@ -4250,39 +4336,58 @@ box-shadow:
 .item-name {
   font-weight: 700;
   color: #334155;
+  line-height: 1.4;
 }
 
 .order-grand-total {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 0.5rem;
+  padding-top: 0.65rem;
   margin-top: 0.5rem;
-  border-t: 2px solid #e2e8f0;
+  border-top: 2px solid #e2e8f0;
   font-weight: 800;
   font-size: 0.95rem;
   color: #0f172a;
 }
 
+/* Track GPS Button */
 .btn-action.location {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  padding: 0.75rem;
-  border-radius: 0.85rem;
-  background-color: #0284c7;
+  padding: 0.85rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   color: #ffffff;
   text-decoration: none;
   font-size: 0.825rem;
   font-weight: 800;
-  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
-  transition: background-color 0.2s;
+  letter-spacing: 0.01em;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-action.location:hover {
-  background-color: #0369a1;
+  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-action.location:active {
+  transform: scale(0.98);
+}
+
+/* Empty & Loading States */
+.orders-loading, .orders-empty, .orders-error {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  background: #ffffff;
+  border-radius: 1.5rem;
+  border: 2px dashed #e2e8f0;
+  color: #64748b;
 }
   </style>
 </head>
