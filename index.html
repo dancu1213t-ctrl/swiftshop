@@ -4038,357 +4038,6 @@ box-shadow:
 .bubble-pop {
   animation: bubblePop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-/* Modern Customer Orders Screen Overhaul */
-.orders-screen-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: #f8fafc;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.04) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.04) 0px, transparent 50%);
-  z-index: 99999;
-  display: flex;
-  flex-direction: column;
-  transform: translateX(100%);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  visibility: hidden;
-}
-
-.orders-screen-overlay.active {
-  transform: translateX(0);
-  visibility: visible;
-}
-
-/* Header & Glass Control Bar */
-.orders-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.25rem 1.75rem;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-.orders-header-title {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.orders-header-title h2 {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #0f172a;
-  letter-spacing: -0.02em;
-  margin: 0;
-}
-
-.back-btn {
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 0.75rem;
-  padding: 0.5rem;
-  color: #475569;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.back-btn:hover {
-  background: #ea580c;
-  color: #ffffff;
-  border-color: #ea580c;
-  transform: translateX(-2px);
-}
-
-.refresh-btn {
-  background: #ffffff;
-  border: 1px solid #cbd5e1;
-  padding: 0.5rem 0.85rem;
-  border-radius: 0.75rem;
-  font-size: 0.75rem;
-  font-weight: 800;
-  color: #334155;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-  transition: all 0.2s ease;
-}
-
-.refresh-btn:hover {
-  background: #f8fafc;
-  border-color: #94a3b8;
-  transform: translateY(-1px);
-}
-
-/* Premium Phone Filter Bar */
-.orders-filter-bar {
-  padding: 1rem 1.75rem;
-  background: rgba(255, 255, 255, 0.6);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.orders-filter-container {
-  position: relative;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.orders-filter-container input {
-  width: 100%;
-  padding: 0.85rem 1rem 0.85rem 2.75rem;
-  border-radius: 1rem;
-  border: 1.5px solid #cbd5e1;
-  background: #ffffff;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: #0f172a;
-  outline: none;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.orders-filter-container input::placeholder {
-  color: #94a3b8;
-  font-weight: 600;
-}
-
-.orders-filter-container input:focus {
-  border-color: #ea580c;
-  background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(234, 88, 12, 0.12), 0 4px 12px rgba(0,0,0,0.05);
-}
-
-.orders-filter-icon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1rem;
-  pointer-events: none;
-  opacity: 0.8;
-}
-
-/* Container & Cards Stack */
-.orders-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1.75rem;
-  max-width: 720px;
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-}
-
-.order-card {
-  background: #ffffff;
-  border-radius: 1.5rem;
-  padding: 1.35rem;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.04), 0 4px 6px -2px rgba(15, 23, 42, 0.02);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.order-card:hover {
-  border-color: #fdba74;
-  transform: translateY(-2px);
-  box-shadow: 0 16px 30px -10px rgba(234, 88, 12, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03);
-}
-
-.order-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 0.9rem;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.order-id-badge {
-  font-weight: 800;
-  font-size: 0.85rem;
-  color: #ea580c;
-  background: #fff7ed;
-  padding: 0.35rem 0.75rem;
-  border-radius: 0.65rem;
-  border: 1px solid #ffedd5;
-  letter-spacing: 0.02em;
-}
-
-/* Status Chips */
-.order-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.4rem 0.85rem;
-  border-radius: 9999px;
-  font-size: 0.725rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  border: 1px solid transparent;
-}
-
-.order-status.status-pending {
-  background: #fef3c7;
-  color: #b45309;
-  border-color: #fde68a;
-}
-
-.order-status.status-preparing {
-  background: #f3e8ff;
-  color: #6b21a8;
-  border-color: #e9d5ff;
-}
-
-.order-status.status-ready {
-  background: #d1fae5;
-  color: #047857;
-  border-color: #a7f3d0;
-}
-
-.order-status.status-on-the-way {
-  background: #dbeafe;
-  color: #1d4ed8;
-  border-color: #bfdbfe;
-}
-
-/* Metadata Grid */
-.order-info-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
-  margin: 1rem 0;
-}
-
-.info-item {
-  background: #f8fafc;
-  padding: 0.75rem 0.9rem;
-  border-radius: 0.85rem;
-  border: 1px solid #f1f5f9;
-}
-
-.info-label {
-  font-size: 0.675rem;
-  font-weight: 800;
-  color: #94a3b8;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.info-val {
-  font-weight: 700;
-  color: #0f172a;
-  font-size: 0.825rem;
-  margin-top: 0.2rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Items Breakdown */
-.order-items-wrapper {
-  background: #f8fafc;
-  border-radius: 1rem;
-  padding: 1rem;
-  border: 1px solid #f1f5f9;
-  margin-bottom: 1.15rem;
-}
-
-.order-items-title {
-  font-size: 0.675rem;
-  font-weight: 800;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.65rem;
-}
-
-.item-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.45rem 0;
-  font-size: 0.85rem;
-  border-bottom: 1px dashed #e2e8f0;
-}
-
-.item-row:last-child {
-  border-bottom: none;
-}
-
-.item-name {
-  font-weight: 700;
-  color: #334155;
-  line-height: 1.4;
-}
-
-.order-grand-total {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 0.65rem;
-  margin-top: 0.5rem;
-  border-top: 2px solid #e2e8f0;
-  font-weight: 800;
-  font-size: 0.95rem;
-  color: #0f172a;
-}
-
-/* Track GPS Button */
-.btn-action.location {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.85rem;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 0.825rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.25);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.btn-action.location:hover {
-  background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
-  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
-  transform: translateY(-1px);
-}
-
-.btn-action.location:active {
-  transform: scale(0.98);
-}
-
-/* Empty & Loading States */
-.orders-loading, .orders-empty, .orders-error {
-  text-align: center;
-  padding: 3.5rem 1.5rem;
-  background: #ffffff;
-  border-radius: 1.5rem;
-  border: 2px dashed #e2e8f0;
-  color: #64748b;
-}
   </style>
 </head>
 
@@ -4412,17 +4061,6 @@ box-shadow:
       <span>Profile</span>
     </button>
 
-
-<button class="panel-item" onclick="openOrders()">
-  <span class="menu-icon">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <path d="M16 10a4 4 0 0 1-8 0"></path>
-    </svg>
-  </span>
-  <span>My Orders</span>
-</button>
     <button class="panel-item" onclick="openFoodMap()">
       <span class="menu-icon">
         <svg viewBox="0 0 24 24"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"></path><path d="M15 2v20"></path><path d="M17 22H13"></path><path d="M6 2v6a3 3 0 0 0 3 3 3 3 0 0 0 3-3V2"></path><path d="M9 2v20"></path><path d="M7 22h4"></path></svg>
@@ -7919,150 +7557,144 @@ async function render() {
     "FLOWER": "18.084406,-88.565955"
   };
 
-  async function order() {
-  let forcedTotal = 0;
+  function order() {
+    let forcedTotal = 0;
 
-  for (let name in cart) {
-    forcedTotal += cart[name].q * cart[name].p;
-  }
+    for (let name in cart) {
+      forcedTotal += cart[name].q * cart[name].p;
+    }
 
-  total = forcedTotal;
+    total = forcedTotal;
 
-  const userName = localStorage.getItem("userName") || "";
-  const userPhone = localStorage.getItem("userPhone") || "";
-  const tacoPlace = localStorage.getItem("tacoPlace");
-  const tacoOrder = localStorage.getItem("tacoOrder");
-  const hasTacos = !!tacoOrder;
+    const userName = localStorage.getItem("userName") || "";
+    const userPhone = localStorage.getItem("userPhone") || "";
+    const tacoPlace = localStorage.getItem("tacoPlace");
+    const tacoOrder = localStorage.getItem("tacoOrder");
+    const hasTacos = !!tacoOrder;
 
-  const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
-  const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
-  const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
+    const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
+    const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
+    const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
 
-  const orderNum = Math.floor(100 + Math.random() * 900);
+    const orderNum = Math.floor(100 + Math.random() * 900);
 
-  if (forcedTotal <= 0 && !hasTacos) {
-    alert("Your cart is empty");
-    return;
-  }
+    if (forcedTotal <= 0 && !hasTacos) {
+      alert("Your cart is empty");
+      return;
+    }
 
-  if (!window.lastCartCoords && total > 0) {
-    alert("Please pin your location on the map!");
-    return;
-  }
+    if (!window.lastCartCoords && total > 0) {
+      alert("Please pin your location on the map!");
+      return;
+    }
 
-  if (!window.lastCartZone) {
-    alert("Please select your delivery area");
-    return;
-  }
+    if (!window.lastCartZone) {
+      alert("Please select your delivery area");
+      return;
+    }
 
-  const deliverySelect = document.getElementById("deliveryZoneSelect");
-  const selectedValue = deliverySelect?.value;
+    const deliverySelect = document.getElementById("deliveryZoneSelect");
+    const selectedValue = deliverySelect?.value;
 
-  if (!selectedValue) {
-    alert("Please select your delivery area");
-    return;
-  }
+    if (!selectedValue) {
+      alert("Please select your delivery area");
+      return;
+    }
 
-  const [deliveryZone, fee] = selectedValue.split("|");
-  const deliveryFee = parseFloat(fee);
-  const itemsTotal = total;
-  const grandTotal = itemsTotal + deliveryFee + tipAmount;
-  const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
+    const [deliveryZone, fee] = selectedValue.split("|");
+    const deliveryFee = parseFloat(fee);
+    const itemsTotal = total;
+    const grandTotal = itemsTotal + deliveryFee + tipAmount;
+    const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
 
-  if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
-    alert(`Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`);
-    return;
-  }
+    if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
+      alert(`Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`);
+      return;
+    }
 
-  // -------------------------------------------------------------
-  // 💾 1. BUILD & SUBMIT TO SUPABASE (Direct Database Order)
-  // -------------------------------------------------------------
-  try {
-    const activeBusinesses = new Set();
+    let msg = `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
+
     const groupedCart = {};
+    const activeBusinesses = new Set();
 
-    for (let i in cart) {
-      const biz = (cart[i].cat || "GENERAL").toUpperCase();
-      activeBusinesses.add(biz);
-      if (!groupedCart[biz]) groupedCart[biz] = [];
-      groupedCart[biz].push({ name: i, details: cart[i] });
-    }
+    if (itemsTotal > 0) {
+      msg += `ITEMS%0A`;
+      msg += `----------------------------%0A`;
 
-    const supabaseInserts = [];
+      for (let i in cart) {
+        const biz = (cart[i].cat || "GENERAL").toUpperCase();
+        activeBusinesses.add(biz);
+        if (!groupedCart[biz]) groupedCart[biz] = [];
+        groupedCart[biz].push({ name: i, details: cart[i] });
+      }
 
-    if (activeBusinesses.size > 0) {
-      activeBusinesses.forEach(bizName => {
-        const storeCoords = (typeof storeLocations !== 'undefined' && storeLocations[bizName]) ? storeLocations[bizName] : "18.0777,-88.5667";
-        const mapRouteLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
-        
-        // Formats item list for merchant reading
-        let itemList = groupedCart[bizName].map(item => `- ${item.name} (Qty: ${item.details.q} x $${item.details.p.toFixed(2)})`).join("\n");
+      for (let bizName in groupedCart) {
+        msg += `${bizName}%0A`;
 
-        const storeOrderId = `ORD-${orderNum}-${bizName.substring(0, 3)}-${Date.now().toString().slice(-4)}`;
-
-        supabaseInserts.push({
-          order_id: storeOrderId,
-          customer_name: userName || 'Guest Customer',
-          phone: userPhone,
-          email: localStorage.getItem("userEmail") || null,
-          status: 'Pending',
-          active_status: 'Unassigned',
-          order_type: `Delivery from ${bizName} (${deliveryZone}) | ${itemList} | Total: $${grandTotal.toFixed(2)} BZD`,
-          gps_link: mapRouteLink
+        groupedCart[bizName].forEach(item => {
+          const price = item.details.p.toFixed(2);
+          msg += `- ${item.name}%0A`;
+          msg += `    Qty: ${item.details.q} x $${price} BZD%0A`;
         });
+
+        msg += `----------------------------%0A`;
+      }
+
+      msg += `%0A`;
+    }
+
+    if (hasTacos) {
+      msg += `TACO ORDER%0A`;
+      msg += `PLACE: ${tacoPlace}%0A`;
+      msg += `----------------------------%0A`;
+      msg += `${tacoOrder}%0A`;
+      msg += `----------------------------%0A`;
+
+      msg += `RUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A`;
+      msg += `----------------------------%0A%0A`;
+    }
+
+    if (itemsTotal > 0) {
+      msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
+      msg += `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
+      
+      if (tipAmount > 0) {
+        msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
+      }
+
+      msg += `----------------------------%0A`;
+      msg += `GRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
+      msg += `PAYMENT METHOD: ${paymentMethod}%0A`;
+
+      if (paymentMethod.includes("Online")) {
+        msg += `Bank: Belize Bank%0A`;
+        msg += `Account Name: Danilo Cu%0A`;
+        msg += `Account Number: 275378010160000%0A`;
+      }
+
+      msg += `%0A`;
+    }
+
+    // 📍 DYNAMIC MULTI-STORE MAP LINKS WITH "RUNNER ROUTE" LABEL & BLACK LINE SEPARATOR
+    if (itemsTotal > 0) {
+      msg += `----------------------------%0A`;
+      msg += `RUNNER ROUTE:%0A`;
+      
+      activeBusinesses.forEach(bizName => {
+        const storeCoords = storeLocations[bizName] || storeLocations["GENERAL"];
+        const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
+        
+        msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
       });
-    } else if (hasTacos) {
-      const tacoOrderId = `ORD-${orderNum}-TACO-${Date.now().toString().slice(-4)}`;
-      supabaseInserts.push({
-        order_id: tacoOrderId,
-        customer_name: userName || 'Guest Customer',
-        phone: userPhone,
-        email: localStorage.getItem("userEmail") || null,
-        status: 'Pending',
-        active_status: 'Unassigned',
-        order_type: `Taco Order from ${tacoPlace} (${deliveryZone}) | Details: ${tacoOrder}`,
-        gps_link: `https://www.google.com/maps/search/?api=1&query=${customerCoords}`
-      });
     }
 
-    if (typeof supabaseClient === 'undefined') {
-      alert("Error: Supabase client is not initialized.");
-      return;
-    }
+    msg += `CUSTOMER: ${userName}%0A`;
+    msg += `PHONE: ${userPhone}`;
 
-    const { error } = await supabaseClient
-      .from('orders')
-      .insert(supabaseInserts);
-
-    if (error) {
-      alert("Failed to submit order: " + error.message);
-      return;
-    }
-
-    // Save phone number locally so customer order history automatically filters
-    if (userPhone) {
-      localStorage.setItem('customerPhone', userPhone);
-    }
-
-    // Clear cart and local taco order upon success
-    if (typeof cart !== 'undefined') {
-      for (let member in cart) delete cart[member];
-    }
-    localStorage.removeItem("tacoOrder");
-    localStorage.removeItem("tacoPlace");
-
-    alert(`🎉 Order placed successfully! (Order #${orderNum})\n\nThe merchant has been notified and is preparing your order.`);
-
-    // Automatically launch customer "My Orders" tracker view
-    if (typeof openOrders === 'function') {
-      openOrders();
-    }
-
-  } catch (err) {
-    console.error("Failed to place order:", err);
-    alert("There was an error processing your order. Please try again.");
+    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
+    window.open(waUrl, "_blank");
   }
-}
+
   function doneOrder() {
     // 1. Clear Taco Data from Storage
     localStorage.removeItem("tacoPlace");
@@ -9790,219 +9422,6 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
     }
   }
 }
-// Safe string escape utility
-function escapeHtml(str) {
-  return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
-}
-
-// 🔊 AUDIO & STATE MANAGEMENT
-const alertSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
-let ordersSubscription = null;
-let isAudioMuted = false;
-
-async function openOrders() {
-  let screen = document.getElementById('orders-screen');
-  if (!screen) {
-    screen = document.createElement('div');
-    screen.id = 'orders-screen';
-    screen.className = 'orders-screen-overlay';
-    document.body.appendChild(screen);
-  }
-
-  const savedPhone = localStorage.getItem('customerPhone') || '';
-
-  screen.innerHTML = `
-    <div class="orders-header">
-      <div class="orders-header-title">
-        <button class="back-btn" onclick="closeOrders()">
-          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-        </button>
-        <h2>My Active Orders</h2>
-      </div>
-      <div style="display: flex; gap: 8px; align-items: center;">
-        <button id="audioToggleBtn" class="refresh-btn" onclick="toggleAudioMute()">${isAudioMuted ? '🔕 Sound Off' : '🔔 Sound On'}</button>
-        <button class="refresh-btn" onclick="loadActiveOrders()">🔄 Refresh</button>
-      </div>
-    </div>
-
-    <div class="orders-filter-bar">
-      <div class="orders-filter-container">
-        <span class="orders-filter-icon">📞</span>
-        <input type="tel" id="customerPhoneFilter" placeholder="Enter phone # to filter your orders..." value="${escapeHtml(savedPhone)}" oninput="saveAndFilterPhone(this.value)">
-      </div>
-    </div>
-
-    <div class="orders-content" id="orders-list-container">
-      <div class="orders-loading">Loading orders...</div>
-    </div>
-  `;
-
-  screen.classList.add('active');
-  await loadActiveOrders();
-  listenToOrderUpdates();
-}
-
-function closeOrders() {
-  const screen = document.getElementById('orders-screen');
-  if (screen) screen.classList.remove('active');
-  
-  if (ordersSubscription && typeof supabaseClient !== 'undefined') {
-    supabaseClient.removeChannel(ordersSubscription);
-    ordersSubscription = null;
-  }
-}
-
-function toggleAudioMute() {
-  isAudioMuted = !isAudioMuted;
-  const btn = document.getElementById('audioToggleBtn');
-  if (btn) {
-    btn.innerText = isAudioMuted ? '🔕 Sound Off' : '🔔 Sound On';
-  }
-}
-
-function saveAndFilterPhone(phone) {
-  const cleanPhone = phone.trim();
-  localStorage.setItem('customerPhone', cleanPhone);
-  loadActiveOrders();
-}
-
-async function loadActiveOrders() {
-  const container = document.getElementById('orders-list-container');
-  if (!container) return;
-
-  const userPhone = (localStorage.getItem('customerPhone') || '').trim();
-
-  try {
-    let query = supabaseClient
-      .from('orders')
-      .select('*')
-      .neq('status', 'Delivered')
-      .order('timestamp', { ascending: false });
-
-    if (userPhone.length > 0) {
-      query = query.ilike('phone', `%${userPhone}%`);
-    }
-
-    const { data: orders, error } = await query;
-    if (error) throw error;
-
-    if (!orders || orders.length === 0) {
-      container.innerHTML = `
-        <div class="orders-empty">
-          <p class="font-bold text-slate-700">${userPhone ? 'No active orders found for this phone number.' : 'No active orders right now.'}</p>
-          <p class="text-xs text-slate-400 mt-1">Enter your phone number above to filter orders.</p>
-        </div>`;
-      return;
-    }
-
-    container.innerHTML = orders.map(order => {
-      const statusText = order.status || 'Pending';
-      const runnerAssigned = (order.active_status && order.active_status !== 'Unassigned') ? order.active_status : 'Assigning Driver...';
-      
-      // Parse Line Items & Totals from order_type string
-      const rawText = order.order_type || '';
-      const parts = rawText.split('|').map(s => s.trim());
-      const storeHeader = parts[0] || 'Delivery Order';
-      
-      const lineItems = parts.filter(p => p.startsWith('-'));
-      const totalPart = parts.find(p => p.toLowerCase().includes('total:')) || '';
-
-      let itemsHTML = '';
-      if (lineItems.length > 0) {
-        itemsHTML = lineItems.map(item => `
-          <div class="item-row">
-            <span class="item-name">${escapeHtml(item.replace(/^-/, '').trim())}</span>
-          </div>
-        `).join('');
-      } else {
-        itemsHTML = `<div class="item-row"><span class="item-name">${escapeHtml(rawText)}</span></div>`;
-      }
-
-      return `
-        <div class="order-card">
-          <div class="order-card-header">
-            <span class="order-id-badge">#${escapeHtml(String(order.order_id).slice(-8))}</span>
-            <span class="order-status status-${statusText.toLowerCase().replace(/\s+/g, '-')}">${escapeHtml(statusText)}</span>
-          </div>
-
-          <div class="order-info-grid">
-            <div class="info-item">
-              <div class="info-label">Customer</div>
-              <div class="info-val">${escapeHtml(order.customer_name || 'Guest')}</div>
-            </div>
-            <div class="info-item">
-              <div class="info-label">Assigned Driver</div>
-              <div class="info-val">🛵 ${escapeHtml(runnerAssigned)}</div>
-            </div>
-            <div class="info-item">
-              <div class="info-label">Store / Service</div>
-              <div class="info-val">${escapeHtml(storeHeader)}</div>
-            </div>
-            <div class="info-item">
-              <div class="info-label">Order Time</div>
-              <div class="info-val">${new Date(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
-            </div>
-          </div>
-
-          <div class="order-items-wrapper">
-            <div class="order-items-title">Order Breakdown</div>
-            ${itemsHTML}
-            ${totalPart ? `
-              <div class="order-grand-total">
-                <span>Grand Total</span>
-                <span class="text-emerald-600">${escapeHtml(totalPart.replace(/Total:/i, '').trim())}</span>
-              </div>
-            ` : ''}
-          </div>
-
-          ${order.gps_link ? `
-            <a href="${escapeHtml(order.gps_link)}" target="_blank" class="btn-action location">
-              <span>🗺️ Track Runner GPS Route</span>
-            </a>
-          ` : ''}
-        </div>
-      `;
-    }).join('');
-
-  } catch (err) {
-    console.error('Error fetching orders:', err);
-    container.innerHTML = `<div class="orders-error">Failed to load orders: ${escapeHtml(err.message)}</div>`;
-  }
-}
-
-function listenToOrderUpdates() {
-  if (typeof supabaseClient === 'undefined') return;
-  if (ordersSubscription) supabaseClient.removeChannel(ordersSubscription);
-
-  ordersSubscription = supabaseClient
-    .channel('customer-orders-realtime')
-    .on(
-      'postgres_changes',
-      { event: 'UPDATE', schema: 'public', table: 'orders' },
-      (payload) => {
-        const updatedOrder = payload.new;
-        const previousOrder = payload.old;
-
-        const newStatus = (updatedOrder.status || '').toLowerCase();
-        const oldStatus = (previousOrder.status || '').toLowerCase();
-
-        if (newStatus.includes('way') && !oldStatus.includes('way')) {
-          playAlertSound();
-        }
-
-        loadActiveOrders();
-      }
-    )
-    .subscribe();
-}
-
-function playAlertSound() {
-  if (isAudioMuted) return;
-  alertSound.currentTime = 0;
-  alertSound.play().catch(err => console.warn('Autoplay prevented by browser:', err));
-}
-  
-          
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
 <div id="suggestOverlay" class="suggest-overlay">
@@ -10506,30 +9925,3 @@ function selectTip(amount, element) {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
