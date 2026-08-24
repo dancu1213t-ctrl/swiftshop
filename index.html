@@ -4056,7 +4056,7 @@ box-shadow:
 .orders-filter-bar input:focus {
   border-color: #059669;
 }
-    /* Fullscreen Screen Overlay for Orders */
+/* Modern Customer Orders Screen Overhaul */
 .orders-screen-overlay {
   position: fixed;
   top: 0;
@@ -4064,7 +4064,7 @@ box-shadow:
   width: 100vw;
   height: 100vh;
   background-color: #f8fafc;
-  z-index: 99999; /* Forces overlay over all other elements */
+  z-index: 99999;
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
@@ -4077,147 +4077,212 @@ box-shadow:
   visibility: visible;
 }
 
-/* Header & Controls */
 .orders-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 1.25rem 1.5rem;
   background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
 }
 
-.orders-header-title {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.orders-header h2 {
-  margin: 0;
-  font-size: 1.125rem;
+.orders-header-title h2 {
+  font-size: 1.25rem;
   font-weight: 800;
   color: #0f172a;
 }
 
-.back-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  color: #475569;
-  display: flex;
-  align-items: center;
-}
-
-.refresh-btn {
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  padding: 0.4rem 0.75rem;
-  border-radius: 0.5rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  color: #334155;
-}
-
-.refresh-btn:hover {
-  background: #e2e8f0;
-}
-
-/* Filter Input */
 .orders-filter-bar {
-  padding: 0.75rem 1rem;
+  padding: 1rem 1.5rem;
   background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
 }
 
-.orders-filter-bar input {
+.orders-filter-container {
+  position: relative;
+  max-w: 600px;
+  margin: 0 auto;
+}
+
+.orders-filter-container input {
   width: 100%;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border-radius: 0.85rem;
   border: 1px solid #cbd5e1;
+  background: #f8fafc;
   font-size: 0.875rem;
+  font-weight: 600;
   outline: none;
+  transition: all 0.2s;
 }
 
-.orders-filter-bar input:focus {
-  border-color: #059669;
+.orders-filter-container input:focus {
+  border-color: #ea580c;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
 }
 
-/* Scrollable Content & Cards */
+.orders-filter-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+}
+
 .orders-content {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 1.5rem;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
+/* Card Visual Design */
 .order-card {
   background: #ffffff;
-  border-radius: 1rem;
-  padding: 1rem;
+  border-radius: 1.25rem;
+  padding: 1.25rem;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+  transition: border-color 0.2s;
+}
+
+.order-card:hover {
+  border-color: #fdba74;
 }
 
 .order-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.85rem;
   border-bottom: 1px solid #f1f5f9;
 }
 
-.order-id {
+.order-id-badge {
   font-weight: 800;
   font-size: 0.875rem;
-  color: #0f172a;
+  color: #ea580c;
+  background: #fff7ed;
+  padding: 0.25rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ffedd5;
 }
 
 .order-status {
-  padding: 0.25rem 0.6rem;
+  padding: 0.35rem 0.85rem;
   border-radius: 9999px;
-  font-size: 0.7rem;
+  font-size: 0.725rem;
   font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.order-status.status-pending { background: #fef3c7; color: #b45309; }
+.order-status.status-preparing { background: #f3e8ff; color: #6b21a8; }
+.order-status.status-ready { background: #d1fae5; color: #047857; }
+.order-status.status-on-the-way { background: #dbeafe; color: #1d4ed8; }
+
+.order-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+  font-size: 0.825rem;
+}
+
+.info-item {
+  background: #f8fafc;
+  padding: 0.65rem 0.85rem;
+  border-radius: 0.75rem;
+  border: 1px solid #f1f5f9;
+}
+
+.info-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #94a3b8;
   text-transform: uppercase;
 }
 
-/* Status Badges */
-.order-status.status-pending { background: #fef3c7; color: #d97706; }
-.order-status.status-ready { background: #fef3c7; color: #b45309; }
-.order-status.status-claimed { background: #e0f2fe; color: #0369a1; }
-.order-status.status-on-the-way { background: #dbeafe; color: #1d4ed8; }
-.order-status.status-delivered { background: #d1fae5; color: #047857; }
+.info-val {
+  font-weight: 700;
+  color: #1e293b;
+  margin-top: 0.15rem;
+}
 
-.order-card-body p {
-  margin: 0.25rem 0;
-  font-size: 0.875rem;
+/* Parsed Items List UI */
+.order-items-wrapper {
+  background: #f8fafc;
+  border-radius: 0.85rem;
+  padding: 0.85rem;
+  border: 1px solid #f1f5f9;
+  margin-bottom: 1rem;
+}
+
+.order-items-title {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0;
+  font-size: 0.85rem;
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.item-row:last-child {
+  border-bottom: none;
+}
+
+.item-name {
+  font-weight: 700;
   color: #334155;
 }
 
-.btn-action.location {
-  display: inline-block;
-  margin-top: 0.75rem;
-  width: 100%;
-  text-align: center;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  background-color: #0284c7;
-  color: white;
-  text-decoration: none;
-  font-size: 0.75rem;
-  font-weight: 700;
+.order-grand-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+  border-t: 2px solid #e2e8f0;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #0f172a;
 }
 
-.orders-loading, .orders-empty, .orders-error {
-  text-align: center;
-  padding: 3rem 1rem;
-  color: #64748b;
-  font-size: 0.875rem;
+.btn-action.location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.85rem;
+  background-color: #0284c7;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.825rem;
+  font-weight: 800;
+  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.2);
+  transition: background-color 0.2s;
+}
+
+.btn-action.location:hover {
+  background-color: #0369a1;
 }
   </style>
 </head>
@@ -9631,53 +9696,45 @@ let ordersSubscription = null;
 let isAudioMuted = false;
 
 async function openOrders() {
-  try {
-    let screen = document.getElementById('orders-screen');
-    
-    // Create screen container if it doesn't exist
-    if (!screen) {
-      screen = document.createElement('div');
-      screen.id = 'orders-screen';
-      screen.className = 'orders-screen-overlay';
-      document.body.appendChild(screen);
-    }
-
-    const savedPhone = localStorage.getItem('customerPhone') || '';
-
-    // Render screen layout
-    screen.innerHTML = `
-      <div class="orders-header">
-        <div class="orders-header-title">
-          <button class="back-btn" onclick="closeOrders()">
-            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-          </button>
-          <h2>My Active Orders</h2>
-        </div>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <button id="audioToggleBtn" class="refresh-btn" onclick="toggleAudioMute()">${isAudioMuted ? '🔕 Sound Off' : '🔔 Sound On'}</button>
-          <button class="refresh-btn" onclick="loadActiveOrders()">🔄 Refresh</button>
-        </div>
-      </div>
-
-      <div class="orders-filter-bar">
-        <input type="tel" id="customerPhoneFilter" placeholder="Enter phone # to filter..." value="${escapeHtml(savedPhone)}" oninput="saveAndFilterPhone(this.value)">
-      </div>
-
-      <div class="orders-content" id="orders-list-container">
-        <div class="orders-loading">Loading orders...</div>
-      </div>
-    `;
-
-    // Force screen visible first
-    screen.classList.add('active');
-
-    // Fetch orders and setup listeners
-    await loadActiveOrders();
-    listenToOrderUpdates();
-
-  } catch (err) {
-    console.error("Error launching My Orders screen:", err);
+  let screen = document.getElementById('orders-screen');
+  if (!screen) {
+    screen = document.createElement('div');
+    screen.id = 'orders-screen';
+    screen.className = 'orders-screen-overlay';
+    document.body.appendChild(screen);
   }
+
+  const savedPhone = localStorage.getItem('customerPhone') || '';
+
+  screen.innerHTML = `
+    <div class="orders-header">
+      <div class="orders-header-title">
+        <button class="back-btn" onclick="closeOrders()">
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        </button>
+        <h2>My Active Orders</h2>
+      </div>
+      <div style="display: flex; gap: 8px; align-items: center;">
+        <button id="audioToggleBtn" class="refresh-btn" onclick="toggleAudioMute()">${isAudioMuted ? '🔕 Sound Off' : '🔔 Sound On'}</button>
+        <button class="refresh-btn" onclick="loadActiveOrders()">🔄 Refresh</button>
+      </div>
+    </div>
+
+    <div class="orders-filter-bar">
+      <div class="orders-filter-container">
+        <span class="orders-filter-icon">📞</span>
+        <input type="tel" id="customerPhoneFilter" placeholder="Enter phone # to filter your orders..." value="${escapeHtml(savedPhone)}" oninput="saveAndFilterPhone(this.value)">
+      </div>
+    </div>
+
+    <div class="orders-content" id="orders-list-container">
+      <div class="orders-loading">Loading orders...</div>
+    </div>
+  `;
+
+  screen.classList.add('active');
+  await loadActiveOrders();
+  listenToOrderUpdates();
 }
 
 function closeOrders() {
@@ -9709,13 +9766,8 @@ async function loadActiveOrders() {
   if (!container) return;
 
   const userPhone = (localStorage.getItem('customerPhone') || '').trim();
-  
-  try {
-    if (typeof supabaseClient === 'undefined') {
-      container.innerHTML = `<div class="orders-error">Supabase client is not connected.</div>`;
-      return;
-    }
 
+  try {
     let query = supabaseClient
       .from('orders')
       .select('*')
@@ -9727,39 +9779,81 @@ async function loadActiveOrders() {
     }
 
     const { data: orders, error } = await query;
-
     if (error) throw error;
 
     if (!orders || orders.length === 0) {
       container.innerHTML = `
         <div class="orders-empty">
-          <p>${userPhone ? 'No active orders found for this phone number.' : 'No active orders right now.'}</p>
+          <p class="font-bold text-slate-700">${userPhone ? 'No active orders found for this phone number.' : 'No active orders right now.'}</p>
+          <p class="text-xs text-slate-400 mt-1">Enter your phone number above to filter orders.</p>
         </div>`;
       return;
     }
 
     container.innerHTML = orders.map(order => {
       const statusText = order.status || 'Pending';
-      const runnerAssigned = (order.active_status && order.active_status !== 'Unassigned') ? order.active_status : 'Assigning Runner...';
+      const runnerAssigned = (order.active_status && order.active_status !== 'Unassigned') ? order.active_status : 'Assigning Driver...';
       
+      // Parse Line Items & Totals from order_type string
+      const rawText = order.order_type || '';
+      const parts = rawText.split('|').map(s => s.trim());
+      const storeHeader = parts[0] || 'Delivery Order';
+      
+      const lineItems = parts.filter(p => p.startsWith('-'));
+      const totalPart = parts.find(p => p.toLowerCase().includes('total:')) || '';
+
+      let itemsHTML = '';
+      if (lineItems.length > 0) {
+        itemsHTML = lineItems.map(item => `
+          <div class="item-row">
+            <span class="item-name">${escapeHtml(item.replace(/^-/, '').trim())}</span>
+          </div>
+        `).join('');
+      } else {
+        itemsHTML = `<div class="item-row"><span class="item-name">${escapeHtml(rawText)}</span></div>`;
+      }
+
       return `
         <div class="order-card">
           <div class="order-card-header">
-            <span class="order-id">#${escapeHtml(String(order.order_id).slice(-8))}</span>
+            <span class="order-id-badge">#${escapeHtml(String(order.order_id).slice(-8))}</span>
             <span class="order-status status-${statusText.toLowerCase().replace(/\s+/g, '-')}">${escapeHtml(statusText)}</span>
           </div>
-          
-          <div class="order-card-body">
-            <p><strong>Customer:</strong> ${escapeHtml(order.customer_name || 'Guest')}</p>
-            <p><strong>Order Type:</strong> ${escapeHtml(order.order_type || 'Delivery')}</p>
-            <p><strong>Runner:</strong> 🛵 ${escapeHtml(runnerAssigned)}</p>
-            <p><strong>Time:</strong> ${new Date(order.timestamp).toLocaleString()}</p>
+
+          <div class="order-info-grid">
+            <div class="info-item">
+              <div class="info-label">Customer</div>
+              <div class="info-val">${escapeHtml(order.customer_name || 'Guest')}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Assigned Driver</div>
+              <div class="info-val">🛵 ${escapeHtml(runnerAssigned)}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Store / Service</div>
+              <div class="info-val">${escapeHtml(storeHeader)}</div>
+            </div>
+            <div class="info-item">
+              <div class="info-label">Order Time</div>
+              <div class="info-val">${new Date(order.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+            </div>
+          </div>
+
+          <div class="order-items-wrapper">
+            <div class="order-items-title">Order Breakdown</div>
+            ${itemsHTML}
+            ${totalPart ? `
+              <div class="order-grand-total">
+                <span>Grand Total</span>
+                <span class="text-emerald-600">${escapeHtml(totalPart.replace(/Total:/i, '').trim())}</span>
+              </div>
+            ` : ''}
           </div>
 
           ${order.gps_link ? `
-            <div class="order-card-actions">
-              <a href="${escapeHtml(order.gps_link)}" target="_blank" class="btn-action location">🗺️ Track GPS Location</a>
-            </div>
+            <a href="${escapeHtml(order.gps_link)}" target="_blank" class="btn-action location">
+              <span>🗺️ Track Runner GPS Route</span>
+            </a>
           ` : ''}
         </div>
       `;
