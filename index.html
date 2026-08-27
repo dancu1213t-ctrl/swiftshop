@@ -8345,29 +8345,28 @@ function toggleModalLike() {
     let index2 = 0;
     const visibleCount2 = 3;
 
-    function rotateFeatures2() {
-      track2.classList.add("fade-out");
+   // Replacement function: display all videos stably in DOM order
+function initFeatures2() {
+  const track2 = document.getElementById("featureTrack2");
+  if (!track2) return;
 
-      setTimeout(() => {
-        track2.innerHTML = "";
-
-        for (let i = 0; i < visibleCount2; i++) {
-          const item = cards2[(index2 + i) % cards2.length];
-          track2.appendChild(item.cloneNode(true));
-        }
-
-        index2 = (index2 + visibleCount2) % cards2.length;
-
-        track2.classList.remove("fade-out");
-        track2.classList.add("fade-in");
-
-      }, 500);
-    }
-
-    rotateFeatures2();
-    setInterval(rotateFeatures2, 3000);
+  // Render all original items directly into track2 without cloning
+  if (window.cards2 && window.cards2.length > 0) {
+    track2.innerHTML = "";
+    window.cards2.forEach(card => track2.appendChild(card));
   }
 
+  // Ensure all videos play uninterrupted
+  const videos = track2.querySelectorAll("video");
+  videos.forEach(video => {
+    video.play().catch(() => {
+      // Handles browser autoplay restrictions gracefully
+    });
+  });
+}
+
+// Call once when script executes
+initFeatures2();
   function setDeliveryZone(val) {
     const [zone, fee] = val.split("|");
 
