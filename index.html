@@ -4038,6 +4038,21 @@ box-shadow:
 .bubble-pop {
   animation: bubblePop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+    .feature2-slider {
+  overflow: hidden;
+  width: 100%;
+}
+
+.feature2-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  will-change: transform;
+}
+
+.feature2-card {
+  flex: 0 0 33.333%; /* Shows exactly 3 cards at once */
+  box-sizing: border-box;
+}
   </style>
 </head>
 
@@ -8338,35 +8353,31 @@ function toggleModalLike() {
     setInterval(rotateFeatures, 3000);
   }
 
-  const track2 = document.getElementById("featureTrack2");
+ const track2 = document.getElementById("featureTrack2");
   if (track2) {
-    const cards2 = Array.from(track2.children);
-
     let index2 = 0;
+    const cards2 = track2.children;
+    const totalCards2 = cards2.length;
     const visibleCount2 = 3;
 
-   // Replacement function: display all videos stably in DOM order
-function initFeatures2() {
-  const track2 = document.getElementById("featureTrack2");
-  if (!track2) return;
+    // Keep all HTML elements intact so videos never lose buffer or pause
+    function rotateFeatures2() {
+      index2++;
 
-  // Render all original items directly into track2 without cloning
-  if (window.cards2 && window.cards2.length > 0) {
-    track2.innerHTML = "";
-    window.cards2.forEach(card => track2.appendChild(card));
+      // Reset to 0 when we reach the end of visible cards
+      if (index2 > totalCards2 - visibleCount2) {
+        index2 = 0;
+      }
+
+      // Smoothly shift track using CSS translateX
+      const stepPercent = 100 / visibleCount2;
+      track2.style.transition = "transform 0.5s ease-in-out";
+      track2.style.transform = `translateX(-${index2 * stepPercent}%)`;
+    }
+
+    // Single interval without double-calling or innerHTML resets
+    setInterval(rotateFeatures2, 4000);
   }
-
-  // Ensure all videos play uninterrupted
-  const videos = track2.querySelectorAll("video");
-  videos.forEach(video => {
-    video.play().catch(() => {
-      // Handles browser autoplay restrictions gracefully
-    });
-  });
-}
-
-// Call once when script executes
-initFeatures2();
   function setDeliveryZone(val) {
     const [zone, fee] = val.split("|");
 
