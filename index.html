@@ -2441,17 +2441,16 @@ box-shadow:
 
 /* ===== SECOND SLIDER ONLY ===== */
 .feature2-slider {
-  overflow-x: auto;   /* horizontal scroll for mobile */
+  overflow-x: auto;
   overflow-y: hidden;
   padding: 15px 0;
 
-  -webkit-overflow-scrolling: touch; /* smooth iPhone scroll */
+  -webkit-overflow-scrolling: touch;
   scroll-snap-type: x mandatory;
-  padding-left: 16px;
-  padding-right: 16px;
+  scrollbar-width: none; /* Firefox hide scrollbar */
 }
 
-/* hide scrollbar */
+/* hide scrollbar for Chrome/Safari */
 .feature2-slider::-webkit-scrollbar {
   display: none;
 }
@@ -2460,19 +2459,23 @@ box-shadow:
   display: flex;
   align-items: center;
   gap: 16px;
-
-  min-width: max-content; /* prevents shrinking */
 }
 
-/* 🔥 BIGGER VIDEO CARDS */
+/* Padding spacers for seamless scroll snapping */
+.feature2-track::before,
+.feature2-track::after {
+  content: '';
+  width: 16px;
+  flex: 0 0 auto;
+}
+
+/* BIGGER VIDEO CARDS */
 .feature2-card {
   position: relative;
-
-  width: 78%;
+  width: 78vw;
   max-width: 260px;
   height: 170px;
-
-  flex: 0 0 auto; /* 🔥 prevents shrinking */
+  flex: 0 0 auto;
 
   border-radius: 18px;
   overflow: hidden;
@@ -2480,9 +2483,10 @@ box-shadow:
 
   box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   transition: transform 0.25s ease;
+  will-change: transform;
+  transform: translateZ(0);
 
   background-color: #000;
-
   --bg: none;
   background-image: var(--bg);
   background-size: cover;
@@ -2495,18 +2499,17 @@ box-shadow:
   transform: scale(0.98);
 }
 
-
-/* 🔥 MEDIA FILLS CARD PERFECTLY */
+/* MEDIA FILLS CARD PERFECTLY */
 .feature2-card img,
 .feature2-card video {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: 1;
 
   width: 100%;
   height: 100%;
-
   object-fit: cover;
+  pointer-events: none;
 }
 
 /* BADGE */
@@ -2517,6 +2520,7 @@ box-shadow:
   z-index: 3;
 
   background: rgba(0,0,0,0.75);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   color: white;
 
@@ -2526,18 +2530,6 @@ box-shadow:
 
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-/* 🔥 POP EFFECT */
-@keyframes popIn {
-  from {
-    transform: scale(0.9);
-    opacity: 0.6;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
 }
 
 .header,
@@ -5200,123 +5192,87 @@ box-shadow:
 }
 </style>
 
-
 <div class="feature2-slider">
   <div class="feature2-track" id="featureTrack2">
 
     <!-- VIDEO CARD 🔥 -->
-    <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Zeli8Ix.png');"
-         onclick="setCategory('Maria')">
-
+    <div class="feature2-card" style="--bg: url('https://i.imgur.com/Zeli8Ix.png');" onclick="setCategory('Maria')">
       <video autoplay muted loop playsinline poster="https://i.imgur.com/Zeli8Ix.png">
         <source src="https://i.imgur.com/sXBgYBB.mp4" type="video/mp4">
       </video>
-
       <div class="feature2-badge">Maria's Cafe</div>
     </div>
 
-     <!-- VIDEO CARD 🔥 -->
-    <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Brew')">
-
+    <!-- VIDEO CARD 🔥 -->
+    <div class="feature2-card" style="--bg: url('https://i.imgur.com/Ow0161u.png');" onclick="setCategory('Brew')">
       <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
         <source src="https://i.imgur.com/GXMLX7n.mp4" type="video/mp4">
       </video>
-
       <div class="feature2-badge">Brew & Browse</div>
     </div>
 
-
- <!-- VIDEO CARD 🔥 -->
-    <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/oSHSyM4.png');"
-         onclick="setCategory('Brew')">
-
+    <!-- VIDEO CARD 🔥 -->
+    <div class="feature2-card" style="--bg: url('https://i.imgur.com/oSHSyM4.png');" onclick="setCategory('Doppex')">
       <video autoplay muted loop playsinline poster="https://i.imgur.com/oSHSyM4.png">
         <source src="https://i.imgur.com/2iOyH04.mp4" type="video/mp4">
       </video>
-
       <div class="feature2-badge">Doppex.Bz</div>
     </div>
 
-
-
-    <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Urban')">
-
+    <!-- VIDEO CARD 🔥 -->
+    <div class="feature2-card" style="--bg: url('https://i.imgur.com/Ow0161u.png');" onclick="setCategory('Urban')">
       <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
         <source src="https://i.imgur.com/cm9B5gd.mp4" type="video/mp4">
       </video>
-
       <div class="feature2-badge">Urban Cafe</div>
     </div>
 
-   <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Faye')">
-
+    <!-- VIDEO CARD 🔥 -->
+    <div class="feature2-card" style="--bg: url('https://i.imgur.com/Ow0161u.png');" onclick="setCategory('Faye')">
       <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
         <source src="https://i.imgur.com/lAteHKS.mp4" type="video/mp4">
       </video>
-
       <div class="feature2-badge">The Faye Collective</div>
     </div>
 
-<div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Shaken')">
-
+    <!-- VIDEO CARD 🔥 -->
+    <div class="feature2-card" style="--bg: url('https://i.imgur.com/Ow0161u.png');" onclick="setCategory('Shaken')">
       <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
         <source src="https://i.imgur.com/l1Ow3PI.mp4" type="video/mp4">
       </video>
-
       <div class="feature2-badge">Shaken & Served</div>
     </div>
 
-    
-   <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Daily Menu')">
-
+    <!-- VIDEO CARD 🔥 -->
+    <div class="feature2-card" style="--bg: url('https://i.imgur.com/Ow0161u.png');" onclick="setCategory('Daily Menu')">
       <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
         <source src="https://i.imgur.com/9ah0eN5.mp4" type="video/mp4">
       </video>
-
       <div class="feature2-badge">The Dinner House</div>
     </div>
 
   </div>
 </div>
 
-
-
- 
-<body>
-
-  <div id="main-view" class="store-section">
-    <div class="store-title">Stores Near You, Coming Soon⏱️:</div>
-    
-    <div class="store-list">
-
-
-
-             <div class="store-profile" onclick="openStore('Saritas', 'https://i.imgur.com/AENg5Lq.png')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/AENg5Lq.png" alt="Saritas Orange Walk">
-        </div>
-        <div class="store-name">Saritas Orange Walk</div>
+<div id="main-view" class="store-section">
+  <div class="store-title">Stores Near You, Coming Soon⏱️:</div>
+  
+  <div class="store-list">
+    <div class="store-profile" onclick="openStore('Saritas', 'https://i.imgur.com/AENg5Lq.png')">
+      <div class="store-logo-wrapper">
+        <img src="https://i.imgur.com/AENg5Lq.png" alt="Saritas Orange Walk">
       </div>
+      <div class="store-name">Saritas Orange Walk</div>
+    </div>
 
-       <div class="store-profile" onclick="openStore('Add to Cart', 'https://i.imgur.com/mtVKxKX.jpeg')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/mtVKxKX.jpeg" alt="Add to Cart">
-        </div>
-        <div class="store-name">Add to Cart Bz</div>
+    <div class="store-profile" onclick="openStore('Add to Cart', 'https://i.imgur.com/mtVKxKX.jpeg')">
+      <div class="store-logo-wrapper">
+        <img src="https://i.imgur.com/mtVKxKX.jpeg" alt="Add to Cart">
       </div>
-
+      <div class="store-name">Add to Cart Bz</div>
+    </div>
+  </div>
+</div>
     
       
       <div class="store-profile" onclick="openStore('Sugar City SuperMarket', 'https://i.imgur.com/ozvrvAD.png')">
