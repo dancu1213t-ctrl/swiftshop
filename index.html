@@ -738,10 +738,11 @@ body {
 }
 
 /* Gray background wrapper for image container */
+/* Gray container changed to white for transparent PNGs */
 .product-img-wrap {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background: #f4f4f5;
+  background: #ffffff; /* White background */
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -750,10 +751,11 @@ body {
   margin-bottom: 10px;
 }
 
+/* Image scaling inside the white wrapper */
 .product img {
-  width: 85%;
-  height: 85%;
-  object-fit: contain;
+  width: 90%;
+  height: 90%;
+  object-fit: contain; /* Keeps transparent products crisp and fully visible */
   cursor: pointer;
 }
 
