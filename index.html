@@ -667,70 +667,150 @@ body {
 
 
 
-    /* ================= PRODUCTS ================= */
-    .section {
+ /* ================= PRODUCTS ================= */
+.section {
   padding: 0 16px;
   margin-bottom: 24px;
+  display: grid;
+  /* Default 2 columns for mobile screens */
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 14px;
 }
 
+/* Tablets (iPad / Foldables) -> 3 Columns */
+@media (min-width: 600px) {
+  .section {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+}
+
+/* Laptops & Desktops -> 4 Columns */
+@media (min-width: 900px) {
+  .section {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Very Small Phones (under 340px width) -> Compact padding & font sizing */
+@media (max-width: 340px) {
+  .section {
+    gap: 8px;
+    padding: 0 8px;
+  }
+  .product {
+    padding: 8px;
+  }
+  .product-info strong {
+    font-size: 12px;
+  }
+}
+/* Subcategory Title spans across both columns */
+.subcategory-title {
+  grid-column: 1 / -1; 
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Vertical Card Design */
 .product {
   background: #ffffff;
   border-radius: 20px;
-  padding: 14px;
+  padding: 12px;
   display: flex;
-  gap: 14px;
-  align-items: center;
+  flex-direction: column; /* Stacks image top, details bottom */
+  align-items: flex-start;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative !important;
+  overflow: visible !important;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-    .product:active {
-  transform: scale(0.99);
+.product:active {
+  transform: scale(0.98);
 }
 
-    .product img {
-      width: 65px;
-      height: 65px;
-      border-radius: 14px;
-      object-fit: cover;
-    }
+/* Gray background wrapper for image container */
+.product-img-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #f4f4f5;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
 
-    .product-info { flex: 1; }
+.product img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.product-info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.product-info strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111111;
+  line-height: 1.25;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Truncates title to 2 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.price {
+  color: #666666;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
 
 .price-was {
   text-decoration: line-through;
   color: #9ca3af;
   font-size: 0.85em;
-  margin-right: 6px;
   font-weight: 400;
 }
 
-.price {
-  color: #1ebe57; 
-  font-weight: 700;
-  margin-top: 4px;
-  display: flex;
-  align-items: center;
-}
-
- .product button {
+.product button {
+  width: 100%;
   background: #111111;
   color: #ffffff;
   border-radius: 12px;
-  padding: 10px 16px;
+  padding: 8px 0;
   font-weight: 700;
   font-size: 13px;
   border: none;
   cursor: pointer;
+  margin-top: auto; /* Pushes button to bottom */
   transition: background 0.2s ease, transform 0.1s ease;
 }
 
- .product button:active {
+.product button:active {
   transform: scale(0.95);
   background: #ff6a00;
 }
-
     /* ================= CART ================= */
     .cart-row {
       display: flex;
@@ -7340,7 +7420,7 @@ async function render() {
 
   if (isOpen === 'no') {
     box.innerHTML = `
-      <div style="text-align:center; padding:50px 20px; color:#555;">
+      <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
         <div style="font-size:50px; margin-bottom:15px;">🔴</div>
         <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
         <p style="font-size:13px; color:#666; margin-top:5px;">This vendor is not accepting orders right now.</p>
@@ -7352,7 +7432,7 @@ async function render() {
 
   if (filteredItems.length === 0) {
     box.innerHTML = `
-      <div style="text-align:center; padding:50px 20px; color:#555;">
+      <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
         <div style="font-size:50px; margin-bottom:15px;">🔒</div>
         <h2 style="font-weight:900; color:#222;">No Items Available</h2>
       </div>`;
@@ -7363,7 +7443,7 @@ async function render() {
   const grouped = {};
 
   filteredItems.forEach(p => {
-    if(!p.subcategory) return;   
+    if (!p.subcategory) return;   
     const sub = p.subcategory;
     if (!grouped[sub]) grouped[sub] = [];
     grouped[sub].push(p);
@@ -7394,17 +7474,19 @@ async function render() {
       box.innerHTML += `
         <div class="product">
           ${badgeHTML}
-          <img src="${p.image}" onclick="openImage(this.src)">
+          <div class="product-img-wrap">
+            <img src="${p.image}" onclick="openImage(this.src)">
+          </div>
           <div class="product-info">
             <strong>${p.name}</strong>
             <div class="price">
               ${wasPriceHTML}
               $${displayPrice} BZD
             </div>
+            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
+              Add
+            </button>
           </div>
-          <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
-            Add
-          </button>
         </div>
       `;
     });
