@@ -4646,6 +4646,25 @@ box-shadow:
     transform: translateX(-50%);
   }
 }
+    /* Slider Container */
+.promo-slider {
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Track holding the cards */
+.promo-track {
+  display: flex;
+  gap: 16px;
+}
+
+/* Make each card take up full width or set size */
+.hero-promo-card {
+  flex: 0 0 100%; /* Each card takes up 100% width of the slider */
+  scroll-snap-align: start;
+}
 
   </style>
 </head>
@@ -5505,19 +5524,41 @@ box-shadow:
   <!-- Keep this: Needed to draw the background fireworks -->
 <canvas id="fireworksCanvas"></canvas>
 
-<div class="hero-promo-card">
-  <div class="hero-promo-content">
-    <span class="hero-promo-tag">Brew and Browse</span>
-    <div class="hero-promo-title">1$ Delivery Fee</div>
-    <div class="hero-promo-sub">Free when you purchase 3+ Drinks</div>
-    <button class="hero-promo-btn" onclick="bannerCategory('Brew')">
-      Shop Now ➔
-    </button>
-  </div>
-  
-  <div class="hero-promo-image-wrap">
-    <div class="hero-badge-icon">★</div>
-    <img src="https://i.imgur.com/fBD37P7.png" alt="Brew">
+<div class="promo-slider">
+  <div class="promo-track">
+    
+    <!-- Card 1 -->
+    <div class="hero-promo-card">
+      <div class="hero-promo-content">
+        <span class="hero-promo-tag">Brew and Browse</span>
+        <div class="hero-promo-title">1$ Delivery Fee</div>
+        <div class="hero-promo-sub">Free when you purchase 3+ Drinks</div>
+        <button class="hero-promo-btn" onclick="bannerCategory('Brew')">
+          Shop Now ➔
+        </button>
+      </div>
+      <div class="hero-promo-image-wrap">
+        <div class="hero-badge-icon">★</div>
+        <img src="https://i.imgur.com/fBD37P7.png" alt="Brew">
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="hero-promo-card">
+      <div class="hero-promo-content">
+        <span class="hero-promo-tag">Elmas Tacos Place</span>
+        <div class="hero-promo-title">2$ Delivery Fee</div>
+        <div class="hero-promo-sub">Tacos at your door</div>
+     <button class="hero-promo-btn" onclick="openTacoOrder()">
+  Place Order Now ➔
+</button>
+      </div>
+      <div class="hero-promo-image-wrap">
+        <div class="hero-badge-icon">★</div>
+        <img src="https://i.imgur.com/Kh0GCTL.png" alt="Tacos">
+      </div>
+    </div>
+
   </div>
 </div>
 
