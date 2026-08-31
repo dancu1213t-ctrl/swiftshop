@@ -4180,80 +4180,6 @@ box-shadow:
   flex: 0 0 33.333%; /* Shows exactly 3 cards at once */
   box-sizing: border-box;
 }
-/* REMOVE WHITE BOX & MAKE FLOATING TOP TABS */
-.main-tabs-container {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding: 10px 16px;
-  background: transparent !important; /* Removes white box */
-  border-bottom: none !important;
-  box-shadow: none !important;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.main-tabs-container::-webkit-scrollbar {
-  display: none;
-}
-
-.main-tab {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  outline: none;
-}
-
-.tab-icon-wrap {
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  background: #ffffff; /* Clean white circle for icon only */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.tab-icon-wrap img {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-}
-
-.main-tab span {
-  font-size: 11px;
-  font-weight: 700;
-  color: #777;
-}
-
-/* Active top tab highlight */
-.main-tab.active .tab-icon-wrap {
-  background: #fde8b3;
-  transform: scale(1.08);
-  box-shadow: 0 4px 12px rgba(255, 106, 0, 0.2);
-}
-
-.main-tab.active span {
-  color: #ff6a00;
-  font-weight: 800;
-}
-
-/* SUB-CATEGORY ROWS (FLOATING) */
-.categories-wrapper {
-  background: transparent !important;
-  padding: 0;
-}
-
-.sub-category-group {
-  background: transparent !important;
-}
   </style>
 </head>
 
@@ -5510,7 +5436,7 @@ box-shadow:
 
 
  
-
+<body>
 
   <div id="main-view" class="store-section">
     <div class="store-title">Stores Near You, Coming Soon⏱️:</div>
@@ -5812,189 +5738,203 @@ box-shadow:
 
 
 
-<!-- MAIN TOP TABS BAR -->
-<div class="main-tabs-container">
-  <button class="main-tab active" onclick="switchMainTab('General', this)">
-    <div class="tab-icon-wrap"><img src="https://i.imgur.com/QduyjdT.png" alt="General"></div>
-    <span>General</span>
-  </button>
-  
-  <button class="main-tab" onclick="switchMainTab('Food', this)">
-    <div class="tab-icon-wrap"><img src="https://i.imgur.com/0UBGQD1.png" alt="Food"></div>
-    <span>Gud-Food</span>
-  </button>
-  
-  <button class="main-tab" onclick="switchMainTab('Cafe', this)">
-    <div class="tab-icon-wrap"><img src="https://i.imgur.com/xcA1I0V.png" alt="Cafe"></div>
-    <span>Cafe</span>
-  </button>
-  
-  <button class="main-tab" onclick="switchMainTab('Apparel', this)">
-    <div class="tab-icon-wrap"><img src="https://i.imgur.com/DcUBmWl.png" alt="Apparel"></div>
-    <span>Apparel</span>
-  </button>
-  
-  <button class="main-tab" onclick="switchMainTab('Electronics', this)">
-    <div class="tab-icon-wrap"><img src="https://i.imgur.com/NWWuZkr.png" alt="Tech"></div>
-    <span>Tech</span>
-  </button>
-</div>
-
-<!-- DYNAMIC SUB-CATEGORIES WRAPPER -->
 <div class="categories-wrapper">
+  <!-- 🛒 GENERAL -->
+  <h3 class="category-label">🛒 General</h3>
 
-  <!-- 🛒 GENERAL SUB-GROUP -->
-  <div class="sub-category-group" id="subGroup-General" style="display: block;">
-    <div class="categories uber-eats-row">
-      <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack',this)">
-        <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
-        <span>Snacks</span>
-      </div>
-      <div class="cat-btn" data-cat="Drink" onclick="setCategory('Drink',this)">
-        <img src="https://i.imgur.com/Bkge0pn.png" class="uber-3d-icon" alt="Drinks">
-        <span>Drinks</span>
-      </div>
-      <div class="cat-btn" data-cat="Household" onclick="setCategory('Household',this)">
-        <img src="https://i.imgur.com/j2GmDW5.png" class="uber-3d-icon" alt="Household">
-        <span>Household</span>
-      </div>
-      <div class="cat-btn" data-cat="Hygiene" onclick="setCategory('Hygiene',this)">
-        <img src="https://i.imgur.com/V5giTO5.png" class="uber-3d-icon" alt="Hygiene">
-        <span>Laundry & Cleaning</span>
-      </div>
-      <div class="cat-btn" data-cat="Vegetables" onclick="setCategory('Vegetables',this)">
-        <img src="https://i.imgur.com/YSC5fdN.png" class="uber-3d-icon" alt="Veggies">
-        <span>Veggies</span>
-      </div>
-      <div class="cat-btn" data-cat="Treats" onclick="setCategory('Treats',this)">
-        <img src="https://i.imgur.com/yX4SJvY.png" class="uber-3d-icon" alt="Treats">
-        <span>Treats</span>
-      </div>
-      <div class="cat-btn" id="pickupSection" onclick="openPickupOrder(this)">
-        <img src="https://i.imgur.com/cMPdTPr.png" class="uber-3d-icon" alt="Pickup">
-        <span>Pickup Food</span>
-      </div>
+  <div class="categories uber-eats-row">
+
+    <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack',this)">
+      <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
+      <span>Snacks</span>
     </div>
+
+    <div class="cat-btn" data-cat="Drink" onclick="setCategory('Drink',this)">
+      <img src="https://i.imgur.com/Bkge0pn.png" class="uber-3d-icon" alt="Drinks">
+      <span>Drinks</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Household" onclick="setCategory('Household',this)">
+      <img src="https://i.imgur.com/j2GmDW5.png" class="uber-3d-icon" alt="Household">
+      <span>Household</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Hygiene" onclick="setCategory('Hygiene',this)">
+      <img src="https://i.imgur.com/V5giTO5.png" class="uber-3d-icon" alt="Hygiene">
+      <span>Laundry & Cleaning</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Vegetables" onclick="setCategory('Vegetables',this)">
+      <img src="https://i.imgur.com/YSC5fdN.png" class="uber-3d-icon" alt="Veggies">
+      <span>Veggies</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Treats" onclick="setCategory('Treats',this)">
+      <img src="https://i.imgur.com/yX4SJvY.png" class="uber-3d-icon" alt="Treats">
+      <span>Treats</span>
+    </div>
+
+    <div class="cat-btn" id="pickupSection" onclick="openPickupOrder(this)">
+      <img src="https://i.imgur.com/cMPdTPr.png" class="uber-3d-icon" alt="Pickup">
+      <span>Pickup Food</span>
+    </div>
+
   </div>
 
-  <!-- 🍲 GUD-FOOD SUB-GROUP -->
-  <div class="sub-category-group" id="subGroup-Food" style="display: none;">
-    <div class="categories logo-row">
-      <div class="cat-btn" data-cat="Breakfast" onclick="setCategory('Breakfast',this)">
-        <img src="https://i.imgur.com/0TtohPG.png" class="cat-img" alt="Breakfast">
-        <span>Breakfast</span>
-      </div>
-      <div class="cat-btn" data-cat="Lunch" onclick="setCategory('Lunch',this)">
-        <img src="https://i.imgur.com/p8vx8Nz.png" class="cat-img" alt="Lunch">
-        <span>Lunch</span>
-      </div>
-      <div class="cat-btn" onclick="openTacoOrder(this)">
-        <img src="https://i.imgur.com/hnzB4IP.png" class="cat-img" alt="Tacos">
-        <span>Tacos</span>
-      </div>
-      <div class="cat-btn" data-cat="Aroma" data-store="true" onclick="setCategory('Aroma',this)">
-        <img src="https://i.imgur.com/i7i6bbl.png" class="cat-img">
-        <span>Aroma</span>
-      </div>
-      <div class="cat-btn" data-cat="Leo" data-store="true" onclick="setCategory('Leo Meatpies',this)">
-        <img src="https://i.imgur.com/aggMVYd.jpeg" class="cat-img">
-        <span>Leo's Bakehouse</span>
-      </div>
-      <div class="cat-btn" data-cat="Daily Menu" data-store="true" onclick="setCategory('Daily Menu',this)">
-        <img src="https://i.imgur.com/BlO73LS.png" class="cat-img">
-        <span>Dinner House</span>
-      </div>
-      <div class="cat-btn" data-cat="Dumpling" data-store="true" onclick="setCategory('Dumpling',this)">
-        <img src="https://i.imgur.com/7pIzEES.png" class="cat-img">
-        <span>Dumpling King</span>
-      </div>
-      <div class="cat-btn" data-cat="Fonda" data-store="true" onclick="setCategory('Fonda',this)">
-        <img src="https://i.imgur.com/2Fgy23i.png" class="cat-img">
-        <span>La Fonda de Nilo</span>
-      </div>
-      <div class="cat-btn" data-cat="Salsa" data-store="true" onclick="setCategory('Salsas',this)">
-        <img src="https://i.imgur.com/g5rhQkp.png" class="cat-img">
-        <span>Salsas y Sabores</span>
-      </div>
-      <div class="cat-btn" data-cat="Burga" data-store="true" onclick="setCategory('Burger Hut',this)">
-        <img src="https://i.imgur.com/kEb6w8N.png" class="cat-img">
-        <span>Burga Hut</span>
-      </div>
-      <div class="cat-btn" data-cat="TFC" data-store="true" onclick="setCategory('TFC',this)">
-        <img src="https://i.imgur.com/sDzNncE.png" class="cat-img">
-        <span>TFC</span>
-      </div>
-      <div class="cat-btn" data-cat="Guerrero" data-store="true" onclick="setCategory('Guerrero',this)">
-        <img src="https://i.imgur.com/U93eRx4.jpeg" class="cat-img">
-        <span>Guerrero</span>
-      </div>
-      <div class="cat-btn" data-cat="Neeyas BackYard" data-store="true" onclick="setCategory('Neeyas Backyard',this)">
-        <img src="https://i.imgur.com/DJb7os5.jpeg" class="cat-img">
-        <span>Neeya's Backyaad</span>
-      </div>
+  <div class="category-divider"></div>
+
+  <!-- 🍲 GUD-FOOD -->
+  <h3 class="category-label">🍲 GUD-FOOD</h3>
+
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="Breakfast" onclick="setCategory('Breakfast',this)">
+      <img src="https://i.imgur.com/0TtohPG.png" class="cat-img" alt="Breakfast">
+      <span>Breakfast</span>
     </div>
+
+    <div class="cat-btn" data-cat="Lunch" onclick="setCategory('Lunch',this)">
+      <img src="https://i.imgur.com/p8vx8Nz.png" class="cat-img" alt="Lunch">
+      <span>Lunch</span>
+    </div>
+
+    <div class="cat-btn" onclick="openTacoOrder(this)">
+      <img src="https://i.imgur.com/hnzB4IP.png" class="cat-img" alt="Tacos">
+      <span>Tacos</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Aroma" onclick="setCategory('Aroma',this)">
+      <img src="https://i.imgur.com/i7i6bbl.png" class="cat-img">
+      <span>Aroma</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Leo" onclick="setCategory('Leo Meatpies',this)">
+      <img src="https://i.imgur.com/aggMVYd.jpeg" class="cat-img">
+      <span>Leo's Bakehouse</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Daily Menu" onclick="setCategory('Daily Menu',this)">
+      <img src="https://i.imgur.com/BlO73LS.png" class="cat-img">
+      <span>Dinner House</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Dumpling" onclick="setCategory('Dumpling',this)">
+      <img src="https://i.imgur.com/7pIzEES.png" class="cat-img">
+      <span>Dumpling King</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Fonda" onclick="setCategory('Fonda',this)">
+      <img src="https://i.imgur.com/2Fgy23i.png" class="cat-img">
+      <span>La Fonda de Nilo</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Salsa" onclick="setCategory('Salsas',this)">
+      <img src="https://i.imgur.com/g5rhQkp.png" class="cat-img">
+      <span>Salsas y Sabores</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Burga" onclick="setCategory('Burger Hut',this)">
+      <img src="https://i.imgur.com/kEb6w8N.png" class="cat-img">
+      <span>Burga Hut</span>
+    </div>
+
+    <div class="cat-btn" data-cat="TFC" onclick="setCategory('TFC',this)">
+      <img src="https://i.imgur.com/sDzNncE.png" class="cat-img">
+      <span>TFC</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Guerrero" onclick="setCategory('Guerrero',this)">
+      <img src="https://i.imgur.com/U93eRx4.jpeg" class="cat-img">
+      <span>Guerrero</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Neeyas BackYard" onclick="setCategory('Neeyas Backyard',this)">
+      <img src="https://i.imgur.com/DJb7os5.jpeg" class="cat-img">
+      <span>Neeya's Backyaad</span>
+    </div>
+
   </div>
 
-  <!-- ☕ CAFE PARLOURS SUB-GROUP -->
-  <div class="sub-category-group" id="subGroup-Cafe" style="display: none;">
-    <div class="categories logo-row">
-      <div class="cat-btn" data-cat="Saritas" data-store="true" onclick="setCategory('Saritas',this)">
-        <img src="https://i.imgur.com/AENg5Lq.png" class="cat-img">
-        <span>Saritas Orange Walk</span>
-      </div>
-      <div class="cat-btn" data-cat="Urban" data-store="true" onclick="setCategory('Urban',this)">
-        <img src="https://i.imgur.com/sdwXPEa.png" class="cat-img">
-        <span>Urban Cafe</span>
-      </div>
-      <div class="cat-btn" data-cat="Brew & Browse" data-store="true" onclick="setCategory('Brew',this)">
-        <img src="https://i.imgur.com/dxhMWyb.png" class="cat-img">
-        <span>Brew&Browse</span>
-      </div>
-      <div class="cat-btn" data-cat="Maria Bakehouse and Coffee" data-store="true" onclick="setCategory('Maria',this)">
-        <img src="https://i.imgur.com/zKm0iej.png" class="cat-img">
-        <span>Maria Cafe</span>
-      </div>
-      <div class="cat-btn" data-cat="Shaken" data-store="true" onclick="setCategory('Shaken',this)">
-        <img src="https://i.imgur.com/ojrOPux.png" class="cat-img">
-        <span>Shaken&Served</span>
-      </div>
+  <div class="category-divider"></div>
+
+  <!-- ☕ CAFE PARLOURS -->
+  <h3 class="category-label">☕ Cafe Parlours</h3>
+
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="Saritas" onclick="setCategory('Saritas',this)">
+      <img src="https://i.imgur.com/AENg5Lq.png" class="cat-img">
+      <span>Saritas Orange Walk</span>
     </div>
+
+    <div class="cat-btn" data-cat="Urban" onclick="setCategory('Urban',this)">
+      <img src="https://i.imgur.com/sdwXPEa.png" class="cat-img">
+      <span>Urban Cafe</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Brew & Browse" onclick="setCategory('Brew',this)">
+      <img src="https://i.imgur.com/dxhMWyb.png" class="cat-img">
+      <span>Brew&Browse</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Maria Bakehouse and Coffee" onclick="setCategory('Maria',this)">
+      <img src="https://i.imgur.com/zKm0iej.png" class="cat-img">
+      <span>Maria Cafe</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Shaken" onclick="setCategory('Shaken',this)">
+      <img src="https://i.imgur.com/ojrOPux.png" class="cat-img">
+      <span>Shaken&Served</span>
+    </div>
+
   </div>
 
-  <!-- 👗 APPAREL SUB-GROUP -->
-  <div class="sub-category-group" id="subGroup-Apparel" style="display: none;">
-    <div class="categories logo-row">
-      <div class="cat-btn" data-cat="Cosmetics" data-store="true" onclick="setCategory('Cosmetics',this)">
-        <img src="https://i.imgur.com/4HuDzQg.png" class="cat-img">
-        <span>Bree's</span>
-      </div>
-      <div class="cat-btn" data-cat="Faye" data-store="true" onclick="setCategory('Faye',this)">
-        <img src="https://i.imgur.com/0cSlDIx.jpeg" class="cat-img">
-        <span>The Faye CO</span>
-      </div>
-      <div class="cat-btn" data-cat="Sister" data-store="true" onclick="setCategory('Sister',this)">
-        <img src="https://i.imgur.com/RQpdN14.jpeg" class="cat-img">
-        <span>Sister's CO</span>
-      </div>
+  <div class="category-divider"></div>
+
+  <!-- 👗 APPAREL -->
+  <h3 class="category-label">👗 Apparel</h3>
+
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="Cosmetics" onclick="setCategory('Cosmetics',this)">
+      <img src="https://i.imgur.com/4HuDzQg.png" class="cat-img">
+      <span>Bree's</span>
     </div>
+
+    <div class="cat-btn" data-cat="Faye" onclick="setCategory('Faye',this)">
+      <img src="https://i.imgur.com/0cSlDIx.jpeg" class="cat-img">
+      <span>The Faye CO</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Sister" onclick="setCategory('Sister',this)">
+      <img src="https://i.imgur.com/RQpdN14.jpeg" class="cat-img">
+      <span>Sister's CO</span>
+    </div>
+
   </div>
 
-  <!-- 🔌 ELECTRONICS SUB-GROUP -->
-  <div class="sub-category-group" id="subGroup-Electronics" style="display: none;">
-    <div class="categories logo-row">
-      <div class="cat-btn" data-cat="AddCart" data-store="true" onclick="setCategory('AddToCart',this)">
-        <img src="https://i.imgur.com/ijxrW5d.jpeg" class="cat-img">
-        <span>Add to Cart</span>
-      </div>
-      <div class="cat-btn" data-cat="Electronics" data-store="true" onclick="setCategory('Electronics',this)">
-        <img src="https://i.imgur.com/5jEUdc4.png" class="cat-img">
-        <span>Tech Gadgets</span>
-      </div>
-      <div class="cat-btn" data-cat="Pocket Mobile" data-store="true" onclick="setCategory('Pocket Mobile',this)">
-        <img src="https://i.imgur.com/mJT39kx.png" class="cat-img">
-        <span>Pocket Mobile</span>
-      </div>
+  <div class="category-divider"></div>
+
+  <!-- 🔌 ELECTRONICS & TECH SERVICES -->
+  <h3 class="category-label"> Electronics & Tech Services</h3>
+
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="AddCart" onclick="setCategory('AddToCart',this)">
+      <img src="https://i.imgur.com/ijxrW5d.jpeg" class="cat-img">
+      <span>Add to Cart</span>
     </div>
+
+    <div class="cat-btn" data-cat="Electronics" onclick="setCategory('Electronics',this)">
+      <img src="https://i.imgur.com/5jEUdc4.png" class="cat-img">
+      <span>Tech Gadgets</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Pocket Mobile" onclick="setCategory('Pocket Mobile',this)">
+      <img src="https://i.imgur.com/mJT39kx.png" class="cat-img">
+      <span>Pocket Mobile</span>
+    </div>
+
   </div>
 
 </div>
@@ -7512,52 +7452,31 @@ function enterApp() {
  
 async function render() {
   const box = document.getElementById("products");
-  const subBar = document.getElementById("subcategory-bar");
   if (!box) return;
 
   box.innerHTML = "";
-  if (subBar) {
-    subBar.innerHTML = "";
-    subBar.style.display = "none";
+
+  // 1. Check if store is open in Supabase before rendering
+  const { data: storeData } = await supabaseClient
+    .from('stores')
+    .select('is_open')
+    .eq('category', cat)
+    .single();
+
+  const isOpen = storeData ? storeData.is_open : 'yes';
+
+  if (isOpen === 'no') {
+    box.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
+        <div style="font-size:50px; margin-bottom:15px;">🔴</div>
+        <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
+        <p style="font-size:13px; color:#666; margin-top:5px;">This vendor is not accepting orders right now.</p>
+      </div>`;
+    return;
   }
 
-  // Normalize search category (e.g., 'Snack' -> 'snack')
-  const targetCat = (cat || "Snack").toLowerCase().trim();
+  const filteredItems = allProducts.filter(p => p.category === cat);
 
-  /* 1. SUPABASE STORE OPEN CHECK (Only for individual vendor stores, skip for general categories) */
-  const generalCategories = ['snack', 'snacks', 'drink', 'drinks', 'household', 'hygiene', 'vegetables', 'veggies', 'treats', 'breakfast', 'lunch'];
-  const isStore = !generalCategories.includes(targetCat);
-
-  if (isStore && typeof supabaseClient !== "undefined") {
-    const { data: storeData } = await supabaseClient
-      .from('stores')
-      .select('is_open')
-      .eq('category', cat)
-      .single();
-
-    if (storeData && storeData.is_open === 'no') {
-      box.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
-          <div style="font-size:50px; margin-bottom:15px;">🔴</div>
-          <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
-          <p style="font-size:13px; color:#666; margin-top:5px;">This vendor is not accepting orders right now.</p>
-        </div>`;
-      return;
-    }
-  }
-
-  /* 2. FLEXIBLE PRODUCT FILTER */
-  const filteredItems = allProducts.filter(p => {
-    if (!p.category) return false;
-    const itemCat = p.category.toLowerCase().trim();
-    
-    // Direct match OR plural match (e.g., 'snack' matches 'snacks')
-    return itemCat === targetCat || 
-           itemCat.startsWith(targetCat) || 
-           targetCat.startsWith(itemCat);
-  });
-
-  /* 3. SHOW EMPTY STATE IF STILL NO MATCH */
   if (filteredItems.length === 0) {
     box.innerHTML = `
       <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
@@ -7567,71 +7486,33 @@ async function render() {
     return;
   }
 
-  /* 4. BUILD SUBCATEGORY BAR */
-  const subcategories = [...new Set(filteredItems.map(p => p.subcategory || p.category || "Items"))];
-
-  if (subcategories.length > 0 && subBar) {
-    subBar.style.display = "flex";
-
-    // 'All' Filter Button
-    const allBtn = document.createElement("button");
-    allBtn.className = "sub-btn active";
-    allBtn.innerText = "All";
-    allBtn.onclick = () => filterSubcategoryView(filteredItems, "ALL", allBtn);
-    subBar.appendChild(allBtn);
-
-    // Individual Subcategory Filter Buttons
-    subcategories.forEach(sub => {
-      const btn = document.createElement("button");
-      btn.className = "sub-btn";
-      btn.innerText = sub;
-      btn.onclick = () => filterSubcategoryView(filteredItems, sub, btn);
-      subBar.appendChild(btn);
-    });
-  }
-
-  /* 5. INITIAL DISPLAY */
-  filterSubcategoryView(filteredItems, "ALL");
-}
-
-/* HELPER: RENDER FILTERED SUBCATEGORY ITEMS */
-function filterSubcategoryView(items, selectedSub, activeBtn) {
-  const box = document.getElementById("products");
-  if (!box) return;
-
-  if (activeBtn) {
-    document.querySelectorAll(".sub-btn").forEach(b => b.classList.remove("active"));
-    activeBtn.classList.add("active");
-  }
-
-  box.innerHTML = "";
-
-  const itemsToRender = selectedSub === "ALL" 
-    ? items 
-    : items.filter(p => (p.subcategory || p.category || "Items") === selectedSub);
-
-  // Group products by subcategory
+  /* GROUP BY SUBCATEGORY */
   const grouped = {};
-  itemsToRender.forEach(p => {
-    const sub = p.subcategory || p.category || "Items";
+
+  filteredItems.forEach(p => {
+    if (!p.subcategory) return;   
+    const sub = p.subcategory;
     if (!grouped[sub]) grouped[sub] = [];
     grouped[sub].push(p);
   });
 
-  // Render grouped sections
+  /* RENDER GROUPS */
   Object.keys(grouped).forEach(sub => {
     box.innerHTML += `
-      <div class="subcategory-title" style="grid-column: 1 / -1; font-weight:800; font-size:16px; margin:16px 0 8px 0; border-bottom:1px solid #eee; padding-bottom:4px;">${sub}</div>
+      <div class="subcategory-title">${sub}</div>
     `;
 
     grouped[sub].forEach(p => {
       let badgeHTML = "";
       let wasPriceHTML = "";
 
-      if (p.was && !isNaN(parseFloat(p.was)) && Number(p.was) > p.price) {
-        const savings = Math.round(((p.was - p.price) / p.was) * 100);
-        badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
-        wasPriceHTML = `<span class="price-was">$${Number(p.was).toFixed(2)}</span>`;
+      if (p.was) {
+        const isNumeric = !isNaN(parseFloat(p.was)) && isFinite(p.was);
+        if (isNumeric && Number(p.was) > p.price) {
+          const savings = Math.round(((p.was - p.price) / p.was) * 100);
+          badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
+          wasPriceHTML = `<span class="price-was">$${Number(p.was).toFixed(2)}</span>`;
+        }
       }
 
       const displayPrice = (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
@@ -7642,14 +7523,21 @@ function filterSubcategoryView(items, selectedSub, activeBtn) {
           ${badgeHTML}
           <div class="product-img-wrap">
             <button class="heart-btn" onclick="toggleLike(this, event)">
-              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              <svg viewBox="0 0 24 24">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>
             </button>
             <img src="${p.image}" onclick="openImage(this.src)">
           </div>
           <div class="product-info">
             <strong>${p.name}</strong>
-            <div class="price">${wasPriceHTML} $${displayPrice} BZD</div>
-            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">Add</button>
+            <div class="price">
+              ${wasPriceHTML}
+              $${displayPrice} BZD
+            </div>
+            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
+              Add
+            </button>
           </div>
         </div>
       `;
@@ -9698,29 +9586,6 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
   // Optional light vibration feedback if supported
   if (navigator.vibrate) {
     navigator.vibrate(20);
-  }
-}
-
-  function switchMainTab(mainTabName, tabElement) {
-  // 1. Highlight clicked top tab
-  document.querySelectorAll('.main-tab').forEach(tab => tab.classList.remove('active'));
-  if (tabElement) tabElement.classList.add('active');
-
-  // 2. Hide all sub-category groups
-  document.querySelectorAll('.sub-category-group').forEach(group => {
-    group.style.display = 'none';
-  });
-
-  // 3. Show target group
-  const targetGroup = document.getElementById(`subGroup-${mainTabName}`);
-  if (targetGroup) {
-    targetGroup.style.display = 'block';
-
-    // 4. Auto-select the first category button in this row (e.g., 'Snack' for General)
-    const firstBtn = targetGroup.querySelector('.cat-btn');
-    if (firstBtn) {
-      firstBtn.click(); // Triggers your existing setCategory(...) & renders first item set
-    }
   }
 }
 </script>
