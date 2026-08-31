@@ -2778,34 +2778,32 @@ box-shadow:
   opacity: 1;
   visibility: visible;
 }
-/* ================= 1. CLEAN TOP BAR (TOGGLE ONLY) ================= */
+/* ================= 1. FLOATING TOP BAR (TOGGLE ONLY) ================= */
 
 .top-bar {
   position: fixed;
   top: 12px;
-  left: 60px; /* Clears the hamburger menu button */
-  height: 48px;
-  z-index: 100; /* Keeps side drawer (z-index: 1000) over top bar */
+  left: 60px; /* Space for hamburger icon */
+  height: 44px;
+  z-index: 100;
   display: flex;
   align-items: center;
-  box-sizing: border-box;
 }
 
 /* Soft 3D Light Toggle */
 .toggle-box {
   display: flex;
-  background: #f0f2f5;
+  background: #edf2f7;
   border-radius: 999px;
-  padding: 4px;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06),
-              0 1px 2px rgba(255, 255, 255, 0.8);
+  padding: 3px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
   border: 1px solid #e2e8f0;
 }
 
 .toggle-btn {
   background: transparent;
   border: none;
-  padding: 6px 16px;
+  padding: 5px 14px;
   font-size: 12px;
   font-weight: 700;
   color: #64748b;
@@ -2815,68 +2813,72 @@ box-shadow:
   white-space: nowrap;
 }
 
-/* Active Pill with Soft 3D Elevation */
 .toggle-btn.active {
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  background: #ffffff;
   color: #ff6a00;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08), 
-              0 1px 2px rgba(0, 0, 0, 0.04);
-  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* ================= 2. LIGHT HERO SECTION & SOFT 3D SEARCH ================= */
+/* ================= 2. NATIVE HERO LAYOUT (NO CONTAINER BOX) ================= */
 
 .hero-section {
-  margin-top: 68px;
-  padding: 20px 20px 24px 20px;
-  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-  border-radius: 24px;
-  border: 1px solid #edf2f7;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04);
+  margin-top: 64px;
+  padding: 8px 16px 16px 16px;
+  /* Completely borderless & uncarded */
+  background: none;
+  border: none;
+  box-shadow: none;
 }
 
 .hero-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.hero-text {
+  flex: 1;
 }
 
 .hero-greeting {
   font-size: 13px;
   font-weight: 700;
-  color: #16a34a;
+  color: #16a34a; /* Accent green greeting */
   margin-bottom: 4px;
 }
 
 .hero-title {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 800;
-  line-height: 1.25;
+  line-height: 1.15;
   color: #0f172a;
   margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
 }
 
 .hero-title span {
-  color: #ff6a00;
+  color: #16a34a;
 }
 
 .hero-subtitle {
   font-size: 13px;
   color: #64748b;
   margin: 0;
+  line-height: 1.35;
 }
 
+/* Floating Basket Graphic */
 .hero-image {
-  width: 110px;
-  height: 110px;
+  width: 115px;
+  height: 115px;
   object-fit: contain;
   flex-shrink: 0;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.08));
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.12));
 }
 
-/* Soft 3D Search Input Box */
+/* Floating Soft 3D Search & Filter */
 .hero-search-wrapper {
   display: flex;
   align-items: center;
@@ -2890,17 +2892,17 @@ box-shadow:
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 999px;
-  padding: 10px 18px;
+  padding: 10px 16px;
   flex: 1;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03),
-              0 4px 12px rgba(0, 0, 0, 0.03);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02),
+              0 6px 16px rgba(0, 0, 0, 0.04);
   transition: all 0.25s ease;
 }
 
 .hero-search-box:focus-within {
   border-color: #ff6a00;
   box-shadow: 0 0 0 4px rgba(255, 106, 0, 0.12),
-              0 4px 14px rgba(0, 0, 0, 0.05);
+              0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
 .hero-search-box svg {
@@ -2921,7 +2923,6 @@ box-shadow:
   color: #0f172a;
 }
 
-/* Action Filter Button */
 .filter-btn {
   width: 44px;
   height: 44px;
@@ -2935,11 +2936,6 @@ box-shadow:
   flex-shrink: 0;
   box-shadow: 0 4px 12px rgba(255, 106, 0, 0.3),
               inset 0 1px 1px rgba(255, 255, 255, 0.4);
-  transition: transform 0.2s ease;
-}
-
-.filter-btn:active {
-  transform: scale(0.95);
 }
 
 .filter-btn svg {
@@ -5102,8 +5098,8 @@ box-shadow:
   <div class="hero-content">
     <div class="hero-text">
       <div class="hero-greeting">Welcome back! 👋</div>
-      <h1 class="hero-title">Your Everyday <span>Essentials</span></h1>
-      <p class="hero-subtitle">Fresh groceries & local goods at your door.</p>
+      <h1 class="hero-title">Your Everyday<br><span>Essentials</span>, Delivered</h1>
+      <p class="hero-subtitle">Groceries, fresh produce & more at your fingertips.</p>
     </div>
     
     <img 
