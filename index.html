@@ -2869,13 +2869,74 @@ box-shadow:
   line-height: 1.35;
 }
 
-/* Floating Basket Graphic */
+/* ================= 3D INTEGRATED HERO IMAGE ================= */
+
+.hero-image-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .hero-image {
-  width: 115px;
-  height: 115px;
+  width: 125px;
+  height: 125px;
   object-fit: contain;
   flex-shrink: 0;
-  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.12));
+  
+  /* 3D Visual Filters & Blend Adjustments */
+  filter: contrast(1.05) brightness(1.02) drop-shadow(0 14px 22px rgba(15, 23, 42, 0.15));
+  
+  /* Smooth Floating Animation */
+  animation: float3D 4s ease-in-out infinite;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hero-image:hover {
+  transform: scale(1.06) rotate(2deg);
+}
+
+/* Soft 3D Ground Shadow under the asset */
+.hero-image-container::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  width: 75%;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.18) 0%, rgba(15, 23, 42, 0) 75%);
+  border-radius: 50%;
+  z-index: -1;
+  animation: shadowScale 4s ease-in-out infinite;
+}
+
+/* Floating Animation Keyframes */
+@keyframes float3D {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1.5deg);
+  }
+}
+
+@keyframes shadowScale {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(0.82);
+    opacity: 0.4;
+  }
+}
+
+/* Mobile responsive sizing */
+@media (max-width: 480px) {
+  .hero-image {
+    width: 100px;
+    height: 100px;
+  }
 }
 
 /* Floating Soft 3D Search & Filter */
@@ -5087,13 +5148,6 @@ box-shadow:
     </div>
   </div>
 </div>
-<div class="top-bar">
-  <div class="toggle-box">
-    <button class="toggle-btn active" onclick="switchToggle(this)">Delivery</button>
-    <button class="toggle-btn" onclick="switchToggle(this)">Pickup</button>
-  </div>
-</div>
-
 <div class="hero-section">
   <div class="hero-content">
     <div class="hero-text">
@@ -5102,11 +5156,13 @@ box-shadow:
       <p class="hero-subtitle">Groceries, fresh produce & more at your fingertips.</p>
     </div>
     
-    <img 
-      src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=300&q=80" 
-      alt="Groceries" 
-      class="hero-image"
-    />
+    <div class="hero-image-container">
+      <img 
+        src="https://i.imgur.com/D0M6eJp.png" 
+        alt="3D Groceries" 
+        class="hero-image"
+      />
+    </div>
   </div>
 
   <div class="hero-search-wrapper">
