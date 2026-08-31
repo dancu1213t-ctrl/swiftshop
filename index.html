@@ -4180,6 +4180,106 @@ box-shadow:
   flex: 0 0 33.333%; /* Shows exactly 3 cards at once */
   box-sizing: border-box;
 }
+
+    /* ================= UNIFIED MAIN TAB ROW (LEVEL 1) ================= */
+.unified-cat-row {
+  display: flex !important;
+  overflow-x: auto !important;
+  white-space: nowrap !important;
+  gap: 20px !important;
+  padding: 12px 16px !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
+  align-items: center !important;
+  scroll-behavior: smooth;
+}
+
+.unified-cat-row::-webkit-scrollbar {
+  display: none !important;
+}
+
+.unified-cat-row .cat-btn {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  height: auto !important;
+  min-width: 68px !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+/* Base icon dimensions for uniform alignment */
+.unified-cat-row .uber-3d-icon,
+.unified-cat-row .cat-img {
+  width: 58px !important;
+  height: 58px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 2px solid transparent !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  transition: all 0.25s ease !important;
+}
+
+.unified-cat-row .cat-btn span {
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #555 !important;
+  margin-top: 6px !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  transition: color 0.2s ease !important;
+}
+
+/* Active Selected Tab Effect */
+.unified-cat-row .cat-btn.active .uber-3d-icon,
+.unified-cat-row .cat-btn.active .cat-img {
+  border-color: #ff6a00 !important;
+  transform: scale(1.1) translateY(-2px) !important;
+  box-shadow: 0 8px 18px rgba(255, 106, 0, 0.35) !important;
+}
+
+.unified-cat-row .cat-btn.active span {
+  color: #ff6a00 !important;
+  font-weight: 900 !important;
+}
+
+/* ================= SECONDARY SUBCATEGORY BAR (LEVEL 2) ================= */
+.subcategory-bar {
+  display: none;
+  gap: 8px;
+  padding: 10px 16px;
+  overflow-x: auto;
+  background: #ffffff;
+  border-bottom: 1px solid #f0f0f0;
+  scrollbar-width: none;
+}
+
+.subcategory-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.sub-btn {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 999px;
+  background: #f4f4f4;
+  color: #444;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.sub-btn.active {
+  background: #111111;
+  color: #ffffff;
+}
   </style>
 </head>
 
@@ -5738,12 +5838,11 @@ box-shadow:
 
 
 
+<!-- UNIFIED TWO-TIER MAIN NAVIGATION -->
 <div class="categories-wrapper">
-  <!-- 🛒 GENERAL -->
-  <h3 class="category-label">🛒 General</h3>
+  <div class="categories unified-cat-row">
 
-  <div class="categories uber-eats-row">
-
+    <!-- 🛒 GENERAL -->
     <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack',this)">
       <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
       <span>Snacks</span>
@@ -5779,15 +5878,7 @@ box-shadow:
       <span>Pickup Food</span>
     </div>
 
-  </div>
-
-  <div class="category-divider"></div>
-
-  <!-- 🍲 GUD-FOOD -->
-  <h3 class="category-label">🍲 GUD-FOOD</h3>
-
-  <div class="categories logo-row">
-
+    <!-- 🍲 GUD-FOOD -->
     <div class="cat-btn" data-cat="Breakfast" onclick="setCategory('Breakfast',this)">
       <img src="https://i.imgur.com/0TtohPG.png" class="cat-img" alt="Breakfast">
       <span>Breakfast</span>
@@ -5853,18 +5944,10 @@ box-shadow:
       <span>Neeya's Backyaad</span>
     </div>
 
-  </div>
-
-  <div class="category-divider"></div>
-
-  <!-- ☕ CAFE PARLOURS -->
-  <h3 class="category-label">☕ Cafe Parlours</h3>
-
-  <div class="categories logo-row">
-
+    <!-- ☕ CAFE PARLOURS -->
     <div class="cat-btn" data-cat="Saritas" onclick="setCategory('Saritas',this)">
       <img src="https://i.imgur.com/AENg5Lq.png" class="cat-img">
-      <span>Saritas Orange Walk</span>
+      <span>Saritas OW</span>
     </div>
 
     <div class="cat-btn" data-cat="Urban" onclick="setCategory('Urban',this)">
@@ -5887,15 +5970,7 @@ box-shadow:
       <span>Shaken&Served</span>
     </div>
 
-  </div>
-
-  <div class="category-divider"></div>
-
-  <!-- 👗 APPAREL -->
-  <h3 class="category-label">👗 Apparel</h3>
-
-  <div class="categories logo-row">
-
+    <!-- 👗 APPAREL -->
     <div class="cat-btn" data-cat="Cosmetics" onclick="setCategory('Cosmetics',this)">
       <img src="https://i.imgur.com/4HuDzQg.png" class="cat-img">
       <span>Bree's</span>
@@ -5911,15 +5986,7 @@ box-shadow:
       <span>Sister's CO</span>
     </div>
 
-  </div>
-
-  <div class="category-divider"></div>
-
-  <!-- 🔌 ELECTRONICS & TECH SERVICES -->
-  <h3 class="category-label"> Electronics & Tech Services</h3>
-
-  <div class="categories logo-row">
-
+    <!-- 🔌 ELECTRONICS & TECH SERVICES -->
     <div class="cat-btn" data-cat="AddCart" onclick="setCategory('AddToCart',this)">
       <img src="https://i.imgur.com/ijxrW5d.jpeg" class="cat-img">
       <span>Add to Cart</span>
@@ -5936,7 +6003,6 @@ box-shadow:
     </div>
 
   </div>
-
 </div>
 <!-- SUBCATEGORY BAR -->
 <div id="subcategory-bar" class="subcategory-bar"></div>
