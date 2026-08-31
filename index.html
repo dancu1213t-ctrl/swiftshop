@@ -4180,68 +4180,6 @@ box-shadow:
   flex: 0 0 33.333%; /* Shows exactly 3 cards at once */
   box-sizing: border-box;
 }
-    /* HORIZONTAL SCROLL CONTAINER */
-.main-categories-container {
-  display: flex;
-  gap: 14px;
-  overflow-x: auto;
-  padding: 12px 16px;
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
-  -webkit-overflow-scrolling: touch; /* Smooth inertia scroll on iOS */
-}
-
-.main-categories-container::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome/Safari */
-}
-
-/* BUTTON PILL */
-.cat-pill {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  flex-shrink: 0;
-  outline: none;
-}
-
-/* CIRCULAR ICON WRAPPER */
-.cat-icon-circle {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: #f4f4f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 6px;
-  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-}
-
-.cat-icon-circle img {
-  width: 42px;
-  height: 42px;
-  object-fit: contain;
-}
-
-.cat-pill span {
-  font-size: 12px;
-  font-weight: 600;
-  color: #4b5563;
-}
-
-/* ACTIVE PILL HIGHLIGHT */
-.cat-pill.active .cat-icon-circle {
-  background: #fde8b3;
-  transform: scale(1.08);
-  box-shadow: 0 4px 12px rgba(255, 106, 0, 0.25);
-}
-
-.cat-pill.active span {
-  color: #ff6a00;
-  font-weight: 700;
-}
   </style>
 </head>
 
@@ -5800,43 +5738,204 @@ box-shadow:
 
 
 
-<!-- REPLACE THE ENTIRE BLOCK WITH THIS -->
-<div class="main-categories-container">
-  
-  <button class="cat-pill active" onclick="setCategory('General', this)">
-    <div class="cat-icon-circle">
-      <img src="https://i.imgur.com/QduyjdT.png" alt="General" />
-    </div>
-    <span>General</span>
-  </button>
+<div class="categories-wrapper">
+  <!-- 🛒 GENERAL -->
+  <h3 class="category-label">🛒 General</h3>
 
-  <button class="cat-pill" onclick="setCategory('Food', this)">
-    <div class="cat-icon-circle">
-      <img src="https://i.imgur.com/0UBGQD1.png" alt="Food" />
-    </div>
-    <span>Food</span>
-  </button>
+  <div class="categories uber-eats-row">
 
-  <button class="cat-pill" onclick="setCategory('Cafe', this)">
-    <div class="cat-icon-circle">
-      <img src="https://i.imgur.com/xcA1I0V.png" alt="Cafe" />
+    <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack',this)">
+      <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
+      <span>Snacks</span>
     </div>
-    <span>Cafe</span>
-  </button>
 
-  <button class="cat-pill" onclick="setCategory('Apparel', this)">
-    <div class="cat-icon-circle">
-      <img src="https://i.imgur.com/DcUBmWl.png" alt="Apparel" />
+    <div class="cat-btn" data-cat="Drink" onclick="setCategory('Drink',this)">
+      <img src="https://i.imgur.com/Bkge0pn.png" class="uber-3d-icon" alt="Drinks">
+      <span>Drinks</span>
     </div>
-    <span>Apparel</span>
-  </button>
 
-  <button class="cat-pill" onclick="setCategory('Electronics', this)">
-    <div class="cat-icon-circle">
-      <img src="https://i.imgur.com/NWWuZkr.png" alt="Tech" />
+    <div class="cat-btn" data-cat="Household" onclick="setCategory('Household',this)">
+      <img src="https://i.imgur.com/j2GmDW5.png" class="uber-3d-icon" alt="Household">
+      <span>Household</span>
     </div>
-    <span>Tech</span>
-  </button>
+
+    <div class="cat-btn" data-cat="Hygiene" onclick="setCategory('Hygiene',this)">
+      <img src="https://i.imgur.com/V5giTO5.png" class="uber-3d-icon" alt="Hygiene">
+      <span>Laundry & Cleaning</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Vegetables" onclick="setCategory('Vegetables',this)">
+      <img src="https://i.imgur.com/YSC5fdN.png" class="uber-3d-icon" alt="Veggies">
+      <span>Veggies</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Treats" onclick="setCategory('Treats',this)">
+      <img src="https://i.imgur.com/yX4SJvY.png" class="uber-3d-icon" alt="Treats">
+      <span>Treats</span>
+    </div>
+
+    <div class="cat-btn" id="pickupSection" onclick="openPickupOrder(this)">
+      <img src="https://i.imgur.com/cMPdTPr.png" class="uber-3d-icon" alt="Pickup">
+      <span>Pickup Food</span>
+    </div>
+
+  </div>
+
+  <div class="category-divider"></div>
+
+  <!-- 🍲 GUD-FOOD -->
+  <h3 class="category-label">🍲 GUD-FOOD</h3>
+
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="Breakfast" onclick="setCategory('Breakfast',this)">
+      <img src="https://i.imgur.com/0TtohPG.png" class="cat-img" alt="Breakfast">
+      <span>Breakfast</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Lunch" onclick="setCategory('Lunch',this)">
+      <img src="https://i.imgur.com/p8vx8Nz.png" class="cat-img" alt="Lunch">
+      <span>Lunch</span>
+    </div>
+
+    <div class="cat-btn" onclick="openTacoOrder(this)">
+      <img src="https://i.imgur.com/hnzB4IP.png" class="cat-img" alt="Tacos">
+      <span>Tacos</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Aroma" onclick="setCategory('Aroma',this)">
+      <img src="https://i.imgur.com/i7i6bbl.png" class="cat-img">
+      <span>Aroma</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Leo" onclick="setCategory('Leo Meatpies',this)">
+      <img src="https://i.imgur.com/aggMVYd.jpeg" class="cat-img">
+      <span>Leo's Bakehouse</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Daily Menu" onclick="setCategory('Daily Menu',this)">
+      <img src="https://i.imgur.com/BlO73LS.png" class="cat-img">
+      <span>Dinner House</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Dumpling" onclick="setCategory('Dumpling',this)">
+      <img src="https://i.imgur.com/7pIzEES.png" class="cat-img">
+      <span>Dumpling King</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Fonda" onclick="setCategory('Fonda',this)">
+      <img src="https://i.imgur.com/2Fgy23i.png" class="cat-img">
+      <span>La Fonda de Nilo</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Salsa" onclick="setCategory('Salsas',this)">
+      <img src="https://i.imgur.com/g5rhQkp.png" class="cat-img">
+      <span>Salsas y Sabores</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Burga" onclick="setCategory('Burger Hut',this)">
+      <img src="https://i.imgur.com/kEb6w8N.png" class="cat-img">
+      <span>Burga Hut</span>
+    </div>
+
+    <div class="cat-btn" data-cat="TFC" onclick="setCategory('TFC',this)">
+      <img src="https://i.imgur.com/sDzNncE.png" class="cat-img">
+      <span>TFC</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Guerrero" onclick="setCategory('Guerrero',this)">
+      <img src="https://i.imgur.com/U93eRx4.jpeg" class="cat-img">
+      <span>Guerrero</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Neeyas BackYard" onclick="setCategory('Neeyas Backyard',this)">
+      <img src="https://i.imgur.com/DJb7os5.jpeg" class="cat-img">
+      <span>Neeya's Backyaad</span>
+    </div>
+
+  </div>
+
+  <div class="category-divider"></div>
+
+  <!-- ☕ CAFE PARLOURS -->
+  <h3 class="category-label">☕ Cafe Parlours</h3>
+
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="Saritas" onclick="setCategory('Saritas',this)">
+      <img src="https://i.imgur.com/AENg5Lq.png" class="cat-img">
+      <span>Saritas Orange Walk</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Urban" onclick="setCategory('Urban',this)">
+      <img src="https://i.imgur.com/sdwXPEa.png" class="cat-img">
+      <span>Urban Cafe</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Brew & Browse" onclick="setCategory('Brew',this)">
+      <img src="https://i.imgur.com/dxhMWyb.png" class="cat-img">
+      <span>Brew&Browse</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Maria Bakehouse and Coffee" onclick="setCategory('Maria',this)">
+      <img src="https://i.imgur.com/zKm0iej.png" class="cat-img">
+      <span>Maria Cafe</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Shaken" onclick="setCategory('Shaken',this)">
+      <img src="https://i.imgur.com/ojrOPux.png" class="cat-img">
+      <span>Shaken&Served</span>
+    </div>
+
+  </div>
+
+  <div class="category-divider"></div>
+
+  <!-- 👗 APPAREL -->
+  <h3 class="category-label">👗 Apparel</h3>
+
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="Cosmetics" onclick="setCategory('Cosmetics',this)">
+      <img src="https://i.imgur.com/4HuDzQg.png" class="cat-img">
+      <span>Bree's</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Faye" onclick="setCategory('Faye',this)">
+      <img src="https://i.imgur.com/0cSlDIx.jpeg" class="cat-img">
+      <span>The Faye CO</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Sister" onclick="setCategory('Sister',this)">
+      <img src="https://i.imgur.com/RQpdN14.jpeg" class="cat-img">
+      <span>Sister's CO</span>
+    </div>
+
+  </div>
+
+  <div class="category-divider"></div>
+
+  <!-- 🔌 ELECTRONICS & TECH SERVICES -->
+  <h3 class="category-label"> Electronics & Tech Services</h3>
+
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="AddCart" onclick="setCategory('AddToCart',this)">
+      <img src="https://i.imgur.com/ijxrW5d.jpeg" class="cat-img">
+      <span>Add to Cart</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Electronics" onclick="setCategory('Electronics',this)">
+      <img src="https://i.imgur.com/5jEUdc4.png" class="cat-img">
+      <span>Tech Gadgets</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Pocket Mobile" onclick="setCategory('Pocket Mobile',this)">
+      <img src="https://i.imgur.com/mJT39kx.png" class="cat-img">
+      <span>Pocket Mobile</span>
+    </div>
+
+  </div>
 
 </div>
 <!-- SUBCATEGORY BAR -->
@@ -6637,116 +6736,117 @@ box-shadow:
   }
 
   function setCategory(c, e) {
-  /* 1. HIDE OTHER SECTIONS */
-  const elementsToHide = [
-    "requestRideBox",
-    "pickupOrderBox",
-    "tacoOrderBox",
-    "products",
-    "map",
-    "subcategory-bar"
-  ];
+    /* 1. HIDE EVERYTHING */
+    const elementsToHide = [
+      "requestRideBox",
+      "pickupOrderBox",
+      "tacoOrderBox",
+      "products",
+      "map",
+      "subcategory-bar"
+    ];
 
-  elementsToHide.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
+    elementsToHide.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
 
-  /* 2. RESET ALL ACTIVE BUTTON HIGHLIGHTS */
-  document.querySelectorAll(".cat-pill, .cat-btn").forEach(btn => btn.classList.remove("active"));
+    /* 2. RESET ACTIVE BUTTONS */
+    document.querySelectorAll(".cat-btn").forEach(btn => btn.classList.remove("active"));
 
-  /* 3. SAVE SELECTED CATEGORY GLOBALLY */
-  cat = c;
+    /* 3. SAVE CURRENT CATEGORY */
+    cat = c;
 
-  /* 4. DETERMINE IF TARGET IS A SPECIFIC STORE MENU */
-  let isStore = false;
-  if (e && (e.dataset.store === "true" || e.getAttribute("data-store") === "true")) {
-    isStore = true;
-  }
-
-  /* 5. SHOW TARGET CONTENT AREA */
-  if (c === "RequestRide") {
-    const rideBox = document.getElementById("requestRideBox");
-    const map = document.getElementById("map");
-
-    if (rideBox) rideBox.style.display = "block";
-    if (map) map.style.display = "block";
-  } 
-  else if (c === "Pickup") {
-    const pickupBox = document.getElementById("pickupOrderBox");
-    if (pickupBox) pickupBox.style.display = "block";
-  } 
-  else {
-    const products = document.getElementById("products");
-
-    if (products) {
-      products.style.display = "grid";
-
-      /* STORE MENU WITH SUBCATEGORIES */
-      if (isStore && typeof loadStoreMenu === "function") {
-        loadStoreMenu(c);
-      } 
-      /* GENERAL OR TOP CATEGORY RENDER */
-      else {
-        render(); 
-      }
-
-      /* Smooth scroll down to grid */
-      setTimeout(() => {
-        products.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-      }, 120);
+    /* 4. CHECK IF STORE */
+    let isStore = false;
+    if (e && e.dataset.store === "true") {
+      isStore = true;
     }
-  }
 
-  /* 6. SET ACTIVE STATE & AUTO-CENTER SCROLL */
-  if (e) {
-    e.classList.add("active");
+    /* 5. SHOW CORRECT SECTION */
+    if (c === "RequestRide") {
+      const rideBox = document.getElementById("requestRideBox");
+      const map = document.getElementById("map");
 
-    const container = e.closest('.main-categories-container') || e.closest('.categories');
+      if (rideBox) rideBox.style.display = "block";
+      if (map) map.style.display = "block";
+    }
+    else if (c === "Pickup") {
+      const pickupBox = document.getElementById("pickupOrderBox");
+      if (pickupBox) pickupBox.style.display = "block";
+    }
+    else {
+      const products = document.getElementById("products");
 
-    if (container) {
-      const elLeft = e.offsetLeft;
-      const elWidth = e.offsetWidth;
-      const containerWidth = container.offsetWidth;
+      if (products) {
+        products.style.display = "grid";
 
-      const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+        /* STORE MENU WITH SUBCATEGORIES */
+        if (isStore && typeof loadStoreMenu === "function") {
+          loadStoreMenu(c);
+        }
+        /* NORMAL CATEGORY */
+        else {
+          render();
+        }
 
-      container.scrollTo({
-        left: scrollTo,
-        behavior: "smooth"
+        /* Smooth scroll after layout updates */
+        setTimeout(() => {
+          products.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        }, 120);
+      }
+    }
+
+    /* 6. ACTIVATE BUTTON */
+    if (e) {
+      /* Manual button click */
+      e.classList.add("active");
+
+      const container = e.closest('.categories');
+
+      if (container) {
+        const elLeft = e.offsetLeft;
+        const elWidth = e.offsetWidth;
+        const containerWidth = container.offsetWidth;
+
+        const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+
+        container.scrollTo({
+          left: scrollTo,
+          behavior: "smooth"
+        });
+      }
+    } 
+    else {
+      /* Automatic trigger (slider banners etc) */
+      document.querySelectorAll(".cat-btn").forEach(btn => {
+        const btnText = btn.innerText.toLowerCase();
+        const categoryTarget = c.toLowerCase();
+
+        if (btnText.includes(categoryTarget)) {
+          btn.classList.add("active");
+
+          const container = btn.closest('.categories');
+
+          if (container) {
+            const elLeft = btn.offsetLeft;
+            const elWidth = btn.offsetWidth;
+            const containerWidth = container.offsetWidth;
+
+            const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
+
+            container.scrollTo({
+              left: scrollTo,
+              behavior: "smooth"
+            });
+          }
+        }
       });
     }
-  } 
-  else {
-    /* Handle programmatic triggers (e.g. ad slider clicks) */
-    document.querySelectorAll(".cat-pill, .cat-btn").forEach(btn => {
-      const btnText = btn.innerText.toLowerCase();
-      const categoryTarget = c.toLowerCase();
-
-      if (btnText.includes(categoryTarget)) {
-        btn.classList.add("active");
-
-        const container = btn.closest('.main-categories-container') || btn.closest('.categories');
-
-        if (container) {
-          const elLeft = btn.offsetLeft;
-          const elWidth = btn.offsetWidth;
-          const containerWidth = container.offsetWidth;
-
-          const scrollTo = elLeft - (containerWidth / 2) + (elWidth / 2);
-
-          container.scrollTo({
-            left: scrollTo,
-            behavior: "smooth"
-          });
-        }
-      }
-    });
   }
-}
 
   // 🌮 OPEN TACO ORDER SCREEN (NOT FROM SHEETS)
   function openTacoOrder(btn){
@@ -7349,68 +7449,33 @@ function enterApp() {
     "Items": "🛒"
   };
 
- const MAIN_CATEGORY_MAP = {
-  Food: [
-    "breakfast", "lunch", "tacos", "aroma", "leo meatpies", 
-    "daily menu", "dumpling", "fonda", "salsas", "burger hut", 
-    "tfc", "guerrero", "neeya's backyard"
-  ],
-  Cafe: [
-    "saritas", "urban", "brew", "maria", "shaken"
-  ],
-  Apparel: [
-    "cosmetics", "faye", "sister"
-  ],
-  Electronics: [
-    "addtocart", "electronics", "pocket mobile"
-  ]
-};
+ 
 async function render() {
   const box = document.getElementById("products");
   if (!box) return;
 
   box.innerHTML = "";
 
-  const currentCat = cat || "General";
-  const isMainCategory = MAIN_CATEGORY_MAP[currentCat] !== undefined;
+  // 1. Check if store is open in Supabase before rendering
+  const { data: storeData } = await supabaseClient
+    .from('stores')
+    .select('is_open')
+    .eq('category', cat)
+    .single();
 
-  /* 1. SUPABASE CHECK (Only for individual store pages, skip for main group categories) */
-  if (!isMainCategory && currentCat !== "General" && typeof supabaseClient !== "undefined") {
-    const { data: storeData } = await supabaseClient
-      .from('stores')
-      .select('is_open')
-      .eq('category', currentCat)
-      .single();
+  const isOpen = storeData ? storeData.is_open : 'yes';
 
-    const isOpen = storeData ? storeData.is_open : 'yes';
-
-    if (isOpen === 'no') {
-      box.innerHTML = `
-        <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
-          <div style="font-size:50px; margin-bottom:15px;">🔴</div>
-          <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
-          <p style="font-size:13px; color:#666; margin-top:5px;">This vendor is not accepting orders right now.</p>
-        </div>`;
-      return;
-    }
+  if (isOpen === 'no') {
+    box.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
+        <div style="font-size:50px; margin-bottom:15px;">🔴</div>
+        <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
+        <p style="font-size:13px; color:#666; margin-top:5px;">This vendor is not accepting orders right now.</p>
+      </div>`;
+    return;
   }
 
-  /* 2. FILTER PRODUCTS BASED ON CATEGORY OR STORE */
-  let filteredItems = [];
-
-  if (currentCat === "General") {
-    filteredItems = allProducts;
-  } 
-  else if (isMainCategory) {
-    const allowedTags = MAIN_CATEGORY_MAP[currentCat].map(t => t.toLowerCase());
-    filteredItems = allProducts.filter(p => {
-      const pCat = (p.category || "").toLowerCase();
-      return allowedTags.includes(pCat) || pCat === currentCat.toLowerCase();
-    });
-  } 
-  else {
-    filteredItems = allProducts.filter(p => (p.category || "").toLowerCase() === currentCat.toLowerCase());
-  }
+  const filteredItems = allProducts.filter(p => p.category === cat);
 
   if (filteredItems.length === 0) {
     box.innerHTML = `
@@ -7421,20 +7486,20 @@ async function render() {
     return;
   }
 
-  /* 3. GROUP BY SUBCATEGORY (OR CATEGORY NAME IF MAIN PILL) */
+  /* GROUP BY SUBCATEGORY */
   const grouped = {};
 
   filteredItems.forEach(p => {
-    // If viewing a main category, group by store name/category; otherwise use item subcategory
-    const sub = isMainCategory ? (p.category || "General") : (p.subcategory || "Menu");
+    if (!p.subcategory) return;   
+    const sub = p.subcategory;
     if (!grouped[sub]) grouped[sub] = [];
     grouped[sub].push(p);
   });
 
-  /* 4. RENDER GROUPS */
+  /* RENDER GROUPS */
   Object.keys(grouped).forEach(sub => {
     box.innerHTML += `
-      <div class="subcategory-title" style="grid-column: 1 / -1; font-weight:800; font-size:18px; margin:20px 0 10px 0; border-bottom:2px solid #eee; padding-bottom:4px;">${sub}</div>
+      <div class="subcategory-title">${sub}</div>
     `;
 
     grouped[sub].forEach(p => {
