@@ -4180,18 +4180,54 @@ box-shadow:
   flex: 0 0 33.333%; /* Shows exactly 3 cards at once */
   box-sizing: border-box;
 }
-    /* ================= CATEGORY BUTTON HEADERS ================= */
+/* ================= UBER-STYLE BLACK BUTTONS ================= */
+.categories-wrapper {
+  padding: 10px 0;
+}
+
+/* Container for horizontal pill scrolling */
+.category-header-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px 14px;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -webkit-overflow-scrolling: touch;
+}
+
+.category-header-row::-webkit-scrollbar {
+  display: none; /* Chrome/Safari */
+}
+
+/* Base Pill Button (Uber-Style Dark Mode) */
 .category-btn-header {
-  display: inline-block;
-  margin: 16px 16px 8px 16px;
-  padding: 8px 18px;
-  background: #ff6a00;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  background: #000000;
   color: #ffffff;
-  font-size: 14px;
-  font-weight: 800;
+  font-size: 13px;
+  font-weight: 700;
   border-radius: 999px;
-  box-shadow: 0 4px 12px rgba(255, 106, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2); /* High-contrast subtle white outline */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   letter-spacing: 0.3px;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Active Selected State (Vibrant Contrast Pop) */
+.category-btn-header:active,
+.category-btn-header.active {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  transform: scale(0.96);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
   </style>
 </head>
