@@ -4591,16 +4591,14 @@ box-shadow:
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 100000;
-  pointer-events: none; /* Allows clicks to pass through to your app UI */
+  pointer-events: none; /* Allows clicks to pass through to buttons underneath */
+  z-index: 9999;        /* Keeps visual effects above background elements */
 }
-
 /* Glassmorphic Text Slider */
 .ticker-container {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  /* Changed from fixed to relative so it sits inside the page layout */
+  position: relative; 
+  margin: 15px auto; /* Centered with vertical spacing instead of fixed positioning */
   width: 90%;
   max-width: 900px;
   height: 54px;
@@ -4613,7 +4611,7 @@ box-shadow:
   overflow: hidden;
   display: flex;
   align-items: center;
-  z-index: 100001;
+  z-index: 10; /* Lowered z-index so popups/drawers can open over it */
 }
 
 .ticker-track {
@@ -5284,6 +5282,14 @@ box-shadow:
   </div>
 </div>
 
+  <div class="ticker-container">
+  <div class="ticker-track">
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+  </div>
+</div>
+
 </style>
 <div class="pill-container-v2">
   <div class="pill-track-v2" id="pillTrackV2">
@@ -5606,20 +5612,7 @@ box-shadow:
 
  
 <body>
-  <canvas id="fireworksCanvas"></canvas>
 
-<div class="ticker-container">
-  <div class="ticker-track">
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-  </div>
-</div>
 
 <div class="hero-promo-card">
   <div class="hero-promo-content">
