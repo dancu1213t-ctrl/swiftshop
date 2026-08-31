@@ -2778,104 +2778,173 @@ box-shadow:
   opacity: 1;
   visibility: visible;
 }
-/* ================= COMPACT FLOATING TOP BAR ================= */
+/* ================= 1. ULTRA-PREMIUM FLOATING TOP BAR ================= */
 
 .top-bar {
   position: fixed;
-  top: 10px;
-
-  left: 60px;   /* 🔥 aligns with menu button */
-  right: 12px;  /* keeps right margin clean */
-
-  height: 50px;
-  z-index: 999;
-
+  top: 12px;
+  left: 60px; /* Keeps clear of hamburger menu */
+  right: 16px;
+  height: 54px;
+  z-index: 9999;
+  
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 14px;
 
-  padding: 6px 12px;
-
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(10px);
-
-  border-radius: 14px;
-  border: 1px solid #eee;
-
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-
+  /* Glassmorphism Effect */
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 
+              0 2px 8px rgba(0, 0, 0, 0.04);
   box-sizing: border-box;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ================= TOGGLE ================= */
-
+/* Delivery / Pickup Toggle */
 .toggle-box {
   display: flex;
-  background: #e5e5e5;
+  background: #f1f3f5;
   border-radius: 999px;
   padding: 3px;
   flex-shrink: 0;
 }
 
 .toggle-btn {
-  border: none;
-  padding: 6px 10px;
-  border-radius: 999px;
   background: transparent;
-  font-weight: 600;
-  font-size: 0.85em;
+  border: none;
+  padding: 7px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #666;
+  border-radius: 999px;
   cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
 }
 
 .toggle-btn.active {
-  background: #ff7a18;
-  color: #fff;
-  box-shadow: 0 2px 6px rgba(255,122,24,0.35);
+  background: #ff6a00;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(255, 106, 0, 0.35);
 }
 
-/* ================= LOCATION ================= */
-
+/* Location Selector Pill */
 .location-box {
-  font-weight: 600;
-  font-size: 0.85em;
-
-  max-width: 110px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  flex-shrink: 0;
-}
-
-/* ================= SMALL SEARCH (NOT STRETCHED) ================= */
-
-.search-box {
-  flex: 0 0 170px;   /* 🔥 fixed small width */
   display: flex;
   align-items: center;
   gap: 6px;
-
-  background: #f5f5f5;
-  padding: 6px 10px;
+  background: rgba(255, 247, 239, 0.9);
+  border: 1px solid #ffe1c7;
+  padding: 7px 12px;
   border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #222;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  max-width: 160px;
+}
 
-  border: 2px solid transparent;
+.location-box:hover {
+  background: #ffefe0;
+  transform: translateY(-1px);
+}
+
+/* Expanding Search Box */
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f9fa;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 7px 14px;
+  flex: 1; /* Automatically expands to fill available space */
+  min-width: 120px;
   transition: all 0.25s ease;
 }
 
 .search-box:focus-within {
-  background: #fff;
-  border: 2px solid #ff7a18;
-  box-shadow: 0 0 0 3px rgba(255,122,24,0.15);
+  background: #ffffff;
+  border-color: #ff6a00;
+  box-shadow: 0 0 0 4px rgba(255, 106, 0, 0.15);
 }
 
 .search-box input {
   border: none;
-  outline: none;
   background: transparent;
-
+  outline: none;
   width: 100%;
-  font-size: 0.85em;
+  font-size: 13px;
+  font-weight: 500;
+  color: #111;
+}
+
+/* Icon Utilities */
+.top-icon,
+.search-icon,
+.dropdown-icon {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.top-icon { color: #ff6a00; }
+.dropdown-icon { width: 13px; height: 13px; color: #666; }
+.search-box .search-icon { color: #9ca3af; }
+
+/* Responsive Adjustments */
+@media (min-width: 1024px) {
+  .top-bar {
+    max-width: 1100px;
+    left: 80px;
+    right: 80px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .top-bar {
+    top: 8px;
+    left: 54px;
+    right: 10px;
+    height: 46px;
+    padding: 4px 8px;
+    gap: 6px;
+  }
+
+  .toggle-btn {
+    padding: 5px 9px;
+    font-size: 10px;
+  }
+
+  .location-box {
+    max-width: 105px;
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+
+  .search-box {
+    padding: 5px 10px;
+  }
+
+  .search-box input {
+    font-size: 11px;
+  }
 }
 
 /* ================= PAGE OFFSET ================= */
