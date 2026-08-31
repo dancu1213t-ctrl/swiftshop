@@ -4180,6 +4180,126 @@ box-shadow:
   flex: 0 0 33.333%; /* Shows exactly 3 cards at once */
   box-sizing: border-box;
 }
+    :root {
+  --tab-bg: #f3f4f6;
+  --tab-active-bg: #ffffff;
+  --tab-active-text: #0f172a;
+  --tab-inactive-text: #64748b;
+  --tab-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.categories-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Horizontal Scrollable Pill Navigation */
+.tab-navigation {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 8px;
+  background-color: var(--tab-bg);
+  border-radius: 9999px;
+  backdrop-filter: blur(10px);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Hide scrollbar Firefox */
+}
+
+.tab-navigation::-webkit-scrollbar {
+  display: none; /* Hide scrollbar Chrome/Safari */
+}
+
+.tab-btn {
+  flex: 0 0 auto;
+  padding: 10px 18px;
+  border: none;
+  background: transparent;
+  color: var(--tab-inactive-text);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn:hover {
+  color: var(--tab-active-text);
+}
+
+.tab-btn.active {
+  background-color: var(--tab-active-bg);
+  color: var(--tab-active-text);
+  box-shadow: var(--tab-shadow);
+}
+
+/* Tab Panels Visibility */
+.tab-panels {
+  margin-top: 16px;
+}
+
+.tab-content {
+  display: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.tab-content.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Modern Grid Layout for Items Inside Tabs */
+.categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 16px;
+  padding: 8px 4px;
+}
+
+.cat-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-align: center;
+}
+
+.cat-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+}
+
+.cat-btn.active {
+  border-color: #000000;
+  background-color: #fafafa;
+}
+
+.uber-3d-icon, .cat-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  margin-bottom: 8px;
+  border-radius: 8px;
+}
+
+.cat-btn span {
+  font-size: 12px;
+  font-weight: 500;
+  color: #334155;
+  line-height: 1.2;
+}
   </style>
 </head>
 
@@ -5739,204 +5859,166 @@ box-shadow:
 
 
 <div class="categories-wrapper">
-  <!-- 🛒 GENERAL -->
-  <h3 class="category-label">🛒 General</h3>
+  <div class="tab-navigation">
+    <button class="tab-btn active" onclick="switchMainTab('general', this)">🛒 General</button>
+    <button class="tab-btn" onclick="switchMainTab('gud-food', this)">🍲 Gud Food</button>
+    <button class="tab-btn" onclick="switchMainTab('cafe', this)">☕ Cafe Parlours</button>
+    <button class="tab-btn" onclick="switchMainTab('apparel', this)">👗 Apparel</button>
+    <button class="tab-btn" onclick="switchMainTab('tech', this)">🔌 Electronics</button>
+  </div>
 
-  <div class="categories uber-eats-row">
-
-    <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack',this)">
-      <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
-      <span>Snacks</span>
+  <div class="tab-panels">
+    
+    <div id="tab-general" class="tab-content active">
+      <div class="categories uber-eats-row">
+        <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack',this)">
+          <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
+          <span>Snacks</span>
+        </div>
+        <div class="cat-btn" data-cat="Drink" onclick="setCategory('Drink',this)">
+          <img src="https://i.imgur.com/Bkge0pn.png" class="uber-3d-icon" alt="Drinks">
+          <span>Drinks</span>
+        </div>
+        <div class="cat-btn" data-cat="Household" onclick="setCategory('Household',this)">
+          <img src="https://i.imgur.com/j2GmDW5.png" class="uber-3d-icon" alt="Household">
+          <span>Household</span>
+        </div>
+        <div class="cat-btn" data-cat="Hygiene" onclick="setCategory('Hygiene',this)">
+          <img src="https://i.imgur.com/V5giTO5.png" class="uber-3d-icon" alt="Hygiene">
+          <span>Laundry & Cleaning</span>
+        </div>
+        <div class="cat-btn" data-cat="Vegetables" onclick="setCategory('Vegetables',this)">
+          <img src="https://i.imgur.com/YSC5fdN.png" class="uber-3d-icon" alt="Veggies">
+          <span>Veggies</span>
+        </div>
+        <div class="cat-btn" data-cat="Treats" onclick="setCategory('Treats',this)">
+          <img src="https://i.imgur.com/yX4SJvY.png" class="uber-3d-icon" alt="Treats">
+          <span>Treats</span>
+        </div>
+        <div class="cat-btn" id="pickupSection" onclick="openPickupOrder(this)">
+          <img src="https://i.imgur.com/cMPdTPr.png" class="uber-3d-icon" alt="Pickup">
+          <span>Pickup Food</span>
+        </div>
+      </div>
     </div>
 
-    <div class="cat-btn" data-cat="Drink" onclick="setCategory('Drink',this)">
-      <img src="https://i.imgur.com/Bkge0pn.png" class="uber-3d-icon" alt="Drinks">
-      <span>Drinks</span>
+    <div id="tab-gud-food" class="tab-content">
+      <div class="categories logo-row">
+        <div class="cat-btn" data-cat="Breakfast" onclick="setCategory('Breakfast',this)">
+          <img src="https://i.imgur.com/0TtohPG.png" class="cat-img" alt="Breakfast">
+          <span>Breakfast</span>
+        </div>
+        <div class="cat-btn" data-cat="Lunch" onclick="setCategory('Lunch',this)">
+          <img src="https://i.imgur.com/p8vx8Nz.png" class="cat-img" alt="Lunch">
+          <span>Lunch</span>
+        </div>
+        <div class="cat-btn" onclick="openTacoOrder(this)">
+          <img src="https://i.imgur.com/hnzB4IP.png" class="cat-img" alt="Tacos">
+          <span>Tacos</span>
+        </div>
+        <div class="cat-btn" data-cat="Aroma" onclick="setCategory('Aroma',this)">
+          <img src="https://i.imgur.com/i7i6bbl.png" class="cat-img">
+          <span>Aroma</span>
+        </div>
+        <div class="cat-btn" data-cat="Leo" onclick="setCategory('Leo Meatpies',this)">
+          <img src="https://i.imgur.com/aggMVYd.jpeg" class="cat-img">
+          <span>Leo's Bakehouse</span>
+        </div>
+        <div class="cat-btn" data-cat="Daily Menu" onclick="setCategory('Daily Menu',this)">
+          <img src="https://i.imgur.com/BlO73LS.png" class="cat-img">
+          <span>Dinner House</span>
+        </div>
+        <div class="cat-btn" data-cat="Dumpling" onclick="setCategory('Dumpling',this)">
+          <img src="https://i.imgur.com/7pIzEES.png" class="cat-img">
+          <span>Dumpling King</span>
+        </div>
+        <div class="cat-btn" data-cat="Fonda" onclick="setCategory('Fonda',this)">
+          <img src="https://i.imgur.com/2Fgy23i.png" class="cat-img">
+          <span>La Fonda de Nilo</span>
+        </div>
+        <div class="cat-btn" data-cat="Salsa" onclick="setCategory('Salsas',this)">
+          <img src="https://i.imgur.com/g5rhQkp.png" class="cat-img">
+          <span>Salsas y Sabores</span>
+        </div>
+        <div class="cat-btn" data-cat="Burga" onclick="setCategory('Burger Hut',this)">
+          <img src="https://i.imgur.com/kEb6w8N.png" class="cat-img">
+          <span>Burga Hut</span>
+        </div>
+        <div class="cat-btn" data-cat="TFC" onclick="setCategory('TFC',this)">
+          <img src="https://i.imgur.com/sDzNncE.png" class="cat-img">
+          <span>TFC</span>
+        </div>
+        <div class="cat-btn" data-cat="Guerrero" onclick="setCategory('Guerrero',this)">
+          <img src="https://i.imgur.com/U93eRx4.jpeg" class="cat-img">
+          <span>Guerrero</span>
+        </div>
+        <div class="cat-btn" data-cat="Neeyas BackYard" onclick="setCategory('Neeyas Backyard',this)">
+          <img src="https://i.imgur.com/DJb7os5.jpeg" class="cat-img">
+          <span>Neeya's Backyaad</span>
+        </div>
+      </div>
     </div>
 
-    <div class="cat-btn" data-cat="Household" onclick="setCategory('Household',this)">
-      <img src="https://i.imgur.com/j2GmDW5.png" class="uber-3d-icon" alt="Household">
-      <span>Household</span>
+    <div id="tab-cafe" class="tab-content">
+      <div class="categories logo-row">
+        <div class="cat-btn" data-cat="Saritas" onclick="setCategory('Saritas',this)">
+          <img src="https://i.imgur.com/AENg5Lq.png" class="cat-img">
+          <span>Saritas Orange Walk</span>
+        </div>
+        <div class="cat-btn" data-cat="Urban" onclick="setCategory('Urban',this)">
+          <img src="https://i.imgur.com/sdwXPEa.png" class="cat-img">
+          <span>Urban Cafe</span>
+        </div>
+        <div class="cat-btn" data-cat="Brew & Browse" onclick="setCategory('Brew',this)">
+          <img src="https://i.imgur.com/dxhMWyb.png" class="cat-img">
+          <span>Brew&Browse</span>
+        </div>
+        <div class="cat-btn" data-cat="Maria Bakehouse and Coffee" onclick="setCategory('Maria',this)">
+          <img src="https://i.imgur.com/zKm0iej.png" class="cat-img">
+          <span>Maria Cafe</span>
+        </div>
+        <div class="cat-btn" data-cat="Shaken" onclick="setCategory('Shaken',this)">
+          <img src="https://i.imgur.com/ojrOPux.png" class="cat-img">
+          <span>Shaken&Served</span>
+        </div>
+      </div>
     </div>
 
-    <div class="cat-btn" data-cat="Hygiene" onclick="setCategory('Hygiene',this)">
-      <img src="https://i.imgur.com/V5giTO5.png" class="uber-3d-icon" alt="Hygiene">
-      <span>Laundry & Cleaning</span>
+    <div id="tab-apparel" class="tab-content">
+      <div class="categories logo-row">
+        <div class="cat-btn" data-cat="Cosmetics" onclick="setCategory('Cosmetics',this)">
+          <img src="https://i.imgur.com/4HuDzQg.png" class="cat-img">
+          <span>Bree's</span>
+        </div>
+        <div class="cat-btn" data-cat="Faye" onclick="setCategory('Faye',this)">
+          <img src="https://i.imgur.com/0cSlDIx.jpeg" class="cat-img">
+          <span>The Faye CO</span>
+        </div>
+        <div class="cat-btn" data-cat="Sister" onclick="setCategory('Sister',this)">
+          <img src="https://i.imgur.com/RQpdN14.jpeg" class="cat-img">
+          <span>Sister's CO</span>
+        </div>
+      </div>
     </div>
 
-    <div class="cat-btn" data-cat="Vegetables" onclick="setCategory('Vegetables',this)">
-      <img src="https://i.imgur.com/YSC5fdN.png" class="uber-3d-icon" alt="Veggies">
-      <span>Veggies</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Treats" onclick="setCategory('Treats',this)">
-      <img src="https://i.imgur.com/yX4SJvY.png" class="uber-3d-icon" alt="Treats">
-      <span>Treats</span>
-    </div>
-
-    <div class="cat-btn" id="pickupSection" onclick="openPickupOrder(this)">
-      <img src="https://i.imgur.com/cMPdTPr.png" class="uber-3d-icon" alt="Pickup">
-      <span>Pickup Food</span>
+    <div id="tab-tech" class="tab-content">
+      <div class="categories logo-row">
+        <div class="cat-btn" data-cat="AddCart" onclick="setCategory('AddToCart',this)">
+          <img src="https://i.imgur.com/ijxrW5d.jpeg" class="cat-img">
+          <span>Add to Cart</span>
+        </div>
+        <div class="cat-btn" data-cat="Electronics" onclick="setCategory('Electronics',this)">
+          <img src="https://i.imgur.com/5jEUdc4.png" class="cat-img">
+          <span>Tech Gadgets</span>
+        </div>
+        <div class="cat-btn" data-cat="Pocket Mobile" onclick="setCategory('Pocket Mobile',this)">
+          <img src="https://i.imgur.com/mJT39kx.png" class="cat-img">
+          <span>Pocket Mobile</span>
+        </div>
+      </div>
     </div>
 
   </div>
-
-  <div class="category-divider"></div>
-
-  <!-- 🍲 GUD-FOOD -->
-  <h3 class="category-label">🍲 GUD-FOOD</h3>
-
-  <div class="categories logo-row">
-
-    <div class="cat-btn" data-cat="Breakfast" onclick="setCategory('Breakfast',this)">
-      <img src="https://i.imgur.com/0TtohPG.png" class="cat-img" alt="Breakfast">
-      <span>Breakfast</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Lunch" onclick="setCategory('Lunch',this)">
-      <img src="https://i.imgur.com/p8vx8Nz.png" class="cat-img" alt="Lunch">
-      <span>Lunch</span>
-    </div>
-
-    <div class="cat-btn" onclick="openTacoOrder(this)">
-      <img src="https://i.imgur.com/hnzB4IP.png" class="cat-img" alt="Tacos">
-      <span>Tacos</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Aroma" onclick="setCategory('Aroma',this)">
-      <img src="https://i.imgur.com/i7i6bbl.png" class="cat-img">
-      <span>Aroma</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Leo" onclick="setCategory('Leo Meatpies',this)">
-      <img src="https://i.imgur.com/aggMVYd.jpeg" class="cat-img">
-      <span>Leo's Bakehouse</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Daily Menu" onclick="setCategory('Daily Menu',this)">
-      <img src="https://i.imgur.com/BlO73LS.png" class="cat-img">
-      <span>Dinner House</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Dumpling" onclick="setCategory('Dumpling',this)">
-      <img src="https://i.imgur.com/7pIzEES.png" class="cat-img">
-      <span>Dumpling King</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Fonda" onclick="setCategory('Fonda',this)">
-      <img src="https://i.imgur.com/2Fgy23i.png" class="cat-img">
-      <span>La Fonda de Nilo</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Salsa" onclick="setCategory('Salsas',this)">
-      <img src="https://i.imgur.com/g5rhQkp.png" class="cat-img">
-      <span>Salsas y Sabores</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Burga" onclick="setCategory('Burger Hut',this)">
-      <img src="https://i.imgur.com/kEb6w8N.png" class="cat-img">
-      <span>Burga Hut</span>
-    </div>
-
-    <div class="cat-btn" data-cat="TFC" onclick="setCategory('TFC',this)">
-      <img src="https://i.imgur.com/sDzNncE.png" class="cat-img">
-      <span>TFC</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Guerrero" onclick="setCategory('Guerrero',this)">
-      <img src="https://i.imgur.com/U93eRx4.jpeg" class="cat-img">
-      <span>Guerrero</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Neeyas BackYard" onclick="setCategory('Neeyas Backyard',this)">
-      <img src="https://i.imgur.com/DJb7os5.jpeg" class="cat-img">
-      <span>Neeya's Backyaad</span>
-    </div>
-
-  </div>
-
-  <div class="category-divider"></div>
-
-  <!-- ☕ CAFE PARLOURS -->
-  <h3 class="category-label">☕ Cafe Parlours</h3>
-
-  <div class="categories logo-row">
-
-    <div class="cat-btn" data-cat="Saritas" onclick="setCategory('Saritas',this)">
-      <img src="https://i.imgur.com/AENg5Lq.png" class="cat-img">
-      <span>Saritas Orange Walk</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Urban" onclick="setCategory('Urban',this)">
-      <img src="https://i.imgur.com/sdwXPEa.png" class="cat-img">
-      <span>Urban Cafe</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Brew & Browse" onclick="setCategory('Brew',this)">
-      <img src="https://i.imgur.com/dxhMWyb.png" class="cat-img">
-      <span>Brew&Browse</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Maria Bakehouse and Coffee" onclick="setCategory('Maria',this)">
-      <img src="https://i.imgur.com/zKm0iej.png" class="cat-img">
-      <span>Maria Cafe</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Shaken" onclick="setCategory('Shaken',this)">
-      <img src="https://i.imgur.com/ojrOPux.png" class="cat-img">
-      <span>Shaken&Served</span>
-    </div>
-
-  </div>
-
-  <div class="category-divider"></div>
-
-  <!-- 👗 APPAREL -->
-  <h3 class="category-label">👗 Apparel</h3>
-
-  <div class="categories logo-row">
-
-    <div class="cat-btn" data-cat="Cosmetics" onclick="setCategory('Cosmetics',this)">
-      <img src="https://i.imgur.com/4HuDzQg.png" class="cat-img">
-      <span>Bree's</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Faye" onclick="setCategory('Faye',this)">
-      <img src="https://i.imgur.com/0cSlDIx.jpeg" class="cat-img">
-      <span>The Faye CO</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Sister" onclick="setCategory('Sister',this)">
-      <img src="https://i.imgur.com/RQpdN14.jpeg" class="cat-img">
-      <span>Sister's CO</span>
-    </div>
-
-  </div>
-
-  <div class="category-divider"></div>
-
-  <!-- 🔌 ELECTRONICS & TECH SERVICES -->
-  <h3 class="category-label"> Electronics & Tech Services</h3>
-
-  <div class="categories logo-row">
-
-    <div class="cat-btn" data-cat="AddCart" onclick="setCategory('AddToCart',this)">
-      <img src="https://i.imgur.com/ijxrW5d.jpeg" class="cat-img">
-      <span>Add to Cart</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Electronics" onclick="setCategory('Electronics',this)">
-      <img src="https://i.imgur.com/5jEUdc4.png" class="cat-img">
-      <span>Tech Gadgets</span>
-    </div>
-
-    <div class="cat-btn" data-cat="Pocket Mobile" onclick="setCategory('Pocket Mobile',this)">
-      <img src="https://i.imgur.com/mJT39kx.png" class="cat-img">
-      <span>Pocket Mobile</span>
-    </div>
-
-  </div>
-
 </div>
 <!-- SUBCATEGORY BAR -->
 <div id="subcategory-bar" class="subcategory-bar"></div>
@@ -9587,6 +9669,24 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
   if (navigator.vibrate) {
     navigator.vibrate(20);
   }
+}
+  function switchMainTab(tabId, element) {
+  // Hide all tab panels
+  const contents = document.querySelectorAll('.tab-content');
+  contents.forEach(content => content.classList.remove('active'));
+
+  // Remove active state from all tab buttons
+  const buttons = document.querySelectorAll('.tab-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+
+  // Show target tab panel
+  const selectedTab = document.getElementById(`tab-${tabId}`);
+  if (selectedTab) {
+    selectedTab.classList.add('active');
+  }
+
+  // Highlight active tab button
+  element.classList.add('active');
 }
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
