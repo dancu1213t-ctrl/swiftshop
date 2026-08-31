@@ -4180,16 +4180,17 @@ box-shadow:
   flex: 0 0 33.333%; /* Shows exactly 3 cards at once */
   box-sizing: border-box;
 }
-    /* MAIN TOP TABS CONTAINER */
+/* REMOVE WHITE BOX & MAKE FLOATING TOP TABS */
 .main-tabs-container {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   overflow-x: auto;
-  padding: 12px 16px;
+  padding: 10px 16px;
+  background: transparent !important; /* Removes white box */
+  border-bottom: none !important;
+  box-shadow: none !important;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  background: #fff;
-  border-bottom: 1px solid #f0f0f0;
 }
 
 .main-tabs-container::-webkit-scrollbar {
@@ -4211,38 +4212,47 @@ box-shadow:
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background: #f5f5f7;
+  background: #ffffff; /* Clean white circle for icon only */
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 4px;
-  transition: all 0.2s ease;
+  margin-bottom: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease, background 0.2s ease;
 }
 
 .tab-icon-wrap img {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   object-fit: contain;
 }
 
 .main-tab span {
   font-size: 11px;
   font-weight: 700;
-  color: #666;
+  color: #777;
 }
 
+/* Active top tab highlight */
 .main-tab.active .tab-icon-wrap {
   background: #fde8b3;
-  transform: scale(1.06);
-  box-shadow: 0 4px 10px rgba(255, 106, 0, 0.2);
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(255, 106, 0, 0.2);
 }
 
 .main-tab.active span {
   color: #ff6a00;
+  font-weight: 800;
+}
+
+/* SUB-CATEGORY ROWS (FLOATING) */
+.categories-wrapper {
+  background: transparent !important;
+  padding: 0;
 }
 
 .sub-category-group {
-  margin-top: 8px;
+  background: transparent !important;
 }
   </style>
 </head>
@@ -7506,27 +7516,43 @@ async function render() {
 
   box.innerHTML = "";
 
-  // 1. Check if store is open in Supabase before rendering
-  const { data: storeData } = await supabaseClient
-    .from('stores')
-    .select('is_open')
-    .eq('category', cat)
-    .single();
+  // Normalize search category (e.g., 'Snack' -> 'snack')
+  const targetCat = (cat || "Snack").toLowerCase().trim();
 
-  const isOpen = storeData ? storeData.is_open : 'yes';
+  /* 1. SUPABASE STORE OPEN CHECK (Only for individual vendor stores, skip for general categories) */
+  const generalCategories = ['snack', 'snacks', 'drink', 'drinks', 'household', 'hygiene', 'vegetables', 'veggies', 'treats', 'breakfast', 'lunch'];
+  const isStore = !generalCategories.includes(targetCat);
 
-  if (isOpen === 'no') {
-    box.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
-        <div style="font-size:50px; margin-bottom:15px;">🔴</div>
-        <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
-        <p style="font-size:13px; color:#666; margin-top:5px;">This vendor is not accepting orders right now.</p>
-      </div>`;
-    return;
+  if (isStore && typeof supabaseClient !== "undefined") {
+    const { data: storeData } = await supabaseClient
+      .from('stores')
+      .select('is_open')
+      .eq('category', cat)
+      .single();
+
+    if (storeData && storeData.is_open === 'no') {
+      box.innerHTML = `
+        <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
+          <div style="font-size:50px; margin-bottom:15px;">🔴</div>
+          <h2 style="font-weight:900; color:#222;">Store Currently Closed</h2>
+          <p style="font-size:13px; color:#666; margin-top:5px;">This vendor is not accepting orders right now.</p>
+        </div>`;
+      return;
+    }
   }
 
-  const filteredItems = allProducts.filter(p => p.category === cat);
+  /* 2. FLEXIBLE PRODUCT FILTER */
+  const filteredItems = allProducts.filter(p => {
+    if (!p.category) return false;
+    const itemCat = p.category.toLowerCase().trim();
+    
+    // Direct match OR plural match (e.g., 'snack' matches 'snacks')
+    return itemCat === targetCat || 
+           itemCat.startsWith(targetCat) || 
+           targetCat.startsWith(itemCat);
+  });
 
+  /* 3. SHOW EMPTY STATE IF STILL NO MATCH */
   if (filteredItems.length === 0) {
     box.innerHTML = `
       <div style="grid-column: 1 / -1; text-align:center; padding:50px 20px; color:#555;">
@@ -7536,33 +7562,28 @@ async function render() {
     return;
   }
 
-  /* GROUP BY SUBCATEGORY */
+  /* 4. GROUP AND RENDER PRODUCTS */
   const grouped = {};
 
   filteredItems.forEach(p => {
-    if (!p.subcategory) return;   
-    const sub = p.subcategory;
+    const sub = p.subcategory || p.category || "Items";
     if (!grouped[sub]) grouped[sub] = [];
     grouped[sub].push(p);
   });
 
-  /* RENDER GROUPS */
   Object.keys(grouped).forEach(sub => {
     box.innerHTML += `
-      <div class="subcategory-title">${sub}</div>
+      <div class="subcategory-title" style="grid-column: 1 / -1; font-weight:800; font-size:16px; margin:16px 0 8px 0; border-bottom:1px solid #eee; padding-bottom:4px;">${sub}</div>
     `;
 
     grouped[sub].forEach(p => {
       let badgeHTML = "";
       let wasPriceHTML = "";
 
-      if (p.was) {
-        const isNumeric = !isNaN(parseFloat(p.was)) && isFinite(p.was);
-        if (isNumeric && Number(p.was) > p.price) {
-          const savings = Math.round(((p.was - p.price) / p.was) * 100);
-          badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
-          wasPriceHTML = `<span class="price-was">$${Number(p.was).toFixed(2)}</span>`;
-        }
+      if (p.was && !isNaN(parseFloat(p.was)) && Number(p.was) > p.price) {
+        const savings = Math.round(((p.was - p.price) / p.was) * 100);
+        badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
+        wasPriceHTML = `<span class="price-was">$${Number(p.was).toFixed(2)}</span>`;
       }
 
       const displayPrice = (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
@@ -7573,21 +7594,14 @@ async function render() {
           ${badgeHTML}
           <div class="product-img-wrap">
             <button class="heart-btn" onclick="toggleLike(this, event)">
-              <svg viewBox="0 0 24 24">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-              </svg>
+              <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
             </button>
             <img src="${p.image}" onclick="openImage(this.src)">
           </div>
           <div class="product-info">
             <strong>${p.name}</strong>
-            <div class="price">
-              ${wasPriceHTML}
-              $${displayPrice} BZD
-            </div>
-            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
-              Add
-            </button>
+            <div class="price">${wasPriceHTML} $${displayPrice} BZD</div>
+            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">Add</button>
           </div>
         </div>
       `;
