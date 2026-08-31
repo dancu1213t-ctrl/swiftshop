@@ -4646,14 +4646,14 @@ box-shadow:
     transform: translateX(-50%);
   }
 }
-    .section-title {
+.section-title {
   font-size: 20px;
   font-weight: 700;
-  color: #ffffff;
+  color: #111111;
   display: inline-block;
   letter-spacing: -0.2px;
   padding-bottom: 8px;
-  border-bottom: 2px solid #ffffff;
+  border-bottom: 2px solid #111111;
   margin-bottom: 12px;
 }
 
@@ -4666,14 +4666,12 @@ box-shadow:
 .feature2-card {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 9; /* Maintains widescreen video ratio on all screen sizes */
+  aspect-ratio: 16 / 9;
   min-height: 200px;
   max-height: 480px;
   border-radius: 18px;
   overflow: hidden;
-  background: rgba(15, 23, 42, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: #0f172a; /* Dark solid base to avoid see-through glitches */
   border: 1px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
   cursor: pointer;
@@ -4682,7 +4680,7 @@ box-shadow:
 /* Tablet & Desktop expansion rules */
 @media (min-width: 768px) {
   .feature2-card {
-    aspect-ratio: 21 / 9; /* Cinematic wide banner format for tablets and PCs */
+    aspect-ratio: 21 / 9;
   }
 }
 
@@ -4693,11 +4691,23 @@ box-shadow:
   display: block;
 }
 
+/* Linear bottom gradient to protect badge contrast (no circular shapes) */
+.feature2-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(15, 23, 42, 0.85) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .feature2-badge {
   position: absolute;
   bottom: 14px;
   left: 14px;
-  background: rgba(15, 23, 42, 0.8);
+  width: max-content; /* Prevents stretching across the container */
+  max-width: 80%;
+  background: rgba(15, 23, 42, 0.85);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -4721,7 +4731,7 @@ box-shadow:
   width: 0%;
   background: linear-gradient(90deg, #dc2626, #ffffff, #2563eb);
   transition: width 0.1s linear;
-  z-index: 2;
+  z-index: 3;
 }
   </style>
 </head>
@@ -5577,24 +5587,25 @@ box-shadow:
 </div>
 <h3 class="feature-title section-title">Trending</h3>
 
-<!-- RESPONSIVE SINGLE REEL CONTAINER -->
 <div class="feature2-slider">
   <div class="feature2-track">
     <div class="feature2-card" id="singleReelCard">
       
       <!-- Video Element -->
-      <video id="singleReelPlayer" autoplay muted playsinline poster="https://i.imgur.com/Zeli8Ix.png"></video>
+      <video id="singleReelPlayer" autoplay muted playsinline poster="https://i.imgur.com/Ow0161u.png"></video>
       
-      <!-- Dynamic Vendor Badge -->
+      <!-- Bottom Dark Gradient (NOT a giant circle) -->
+      <div class="feature2-gradient-overlay"></div>
+
+      <!-- Compact Glass Badge (Bottom Left) -->
       <div class="feature2-badge" id="singleReelBadge">Maria's Cafe</div>
 
-      <!-- Playback Progress Bar -->
+      <!-- Clean Progress Line -->
       <div class="reel-progress-bar" id="reelProgressBar"></div>
       
     </div>
   </div>
 </div>
-
 
 
  
