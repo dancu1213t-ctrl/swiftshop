@@ -4180,413 +4180,6 @@ box-shadow:
   flex: 0 0 33.333%; /* Shows exactly 3 cards at once */
   box-sizing: border-box;
 }
-    /* ==========================================
-   SWIFTSHOP — TWO TIER CATEGORY SYSTEM
-   ========================================== */
-
-.categories-wrapper {
-  width: 100%;
-  margin: 0 auto;
-  padding: 10px 0 20px;
-}
-
-
-/* ==========================================
-   TIER 1 — MAIN CATEGORY TABS
-   ========================================== */
-
-.main-category-tabs {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  width: 100%;
-  overflow-x: auto;
-
-  padding: 5px 4px 10px;
-
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-}
-
-.main-category-tabs::-webkit-scrollbar {
-  display: none;
-}
-
-
-.main-tab {
-  position: relative;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-
-  flex: 0 0 auto;
-
-  border: 1px solid #e5e5e5;
-  background: #ffffff;
-
-  color: #555;
-
-  padding: 11px 17px;
-
-  border-radius: 14px;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  white-space: nowrap;
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-
-.main-tab:hover {
-  transform: translateY(-1px);
-  border-color: #ff7900;
-  color: #ff7900;
-}
-
-
-.main-tab:active {
-  transform: scale(0.97);
-}
-
-
-.main-tab-icon {
-  font-size: 17px;
-  line-height: 1;
-}
-
-
-/* ACTIVE MAIN TAB */
-
-.main-tab.active {
-  background: #ff7900;
-  color: #ffffff;
-
-  border-color: #ff7900;
-
-  box-shadow:
-    0 5px 14px rgba(255, 121, 0, 0.22);
-}
-
-
-.main-tab.active:hover {
-  color: #ffffff;
-}
-
-
-/* ==========================================
-   TIER 2 — SUBCATEGORY PANEL
-   ========================================== */
-
-.subcategory-panel {
-  display: none;
-
-  margin-top: 6px;
-
-  padding: 15px 0 5px;
-
-  animation: categoryFadeIn 0.25s ease;
-}
-
-
-.subcategory-panel.active-panel {
-  display: block;
-}
-
-
-@keyframes categoryFadeIn {
-
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-}
-
-
-/* ==========================================
-   SUBCATEGORY HEADER
-   ========================================== */
-
-.subcategory-title {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-
-  padding: 0 4px 12px;
-
-  border-bottom: 1px solid #eeeeee;
-
-  margin-bottom: 13px;
-}
-
-
-.subcategory-title span {
-  font-size: 16px;
-  font-weight: 800;
-  color: #222;
-}
-
-
-.subcategory-title small {
-  font-size: 12px;
-  font-weight: 500;
-  color: #999;
-}
-
-
-/* ==========================================
-   CATEGORY ROW
-   ========================================== */
-
-.subcategory-panel .categories {
-  display: flex;
-
-  gap: 12px;
-
-  overflow-x: auto;
-
-  padding: 2px 4px 12px;
-
-  scrollbar-width: none;
-
-  -webkit-overflow-scrolling: touch;
-}
-
-
-.subcategory-panel .categories::-webkit-scrollbar {
-  display: none;
-}
-
-
-/* ==========================================
-   CATEGORY CARDS
-   ========================================== */
-
-.subcategory-panel .cat-btn {
-
-  flex: 0 0 auto;
-
-  width: 92px;
-
-  min-height: 112px;
-
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  padding: 10px 7px;
-
-  background: #ffffff;
-
-  border: 1px solid #eeeeee;
-
-  border-radius: 16px;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease;
-}
-
-
-.subcategory-panel .cat-btn:hover {
-
-  transform: translateY(-3px);
-
-  border-color: #ff7900;
-
-  box-shadow:
-    0 7px 18px rgba(0, 0, 0, 0.08);
-}
-
-
-.subcategory-panel .cat-btn:active {
-  transform: scale(0.96);
-}
-
-
-/* ACTIVE STORE/CATEGORY */
-
-.subcategory-panel .cat-btn.active {
-
-  border-color: #ff7900;
-
-  background: #fff8f2;
-
-  box-shadow:
-    0 5px 15px rgba(255, 121, 0, 0.12);
-}
-
-
-/* ==========================================
-   CATEGORY IMAGES
-   ========================================== */
-
-.subcategory-panel .cat-img,
-.subcategory-panel .uber-3d-icon {
-
-  width: 62px;
-  height: 62px;
-
-  object-fit: contain;
-
-  border-radius: 13px;
-
-  transition: transform 0.2s ease;
-}
-
-
-.subcategory-panel .cat-btn:hover img {
-  transform: scale(1.06);
-}
-
-
-/* ==========================================
-   CATEGORY TEXT
-   ========================================== */
-
-.subcategory-panel .cat-btn span {
-
-  width: 100%;
-
-  text-align: center;
-
-  font-size: 11.5px;
-
-  line-height: 1.2;
-
-  font-weight: 700;
-
-  color: #333;
-}
-
-
-/* ==========================================
-   MOBILE
-   ========================================== */
-
-@media (max-width: 600px) {
-
-  .categories-wrapper {
-    padding-top: 5px;
-  }
-
-
-  .main-category-tabs {
-    gap: 7px;
-
-    padding-left: 2px;
-    padding-right: 2px;
-  }
-
-
-  .main-tab {
-
-    padding: 10px 14px;
-
-    border-radius: 13px;
-
-    font-size: 13px;
-  }
-
-
-  .main-tab-icon {
-    font-size: 16px;
-  }
-
-
-  .subcategory-panel {
-    padding-top: 12px;
-  }
-
-
-  .subcategory-title {
-    padding-left: 3px;
-    padding-right: 3px;
-  }
-
-
-  .subcategory-title span {
-    font-size: 15px;
-  }
-
-
-  .subcategory-title small {
-    font-size: 10px;
-  }
-
-
-  .subcategory-panel .categories {
-    gap: 10px;
-  }
-
-
-  .subcategory-panel .cat-btn {
-    width: 84px;
-    min-height: 105px;
-
-    border-radius: 15px;
-  }
-
-
-  .subcategory-panel .cat-img,
-  .subcategory-panel .uber-3d-icon {
-    width: 56px;
-    height: 56px;
-  }
-
-
-  .subcategory-panel .cat-btn span {
-    font-size: 10.5px;
-  }
-
-}
-
-
-/* ==========================================
-   VERY SMALL PHONES
-   ========================================== */
-
-@media (max-width: 380px) {
-
-  .main-tab {
-    padding: 9px 12px;
-    font-size: 12px;
-  }
-
-  .main-tab-icon {
-    font-size: 15px;
-  }
-
-  .subcategory-panel .cat-btn {
-    width: 80px;
-  }
-
-}
   </style>
 </head>
 
@@ -6146,333 +5739,202 @@ box-shadow:
 
 
 <div class="categories-wrapper">
+  <!-- 🛒 GENERAL -->
+  <h3 class="category-label">🛒 General</h3>
 
-  <!-- =========================
-       TIER 1 — MAIN TABS
-       ========================= -->
-  <div class="main-category-tabs">
+  <div class="categories uber-eats-row">
 
-    <button class="main-tab active" onclick="switchMainCategory('general', this)">
-      <span class="main-tab-icon">🛒</span>
-      <span>General</span>
-    </button>
+    <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack',this)">
+      <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
+      <span>Snacks</span>
+    </div>
 
-    <button class="main-tab" onclick="switchMainCategory('gudfood', this)">
-      <span class="main-tab-icon">🍲</span>
-      <span>Gud-Food</span>
-    </button>
+    <div class="cat-btn" data-cat="Drink" onclick="setCategory('Drink',this)">
+      <img src="https://i.imgur.com/Bkge0pn.png" class="uber-3d-icon" alt="Drinks">
+      <span>Drinks</span>
+    </div>
 
-    <button class="main-tab" onclick="switchMainCategory('cafes', this)">
-      <span class="main-tab-icon">☕</span>
-      <span>Cafe Parlours</span>
-    </button>
+    <div class="cat-btn" data-cat="Household" onclick="setCategory('Household',this)">
+      <img src="https://i.imgur.com/j2GmDW5.png" class="uber-3d-icon" alt="Household">
+      <span>Household</span>
+    </div>
 
-    <button class="main-tab" onclick="switchMainCategory('apparel', this)">
-      <span class="main-tab-icon">👗</span>
-      <span>Apparel</span>
-    </button>
+    <div class="cat-btn" data-cat="Hygiene" onclick="setCategory('Hygiene',this)">
+      <img src="https://i.imgur.com/V5giTO5.png" class="uber-3d-icon" alt="Hygiene">
+      <span>Laundry & Cleaning</span>
+    </div>
 
-    <button class="main-tab" onclick="switchMainCategory('tech', this)">
-      <span class="main-tab-icon">🔌</span>
-      <span>Tech</span>
-    </button>
+    <div class="cat-btn" data-cat="Vegetables" onclick="setCategory('Vegetables',this)">
+      <img src="https://i.imgur.com/YSC5fdN.png" class="uber-3d-icon" alt="Veggies">
+      <span>Veggies</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Treats" onclick="setCategory('Treats',this)">
+      <img src="https://i.imgur.com/yX4SJvY.png" class="uber-3d-icon" alt="Treats">
+      <span>Treats</span>
+    </div>
+
+    <div class="cat-btn" id="pickupSection" onclick="openPickupOrder(this)">
+      <img src="https://i.imgur.com/cMPdTPr.png" class="uber-3d-icon" alt="Pickup">
+      <span>Pickup Food</span>
+    </div>
 
   </div>
 
+  <div class="category-divider"></div>
 
-  <!-- =========================
-       TIER 2 — GENERAL
-       ========================= -->
-  <div class="subcategory-panel active-panel" id="panel-general">
+  <!-- 🍲 GUD-FOOD -->
+  <h3 class="category-label">🍲 GUD-FOOD</h3>
 
-    <div class="subcategory-title">
-      <span>General</span>
-      <small>Everyday essentials</small>
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="Breakfast" onclick="setCategory('Breakfast',this)">
+      <img src="https://i.imgur.com/0TtohPG.png" class="cat-img" alt="Breakfast">
+      <span>Breakfast</span>
     </div>
 
-    <div class="categories uber-eats-row">
-
-      <div class="cat-btn active"
-           data-cat="Snack"
-           onclick="setCategory('Snack',this)">
-        <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
-        <span>Snacks</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Drink"
-           onclick="setCategory('Drink',this)">
-        <img src="https://i.imgur.com/Bkge0pn.png" class="uber-3d-icon" alt="Drinks">
-        <span>Drinks</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Household"
-           onclick="setCategory('Household',this)">
-        <img src="https://i.imgur.com/j2GmDW5.png" class="uber-3d-icon" alt="Household">
-        <span>Household</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Hygiene"
-           onclick="setCategory('Hygiene',this)">
-        <img src="https://i.imgur.com/V5giTO5.png" class="uber-3d-icon" alt="Hygiene">
-        <span>Laundry & Cleaning</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Vegetables"
-           onclick="setCategory('Vegetables',this)">
-        <img src="https://i.imgur.com/YSC5fdN.png" class="uber-3d-icon" alt="Veggies">
-        <span>Veggies</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Treats"
-           onclick="setCategory('Treats',this)">
-        <img src="https://i.imgur.com/yX4SJvY.png" class="uber-3d-icon" alt="Treats">
-        <span>Treats</span>
-      </div>
-
-      <div class="cat-btn"
-           id="pickupSection"
-           onclick="openPickupOrder(this)">
-        <img src="https://i.imgur.com/cMPdTPr.png" class="uber-3d-icon" alt="Pickup">
-        <span>Pickup Food</span>
-      </div>
-
+    <div class="cat-btn" data-cat="Lunch" onclick="setCategory('Lunch',this)">
+      <img src="https://i.imgur.com/p8vx8Nz.png" class="cat-img" alt="Lunch">
+      <span>Lunch</span>
     </div>
+
+    <div class="cat-btn" onclick="openTacoOrder(this)">
+      <img src="https://i.imgur.com/hnzB4IP.png" class="cat-img" alt="Tacos">
+      <span>Tacos</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Aroma" onclick="setCategory('Aroma',this)">
+      <img src="https://i.imgur.com/i7i6bbl.png" class="cat-img">
+      <span>Aroma</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Leo" onclick="setCategory('Leo Meatpies',this)">
+      <img src="https://i.imgur.com/aggMVYd.jpeg" class="cat-img">
+      <span>Leo's Bakehouse</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Daily Menu" onclick="setCategory('Daily Menu',this)">
+      <img src="https://i.imgur.com/BlO73LS.png" class="cat-img">
+      <span>Dinner House</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Dumpling" onclick="setCategory('Dumpling',this)">
+      <img src="https://i.imgur.com/7pIzEES.png" class="cat-img">
+      <span>Dumpling King</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Fonda" onclick="setCategory('Fonda',this)">
+      <img src="https://i.imgur.com/2Fgy23i.png" class="cat-img">
+      <span>La Fonda de Nilo</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Salsa" onclick="setCategory('Salsas',this)">
+      <img src="https://i.imgur.com/g5rhQkp.png" class="cat-img">
+      <span>Salsas y Sabores</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Burga" onclick="setCategory('Burger Hut',this)">
+      <img src="https://i.imgur.com/kEb6w8N.png" class="cat-img">
+      <span>Burga Hut</span>
+    </div>
+
+    <div class="cat-btn" data-cat="TFC" onclick="setCategory('TFC',this)">
+      <img src="https://i.imgur.com/sDzNncE.png" class="cat-img">
+      <span>TFC</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Guerrero" onclick="setCategory('Guerrero',this)">
+      <img src="https://i.imgur.com/U93eRx4.jpeg" class="cat-img">
+      <span>Guerrero</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Neeyas BackYard" onclick="setCategory('Neeyas Backyard',this)">
+      <img src="https://i.imgur.com/DJb7os5.jpeg" class="cat-img">
+      <span>Neeya's Backyaad</span>
+    </div>
+
   </div>
 
+  <div class="category-divider"></div>
 
-  <!-- =========================
-       TIER 2 — GUD FOOD
-       ========================= -->
-  <div class="subcategory-panel" id="panel-gudfood">
+  <!-- ☕ CAFE PARLOURS -->
+  <h3 class="category-label">☕ Cafe Parlours</h3>
 
-    <div class="subcategory-title">
-      <span>Gud-Food</span>
-      <small>Food & local favourites</small>
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="Saritas" onclick="setCategory('Saritas',this)">
+      <img src="https://i.imgur.com/AENg5Lq.png" class="cat-img">
+      <span>Saritas Orange Walk</span>
     </div>
 
-    <div class="categories logo-row">
-
-      <div class="cat-btn"
-           data-cat="Breakfast"
-           onclick="setCategory('Breakfast',this)">
-        <img src="https://i.imgur.com/0TtohPG.png" class="cat-img">
-        <span>Breakfast</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Lunch"
-           onclick="setCategory('Lunch',this)">
-        <img src="https://i.imgur.com/p8vx8Nz.png" class="cat-img">
-        <span>Lunch</span>
-      </div>
-
-      <div class="cat-btn"
-           onclick="openTacoOrder(this)">
-        <img src="https://i.imgur.com/hnzB4IP.png" class="cat-img">
-        <span>Tacos</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Aroma"
-           onclick="setCategory('Aroma',this)">
-        <img src="https://i.imgur.com/i7i6bbl.png" class="cat-img">
-        <span>Aroma</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Leo"
-           onclick="setCategory('Leo Meatpies',this)">
-        <img src="https://i.imgur.com/aggMVYd.jpeg" class="cat-img">
-        <span>Leo's Bakehouse</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Daily Menu"
-           onclick="setCategory('Daily Menu',this)">
-        <img src="https://i.imgur.com/BlO73LS.png" class="cat-img">
-        <span>Dinner House</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Dumpling"
-           onclick="setCategory('Dumpling',this)">
-        <img src="https://i.imgur.com/7pIzEES.png" class="cat-img">
-        <span>Dumpling King</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Fonda"
-           onclick="setCategory('Fonda',this)">
-        <img src="https://i.imgur.com/2Fgy23i.png" class="cat-img">
-        <span>La Fonda de Nilo</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Salsa"
-           onclick="setCategory('Salsas',this)">
-        <img src="https://i.imgur.com/g5rhQkp.png" class="cat-img">
-        <span>Salsas y Sabores</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Burga"
-           onclick="setCategory('Burger Hut',this)">
-        <img src="https://i.imgur.com/kEb6w8N.png" class="cat-img">
-        <span>Burga Hut</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="TFC"
-           onclick="setCategory('TFC',this)">
-        <img src="https://i.imgur.com/sDzNncE.png" class="cat-img">
-        <span>TFC</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Guerrero"
-           onclick="setCategory('Guerrero',this)">
-        <img src="https://i.imgur.com/U93eRx4.jpeg" class="cat-img">
-        <span>Guerrero</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Neeyas BackYard"
-           onclick="setCategory('Neeyas Backyard',this)">
-        <img src="https://i.imgur.com/DJb7os5.jpeg" class="cat-img">
-        <span>Neeya's Backyard</span>
-      </div>
-
+    <div class="cat-btn" data-cat="Urban" onclick="setCategory('Urban',this)">
+      <img src="https://i.imgur.com/sdwXPEa.png" class="cat-img">
+      <span>Urban Cafe</span>
     </div>
+
+    <div class="cat-btn" data-cat="Brew & Browse" onclick="setCategory('Brew',this)">
+      <img src="https://i.imgur.com/dxhMWyb.png" class="cat-img">
+      <span>Brew&Browse</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Maria Bakehouse and Coffee" onclick="setCategory('Maria',this)">
+      <img src="https://i.imgur.com/zKm0iej.png" class="cat-img">
+      <span>Maria Cafe</span>
+    </div>
+
+    <div class="cat-btn" data-cat="Shaken" onclick="setCategory('Shaken',this)">
+      <img src="https://i.imgur.com/ojrOPux.png" class="cat-img">
+      <span>Shaken&Served</span>
+    </div>
+
   </div>
 
+  <div class="category-divider"></div>
 
-  <!-- =========================
-       TIER 2 — CAFE PARLOURS
-       ========================= -->
-  <div class="subcategory-panel" id="panel-cafes">
+  <!-- 👗 APPAREL -->
+  <h3 class="category-label">👗 Apparel</h3>
 
-    <div class="subcategory-title">
-      <span>Cafe Parlours</span>
-      <small>Coffee, pastries & refreshments</small>
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="Cosmetics" onclick="setCategory('Cosmetics',this)">
+      <img src="https://i.imgur.com/4HuDzQg.png" class="cat-img">
+      <span>Bree's</span>
     </div>
 
-    <div class="categories logo-row">
-
-      <div class="cat-btn"
-           data-cat="Saritas"
-           onclick="setCategory('Saritas',this)">
-        <img src="https://i.imgur.com/AENg5Lq.png" class="cat-img">
-        <span>Saritas Orange Walk</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Urban"
-           onclick="setCategory('Urban',this)">
-        <img src="https://i.imgur.com/sdwXPEa.png" class="cat-img">
-        <span>Urban Cafe</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Brew & Browse"
-           onclick="setCategory('Brew',this)">
-        <img src="https://i.imgur.com/dxhMWyb.png" class="cat-img">
-        <span>Brew&Browse</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Maria Bakehouse and Coffee"
-           onclick="setCategory('Maria',this)">
-        <img src="https://i.imgur.com/zKm0iej.png" class="cat-img">
-        <span>Maria Cafe</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Shaken"
-           onclick="setCategory('Shaken',this)">
-        <img src="https://i.imgur.com/ojrOPux.png" class="cat-img">
-        <span>Shaken&Served</span>
-      </div>
-
+    <div class="cat-btn" data-cat="Faye" onclick="setCategory('Faye',this)">
+      <img src="https://i.imgur.com/0cSlDIx.jpeg" class="cat-img">
+      <span>The Faye CO</span>
     </div>
+
+    <div class="cat-btn" data-cat="Sister" onclick="setCategory('Sister',this)">
+      <img src="https://i.imgur.com/RQpdN14.jpeg" class="cat-img">
+      <span>Sister's CO</span>
+    </div>
+
   </div>
 
+  <div class="category-divider"></div>
 
-  <!-- =========================
-       TIER 2 — APPAREL
-       ========================= -->
-  <div class="subcategory-panel" id="panel-apparel">
+  <!-- 🔌 ELECTRONICS & TECH SERVICES -->
+  <h3 class="category-label"> Electronics & Tech Services</h3>
 
-    <div class="subcategory-title">
-      <span>Apparel</span>
-      <small>Fashion, clothing & lifestyle</small>
+  <div class="categories logo-row">
+
+    <div class="cat-btn" data-cat="AddCart" onclick="setCategory('AddToCart',this)">
+      <img src="https://i.imgur.com/ijxrW5d.jpeg" class="cat-img">
+      <span>Add to Cart</span>
     </div>
 
-    <div class="categories logo-row">
-
-      <div class="cat-btn"
-           data-cat="Cosmetics"
-           onclick="setCategory('Cosmetics',this)">
-        <img src="https://i.imgur.com/4HuDzQg.png" class="cat-img">
-        <span>Bree's</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Faye"
-           onclick="setCategory('Faye',this)">
-        <img src="https://i.imgur.com/0cSlDIx.jpeg" class="cat-img">
-        <span>The Faye CO</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Sister"
-           onclick="setCategory('Sister',this)">
-        <img src="https://i.imgur.com/RQpdN14.jpeg" class="cat-img">
-        <span>Sister's CO</span>
-      </div>
-
-    </div>
-  </div>
-
-
-  <!-- =========================
-       TIER 2 — TECH
-       ========================= -->
-  <div class="subcategory-panel" id="panel-tech">
-
-    <div class="subcategory-title">
-      <span>Electronics & Tech</span>
-      <small>Gadgets, electronics & tech services</small>
+    <div class="cat-btn" data-cat="Electronics" onclick="setCategory('Electronics',this)">
+      <img src="https://i.imgur.com/5jEUdc4.png" class="cat-img">
+      <span>Tech Gadgets</span>
     </div>
 
-    <div class="categories logo-row">
-
-      <div class="cat-btn"
-           data-cat="AddCart"
-           onclick="setCategory('AddToCart',this)">
-        <img src="https://i.imgur.com/ijxrW5d.jpeg" class="cat-img">
-        <span>Add to Cart</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Electronics"
-           onclick="setCategory('Electronics',this)">
-        <img src="https://i.imgur.com/5jEUdc4.png" class="cat-img">
-        <span>Tech Gadgets</span>
-      </div>
-
-      <div class="cat-btn"
-           data-cat="Pocket Mobile"
-           onclick="setCategory('Pocket Mobile',this)">
-        <img src="https://i.imgur.com/mJT39kx.png" class="cat-img">
-        <span>Pocket Mobile</span>
-      </div>
-
+    <div class="cat-btn" data-cat="Pocket Mobile" onclick="setCategory('Pocket Mobile',this)">
+      <img src="https://i.imgur.com/mJT39kx.png" class="cat-img">
+      <span>Pocket Mobile</span>
     </div>
+
   </div>
 
 </div>
@@ -7290,8 +6752,8 @@ box-shadow:
     });
 
     /* 2. RESET ACTIVE BUTTONS */
-   document.querySelectorAll(".subcategory-panel .cat-btn")
-  .forEach(btn => btn.classList.remove("active"));
+    document.querySelectorAll(".cat-btn").forEach(btn => btn.classList.remove("active"));
+
     /* 3. SAVE CURRENT CATEGORY */
     cat = c;
 
@@ -10125,75 +9587,6 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
   if (navigator.vibrate) {
     navigator.vibrate(20);
   }
-}
-  /* ==========================================
-   SWIFTSHOP MAIN CATEGORY SWITCHER
-   ========================================== */
-
-function switchMainCategory(category, button) {
-
-  // ------------------------------------------
-  // Remove active state from ALL main tabs
-  // ------------------------------------------
-
-  document.querySelectorAll('.main-tab').forEach(tab => {
-    tab.classList.remove('active');
-  });
-
-
-  // ------------------------------------------
-  // Activate clicked main tab
-  // ------------------------------------------
-
-  button.classList.add('active');
-
-
-  // ------------------------------------------
-  // Hide ALL second-tier panels
-  // ------------------------------------------
-
-  document.querySelectorAll('.subcategory-panel').forEach(panel => {
-    panel.classList.remove('active-panel');
-  });
-
-
-  // ------------------------------------------
-  // Show selected second-tier panel
-  // ------------------------------------------
-
-  const selectedPanel = document.getElementById(
-    'panel-' + category
-  );
-
-  if (selectedPanel) {
-    selectedPanel.classList.add('active-panel');
-  }
-
-
-  // ------------------------------------------
-  // Reset active store/category
-  // ------------------------------------------
-
-  document.querySelectorAll('.subcategory-panel .cat-btn').forEach(btn => {
-    btn.classList.remove('active');
-  });
-
-
-  // ------------------------------------------
-  // Automatically activate first category
-  // ------------------------------------------
-
-  if (selectedPanel) {
-
-    const firstCategory =
-      selectedPanel.querySelector('.cat-btn');
-
-    if (firstCategory) {
-      firstCategory.classList.add('active');
-    }
-
-  }
-
 }
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
