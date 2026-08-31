@@ -4229,6 +4229,199 @@ box-shadow:
   transform: scale(0.96);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
+    /* ================= PREMIUM RESPONSIVE BANNER CARD ================= */
+
+/* Card Container */
+.hero-promo-card {
+  position: relative;
+  width: 92%;
+  max-width: 1100px; /* Expands nicely on large screens */
+  margin: 20px auto;
+  padding: 24px 28px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  /* Rich Gradient + Glassmorphism Outline */
+  background: radial-gradient(circle at 85% 20%, #17522a 0%, #0c2b16 55%, #06170b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 
+              inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+  /* Layout Alignment */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover Accent for Desktop */
+@media (hover: hover) {
+  .hero-promo-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 50px rgba(0, 0, 0, 0.45), 
+                inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+}
+
+/* Ambient Background Glow */
+.hero-promo-card::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Content Column */
+.hero-promo-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  max-width: 600px;
+}
+
+/* Top Tag / Eyebrow */
+.hero-promo-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  color: #4ade80;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 8px rgba(74, 222, 128, 0.3);
+}
+
+/* Banner Title */
+.hero-promo-title {
+  font-size: clamp(20px, 3.5vw, 36px); /* Responsive Scaling */
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+/* Subtitle */
+.hero-promo-sub {
+  font-size: clamp(12px, 1.8vw, 16px); /* Responsive Scaling */
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+/* Call To Action Button */
+.hero-promo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 0.3px;
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hero-promo-btn:active {
+  transform: scale(0.95);
+}
+
+/* Image Wrapper */
+.hero-promo-image-wrap {
+  position: relative;
+  z-index: 2;
+  width: clamp(110px, 20vw, 220px); /* Dynamic scaling based on screen width */
+  aspect-ratio: 1 / 1;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-promo-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.4));
+  transition: transform 0.3s ease;
+}
+
+/* Floating Star Badge */
+.hero-badge-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: linear-gradient(135deg, #22c55e, #15803d);
+  color: #ffffff;
+  width: clamp(24px, 3.5vw, 36px);
+  height: clamp(24px, 3.5vw, 36px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(11px, 1.5vw, 16px);
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 3;
+}
+
+
+/* ================= RESPONSIVE BREAKPOINTS ================= */
+
+/* Tablets (iPad / Small Laptops) */
+@media (max-width: 768px) {
+  .hero-promo-card {
+    padding: 20px 22px;
+    border-radius: 24px;
+  }
+
+  .hero-promo-btn {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+}
+
+/* Mobile Phones (Compact Layout) */
+@media (max-width: 480px) {
+  .hero-promo-card {
+    width: 92%;
+    padding: 18px 16px;
+    gap: 12px;
+  }
+
+  .hero-promo-tag {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+
+  .hero-promo-sub {
+    margin-bottom: 14px;
+  }
+
+  .hero-promo-btn {
+    padding: 9px 16px;
+    font-size: 11px;
+  }
+
+  .hero-badge-icon {
+    top: -4px;
+    right: -4px;
+  }
+}
   </style>
 </head>
 
@@ -5487,94 +5680,21 @@ box-shadow:
  
 <body>
 
-  <div id="main-view" class="store-section">
-    <div class="store-title">Stores Near You, Coming Soon⏱️:</div>
-    
-    <div class="store-list">
-
-
-
-             <div class="store-profile" onclick="openStore('Saritas', 'https://i.imgur.com/AENg5Lq.png')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/AENg5Lq.png" alt="Saritas Orange Walk">
-        </div>
-        <div class="store-name">Saritas Orange Walk</div>
-      </div>
-
-       <div class="store-profile" onclick="openStore('Add to Cart', 'https://i.imgur.com/mtVKxKX.jpeg')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/mtVKxKX.jpeg" alt="Add to Cart">
-        </div>
-        <div class="store-name">Add to Cart Bz</div>
-      </div>
-
-    
-      
-      <div class="store-profile" onclick="openStore('Sugar City SuperMarket', 'https://i.imgur.com/ozvrvAD.png')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/ozvrvAD.png" alt="Sugar City SuperMarket">
-        </div>
-        <div class="store-name">Sugar City SuperMarket</div>
-      </div>
-
-
-        <div class="store-profile" onclick="openStore('La Popular', 'https://i.imgur.com/sRcr4TA.png')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/sRcr4TA.png" alt="La Popular">
-        </div>
-        <div class="store-name"> La Popular</div>
-      </div>
-
-
-      <div class="store-profile" onclick="openStore('People Store', 'https://i.imgur.com/4BgITmz.png')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/4BgITmz.png" alt="People Store">
-        </div>
-        <div class="store-name">People's Store</div>
-      </div>
-
-      <div class="store-profile" onclick="openStore('123 SuperMarket', 'https://i.imgur.com/AkWl7xO.png')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/AkWl7xO.png" alt="123 SuperMarket">
-        </div>
-        <div class="store-name">123 SuperMarket</div>
-      </div>
-
-      <div class="store-profile" onclick="openStore('White House', 'https://i.imgur.com/k8uvqJB.png')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/k8uvqJB.png" alt="White House">
-        </div>
-        <div class="store-name">White House SuperMarket</div>
-      </div>
-
-       <div class="store-profile" onclick="openStore('Ring SuperMarket', 'https://i.imgur.com/tsQK2Wa.png')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/tsQK2Wa.png" alt="Ring SuperMarket">
-        </div>
-        <div class="store-name">Ring SuperMarket</div>
-      </div>
-
-       <div class="store-profile" onclick="openStore('Aaron Super Store', 'https://i.imgur.com/4Ju6NvL.jpeg')">
-        <div class="store-logo-wrapper">
-          <img src="https://i.imgur.com/4Ju6NvL.jpeg" alt="Aaron Super Store">
-        </div>
-        <div class="store-name">Aaron Super Store</div>
-      </div>
-
-    </div>
+<div class="hero-promo-card">
+  <div class="hero-promo-content">
+    <span class="hero-promo-tag">Weekend Special</span>
+    <div class="hero-promo-title">Up to 30% Off</div>
+    <div class="hero-promo-sub">On Fresh Fruits & Vegetables</div>
+    <button class="hero-promo-btn" onclick="bannerCategory('Vegetables')">
+      Shop Now ➔
+    </button>
   </div>
-
-  <div id="store-detail-view">
-    <button class="back-btn" onclick="closeStore()">← Back to Stores</button>
-    
-    <div class="store-header">
-      <img id="detail-logo" class="detail-logo" src="">
-      <h2 id="detail-name">Store Name</h2>
-    </div>
-
-    <div id="items-container" class="items-grid">
-      </div>
+  
+  <div class="hero-promo-image-wrap">
+    <div class="hero-badge-icon">★</div>
+    <img src="https://i.imgur.com/YSC5fdN.png" alt="Fresh Vegetables">
   </div>
+</div>
 
 <div id="locationModal" style="
   display:none;
@@ -6452,7 +6572,7 @@ box-shadow:
     const openMinute = 30;
 
     // CLOSE: 9:00 PM
-    const closeHour = 21;
+    const closeHour = 23;
     const closeMinute = 0;
 
     let isOpen = false;
