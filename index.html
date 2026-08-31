@@ -4585,20 +4585,23 @@ box-shadow:
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
     /* ================= FIREWORKS & TEXT SLIDER ================= */
+/* ================= BACKGROUND FIREWORKS CANVAS ================= */
 #fireworksCanvas {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  pointer-events: none; /* Allows clicks to pass through to buttons underneath */
-  z-index: 9999;        /* Keeps visual effects above background elements */
+  z-index: -1; /* Places the canvas behind all HTML content */
+  pointer-events: none; /* Allows clicks to pass through to your UI */
 }
+
 /* Glassmorphic Text Slider */
 .ticker-container {
-  /* Changed from fixed to relative so it sits inside the page layout */
-  position: relative; 
-  margin: 15px auto; /* Centered with vertical spacing instead of fixed positioning */
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   width: 90%;
   max-width: 900px;
   height: 54px;
@@ -4611,7 +4614,7 @@ box-shadow:
   overflow: hidden;
   display: flex;
   align-items: center;
-  z-index: 10; /* Lowered z-index so popups/drawers can open over it */
+  z-index: 100001;
 }
 
 .ticker-track {
@@ -5282,14 +5285,6 @@ box-shadow:
   </div>
 </div>
 
-  <div class="ticker-container">
-  <div class="ticker-track">
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-  </div>
-</div>
-
 </style>
 <div class="pill-container-v2">
   <div class="pill-track-v2" id="pillTrackV2">
@@ -5612,7 +5607,8 @@ box-shadow:
 
  
 <body>
-
+  <!-- Keep this: Needed to draw the background fireworks -->
+<canvas id="fireworksCanvas"></canvas>
 
 <div class="hero-promo-card">
   <div class="hero-promo-content">
@@ -9663,114 +9659,100 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
     navigator.vibrate(20);
   }
 }
-  // ==========================================
-// 🎆 RED, WHITE & BLUE 3D FIREWORKS ENGINE
-// ==========================================
-(function initFireworks() {
-  const canvas = document.getElementById('fireworksCanvas');
+const canvas = document.getElementById('fireworksCanvas');
+const ctx = canvas ? canvas.getContext('2d') : null;
+
+let particles = [];
+
+function resizeCanvas() {
   if (!canvas) return;
-  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
-  let width, height;
-
-  function resizeCanvas() {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
+class Particle {
+  constructor(x, y, color) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 5 + 2;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.alpha = 1;
+    this.decay = Math.random() * 0.015 + 0.01;
+    this.gravity = 0.12;
   }
 
-  window.addEventListener('resize', resizeCanvas);
-  resizeCanvas();
-
-  const colors = [
-    { r: 225, g: 29, b: 72 },   // Red
-    { r: 255, g: 255, b: 255 }, // White
-    { r: 37, g: 99, b: 235 }    // Blue
-  ];
-
-  class Particle {
-    constructor(x, y, color) {
-      this.x = x;
-      this.y = y;
-      this.color = color;
-
-      const angle = Math.random() * Math.PI * 2;
-      const speed = Math.random() * 5 + 2;
-      this.vx = Math.cos(angle) * speed;
-      this.vy = Math.sin(angle) * speed;
-      this.vz = (Math.random() - 0.5) * 5;
-
-      this.z = 0;
-      this.alpha = 1;
-      this.decay = Math.random() * 0.015 + 0.01;
-      this.gravity = 0.06;
-      this.friction = 0.96;
-      this.size = Math.random() * 2 + 1.5;
-    }
-
-    update() {
-      this.vx *= this.friction;
-      this.vy *= this.friction;
-      this.vz *= this.friction;
-      this.vy += this.gravity;
-
-      this.x += this.vx;
-      this.y += this.vy;
-      this.z += this.vz;
-
-      this.alpha -= this.decay;
-    }
-
-    draw() {
-      const perspective = 400;
-      const scale = perspective / (perspective + this.z);
-      const projectedX = (this.x - width / 2) * scale + width / 2;
-      const projectedY = (this.y - height / 2) * scale + height / 2;
-      const projectedSize = Math.max(0.1, this.size * scale);
-
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, this.alpha);
-      ctx.beginPath();
-      ctx.arc(projectedX, projectedY, projectedSize, 0, Math.PI * 2);
-      ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-      ctx.shadowBlur = 8 * scale;
-      ctx.shadowColor = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-      ctx.fill();
-      ctx.restore();
-    }
+  update() {
+    this.vx *= 0.98;
+    this.vy *= 0.98;
+    this.vy += this.gravity;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= this.decay;
   }
 
-  let particles = [];
+  draw() {
+    if (!ctx) return;
+    ctx.save();
+    ctx.globalAlpha = Math.max(this.alpha, 0);
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+}
 
-  function createBurst(x, y) {
-    const count = 75;
+function createFirework(x, y) {
+  // Belize Red, White, & Blue Theme
+  const colors = ['#DC2626', '#FFFFFF', '#2563EB'];
+  const particleCount = 35;
+  
+  for (let i = 0; i < particleCount; i++) {
     const color = colors[Math.floor(Math.random() * colors.length)];
-    for (let i = 0; i < count; i++) {
-      particles.push(new Particle(x, y, color));
+    particles.push(new Particle(x, y, color));
+  }
+}
+
+function renderFireworks() {
+  if (!ctx) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.update();
+    p.draw();
+    if (p.alpha <= 0) {
+      particles.splice(i, 1);
     }
   }
 
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-
-    if (Math.random() < 0.04) {
-      const randomX = Math.random() * (width * 0.8) + width * 0.1;
-      const randomY = Math.random() * (height * 0.4) + height * 0.1;
-      createBurst(randomX, randomY);
-    }
-
-    for (let i = particles.length - 1; i >= 0; i--) {
-      particles[i].update();
-      particles[i].draw();
-      if (particles[i].alpha <= 0) {
-        particles.splice(i, 1);
-      }
-    }
-
-    requestAnimationFrame(animate);
+  // Random ambient bursts in the background
+  if (Math.random() < 0.03) {
+    const randomX = Math.random() * canvas.width;
+    const randomY = Math.random() * (canvas.height * 0.6);
+    createFirework(randomX, randomY);
   }
 
-  animate();
-})();
+  requestAnimationFrame(renderFireworks);
+}
+
+// Start ambient background loop immediately
+renderFireworks();
+
+// Globally accessible for big manual bursts (e.g. order completion)
+function triggerCelebration() {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+
+  createFirework(width * 0.5, height * 0.3);
+  setTimeout(() => createFirework(width * 0.3, height * 0.4), 150);
+  setTimeout(() => createFirework(width * 0.7, height * 0.35), 300);
+}
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
 <div id="suggestOverlay" class="suggest-overlay">
