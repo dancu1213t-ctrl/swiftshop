@@ -4584,74 +4584,51 @@ box-shadow:
   color: #ff6a00;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
-
-    /* Reset & Base Setup */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  background: #05070f;
-  overflow: hidden;
-  height: 100vh;
-  width: 100vw;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-/* Fireworks Canvas Layer */
+    /* ================= FIREWORKS & TEXT SLIDER ================= */
 #fireworksCanvas {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100000;
+  pointer-events: none; /* Allows clicks to pass through to your app UI */
 }
 
-/* 3D Glassmorphic Ticker Banner Container */
+/* Glassmorphic Text Slider */
 .ticker-container {
-  position: absolute;
-  bottom: 40px;
+  position: fixed;
+  bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;
-  max-width: 1000px;
-  height: 64px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  max-width: 900px;
+  height: 54px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.6),
-    inset 0 1px 1px rgba(255, 255, 255, 0.3),
-    inset 0 -1px 1px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
   overflow: hidden;
   display: flex;
   align-items: center;
-  z-index: 10;
+  z-index: 100001;
 }
 
-/* Moving Text Track */
 .ticker-track {
   display: flex;
   white-space: nowrap;
-  animation: smoothSlide 18s linear infinite;
+  animation: belizeSlide 16s linear infinite;
   will-change: transform;
 }
 
-/* Text Styling */
 .ticker-item {
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 800;
-  letter-spacing: 1px;
-  padding: 0 40px;
+  letter-spacing: 0.5px;
+  padding: 0 35px;
   color: #ffffff;
-  text-shadow: 
-    0 2px 4px rgba(0, 0, 0, 0.8),
-    0 0 12px rgba(255, 255, 255, 0.4);
 }
 
 .ticker-item span {
@@ -4660,8 +4637,7 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* Infinite Marquee Animation */
-@keyframes smoothSlide {
+@keyframes belizeSlide {
   0% {
     transform: translateX(0);
   }
@@ -4669,7 +4645,6 @@ body {
     transform: translateX(-50%);
   }
 }
-    
   </style>
 </head>
 
@@ -5253,8 +5228,21 @@ body {
       🤳🏻 Contact Us
     </a>
   </div>
-
-  
+ <div class="ad-slider">
+    <div class="ad-track" id="adTrack">
+      <img src="https://i.imgur.com/cIBhlR2.png">
+      <img src="https://i.imgur.com/fXARTs0.jpeg">
+      <img src="https://i.imgur.com/1m4sGIf.png">
+      <img src="https://i.imgur.com/zbpecxu.png">
+      <img src="https://i.imgur.com/4Zbp1Ca.png">
+      <img src="https://i.imgur.com/rMFHYuF.png">
+      <img src="https://i.imgur.com/rM0jihJ.png">
+      <img src="https://i.imgur.com/Y5ukTiA.png">
+      <img src="https://i.imgur.com/scZfve8.jpeg">
+      <img src="https://i.imgur.com/PXRYKiM.png">
+    </div>
+  </div>
+</div>
 <div class="hero-section">
   <div class="hero-toggle-row">
     <div class="toggle-box">
@@ -5391,19 +5379,8 @@ body {
   color:#444;
   text-align:center;
 ">
-<canvas id="fireworksCanvas"></canvas>
-
-<div class="ticker-container">
-  <div class="ticker-track">
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
-  </div>
+  💳 Current Balance:
+  <span id="userBalance">0.00</span> BZD
 </div>
 
 <h3 class="feature-title section-title">Featured</h3>
@@ -5629,6 +5606,20 @@ body {
 
  
 <body>
+  <canvas id="fireworksCanvas"></canvas>
+
+<div class="ticker-container">
+  <div class="ticker-track">
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+    <div class="ticker-item">Look at Me: <span>I am Belize@45</span></div>
+  </div>
+</div>
 
 <div class="hero-promo-card">
   <div class="hero-promo-content">
@@ -9679,125 +9670,114 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
     navigator.vibrate(20);
   }
 }
+  // ==========================================
+// 🎆 RED, WHITE & BLUE 3D FIREWORKS ENGINE
+// ==========================================
+(function initFireworks() {
   const canvas = document.getElementById('fireworksCanvas');
-const ctx = canvas.getContext('2d');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
 
-let width, height;
+  let width, height;
 
-function resizeCanvas() {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-}
-
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
-
-// Red, White, and Blue Color Palette
-const colors = [
-  { r: 239, g: 68, b: 68 },  // Red
-  { r: 255, g: 255, b: 255 }, // White
-  { r: 59, g: 130, b: 246 }   // Blue
-];
-
-class Particle {
-  constructor(x, y, color) {
-    this.x = x;
-    this.y = y;
-    this.color = color;
-    
-    // 3D Velocity vectors
-    const angle = Math.random() * Math.PI * 2;
-    const speed = Math.random() * 6 + 2;
-    this.vx = Math.cos(angle) * speed;
-    this.vy = Math.sin(angle) * speed;
-    this.vz = (Math.random() - 0.5) * 6; // Z-axis depth velocity
-
-    this.z = 0; // Perspective depth coordinate
-    this.alpha = 1;
-    this.decay = Math.random() * 0.015 + 0.01;
-    this.gravity = 0.08;
-    this.friction = 0.96;
-    this.size = Math.random() * 2.5 + 1.5;
+  function resizeCanvas() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
   }
 
-  update() {
-    this.vx *= this.friction;
-    this.vy *= this.friction;
-    this.vz *= this.friction;
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
 
-    this.vy += this.gravity;
+  const colors = [
+    { r: 225, g: 29, b: 72 },   // Red
+    { r: 255, g: 255, b: 255 }, // White
+    { r: 37, g: 99, b: 235 }    // Blue
+  ];
 
-    this.x += this.vx;
-    this.y += this.vy;
-    this.z += this.vz;
+  class Particle {
+    constructor(x, y, color) {
+      this.x = x;
+      this.y = y;
+      this.color = color;
 
-    this.alpha -= this.decay;
-  }
+      const angle = Math.random() * Math.PI * 2;
+      const speed = Math.random() * 5 + 2;
+      this.vx = Math.cos(angle) * speed;
+      this.vy = Math.sin(angle) * speed;
+      this.vz = (Math.random() - 0.5) * 5;
 
-  draw() {
-    // Apply 3D perspective projection scaling
-    const perspective = 400;
-    const scale = perspective / (perspective + this.z);
-    const projectedX = (this.x - width / 2) * scale + width / 2;
-    const projectedY = (this.y - height / 2) * scale + height / 2;
-    const projectedSize = Math.max(0.1, this.size * scale);
+      this.z = 0;
+      this.alpha = 1;
+      this.decay = Math.random() * 0.015 + 0.01;
+      this.gravity = 0.06;
+      this.friction = 0.96;
+      this.size = Math.random() * 2 + 1.5;
+    }
 
-    ctx.save();
-    ctx.globalAlpha = Math.max(0, this.alpha);
-    ctx.beginPath();
-    ctx.arc(projectedX, projectedY, projectedSize, 0, Math.PI * 2);
-    ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-    
-    // Glow effect based on depth
-    ctx.shadowBlur = 10 * scale;
-    ctx.shadowColor = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
-    
-    ctx.fill();
-    ctx.restore();
-  }
-}
+    update() {
+      this.vx *= this.friction;
+      this.vy *= this.friction;
+      this.vz *= this.friction;
+      this.vy += this.gravity;
 
-let particles = [];
+      this.x += this.vx;
+      this.y += this.vy;
+      this.z += this.vz;
 
-function createBurst(x, y) {
-  const particleCount = 90;
-  const color = colors[Math.floor(Math.random() * colors.length)];
-  
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle(x, y, color));
-  }
-}
+      this.alpha -= this.decay;
+    }
 
-function animate() {
-  // Trail effect background clear
-  ctx.fillStyle = 'rgba(5, 7, 15, 0.2)';
-  ctx.fillRect(0, 0, width, height);
+    draw() {
+      const perspective = 400;
+      const scale = perspective / (perspective + this.z);
+      const projectedX = (this.x - width / 2) * scale + width / 2;
+      const projectedY = (this.y - height / 2) * scale + height / 2;
+      const projectedSize = Math.max(0.1, this.size * scale);
 
-  // Auto-trigger random explosions
-  if (Math.random() < 0.05) {
-    const randomX = Math.random() * (width * 0.8) + width * 0.1;
-    const randomY = Math.random() * (height * 0.5) + height * 0.1;
-    createBurst(randomX, randomY);
-  }
-
-  for (let i = particles.length - 1; i >= 0; i--) {
-    particles[i].update();
-    particles[i].draw();
-
-    if (particles[i].alpha <= 0) {
-      particles.splice(i, 1);
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, this.alpha);
+      ctx.beginPath();
+      ctx.arc(projectedX, projectedY, projectedSize, 0, Math.PI * 2);
+      ctx.fillStyle = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
+      ctx.shadowBlur = 8 * scale;
+      ctx.shadowColor = `rgb(${this.color.r}, ${this.color.g}, ${this.color.b})`;
+      ctx.fill();
+      ctx.restore();
     }
   }
 
-  requestAnimationFrame(animate);
-}
+  let particles = [];
 
-// Click to burst
-window.addEventListener('click', (e) => {
-  createBurst(e.clientX, e.clientY);
-});
+  function createBurst(x, y) {
+    const count = 75;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    for (let i = 0; i < count; i++) {
+      particles.push(new Particle(x, y, color));
+    }
+  }
 
-animate();
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    if (Math.random() < 0.04) {
+      const randomX = Math.random() * (width * 0.8) + width * 0.1;
+      const randomY = Math.random() * (height * 0.4) + height * 0.1;
+      createBurst(randomX, randomY);
+    }
+
+    for (let i = particles.length - 1; i >= 0; i--) {
+      particles[i].update();
+      particles[i].draw();
+      if (particles[i].alpha <= 0) {
+        particles.splice(i, 1);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+})();
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
 <div id="suggestOverlay" class="suggest-overlay">
