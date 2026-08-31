@@ -4646,26 +4646,90 @@ box-shadow:
     transform: translateX(-50%);
   }
 }
-    /* Slider Container */
-.promo-slider {
+/* Container */
+.promo-slider-container {
+  position: relative;
   width: 100%;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
+  max-width: 600px;
+  margin: 0 auto;
+  border-radius: 999px; /* Pill Shape */
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-/* Track holding the cards */
 .promo-track {
   display: flex;
-  gap: 16px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-/* Make each card take up full width or set size */
+.promo-track::-webkit-scrollbar {
+  display: none;
+}
+
 .hero-promo-card {
-  flex: 0 0 100%; /* Each card takes up 100% width of the slider */
+  flex: 0 0 100%;
+  min-width: 100%;
   scroll-snap-align: start;
+  scroll-snap-stop: always;
+  box-sizing: border-box;
 }
 
+/* Arrows */
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.85);
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  transition: background 0.2s;
+}
+
+.slider-arrow:hover {
+  background: #ffffff;
+}
+
+.prev-btn { left: 12px; }
+.next-btn { right: 12px; }
+
+/* Pagination Dots */
+.promo-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dot.active {
+  background-color: #ffffff;
+  width: 20px;
+  border-radius: 4px; /* Expanding pill effect for active dot */
+}
   </style>
 </head>
 
@@ -5524,10 +5588,12 @@ box-shadow:
   <!-- Keep this: Needed to draw the background fireworks -->
 <canvas id="fireworksCanvas"></canvas>
 
-<div class="promo-slider">
-  <div class="promo-track">
+<div class="promo-slider-container">
+  <button class="slider-arrow prev-btn" id="prevBtn" aria-label="Previous Slide">❮</button>
+  <button class="slider-arrow next-btn" id="nextBtn" aria-label="Next Slide">❯</button>
+
+  <div class="promo-track" id="promoTrack">
     
-    <!-- Card 1 -->
     <div class="hero-promo-card">
       <div class="hero-promo-content">
         <span class="hero-promo-tag">Brew and Browse</span>
@@ -5543,15 +5609,14 @@ box-shadow:
       </div>
     </div>
 
-    <!-- Card 2 -->
     <div class="hero-promo-card">
       <div class="hero-promo-content">
         <span class="hero-promo-tag">Elmas Tacos Place</span>
         <div class="hero-promo-title">2$ Delivery Fee</div>
         <div class="hero-promo-sub">Tacos at your door</div>
-     <button class="hero-promo-btn" onclick="openTacoOrder()">
-  Place Order Now ➔
-</button>
+        <button class="hero-promo-btn" onclick="openTacoOrder()">
+          Place Order Now ➔
+        </button>
       </div>
       <div class="hero-promo-image-wrap">
         <div class="hero-badge-icon">★</div>
@@ -5560,8 +5625,9 @@ box-shadow:
     </div>
 
   </div>
-</div>
 
+  <div class="promo-dots" id="promoDots"></div>
+</div>
 <div id="locationModal" style="
   display:none;
   position:fixed;
@@ -9690,7 +9756,78 @@ function triggerCelebration() {
   setTimeout(() => createFirework(width * 0.3, height * 0.4), 150);
   setTimeout(() => createFirework(width * 0.7, height * 0.35), 300);
 }
+const track = document.getElementById('promoTrack');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const dotsContainer = document.getElementById('promoDots');
+const cards = track.querySelectorAll('.hero-promo-card');
 
+let autoSlideInterval;
+const slideDelay = 4000;
+
+// Dynamically generate pagination dots
+cards.forEach((_, index) => {
+  const dot = document.createElement('div');
+  dot.classList.add('dot');
+  if (index === 0) dot.classList.add('active');
+  
+  dot.addEventListener('click', () => {
+    track.scrollTo({ left: index * track.clientWidth, behavior: 'smooth' });
+    startAutoSlide();
+  });
+
+  dotsContainer.appendChild(dot);
+});
+
+const dots = dotsContainer.querySelectorAll('.dot');
+
+// Update active dot based on scroll position
+function updateActiveDot() {
+  const activeIndex = Math.round(track.scrollLeft / track.clientWidth);
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === activeIndex);
+  });
+}
+
+// Navigation functions
+function nextSlide() {
+  const maxScroll = track.scrollWidth - track.clientWidth;
+  if (track.scrollLeft >= maxScroll - 5) {
+    track.scrollTo({ left: 0, behavior: 'smooth' });
+  } else {
+    track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
+  }
+}
+
+function prevSlide() {
+  if (track.scrollLeft <= 5) {
+    track.scrollTo({ left: track.scrollWidth, behavior: 'smooth' });
+  } else {
+    track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
+  }
+}
+
+// Auto-play timer control
+function startAutoSlide() {
+  stopAutoSlide();
+  autoSlideInterval = setInterval(nextSlide, slideDelay);
+}
+
+function stopAutoSlide() {
+  clearInterval(autoSlideInterval);
+}
+
+// Listeners
+nextBtn.addEventListener('click', () => { nextSlide(); startAutoSlide(); });
+prevBtn.addEventListener('click', () => { prevSlide(); startAutoSlide(); });
+track.addEventListener('scroll', updateActiveDot);
+
+track.addEventListener('mouseenter', stopAutoSlide);
+track.addEventListener('mouseleave', startAutoSlide);
+track.addEventListener('touchstart', stopAutoSlide, { passive: true });
+track.addEventListener('touchend', startAutoSlide);
+
+startAutoSlide();
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
 <div id="suggestOverlay" class="suggest-overlay">
