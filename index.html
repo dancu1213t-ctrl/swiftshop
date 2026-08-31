@@ -4646,6 +4646,83 @@ box-shadow:
     transform: translateX(-50%);
   }
 }
+    .section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  display: inline-block;
+  letter-spacing: -0.2px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #ffffff;
+  margin-bottom: 12px;
+}
+
+.feature2-slider {
+  width: 100%;
+  padding: 8px 0;
+}
+
+/* Responsive aspect-ratio container */
+.feature2-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Maintains widescreen video ratio on all screen sizes */
+  min-height: 200px;
+  max-height: 480px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+/* Tablet & Desktop expansion rules */
+@media (min-width: 768px) {
+  .feature2-card {
+    aspect-ratio: 21 / 9; /* Cinematic wide banner format for tablets and PCs */
+  }
+}
+
+.feature2-card video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.feature2-badge {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+/* Visual Progress Indicator */
+.reel-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  width: 0%;
+  background: linear-gradient(90deg, #dc2626, #ffffff, #2563eb);
+  transition: width 0.1s linear;
+  z-index: 2;
+}
   </style>
 </head>
 
@@ -5500,106 +5577,21 @@ box-shadow:
 </div>
 <h3 class="feature-title section-title">Trending</h3>
 
-<style>
-.section-title {
-  font-size: 20px;
-  font-weight: 700; /* stronger, premium */
-  color: #111;
-  display: inline-block;
-  letter-spacing: -0.2px; /* tighter, cleaner */
-  padding-bottom: 8px;
-  border-bottom: 2px solid #111;
-}
-</style>
-
-
+<!-- RESPONSIVE SINGLE REEL CONTAINER -->
 <div class="feature2-slider">
-  <div class="feature2-track" id="featureTrack2">
+  <div class="feature2-track">
+    <div class="feature2-card" id="singleReelCard">
+      
+      <!-- Video Element -->
+      <video id="singleReelPlayer" autoplay muted playsinline poster="https://i.imgur.com/Zeli8Ix.png"></video>
+      
+      <!-- Dynamic Vendor Badge -->
+      <div class="feature2-badge" id="singleReelBadge">Maria's Cafe</div>
 
-    <!-- VIDEO CARD 🔥 -->
-    <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Zeli8Ix.png');"
-         onclick="setCategory('Maria')">
-
-      <video autoplay muted loop playsinline poster="https://i.imgur.com/Zeli8Ix.png">
-        <source src="https://i.imgur.com/sXBgYBB.mp4" type="video/mp4">
-      </video>
-
-      <div class="feature2-badge">Maria's Cafe</div>
+      <!-- Playback Progress Bar -->
+      <div class="reel-progress-bar" id="reelProgressBar"></div>
+      
     </div>
-
-     <!-- VIDEO CARD 🔥 -->
-    <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Brew')">
-
-      <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
-        <source src="https://i.imgur.com/GXMLX7n.mp4" type="video/mp4">
-      </video>
-
-      <div class="feature2-badge">Brew & Browse</div>
-    </div>
-
-
- <!-- VIDEO CARD 🔥 -->
-    <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/oSHSyM4.png');"
-         onclick="setCategory('Brew')">
-
-      <video autoplay muted loop playsinline poster="https://i.imgur.com/oSHSyM4.png">
-        <source src="https://i.imgur.com/2iOyH04.mp4" type="video/mp4">
-      </video>
-
-      <div class="feature2-badge">Doppex.Bz</div>
-    </div>
-
-
-
-    <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Urban')">
-
-      <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
-        <source src="https://i.imgur.com/cm9B5gd.mp4" type="video/mp4">
-      </video>
-
-      <div class="feature2-badge">Urban Cafe</div>
-    </div>
-
-   <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Faye')">
-
-      <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
-        <source src="https://i.imgur.com/lAteHKS.mp4" type="video/mp4">
-      </video>
-
-      <div class="feature2-badge">The Faye Collective</div>
-    </div>
-
-<div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Shaken')">
-
-      <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
-        <source src="https://i.imgur.com/l1Ow3PI.mp4" type="video/mp4">
-      </video>
-
-      <div class="feature2-badge">Shaken & Served</div>
-    </div>
-
-    
-   <div class="feature2-card"
-         style="--bg: url('https://i.imgur.com/Ow0161u.png');"
-         onclick="setCategory('Daily Menu')">
-
-      <video autoplay muted loop playsinline poster="https://i.imgur.com/Ow0161u.png">
-        <source src="https://i.imgur.com/9ah0eN5.mp4" type="video/mp4">
-      </video>
-
-      <div class="feature2-badge">The Dinner House</div>
-    </div>
-
   </div>
 </div>
 
@@ -5858,7 +5850,7 @@ box-shadow:
 
   <div class="category-divider"></div>
 
-  <div class="category-btn-header">🍲 GUD-FOOD</div>
+  <div class="category-btn-header">🍲 FOOD</div>
 
   <div class="categories logo-row">
 
@@ -6287,6 +6279,7 @@ box-shadow:
   color: #ffffff;
   box-shadow: 0 4px 12px rgba(255,106,0,0.25);
 }
+  
 </style>
 
 
@@ -9753,6 +9746,64 @@ function triggerCelebration() {
   setTimeout(() => createFirework(width * 0.3, height * 0.4), 150);
   setTimeout(() => createFirework(width * 0.7, height * 0.35), 300);
 }
+  (function() {
+  const playlist = [
+    { src: 'https://i.imgur.com/sXBgYBB.mp4', poster: 'https://i.imgur.com/Zeli8Ix.png', badge: "Maria's Cafe", category: 'Maria' },
+    { src: 'https://i.imgur.com/GXMLX7n.mp4', poster: 'https://i.imgur.com/Ow0161u.png', badge: 'Brew & Browse', category: 'Brew' },
+    { src: 'https://i.imgur.com/2iOyH04.mp4', poster: 'https://i.imgur.com/oSHSyM4.png', badge: 'Doppex.Bz', category: 'Brew' },
+    { src: 'https://i.imgur.com/cm9B5gd.mp4', poster: 'https://i.imgur.com/Ow0161u.png', badge: 'Urban Cafe', category: 'Urban' },
+    { src: 'https://i.imgur.com/lAteHKS.mp4', poster: 'https://i.imgur.com/Ow0161u.png', badge: 'The Faye Collective', category: 'Faye' },
+    { src: 'https://i.imgur.com/l1Ow3PI.mp4', poster: 'https://i.imgur.com/Ow0161u.png', badge: 'Shaken & Served', category: 'Shaken' },
+    { src: 'https://i.imgur.com/9ah0eN5.mp4', poster: 'https://i.imgur.com/Ow0161u.png', badge: 'The Dinner House', category: 'Daily Menu' }
+  ];
+
+  let currentIndex = 0;
+  const player = document.getElementById('singleReelPlayer');
+  const badge = document.getElementById('singleReelBadge');
+  const card = document.getElementById('singleReelCard');
+  const progressBar = document.getElementById('reelProgressBar');
+
+  function playVideoAt(index) {
+    const item = playlist[index];
+    if (!item || !player) return;
+
+    player.poster = item.poster;
+    player.src = item.src;
+    if (badge) badge.innerText = item.badge;
+    if (progressBar) progressBar.style.width = '0%';
+
+    player.play().catch(() => {});
+  }
+
+  if (player) {
+    // Update bottom progress bar as video plays
+    player.addEventListener('timeupdate', () => {
+      if (player.duration && progressBar) {
+        const pct = (player.currentTime / player.duration) * 100;
+        progressBar.style.width = `${pct}%`;
+      }
+    });
+
+    // Advance to next video when complete
+    player.addEventListener('ended', () => {
+      currentIndex = (currentIndex + 1) % playlist.length;
+      playVideoAt(currentIndex);
+    });
+  }
+
+  if (card) {
+    // Tapping container triggers current active vendor category
+    card.addEventListener('click', () => {
+      const activeCategory = playlist[currentIndex].category;
+      if (typeof setCategory === 'function') {
+        setCategory(activeCategory);
+      }
+    });
+  }
+
+  // Start sequence
+  playVideoAt(0);
+})();
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
 <div id="suggestOverlay" class="suggest-overlay">
