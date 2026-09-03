@@ -4725,6 +4725,13 @@ box-shadow:
 /* ---------------------------------------------------------
    1. OVERLAY CONTAINERS & BACKDROPS
    --------------------------------------------------------- */
+/* =========================================================
+   SWIFTSHOP GAMIFIED PROFILE & REWARDS MODALS (FULL OVERRIDE)
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. OVERLAY CONTAINERS & BACKDROPS
+   --------------------------------------------------------- */
 #profileOverlay,
 .profile-overlay {
   position: fixed;
@@ -4732,14 +4739,14 @@ box-shadow:
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   z-index: 10000;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
-  padding: 20px;
+  padding: 16px;
   box-sizing: border-box;
 }
 
@@ -4764,7 +4771,7 @@ box-shadow:
 }
 
 /* ---------------------------------------------------------
-   2. MAIN PROFILE MODAL DASHBOARD (FULL SIZE / WIDE CARD)
+   2. MAIN PROFILE MODAL DASHBOARD & VERTICAL SCROLLER
    --------------------------------------------------------- */
 #profileScreen {
   width: 100%;
@@ -4779,16 +4786,48 @@ box-shadow:
   background: #ffffff;
   width: 100%;
   max-width: 900px;
-  height: min(850px, 92vh);
+  max-height: 88vh !important;
+  height: auto !important;
   border-radius: 28px;
   box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
   padding: 28px;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
+  display: flex !important;
+  flex-direction: column !important;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
   animation: profilePopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom Scrollbar Styles */
+.profile-card::-webkit-scrollbar,
+.gamified-card::-webkit-scrollbar,
+#profileScreen .profile-card.gamified-card::-webkit-scrollbar {
+  width: 6px;
+}
+
+.profile-card::-webkit-scrollbar-track,
+.gamified-card::-webkit-scrollbar-track,
+#profileScreen .profile-card.gamified-card::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 10px;
+}
+
+.profile-card::-webkit-scrollbar-thumb,
+.gamified-card::-webkit-scrollbar-thumb,
+#profileScreen .profile-card.gamified-card::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+.profile-card::-webkit-scrollbar-thumb:hover,
+.gamified-card::-webkit-scrollbar-thumb:hover,
+#profileScreen .profile-card.gamified-card::-webkit-scrollbar-thumb:hover {
+  background: #ff5a1f;
 }
 
 @keyframes profilePopIn {
@@ -4824,22 +4863,19 @@ box-shadow:
 }
 
 /* ---------------------------------------------------------
-   3. RESPONSIVE TWO-COLUMN DASHBOARD GRID (NO UGLY SCROLLING)
+   3. RESPONSIVE TWO-COLUMN DASHBOARD GRID
    --------------------------------------------------------- */
 
-/* Container wrapping all inner profile sections */
+/* Container wrapping inner profile sections */
 .profile-card-content {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  flex: 1;
-  overflow-y: auto;
-  padding-right: 4px;
-  scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Desktop & Tablet Expanded Layout (Width >= 680px) */
+/* Desktop & Tablet Layout (Width >= 680px) */
 @media (min-width: 680px) {
   .profile-card,
   .gamified-card,
@@ -4847,14 +4883,12 @@ box-shadow:
     padding: 32px;
   }
 
-  /* Two Columns: Left column holds Profile + Stats + Inputs, Right column holds Rewards */
   .profile-dashboard-layout {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 24px;
     align-items: start;
-    height: 100%;
-    overflow-y: auto;
+    width: 100%;
   }
 
   .profile-left-col,
@@ -4862,12 +4896,7 @@ box-shadow:
     display: flex;
     flex-direction: column;
     gap: 16px;
-  }
-
-  .profile-right-col {
-    max-height: 100%;
-    overflow-y: auto;
-    padding-right: 6px;
+    width: 100%;
   }
 }
 
@@ -5083,10 +5112,14 @@ box-shadow:
 }
 
 #profileScreen .milestones-container,
-.milestones-container {
+.milestones-container,
+#milestonesListContainer,
+#savedRewardsListContainer {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .reward {
@@ -5120,6 +5153,8 @@ box-shadow:
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
+  margin-top: 10px;
 }
 
 #profileScreen .profile-field label,
@@ -5165,11 +5200,6 @@ box-shadow:
   text-align: center;
   box-sizing: border-box;
   animation: modalPopIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-@keyframes modalPopIn {
-  from { transform: scale(0.9); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
 }
 
 .modal-actions {
@@ -5261,7 +5291,7 @@ box-shadow:
   .gamified-card,
   #profileScreen .profile-card.gamified-card {
     max-width: 100vw;
-    height: 90vh;
+    max-height: 90vh !important;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     border-top-left-radius: 28px;
@@ -10336,7 +10366,6 @@ function triggerCelebration() {
   // 4. Show the selected category panel
   document.getElementById('panel-' + panelId).classList.add('active');
 }
-
 /* =========================================================
    SWIFTSHOP GAMIFICATION / REWARDS SYSTEM (FIXED & HARDENED)
    ========================================================= */
@@ -10443,18 +10472,15 @@ async function loadGamificationData() {
   if (!phone) return;
 
   try {
-    // Switched .single() to .maybeSingle() to prevent hard throwing on deleted users
     const { data: user } = await supabaseClient
       .from("swiftshop_users")
       .select("name, phone, points, streak")
       .eq("phone", phone)
       .maybeSingle();
 
-    // Fallback directly to 0 if record doesn't exist in DB
     const points = Number(user?.points || 0);
     const streak = Number(user?.streak || 0);
 
-    // Sync state locally
     localStorage.setItem("points", points);
 
     const pPoints = document.getElementById("profilePoints");
@@ -10514,7 +10540,6 @@ async function addGamificationPoints(amount) {
     const currentPoints = Number(user?.points || 0);
     const newPoints = currentPoints + amount;
 
-    // Uses upsert so it recreates user record if database was cleared
     await supabaseClient
       .from("swiftshop_users")
       .upsert({ phone: phone, points: newPoints, name: getRewardsUserName() }, { onConflict: "phone" });
@@ -10610,7 +10635,7 @@ async function redeemMilestoneNow() {
     phone: phone, milestone_id: milestone.id, status: "REQUESTED", updated_at: new Date().toISOString()
   }, { onConflict: "phone,milestone_id" });
 
-  const text = `🎁 *SWIFTSHOP REWARD REDEMPTION*\n\n*Customer:* ${name}\n*Phone:* ${phone}\n\n🏆 *Reward:* ${milestone.title}\n⭐ *Points:* ${milestone.points}`;
+  const text = `SWIFTSHOP REWARD REDEMPTION\n\nCustomer: ${name}\nPhone: ${phone}\n\nReward: ${milestone.title}\nPoints: ${milestone.points}`;
   window.open(`https://wa.me/${SWIFTSHOP_REWARD_PHONE}?text=${encodeURIComponent(text)}`, "_blank");
   closeRewardChoiceModal();
   await loadGamificationData();
@@ -10626,7 +10651,7 @@ async function saveMilestoneForLater() {
   }, { onConflict: "phone,milestone_id" });
 
   closeRewardChoiceModal();
-  alert("🎁 Reward saved! You can redeem it later.");
+  alert("Reward saved! You can redeem it later.");
   await loadGamificationData();
 }
 
@@ -10659,7 +10684,7 @@ async function loadSavedRewards() {
     card.innerHTML = `
       <div style="font-size:24px;">${milestone.icon}</div>
       <div style="font-weight:800;margin-top:4px;">${milestone.title}</div>
-      <button onclick="chooseMilestoneReward('${milestone.id}')" style="width:100%;margin-top:10px;padding:9px;border:none;border-radius:11px;background:#25d366;color:white;font-weight:800;cursor:pointer;">📲 Redeem Now</button>
+      <button onclick="chooseMilestoneReward('${milestone.id}')" style="width:100%;margin-top:10px;padding:9px;border:none;border-radius:11px;background:#25d366;color:white;font-weight:800;cursor:pointer;">Redeem Now</button>
     `;
     container.appendChild(card);
   });
@@ -10691,7 +10716,7 @@ async function updateDailySpinButton() {
 
   const allowed = await canUserSpin();
   button.disabled = !allowed;
-  button.innerText = allowed ? "🎡 SPIN NOW" : "⏳ Spin Used (Available in 24h)";
+  button.innerText = allowed ? "SPIN NOW" : "Spin Used (Available in 24h)";
   button.style.opacity = allowed ? "1" : "0.55";
   button.style.cursor = allowed ? "pointer" : "not-allowed";
 }
@@ -10800,7 +10825,7 @@ async function spinDailyWheel() {
 
   const allowed = await canUserSpin();
   if (!allowed) {
-    alert("⏳ Daily spin used. Please check back tomorrow!");
+    alert("Daily spin used. Please check back tomorrow!");
     return;
   }
 
@@ -10808,7 +10833,7 @@ async function spinDailyWheel() {
   const button = document.getElementById("dailySpinButton");
   if (button) {
     button.disabled = true;
-    button.innerText = "🎡 SPINNING...";
+    button.innerText = "SPINNING...";
   }
 
   const sectors = getDailyWheelSectors();
@@ -10818,12 +10843,11 @@ async function spinDailyWheel() {
   const numSectors = sectors.length;
   const sliceAngle = (2 * Math.PI) / numSectors;
 
-  // Pointer at top (270deg / 3PI/2)
   const targetSectorCenter = winnerIndex * sliceAngle + sliceAngle / 2;
   const pointerAngle = (3 * Math.PI) / 2;
   const targetRotation = pointerAngle - targetSectorCenter;
 
-  const extraSpins = Math.PI * 2 * 6; // 6 full rotations
+  const extraSpins = Math.PI * 2 * 6;
   
   const startRotation = rewardsWheelRotation % (Math.PI * 2);
   const finalRotation = startRotation + extraSpins + (targetRotation - startRotation);
@@ -10873,10 +10897,11 @@ async function finishDailySpin(winner) {
 
     if (winner.type === "points" && winner.points > 0) {
       await addGamificationPoints(winner.points);
-      alert(`🎉 YOU WON ${winner.label}!`);
+      alert(`YOU WON ${winner.label}!`);
     } else if (winner.type === "reward") {
       const name = getRewardsUserName();
-      const message = `🎉 *SWIFTSHOP REWARD WON!*\n\n*Customer:* ${name}\n*Phone:* ${phone}\n\n🏆 *Prize:* ${winner.description}`;
+      const cleanDesc = (winner.description || "").replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '').trim();
+      const message = `SWIFTSHOP REWARD WON!\n\nCustomer: ${name}\nPhone: ${phone}\n\nPrize: ${cleanDesc}`;
       window.open(`https://wa.me/${SWIFTSHOP_REWARD_PHONE}?text=${encodeURIComponent(message)}`, "_blank");
     }
 
