@@ -4991,6 +4991,21 @@ box-shadow:
         </div>
       </div>
 
+      <!-- Wheel Spin Modal -->
+<div id="spinWheelModal" class="reward-modal-backdrop" style="display: none;">
+  <div class="reward-modal-card">
+    <h3 style="color: #fff; margin-bottom: 12px;">🎡 Daily Spin</h3>
+    
+    <div class="wheel-container" style="position: relative; width: 260px; height: 260px; margin: 0 auto;">
+      <div class="wheel-pointer" style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 20px solid #ff5a1f; z-index: 10;"></div>
+      <canvas id="wheelCanvas" width="300" height="300" style="width: 100%; height: 100%; border-radius: 50%;"></canvas>
+    </div>
+
+    <button class="btn-spin-shortcut" style="width: 100%; padding: 12px; margin-top: 15px; font-size: 14px;" onclick="spinDailyWheel()">SPIN NOW</button>
+    <button class="btn-reward-cancel" style="width: 100%; margin-top: 8px;" onclick="closeSpinWheelModal()">Close</button>
+  </div>
+</div>
+
       <!-- 🏆 Milestone Rewards List -->
       <div class="rewards-section">
         <h4 class="section-title">🏆 Milestone Rewards</h4>
@@ -10238,6 +10253,16 @@ async function addSwiftShopPoints(pointsToAdd) {
     .from('swiftshop_users')
     .update({ points: updatedPoints })
     .eq('phone', phone);
+}
+  function openSpinWheel() {
+  const modal = document.getElementById("spinWheelModal");
+  if (modal) {
+    modal.style.display = "flex";
+    drawSpinWheelCanvas();
+  } else {
+    // Fallback if no modal exists
+    spinDailyWheel();
+  }
 }
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
