@@ -5059,13 +5059,9 @@ box-shadow:
 
 <div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()"></div>
 
-<!-- YOUR EXISTING SWIFTSHOP WEBSITE CONTENT -->
-  <!-- Keep all your existing categories, header, cart, map, etc. here -->
-
 
 <!-- CENTERED PROFILE OVERLAY BACKDROP -->
 <div id="profileOverlay" class="profile-overlay">
-  <div id="profileScreen" class="screen">
     
     <div class="profile-card gamified-card">
       <button class="btn-back-panel" onclick="closeProfile()">← Back</button>
@@ -7655,27 +7651,38 @@ function closeCart() {
       .toUpperCase();
   }
 
-  function openProfile() {
-    document.getElementById("profileOverlay").style.display = "flex";
+function openProfile() {
+  const pOverlay = document.getElementById("profileOverlay");
+  if (pOverlay) pOverlay.classList.add("active"); // Displays the overlay flex container
 
-    const name = localStorage.getItem("userName") || "Customer";
-    const phone = localStorage.getItem("userPhone") || "—";
-    const points = localStorage.getItem("points") || "0";
+  const name = getRewardsUserName();
+  const phone = getRewardsUserPhone();
 
-    const pName = document.getElementById("profileName");
-    const pPhone = document.getElementById("profilePhone");
-    const pPoints = document.getElementById("profilePoints");
-    const pInit = document.getElementById("profileInitials");
+  const pName = document.getElementById("profileName");
+  const pPhone = document.getElementById("profilePhone");
+  const pDisplayName = document.getElementById("profileDisplayName");
+  const pInitial = document.getElementById("profileInitial");
 
-    if (pName) pName.innerText = name;
-    if (pPhone) pPhone.innerText = phone;
-    if (pPoints) pPoints.innerText = points;
-    if (pInit) pInit.innerText = getInitials(name);
+  if (pName) pName.value = name;
+  if (pPhone) pPhone.value = phone;
+  if (pDisplayName) pDisplayName.innerText = name;
+  if (pInitial) pInitial.innerText = name ? name.charAt(0).toUpperCase() : "?";
+
+  loadGamificationData();
+
+  // Close side menu if open
+  if (typeof toggleMenu === "function") {
+    const sidePanel = document.getElementById("sidePanel");
+    if (sidePanel && (sidePanel.classList.contains("open") || sidePanel.classList.contains("active"))) {
+      toggleMenu();
+    }
   }
+}
 
-  function closeProfile() {
-    document.getElementById("profileOverlay").style.display = "none";
-  }
+function closeProfile() {
+  const pOverlay = document.getElementById("profileOverlay");
+  if (pOverlay) pOverlay.classList.remove("active");
+}
 
 function enterApp() {
     const appScr = document.getElementById("appScreen");
