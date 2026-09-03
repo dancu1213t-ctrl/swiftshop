@@ -4717,6 +4717,479 @@ box-shadow:
   opacity: 1;
   transform: translateY(0);
 }
+
+    /* =========================================================
+   SWIFTSHOP REWARDS / PROFILE
+   ========================================================= */
+
+#profileScreen {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+#profileScreen .profile-card.gamified-card {
+  width: 100%;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.12);
+}
+
+#profileScreen .profile-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+#profileScreen .profile-avatar {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff5a1f, #ff8a4c);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  box-shadow: 0 6px 15px rgba(255, 90, 31, 0.25);
+}
+
+#profileScreen .profile-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+#profileScreen .level-badge {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 5px 10px;
+  border-radius: 20px;
+  background: #fff7ed;
+  color: #ea580c;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Progress */
+
+#profileScreen .gamification-box {
+  background: linear-gradient(135deg, #fff7ed, #ffffff);
+  border: 1px solid #fed7aa;
+  border-radius: 18px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+#profileScreen .xp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 9px;
+}
+
+#profileScreen .points-label {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+#profileScreen .points-number {
+  color: #0f172a;
+  font-size: 22px;
+  font-weight: 900;
+}
+
+#profileScreen .xp-bar-container {
+  width: 100%;
+  height: 9px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #e2e8f0;
+}
+
+#profileScreen .xp-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #ff5a1f, #fb923c);
+  transition: width 0.5s ease;
+}
+
+#profileScreen .xp-subtext {
+  display: block;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 11px;
+}
+
+/* Stats */
+
+#profileScreen .stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+#profileScreen .stat-card {
+  min-height: 105px;
+  padding: 14px;
+  box-sizing: border-box;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#profileScreen .stat-icon {
+  font-size: 25px;
+  margin-bottom: 3px;
+}
+
+#profileScreen .stat-value {
+  color: #0f172a;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+#profileScreen .stat-label {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* Buttons */
+
+#profileScreen .btn-spin-shortcut {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  margin-top: 7px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  background: #ff5a1f;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  box-shadow: 0 4px 10px rgba(255, 90, 31, 0.2);
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+#profileScreen .btn-spin-shortcut:hover {
+  transform: translateY(-1px);
+}
+
+#profileScreen .btn-spin-shortcut:active {
+  transform: scale(0.97);
+}
+
+/* Rewards */
+
+#profileScreen .rewards-section {
+  margin-top: 18px;
+}
+
+#profileScreen .section-title {
+  color: #0f172a;
+  font-size: 15px;
+  font-weight: 850;
+  margin: 0 0 10px;
+}
+
+#profileScreen .milestones-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#profileScreen .milestone-card {
+  position: relative;
+  overflow: hidden;
+  padding: 14px;
+  border-radius: 17px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+
+#profileScreen .milestone-card.unlocked {
+  border-color: #fdba74;
+  background: linear-gradient(135deg, #fff7ed, #ffffff);
+}
+
+#profileScreen .milestone-card.claimed {
+  opacity: 0.7;
+}
+
+#profileScreen .milestone-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#profileScreen .milestone-icon {
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  border-radius: 13px;
+  background: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+}
+
+#profileScreen .milestone-card.unlocked .milestone-icon {
+  background: #ffedd5;
+}
+
+#profileScreen .milestone-info {
+  flex: 1;
+}
+
+#profileScreen .milestone-points {
+  color: #ff5a1f;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+#profileScreen .milestone-title {
+  color: #0f172a;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+#profileScreen .milestone-status {
+  color: #64748b;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+#profileScreen .milestone-action {
+  width: 100%;
+  margin-top: 11px;
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+#profileScreen .milestone-action.redeem {
+  background: #ff5a1f;
+  color: #ffffff;
+}
+
+#profileScreen .milestone-action.later {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+#profileScreen .milestone-action:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: default;
+}
+
+/* Profile fields */
+
+#profileScreen .profile-field {
+  margin-top: 15px;
+}
+
+#profileScreen .profile-field label {
+  display: block;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+#profileScreen .profile-field input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 14px;
+  outline: none;
+}
+
+#profileScreen .profile-field input:focus {
+  border-color: #ff5a1f;
+  box-shadow: 0 0 0 3px rgba(255, 90, 31, 0.1);
+}
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+.reward-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  box-sizing: border-box;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(5px);
+}
+
+.reward-modal-card {
+  width: min(100%, 430px);
+  max-height: 92vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.reward-modal-icon {
+  font-size: 42px;
+  margin-bottom: 5px;
+}
+
+.reward-modal-card h3 {
+  color: #0f172a;
+  margin: 0 0 8px;
+}
+
+.reward-modal-card p {
+  color: #64748b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* Reward choice */
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.btn-reward-redeem,
+.btn-reward-later,
+.btn-reward-cancel {
+  width: 100%;
+  border: none;
+  border-radius: 13px;
+  padding: 12px;
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.btn-reward-redeem {
+  background: #25d366;
+  color: #ffffff;
+}
+
+.btn-reward-later {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.btn-reward-cancel {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+/* =========================================================
+   WHEEL
+   ========================================================= */
+
+#spinWheelModal .reward-modal-card {
+  padding: 18px;
+}
+
+.wheel-container {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  max-width: 100%;
+  margin: 8px auto 0;
+}
+
+#wheelCanvas {
+  display: block;
+  width: 300px;
+  height: 300px;
+  max-width: 100%;
+  border-radius: 50%;
+  box-shadow:
+    0 8px 25px rgba(15, 23, 42, 0.18),
+    0 0 0 7px #ffffff;
+}
+
+/* Pointer */
+
+.wheel-pointer {
+  position: absolute;
+  z-index: 5;
+  top: -7px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 0;
+  border-bottom: 27px solid #0f172a;
+  filter: drop-shadow(0 3px 3px rgba(0, 0, 0, 0.25));
+}
+
+/* Mobile */
+
+@media (max-width: 480px) {
+  #profileScreen {
+    padding: 10px;
+  }
+
+  #profileScreen .profile-card.gamified-card {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .wheel-container {
+    width: 280px;
+    height: 280px;
+  }
+
+  #wheelCanvas {
+    width: 280px;
+    height: 280px;
+  }
+
+  #profileScreen .stats-grid {
+    gap: 8px;
+  }
+}
   </style>
 </head>
 
@@ -4823,44 +5296,264 @@ box-shadow:
 
 <div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()"></div>
 
-<div id="profileScreen" class="screen">
+<!-- YOUR EXISTING SWIFTSHOP WEBSITE CONTENT -->
+  <!-- Keep all your existing categories, header, cart, map, etc. here -->
 
-  <div class="profile-screen">
 
-    <button
-      class="panel-item"
-      style="width:auto; margin-bottom:20px;"
-      onclick="closeProfile()">
-      ← Back
-    </button>
+  <!-- PROFILE PANEL -->
+  <div id="profileScreen" class="screen">
 
-    <div class="profile-card">
+    <button class="btn-back-panel" onclick="closeProfile()">← Back</button>
 
-      <div id="profileInitial" class="profile-avatar">?</div>
+    <div class="profile-card gamified-card">
 
-      <div class="profile-field">
+      <div class="profile-top">
+        <div id="profileInitial" class="profile-avatar">?</div>
+
+        <div class="profile-user-info">
+          <div class="profile-name" id="profileDisplayName">Customer</div>
+          <div class="level-badge" id="userLevelBadge">
+            🥉 Bronze Shopper
+          </div>
+        </div>
+      </div>
+
+      <div class="gamification-box">
+
+        <div class="xp-header">
+          <span class="points-label">SwiftShop Points</span>
+
+          <span class="points-number">
+            <span id="profilePoints">0</span>
+            <small style="font-size:14px;color:#ff5a1f;">
+              ⭐ PTS
+            </small>
+          </span>
+        </div>
+
+        <div class="xp-bar-container">
+          <div
+            class="xp-bar-fill"
+            id="xpBarFill"
+            style="width:0%;">
+          </div>
+        </div>
+
+        <small id="xpNextLevelText" class="xp-subtext">
+          100 pts to next reward
+        </small>
+
+      </div>
+
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+          <span class="stat-icon">🔥</span>
+
+          <span class="stat-value" id="streakDays">
+            1
+          </span>
+
+          <span class="stat-label">
+            Day Streak
+          </span>
+        </div>
+
+
+        <div class="stat-card">
+          <span class="stat-icon">🎡</span>
+
+          <span
+            class="stat-value"
+            style="font-size:13px;margin-top:4px;"
+          >
+            Daily Spin
+          </span>
+
+          <button
+            class="btn-spin-shortcut"
+            onclick="openSpinWheel()"
+          >
+            Spin Now
+          </button>
+        </div>
+
+      </div>
+
+
+      <div class="rewards-section">
+
+        <h4 class="section-title">
+          🏆 Milestone Rewards
+        </h4>
+
+        <div
+          id="milestonesListContainer"
+          class="milestones-container"
+        ></div>
+
+      </div>
+
+
+      <div
+        class="rewards-section"
+        id="savedRewardsSection"
+        style="display:none;margin-top:20px;"
+      >
+
+        <h4 class="section-title">
+          🎁 Saved Rewards
+        </h4>
+
+        <div
+          id="savedRewardsListContainer"
+          class="milestones-container"
+        ></div>
+
+      </div>
+
+
+      <div class="profile-field" style="margin-top:25px;">
+
         <label>Full Name</label>
+
         <input
           type="text"
           id="profileName"
           placeholder="Name"
-          oninput="saveProfile()">
+          oninput="saveProfile()"
+        >
+
       </div>
 
+
       <div class="profile-field">
+
         <label>Phone Number</label>
+
         <input
           type="tel"
           id="profilePhone"
           placeholder="Phone"
-          oninput="saveProfile()">
+          oninput="saveProfile()"
+        >
+
       </div>
 
     </div>
 
   </div>
 
-</div>
+
+  <!-- REWARD CHOICE MODAL -->
+
+  <div
+    id="rewardChoiceModal"
+    class="reward-modal-backdrop"
+    style="display:none;"
+  >
+
+    <div class="reward-modal-card">
+
+      <div class="reward-modal-icon">
+        🎁
+      </div>
+
+      <h3 id="choiceModalTitle">
+        Reward Unlocked!
+      </h3>
+
+      <p id="choiceModalDesc">
+        How would you like to handle this reward?
+      </p>
+
+      <div class="modal-actions">
+
+        <button
+          class="btn-reward-redeem"
+          id="btnChoiceRedeem"
+        >
+          📲 Redeem Now
+        </button>
+
+        <button
+          class="btn-reward-later"
+          id="btnChoiceLater"
+        >
+          🟡 Save For Later
+        </button>
+
+        <button
+          class="btn-reward-cancel"
+          onclick="closeRewardChoiceModal()"
+        >
+          Cancel
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- DAILY SPIN MODAL -->
+
+  <div
+    id="spinWheelModal"
+    class="reward-modal-backdrop"
+    style="display:none;"
+  >
+
+    <div class="reward-modal-card">
+
+      <h3 style="color:#0f172a;margin-bottom:5px;">
+        🎡 Daily Spin
+      </h3>
+
+      <p style="margin-top:0;">
+        Spin once every 24 hours for a chance to win!
+      </p>
+
+      <div class="wheel-container">
+
+        <div class="wheel-pointer"></div>
+
+        <canvas
+          id="wheelCanvas"
+          width="300"
+          height="300"
+        ></canvas>
+
+      </div>
+
+      <button
+        id="dailySpinButton"
+        class="btn-spin-shortcut"
+        style="
+          width:100%;
+          padding:13px;
+          margin-top:18px;
+          font-size:14px;
+        "
+        onclick="spinDailyWheel()"
+      >
+        🎡 SPIN NOW
+      </button>
+
+      <button
+        class="btn-reward-cancel"
+        style="width:100%;margin-top:8px;"
+        onclick="closeSpinWheelModal()"
+      >
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
 
 <div id="foodMapScreen" class="screen">
 
@@ -9711,6 +10404,1840 @@ function triggerCelebration() {
   // 4. Show the selected category panel
   document.getElementById('panel-' + panelId).classList.add('active');
 }
+
+  /* =========================================================
+   SWIFTSHOP GAMIFICATION / REWARDS SYSTEM
+   Uses the EXISTING supabaseClient from your main script.
+   DO NOT create another Supabase client here.
+   ========================================================= */
+
+const SWIFTSHOP_REWARD_PHONE = "5016080205";
+
+let rewardsCurrentMilestone = null;
+let rewardsCurrentSpin = null;
+let rewardsIsSpinning = false;
+let rewardsWheelRotation = 0;
+
+
+/* =========================================================
+   MILESTONE REWARDS
+   ========================================================= */
+
+const SWIFTSHOP_MILESTONES = [
+  {
+    id: "m100",
+    points: 100,
+    title: "$4 SwiftCredit",
+    description: "Get $4 SwiftCredit",
+    icon: "💳"
+  },
+  {
+    id: "m150",
+    points: 150,
+    title: "$8 SwiftCredit",
+    description: "Get $8 SwiftCredit",
+    icon: "💳"
+  },
+  {
+    id: "m250",
+    points: 250,
+    title: "$15 SwiftCredit",
+    description: "Get $15 SwiftCredit",
+    icon: "💰"
+  },
+  {
+    id: "m350",
+    points: 350,
+    title: "Spicy Wings TFC + Frappe Maria's",
+    description: "Spicy Wings from TFC + Frappe from Maria's",
+    icon: "🍗"
+  },
+  {
+    id: "m500",
+    points: 500,
+    title: "2 × 16-inch Pizza + 4 Plastic Beverages",
+    description: "Two 16-inch pizzas + four plastic beverages",
+    icon: "🍕"
+  }
+];
+
+
+/* =========================================================
+   DAILY WHEEL
+   TOTAL WEIGHT = 1000
+   $8 SWIFTCREDIT = 3 / 1000
+   ========================================================= */
+
+const SWIFTSHOP_WHEEL = [
+  {
+    id: "pts_1",
+    label: "+1",
+    description: "1 SwiftShop Point",
+    type: "points",
+    points: 1,
+    weight: 300,
+    icon: "⭐"
+  },
+  {
+    id: "pts_2",
+    label: "+2",
+    description: "2 SwiftShop Points",
+    type: "points",
+    points: 2,
+    weight: 250,
+    icon: "⭐"
+  },
+  {
+    id: "pts_3",
+    label: "+3",
+    description: "3 SwiftShop Points",
+    type: "points",
+    points: 3,
+    weight: 180,
+    icon: "⭐"
+  },
+  {
+    id: "pts_5",
+    label: "+5",
+    description: "5 SwiftShop Points",
+    type: "points",
+    points: 5,
+    weight: 120,
+    icon: "⭐"
+  },
+  {
+    id: "pts_6",
+    label: "+6",
+    description: "6 SwiftShop Points",
+    type: "points",
+    points: 6,
+    weight: 70,
+    icon: "⭐"
+  },
+  {
+    id: "pts_8",
+    label: "+8",
+    description: "8 SwiftShop Points",
+    type: "points",
+    points: 8,
+    weight: 40,
+    icon: "⭐"
+  },
+  {
+    id: "frappe_brew",
+    label: "FREE FRAPPE",
+    description: "Free Frappe from Brew and Browse",
+    type: "reward",
+    points: 0,
+    weight: 15,
+    icon: "🥤"
+  },
+  {
+    id: "pizza_slice",
+    label: "PIZZA SLICE",
+    description: "Free Pizza Slice",
+    type: "reward",
+    points: 0,
+    weight: 12,
+    icon: "🍕"
+  },
+  {
+    id: "doritos_ideal",
+    label: "DORITOS + IDEAL",
+    description: "Doritos Chips + Western Dairies Ideal",
+    type: "reward",
+    points: 0,
+    weight: 10,
+    icon: "🍟"
+  },
+  {
+    id: "swiftcredit_8",
+    label: "$8 SWIFTCREDIT",
+    description: "$8 SwiftCredit JACKPOT!",
+    type: "reward",
+    points: 0,
+    weight: 3,
+    icon: "💰"
+  }
+];
+
+const TOTAL_WHEEL_WEIGHT = SWIFTSHOP_WHEEL.reduce(
+  (sum, item) => sum + item.weight,
+  0
+);
+
+
+/* =========================================================
+   GET CURRENT USER
+   ========================================================= */
+
+function getRewardsUserPhone() {
+  return (
+    localStorage.getItem("userPhone") ||
+    window.userPhone ||
+    customerPhone ||
+    ""
+  ).trim();
+}
+
+function getRewardsUserName() {
+  return (
+    localStorage.getItem("userName") ||
+    window.customerName ||
+    customerName ||
+    "Customer"
+  ).trim();
+}
+
+
+/* =========================================================
+   OPEN PROFILE
+   ========================================================= */
+
+async function openProfile() {
+
+  const pScreen = document.getElementById("profileScreen");
+  const pOverlay = document.getElementById("profileOverlay");
+
+  if (pScreen) {
+    pScreen.classList.add("active");
+  }
+
+  if (pOverlay) {
+    pOverlay.style.display = "flex";
+  }
+
+  const name = getRewardsUserName();
+  const phone = getRewardsUserPhone();
+
+  const pName = document.getElementById("profileName");
+  const pPhone = document.getElementById("profilePhone");
+  const pDisplayName = document.getElementById("profileDisplayName");
+  const pInitial = document.getElementById("profileInitial");
+  const pInitials = document.getElementById("profileInitials");
+
+  if (pName) {
+    if (pName.tagName === "INPUT") {
+      pName.value = name;
+    } else {
+      pName.innerText = name;
+    }
+  }
+
+  if (pPhone) {
+    if (pPhone.tagName === "INPUT") {
+      pPhone.value = phone;
+    } else {
+      pPhone.innerText = phone;
+    }
+  }
+
+  if (pDisplayName) {
+    pDisplayName.innerText = name;
+  }
+
+  const initial = name ? name.charAt(0).toUpperCase() : "?";
+
+  if (pInitial) {
+    pInitial.innerText = initial;
+  }
+
+  if (pInitials) {
+    pInitials.innerText = initial;
+  }
+
+  await loadGamificationData();
+}
+
+
+/* =========================================================
+   CLOSE PROFILE
+   ========================================================= */
+
+function closeProfile() {
+
+  const pScreen = document.getElementById("profileScreen");
+  const pOverlay = document.getElementById("profileOverlay");
+
+  if (pScreen) {
+    pScreen.classList.remove("active");
+  }
+
+  if (pOverlay) {
+    pOverlay.style.display = "none";
+  }
+}
+
+
+/* =========================================================
+   LOAD USER GAMIFICATION DATA
+   ========================================================= */
+
+async function loadGamificationData() {
+
+  const phone = getRewardsUserPhone();
+
+  if (!phone) {
+    console.warn("Rewards: No user phone found.");
+    return;
+  }
+
+  try {
+
+    const { data: user, error } = await supabaseClient
+      .from("swiftshop_users")
+      .select("name, phone, points, streak")
+      .eq("phone", phone)
+      .single();
+
+    if (error) {
+      console.error("Rewards user load error:", error);
+      return;
+    }
+
+    const points = Number(user?.points || 0);
+    const streak = Number(user?.streak || 0);
+
+    localStorage.setItem("points", points);
+
+    const name = user?.name || getRewardsUserName();
+
+    const pName = document.getElementById("profileName");
+    const pPhone = document.getElementById("profilePhone");
+    const pDisplayName = document.getElementById("profileDisplayName");
+    const pPoints = document.getElementById("profilePoints");
+    const pStreak = document.getElementById("streakDays");
+    const pInitial = document.getElementById("profileInitial");
+
+    if (pName && pName.tagName === "INPUT") {
+      pName.value = name;
+    }
+
+    if (pPhone && pPhone.tagName === "INPUT") {
+      pPhone.value = phone;
+    }
+
+    if (pDisplayName) {
+      pDisplayName.innerText = name;
+    }
+
+    if (pPoints) {
+      pPoints.innerText = points;
+    }
+
+    if (pStreak) {
+      pStreak.innerText = streak;
+    }
+
+    if (pInitial) {
+      pInitial.innerText = name.charAt(0).toUpperCase();
+    }
+
+    updateGamificationProgress(points);
+
+    await renderMilestones(points);
+    await loadSavedRewards();
+
+    await updateDailySpinButton();
+
+  } catch (err) {
+
+    console.error("Gamification load error:", err);
+
+  }
+}
+
+
+/* =========================================================
+   PROGRESS / LEVEL
+   ========================================================= */
+
+function updateGamificationProgress(points) {
+
+  let next = SWIFTSHOP_MILESTONES.find(
+    milestone => milestone.points > points
+  );
+
+  const badge = document.getElementById("userLevelBadge");
+  const bar = document.getElementById("xpBarFill");
+  const nextText = document.getElementById("xpNextLevelText");
+
+  if (!next) {
+
+    if (badge) {
+      badge.innerText = "🏆 Rewards Master";
+    }
+
+    if (bar) {
+      bar.style.width = "100%";
+    }
+
+    if (nextText) {
+      nextText.innerText = "All milestone rewards unlocked!";
+    }
+
+    return;
+  }
+
+  const previousMilestone =
+    [...SWIFTSHOP_MILESTONES]
+      .reverse()
+      .find(milestone => milestone.points <= points);
+
+  const previousPoints = previousMilestone
+    ? previousMilestone.points
+    : 0;
+
+  const progressRange = next.points - previousPoints;
+
+  const progress =
+    progressRange > 0
+      ? ((points - previousPoints) / progressRange) * 100
+      : 0;
+
+  if (bar) {
+    bar.style.width = Math.max(0, Math.min(100, progress)) + "%";
+  }
+
+  if (nextText) {
+    nextText.innerText =
+      `${Math.max(0, next.points - points)} pts to ${next.title}`;
+  }
+
+  if (badge) {
+
+    if (points >= 350) {
+      badge.innerText = "💎 Diamond Shopper";
+    } else if (points >= 250) {
+      badge.innerText = "🥇 Gold Shopper";
+    } else if (points >= 150) {
+      badge.innerText = "🥈 Silver Shopper";
+    } else {
+      badge.innerText = "🥉 Bronze Shopper";
+    }
+
+  }
+}
+
+
+/* =========================================================
+   ADD POINTS TO SUPABASE
+   ========================================================= */
+
+async function addGamificationPoints(amount) {
+
+  amount = Number(amount || 0);
+
+  if (amount <= 0) {
+    return true;
+  }
+
+  const phone = getRewardsUserPhone();
+
+  if (!phone) {
+    alert("Unable to identify your account.");
+    return false;
+  }
+
+  try {
+
+    const { data: user, error: readError } = await supabaseClient
+      .from("swiftshop_users")
+      .select("points")
+      .eq("phone", phone)
+      .single();
+
+    if (readError || !user) {
+      console.error("Could not read user points:", readError);
+      alert("Could not update your points.");
+      return false;
+    }
+
+    const currentPoints = Number(user.points || 0);
+    const newPoints = currentPoints + amount;
+
+    const { error: updateError } = await supabaseClient
+      .from("swiftshop_users")
+      .update({
+        points: newPoints
+      })
+      .eq("phone", phone);
+
+    if (updateError) {
+      console.error("Could not update points:", updateError);
+      alert("Could not save your points.");
+      return false;
+    }
+
+    localStorage.setItem("points", newPoints);
+
+    const pPoints = document.getElementById("profilePoints");
+
+    if (pPoints) {
+      pPoints.innerText = newPoints;
+    }
+
+    updateGamificationProgress(newPoints);
+
+    return true;
+
+  } catch (err) {
+
+    console.error("Add points error:", err);
+
+    alert("Something went wrong while saving your points.");
+
+    return false;
+  }
+}
+
+
+/* =========================================================
+   MILESTONE RENDERING
+   ========================================================= */
+
+async function renderMilestones(points) {
+
+  const container =
+    document.getElementById("milestonesListContainer");
+
+  if (!container) return;
+
+  const phone = getRewardsUserPhone();
+
+  let redemptionRows = [];
+
+  if (phone) {
+
+    const { data, error } = await supabaseClient
+      .from("user_milestone_redemptions")
+      .select("*")
+      .eq("phone", phone);
+
+    if (!error && data) {
+      redemptionRows = data;
+    }
+  }
+
+  container.innerHTML = "";
+
+  SWIFTSHOP_MILESTONES.forEach(milestone => {
+
+    const unlocked = points >= milestone.points;
+
+    const redemption = redemptionRows.find(
+      row => row.milestone_id === milestone.id
+    );
+
+    const redeemed =
+      redemption &&
+      (
+        redemption.status === "REQUESTED" ||
+        redemption.status === "REDEEMED"
+      );
+
+    const saved =
+      redemption &&
+      redemption.status === "SAVED";
+
+    const card = document.createElement("div");
+
+    card.className =
+      "reward " +
+      (unlocked ? "reward-unlocked" : "reward-locked");
+
+    let buttonHTML = "";
+
+    if (redeemed) {
+
+      buttonHTML = `
+        <div style="
+          margin-top:8px;
+          font-size:12px;
+          font-weight:800;
+          color:#16a34a;
+        ">
+          ✅ Redeemed
+        </div>
+      `;
+
+    } else if (saved) {
+
+      buttonHTML = `
+        <div style="
+          margin-top:8px;
+          font-size:12px;
+          font-weight:800;
+          color:#d97706;
+        ">
+          🎁 Saved For Later
+        </div>
+      `;
+
+    } else if (unlocked) {
+
+      buttonHTML = `
+        <button
+          onclick="chooseMilestoneReward('${milestone.id}')"
+          style="
+            width:100%;
+            margin-top:10px;
+            padding:10px;
+            border:none;
+            border-radius:12px;
+            background:#ff6a00;
+            color:white;
+            font-weight:800;
+            cursor:pointer;
+          "
+        >
+          🎁 Redeem Reward
+        </button>
+      `;
+
+    } else {
+
+      buttonHTML = `
+        <div style="
+          margin-top:7px;
+          font-size:11px;
+          color:#94a3b8;
+          font-weight:700;
+        ">
+          🔒 ${milestone.points - points} more points
+        </div>
+      `;
+
+    }
+
+    card.innerHTML = `
+      <div style="font-size:25px;">
+        ${milestone.icon}
+      </div>
+
+      <div style="
+        font-weight:900;
+        margin-top:4px;
+      ">
+        ${milestone.title}
+      </div>
+
+      <div style="
+        font-size:11px;
+        color:#64748b;
+        margin-top:3px;
+      ">
+        ${milestone.points} Points
+      </div>
+
+      ${buttonHTML}
+    `;
+
+    container.appendChild(card);
+
+  });
+}
+
+
+/* =========================================================
+   MILESTONE CHOICE MODAL
+   ========================================================= */
+
+function chooseMilestoneReward(milestoneId) {
+
+  const milestone =
+    SWIFTSHOP_MILESTONES.find(
+      m => m.id === milestoneId
+    );
+
+  if (!milestone) return;
+
+  rewardsCurrentMilestone = milestone;
+
+  const modal =
+    document.getElementById("rewardChoiceModal");
+
+  const title =
+    document.getElementById("choiceModalTitle");
+
+  const desc =
+    document.getElementById("choiceModalDesc");
+
+  if (title) {
+    title.innerText =
+      `${milestone.icon} ${milestone.title}`;
+  }
+
+  if (desc) {
+    desc.innerText =
+      `You unlocked this reward at ${milestone.points} SwiftShop Points. What would you like to do?`;
+  }
+
+  const redeemBtn =
+    document.getElementById("btnChoiceRedeem");
+
+  const laterBtn =
+    document.getElementById("btnChoiceLater");
+
+  if (redeemBtn) {
+
+    redeemBtn.onclick = function() {
+      redeemMilestoneNow();
+    };
+
+  }
+
+  if (laterBtn) {
+
+    laterBtn.onclick = function() {
+      saveMilestoneForLater();
+    };
+
+  }
+
+  if (modal) {
+    modal.style.display = "flex";
+  }
+}
+
+
+function closeRewardChoiceModal() {
+
+  const modal =
+    document.getElementById("rewardChoiceModal");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+
+  rewardsCurrentMilestone = null;
+}
+
+
+/* =========================================================
+   REDEEM MILESTONE NOW
+   ========================================================= */
+
+async function redeemMilestoneNow() {
+
+  const milestone = rewardsCurrentMilestone;
+
+  if (!milestone) return;
+
+  const phone = getRewardsUserPhone();
+  const name = getRewardsUserName();
+
+  if (!phone) {
+    alert("Your phone number is missing.");
+    return;
+  }
+
+  try {
+
+    const { error } = await supabaseClient
+      .from("user_milestone_redemptions")
+      .upsert(
+        {
+          phone: phone,
+          milestone_id: milestone.id,
+          status: "REQUESTED",
+          updated_at: new Date().toISOString()
+        },
+        {
+          onConflict: "phone,milestone_id"
+        }
+      );
+
+    if (error) {
+      console.error("Milestone redemption error:", error);
+      alert("Could not save your reward request.");
+      return;
+    }
+
+    const message =
+`🎁 *SWIFTSHOP REWARD REDEMPTION*
+
+*Customer:* ${name}
+*Phone:* ${phone}
+
+🏆 *Reward:*
+${milestone.title}
+
+⭐ *Required Points:* ${milestone.points}
+
+Please confirm my SwiftShop reward redemption.`;
+
+    const waURL =
+      "https://wa.me/" +
+      SWIFTSHOP_REWARD_PHONE +
+      "?text=" +
+      encodeURIComponent(message);
+
+    window.open(waURL, "_blank");
+
+    closeRewardChoiceModal();
+
+    await loadGamificationData();
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Something went wrong.");
+
+  }
+}
+
+
+/* =========================================================
+   SAVE MILESTONE FOR LATER
+   ========================================================= */
+
+async function saveMilestoneForLater() {
+
+  const milestone = rewardsCurrentMilestone;
+
+  if (!milestone) return;
+
+  const phone = getRewardsUserPhone();
+
+  if (!phone) {
+    alert("Your phone number is missing.");
+    return;
+  }
+
+  try {
+
+    const { error } = await supabaseClient
+      .from("user_milestone_redemptions")
+      .upsert(
+        {
+          phone: phone,
+          milestone_id: milestone.id,
+          status: "SAVED",
+          updated_at: new Date().toISOString()
+        },
+        {
+          onConflict: "phone,milestone_id"
+        }
+      );
+
+    if (error) {
+
+      console.error("Save reward error:", error);
+
+      alert("Could not save this reward.");
+
+      return;
+    }
+
+    closeRewardChoiceModal();
+
+    alert("🎁 Reward saved! You can redeem it later.");
+
+    await loadGamificationData();
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert("Something went wrong.");
+
+  }
+}
+
+
+/* =========================================================
+   SAVED REWARDS
+   ========================================================= */
+
+async function loadSavedRewards() {
+
+  const section =
+    document.getElementById("savedRewardsSection");
+
+  const container =
+    document.getElementById("savedRewardsListContainer");
+
+  if (!section || !container) return;
+
+  const phone = getRewardsUserPhone();
+
+  if (!phone) {
+    section.style.display = "none";
+    return;
+  }
+
+  try {
+
+    const { data, error } = await supabaseClient
+      .from("user_milestone_redemptions")
+      .select("*")
+      .eq("phone", phone)
+      .eq("status", "SAVED")
+      .order("updated_at", {
+        ascending: false
+      });
+
+    if (error) {
+      console.error("Saved rewards error:", error);
+      return;
+    }
+
+    container.innerHTML = "";
+
+    if (!data || data.length === 0) {
+
+      section.style.display = "none";
+
+      return;
+    }
+
+    section.style.display = "block";
+
+    data.forEach(row => {
+
+      const milestone =
+        SWIFTSHOP_MILESTONES.find(
+          m => m.id === row.milestone_id
+        );
+
+      if (!milestone) return;
+
+      const card =
+        document.createElement("div");
+
+      card.className = "reward reward-unlocked";
+
+      card.innerHTML = `
+        <div style="font-size:26px;">
+          ${milestone.icon}
+        </div>
+
+        <div style="
+          font-weight:900;
+          margin-top:4px;
+        ">
+          ${milestone.title}
+        </div>
+
+        <div style="
+          font-size:11px;
+          color:#d97706;
+          margin-top:4px;
+          font-weight:800;
+        ">
+          🎁 Saved For Later
+        </div>
+
+        <button
+          onclick="chooseMilestoneReward('${milestone.id}')"
+          style="
+            width:100%;
+            margin-top:10px;
+            padding:9px;
+            border:none;
+            border-radius:11px;
+            background:#25d366;
+            color:white;
+            font-weight:800;
+          "
+        >
+          📲 Redeem Now
+        </button>
+      `;
+
+      container.appendChild(card);
+
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+  }
+}
+
+
+/* =========================================================
+   DAILY SPIN — CHECK DATABASE
+   ========================================================= */
+
+async function getLastDailySpin() {
+
+  const phone = getRewardsUserPhone();
+
+  if (!phone) return null;
+
+  const { data, error } = await supabaseClient
+    .from("swiftshop_daily_spins")
+    .select("spun_at, outcome_id, outcome_type, points_won")
+    .eq("phone", phone)
+    .order("spun_at", {
+      ascending: false
+    })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) {
+
+    console.error(
+      "Daily spin lookup error:",
+      error
+    );
+
+    return null;
+  }
+
+  return data || null;
+}
+
+
+async function canUserSpin() {
+
+  const lastSpin = await getLastDailySpin();
+
+  if (!lastSpin) {
+    return true;
+  }
+
+  const lastTime =
+    new Date(lastSpin.spun_at).getTime();
+
+  const now = Date.now();
+
+  const twentyFourHours =
+    24 * 60 * 60 * 1000;
+
+  return (
+    now - lastTime >= twentyFourHours
+  );
+}
+
+
+async function getSpinTimeRemaining() {
+
+  const lastSpin = await getLastDailySpin();
+
+  if (!lastSpin) {
+    return 0;
+  }
+
+  const lastTime =
+    new Date(lastSpin.spun_at).getTime();
+
+  const remaining =
+    (24 * 60 * 60 * 1000) -
+    (Date.now() - lastTime);
+
+  return Math.max(0, remaining);
+}
+
+
+function formatRemainingTime(ms) {
+
+  const totalSeconds =
+    Math.ceil(ms / 1000);
+
+  const hours =
+    Math.floor(totalSeconds / 3600);
+
+  const minutes =
+    Math.floor(
+      (totalSeconds % 3600) / 60
+    );
+
+  const seconds =
+    totalSeconds % 60;
+
+  return `${hours}h ${minutes}m ${seconds}s`;
+}
+
+
+/* =========================================================
+   DAILY SPIN BUTTON
+   ========================================================= */
+
+async function updateDailySpinButton() {
+
+  const button =
+    document.getElementById("dailySpinButton");
+
+  if (!button) return;
+
+  const allowed =
+    await canUserSpin();
+
+  if (allowed) {
+
+    button.disabled = false;
+
+    button.innerText =
+      "🎡 SPIN NOW";
+
+    button.style.opacity = "1";
+    button.style.cursor = "pointer";
+
+  } else {
+
+    const remaining =
+      await getSpinTimeRemaining();
+
+    button.disabled = true;
+
+    button.innerText =
+      `⏳ Available in ${formatRemainingTime(remaining)}`;
+
+    button.style.opacity = "0.55";
+    button.style.cursor = "not-allowed";
+
+  }
+}
+
+
+/* =========================================================
+   OPEN WHEEL
+   ========================================================= */
+
+async function openSpinWheel() {
+
+  const modal =
+    document.getElementById("spinWheelModal");
+
+  if (!modal) return;
+
+  modal.style.display = "flex";
+
+  drawSpinWheelCanvas();
+
+  await updateDailySpinButton();
+
+}
+
+
+/* =========================================================
+   CLOSE WHEEL
+   ========================================================= */
+
+function closeSpinWheelModal() {
+
+  const modal =
+    document.getElementById("spinWheelModal");
+
+  if (modal) {
+    modal.style.display = "none";
+  }
+
+  rewardsIsSpinning = false;
+
+  const button =
+    document.getElementById("dailySpinButton");
+
+  if (button) {
+    button.disabled = false;
+  }
+}
+
+
+/* =========================================================
+   DRAW WHEEL
+   ========================================================= */
+
+function drawSpinWheelCanvas() {
+
+  const canvas =
+    document.getElementById("wheelCanvas");
+
+  if (!canvas) return;
+
+  const ctx =
+    canvas.getContext("2d");
+
+  const size = canvas.width;
+  const center = size / 2;
+  const radius = size / 2 - 5;
+
+  ctx.clearRect(
+    0,
+    0,
+    size,
+    size
+  );
+
+  const slice =
+    (Math.PI * 2) /
+    SWIFTSHOP_WHEEL.length;
+
+  const colors = [
+    "#ff6a00",
+    "#ff9d52",
+    "#111827",
+    "#f59e0b",
+    "#25d366",
+    "#fb7185",
+    "#8b5cf6",
+    "#06b6d4",
+    "#f97316",
+    "#16a34a"
+  ];
+
+  SWIFTSHOP_WHEEL.forEach(
+    (item, index) => {
+
+      const start =
+        index * slice +
+        rewardsWheelRotation;
+
+      const end =
+        start + slice;
+
+      ctx.beginPath();
+
+      ctx.moveTo(
+        center,
+        center
+      );
+
+      ctx.arc(
+        center,
+        center,
+        radius,
+        start,
+        end
+      );
+
+      ctx.closePath();
+
+      ctx.fillStyle =
+        colors[index % colors.length];
+
+      ctx.fill();
+
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      ctx.save();
+
+      ctx.translate(
+        center,
+        center
+      );
+
+      ctx.rotate(
+        start + slice / 2
+      );
+
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "800 11px Poppins, Arial";
+
+      let label = item.label;
+
+      if (label.length > 14) {
+        label =
+          label.substring(0, 13) +
+          "…";
+      }
+
+      ctx.fillText(
+        label,
+        radius - 12,
+        0
+      );
+
+      ctx.restore();
+
+    }
+  );
+
+  /* CENTER */
+
+  ctx.beginPath();
+
+  ctx.arc(
+    center,
+    center,
+    30,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fillStyle = "#ffffff";
+  ctx.fill();
+
+  ctx.strokeStyle = "#ff6a00";
+  ctx.lineWidth = 4;
+  ctx.stroke();
+
+  ctx.fillStyle = "#ff6a00";
+  ctx.font = "900 13px Poppins, Arial";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  ctx.fillText(
+    "SWIFT",
+    center,
+    center - 7
+  );
+
+  ctx.fillText(
+    "SHOP",
+    center,
+    center + 8
+  );
+}
+
+
+/* =========================================================
+   SELECT WEIGHTED OUTCOME
+   ========================================================= */
+
+function selectWeightedWheelOutcome() {
+
+  let random =
+    Math.random() *
+    TOTAL_WHEEL_WEIGHT;
+
+  for (
+    const outcome of SWIFTSHOP_WHEEL
+  ) {
+
+    random -= outcome.weight;
+
+    if (random < 0) {
+      return outcome;
+    }
+
+  }
+
+  return SWIFTSHOP_WHEEL[0];
+}
+
+
+/* =========================================================
+   SPIN WHEEL
+   ========================================================= */
+
+async function spinDailyWheel() {
+
+  if (rewardsIsSpinning) {
+    return;
+  }
+
+  const phone =
+    getRewardsUserPhone();
+
+  if (!phone) {
+
+    alert(
+      "Please log in before using the Daily Spin."
+    );
+
+    return;
+  }
+
+  const allowed =
+    await canUserSpin();
+
+  if (!allowed) {
+
+    const remaining =
+      await getSpinTimeRemaining();
+
+    alert(
+      `⏳ You already used your Daily Spin.\n\nCome back in ${formatRemainingTime(remaining)}.`
+    );
+
+    await updateDailySpinButton();
+
+    return;
+  }
+
+  const button =
+    document.getElementById(
+      "dailySpinButton"
+    );
+
+  rewardsIsSpinning = true;
+
+  if (button) {
+    button.disabled = true;
+    button.innerText = "🎡 SPINNING...";
+  }
+
+  const winner =
+    selectWeightedWheelOutcome();
+
+  rewardsCurrentSpin = winner;
+
+  const winnerIndex =
+    SWIFTSHOP_WHEEL.findIndex(
+      item => item.id === winner.id
+    );
+
+  const sliceAngle =
+    360 /
+    SWIFTSHOP_WHEEL.length;
+
+  /*
+    Pointer is at the TOP.
+
+    Put the winning slice underneath
+    the pointer after the animation.
+  */
+
+  const targetAngle =
+    360 -
+    (
+      winnerIndex * sliceAngle +
+      sliceAngle / 2
+    );
+
+  const extraSpins =
+    360 * 6;
+
+  const finalRotation =
+    extraSpins +
+    targetAngle;
+
+  const startRotation =
+    rewardsWheelRotation * 180 / Math.PI;
+
+  const totalRotation =
+    finalRotation -
+    startRotation;
+
+  const duration = 5200;
+
+  const startTime =
+    performance.now();
+
+  function animate(now) {
+
+    const elapsed =
+      now - startTime;
+
+    const progress =
+      Math.min(
+        elapsed / duration,
+        1
+      );
+
+    /*
+      Ease out.
+    */
+
+    const eased =
+      1 -
+      Math.pow(
+        1 - progress,
+        4
+      );
+
+    const current =
+      startRotation +
+      totalRotation * eased;
+
+    rewardsWheelRotation =
+      current * Math.PI / 180;
+
+    drawSpinWheelCanvas();
+
+    if (progress < 1) {
+
+      requestAnimationFrame(
+        animate
+      );
+
+    } else {
+
+      finishDailySpin(winner);
+
+    }
+
+  }
+
+  requestAnimationFrame(
+    animate
+  );
+}
+
+
+/* =========================================================
+   FINISH SPIN
+   ========================================================= */
+
+async function finishDailySpin(winner) {
+
+  const phone =
+    getRewardsUserPhone();
+
+  try {
+
+    /*
+      IMPORTANT:
+      Save the spin BEFORE giving the reward.
+    */
+
+    const { error: spinError } =
+      await supabaseClient
+        .from("swiftshop_daily_spins")
+        .insert({
+          phone: phone,
+          outcome_id: winner.id,
+          outcome_type: winner.type,
+          points_won: Number(
+            winner.points || 0
+          ),
+          spun_at:
+            new Date().toISOString()
+        });
+
+    if (spinError) {
+
+      console.error(
+        "Spin database error:",
+        spinError
+      );
+
+      alert(
+        "Your spin could not be recorded. No reward was issued."
+      );
+
+      rewardsIsSpinning = false;
+
+      await updateDailySpinButton();
+
+      return;
+    }
+
+    /*
+      POINT REWARD
+    */
+
+    if (
+      winner.type === "points" &&
+      winner.points > 0
+    ) {
+
+      const success =
+        await addGamificationPoints(
+          winner.points
+        );
+
+      if (!success) {
+        rewardsIsSpinning = false;
+        return;
+      }
+
+    }
+
+    /*
+      PHYSICAL / CREDIT REWARD
+    */
+
+    if (
+      winner.type === "reward"
+    ) {
+
+      await showSpinReward(winner);
+
+    } else {
+
+      alert(
+        `🎉 You won ${winner.points} SwiftShop Point${winner.points === 1 ? "" : "s"}!`
+      );
+
+    }
+
+    rewardsIsSpinning = false;
+
+    await loadGamificationData();
+
+  } catch (err) {
+
+    console.error(
+      "Finish spin error:",
+      err
+    );
+
+    rewardsIsSpinning = false;
+
+    alert(
+      "Something went wrong recording your spin."
+    );
+
+  }
+}
+
+
+/* =========================================================
+   SHOW SPIN REWARD
+   ========================================================= */
+
+async function showSpinReward(winner) {
+
+  const phone =
+    getRewardsUserPhone();
+
+  const name =
+    getRewardsUserName();
+
+  /*
+    $8 SWIFTCREDIT JACKPOT
+  */
+
+  if (
+    winner.id === "swiftcredit_8"
+  ) {
+
+    const message =
+`🎉 *SWIFTSHOP JACKPOT!*
+
+*Customer:* ${name}
+*Phone:* ${phone}
+
+💰 *$8 SwiftCredit WON!*
+
+The customer won the $8 SwiftCredit jackpot from the Daily Spin.
+
+Please confirm the reward.`;
+
+    const waURL =
+      "https://wa.me/" +
+      SWIFTSHOP_REWARD_PHONE +
+      "?text=" +
+      encodeURIComponent(message);
+
+    alert(
+      "🎉🎉 JACKPOT! 🎉🎉\n\nYou won $8 SwiftCredit!"
+    );
+
+    window.open(
+      waURL,
+      "_blank"
+    );
+
+    return;
+  }
+
+  /*
+    OTHER PHYSICAL REWARDS
+  */
+
+  const message =
+`🎁 *SWIFTSHOP DAILY SPIN REWARD*
+
+*Customer:* ${name}
+*Phone:* ${phone}
+
+🏆 *Reward Won:*
+${winner.description}
+
+Please confirm my reward.`;
+
+  const waURL =
+    "https://wa.me/" +
+    SWIFTSHOP_REWARD_PHONE +
+    "?text=" +
+    encodeURIComponent(message);
+
+  const redeem =
+    confirm(
+      `🎉 YOU WON!\n\n${winner.description}\n\nPress OK to redeem through WhatsApp.`
+    );
+
+  if (redeem) {
+
+    window.open(
+      waURL,
+      "_blank"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SPIN HISTORY
+   ========================================================= */
+
+async function getSpinHistory() {
+
+  const phone =
+    getRewardsUserPhone();
+
+  if (!phone) {
+    return [];
+  }
+
+  const {
+    data,
+    error
+  } = await supabaseClient
+    .from("swiftshop_daily_spins")
+    .select("*")
+    .eq("phone", phone)
+    .order("spun_at", {
+      ascending: false
+    });
+
+  if (error) {
+
+    console.error(
+      "Spin history error:",
+      error
+    );
+
+    return [];
+
+  }
+
+  return data || [];
+}
+
+
+/* =========================================================
+   SAVE PROFILE
+   ========================================================= */
+
+async function saveProfile() {
+
+  const nameEl =
+    document.getElementById(
+      "profileName"
+    );
+
+  const phoneEl =
+    document.getElementById(
+      "profilePhone"
+    );
+
+  const name =
+    nameEl
+      ? (
+          nameEl.value ||
+          nameEl.innerText ||
+          ""
+        ).trim()
+      : "";
+
+  const phone =
+    phoneEl
+      ? (
+          phoneEl.value ||
+          phoneEl.innerText ||
+          ""
+        ).trim()
+      : "";
+
+  localStorage.setItem(
+    "userName",
+    name
+  );
+
+  localStorage.setItem(
+    "userPhone",
+    phone
+  );
+
+  window.userPhone = phone;
+
+  const display =
+    document.getElementById(
+      "profileDisplayName"
+    );
+
+  if (display) {
+    display.innerText =
+      name || "Customer";
+  }
+
+  const initial =
+    document.getElementById(
+      "profileInitial"
+    );
+
+  if (initial) {
+    initial.innerText =
+      name
+        ? name.charAt(0).toUpperCase()
+        : "?";
+  }
+
+  /*
+    Save name to existing
+    swiftshop_users record.
+  */
+
+  if (
+    phone &&
+    name
+  ) {
+
+    const {
+      error
+    } = await supabaseClient
+      .from("swiftshop_users")
+      .update({
+        name: name
+      })
+      .eq("phone", phone);
+
+    if (error) {
+      console.error(
+        "Profile save error:",
+        error
+      );
+    }
+
+  }
+
+}
+
+
+/* =========================================================
+   AUTO UPDATE SPIN BUTTON
+   ========================================================= */
+
+setInterval(
+  async function() {
+
+    const modal =
+      document.getElementById(
+        "spinWheelModal"
+      );
+
+    if (
+      modal &&
+      modal.style.display === "flex"
+    ) {
+
+      await updateDailySpinButton();
+
+    }
+
+  },
+  1000
+);
+
+
+/* =========================================================
+   INITIAL WHEEL DRAW
+   ========================================================= */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    drawSpinWheelCanvas();
+
+  }
+);
 
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
