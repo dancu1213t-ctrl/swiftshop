@@ -10021,7 +10021,7 @@ function triggerCelebration() {
 }
 
 /* =========================================================
-   SWIFTSHOP GAMIFICATION / REWARDS SYSTEM (FIXED)
+   SWIFTSHOP GAMIFICATION / REWARDS SYSTEM (FIXED & HARDENED)
    ========================================================= */
 
 const SWIFTSHOP_REWARD_PHONE = "5016080205";
@@ -10126,15 +10126,18 @@ async function loadGamificationData() {
   if (!phone) return;
 
   try {
+    // Switched .single() to .maybeSingle() to prevent hard throwing on deleted users
     const { data: user } = await supabaseClient
       .from("swiftshop_users")
       .select("name, phone, points, streak")
       .eq("phone", phone)
-      .single();
+      .maybeSingle();
 
+    // Fallback directly to 0 if record doesn't exist in DB
     const points = Number(user?.points || 0);
     const streak = Number(user?.streak || 0);
 
+    // Sync state locally
     localStorage.setItem("points", points);
 
     const pPoints = document.getElementById("profilePoints");
@@ -10189,15 +10192,15 @@ async function addGamificationPoints(amount) {
       .from("swiftshop_users")
       .select("points")
       .eq("phone", phone)
-      .single();
+      .maybeSingle();
 
     const currentPoints = Number(user?.points || 0);
     const newPoints = currentPoints + amount;
 
+    // Uses upsert so it recreates user record if database was cleared
     await supabaseClient
       .from("swiftshop_users")
-      .update({ points: newPoints })
-      .eq("phone", phone);
+      .upsert({ phone: phone, points: newPoints, name: getRewardsUserName() }, { onConflict: "phone" });
 
     localStorage.setItem("points", newPoints);
     const pPoints = document.getElementById("profilePoints");
@@ -10498,16 +10501,13 @@ async function spinDailyWheel() {
   const numSectors = sectors.length;
   const sliceAngle = (2 * Math.PI) / numSectors;
 
-  // CRITICAL MATH FIX:
-  // Top pointer is at 270 degrees (3 * PI / 2).
-  // Target rotation brings the center of the winning slice exactly under the top pointer.
+  // Pointer at top (270deg / 3PI/2)
   const targetSectorCenter = winnerIndex * sliceAngle + sliceAngle / 2;
   const pointerAngle = (3 * Math.PI) / 2;
   const targetRotation = pointerAngle - targetSectorCenter;
 
-  const extraSpins = Math.PI * 2 * 6; // 6 full rotation spins
+  const extraSpins = Math.PI * 2 * 6; // 6 full rotations
   
-  // Normalize current rotation angle
   const startRotation = rewardsWheelRotation % (Math.PI * 2);
   const finalRotation = startRotation + extraSpins + (targetRotation - startRotation);
 
@@ -10518,7 +10518,6 @@ async function spinDailyWheel() {
     const elapsed = now - startTime;
     const progress = Math.min(elapsed / duration, 1);
 
-    // Smooth cubic ease-out curve
     const eased = 1 - Math.pow(1 - progress, 3);
     rewardsWheelRotation = startRotation + (finalRotation - startRotation) * eased;
 
@@ -10591,7 +10590,6 @@ function saveProfile() {
 document.addEventListener("DOMContentLoaded", () => {
   drawSpinWheelCanvas();
 });
-
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
 <div id="suggestOverlay" class="suggest-overlay">
