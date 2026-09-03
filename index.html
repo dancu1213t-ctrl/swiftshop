@@ -5299,7 +5299,85 @@ box-shadow:
     padding: 20px 16px;
   }
 }
-    
+    /* =========================================================
+   MOBILE RESPONSIVE POLISH & VIEWPORT FIXES
+   ========================================================= */
+
+@media (max-width: 679px) {
+  /* 1. Prevent mobile browser layout jumps with dynamic viewport height */
+  #profileOverlay,
+  .profile-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .profile-card,
+  .gamified-card,
+  #profileScreen .profile-card.gamified-card {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 85dvh !important; /* Uses dynamic viewport height to account for mobile browser bars */
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    border-top-left-radius: 24px !important;
+    border-top-right-radius: 24px !important;
+    padding: 20px 16px 28px 16px !important;
+    margin: 0;
+  }
+
+  /* 2. Compact Header for Small Screens */
+  #profileScreen .profile-top,
+  .profile-top {
+    gap: 12px;
+  }
+
+  #profileScreen .profile-avatar,
+  .profile-avatar {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    font-size: 22px;
+  }
+
+  #profileScreen .profile-name,
+  .profile-name {
+    font-size: 18px;
+  }
+
+  /* 3. Scale Points Banner to Fit Narrow Screens */
+  #profileScreen .gamification-box,
+  .gamification-box {
+    padding: 14px 16px;
+  }
+
+  #profileScreen .points-number,
+  .points-number {
+    font-size: 26px;
+  }
+
+  /* 4. Fix Input Form Zooming on iOS Safari */
+  #profileScreen .profile-field input,
+  .profile-field input {
+    font-size: 16px !important; /* Prevents auto-zoom on mobile focus */
+    padding: 12px;
+  }
+
+  /* 5. Responsive Daily Spin Wheel Scaling for Phones */
+  .wheel-container {
+    width: 220px;
+    height: 220px;
+  }
+
+  #wheelCanvas {
+    width: 220px !important;
+    height: 220px !important;
+  }
+
+  .reward-modal-card {
+    padding: 20px 16px;
+    border-radius: 20px;
+  }
+}
   </style>
 </head>
 
