@@ -4953,6 +4953,471 @@ box-shadow:
   border-top: 22px solid #ff5a1f; /* Downward pointing arrow */
   filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3));
 }
+    /* =========================================================
+   SWIFTSHOP GAMIFIED PROFILE & REWARDS MODALS (FULL OVERRIDE)
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. OVERLAY & BACKDROP CONTAINERS
+   --------------------------------------------------------- */
+#profileOverlay,
+.profile-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+#profileOverlay.active,
+.profile-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.reward-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* ---------------------------------------------------------
+   2. MAIN PROFILE MODAL CARD
+   --------------------------------------------------------- */
+.profile-card,
+.gamified-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  border-radius: 28px;
+  overflow-y: auto;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  scrollbar-width: none;
+}
+
+.profile-card::-webkit-scrollbar,
+.gamified-card::-webkit-scrollbar {
+  display: none;
+}
+
+.btn-back-panel {
+  align-self: flex-start;
+  background: #f1f5f9;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  margin-bottom: 16px;
+}
+
+.btn-back-panel:active {
+  transform: scale(0.95);
+  background: #e2e8f0;
+}
+
+/* ---------------------------------------------------------
+   3. PROFILE HEADER & AVATAR
+   --------------------------------------------------------- */
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #111827, #374151);
+  color: #ffffff;
+  font-size: 26px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+.profile-user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #d97706;
+  background: #fffbe2;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-top: 6px;
+  width: fit-content;
+  border: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+/* ---------------------------------------------------------
+   4. GAMIFICATION HERO BOX & PROGRESS BAR
+   --------------------------------------------------------- */
+.gamification-box {
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1px solid #fed7aa;
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 16px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+.xp-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.points-label {
+  font-size: 12px;
+  font-weight: 800;
+  color: #c2410c;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.points-number {
+  font-size: 32px;
+  font-weight: 900;
+  color: #ea580c;
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.xp-bar-container {
+  width: 100%;
+  height: 10px;
+  background: rgba(251, 146, 60, 0.25);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff8c1a 0%, #ff5a1f 100%);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+.xp-subtext {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #7c2d12;
+  text-align: right;
+}
+
+/* ---------------------------------------------------------
+   5. STATS GRID & DAILY SPIN BUTTON
+   --------------------------------------------------------- */
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.stat-icon {
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.btn-spin-shortcut {
+  background: linear-gradient(135deg, #ff6a00 0%, #ff5a1f 100%);
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 6px;
+  box-shadow: 0 4px 12px rgba(255, 106, 0, 0.25);
+  transition: transform 0.15s ease, opacity 0.2s ease;
+}
+
+.btn-spin-shortcut:active {
+  transform: scale(0.94);
+}
+
+/* ---------------------------------------------------------
+   6. MILESTONE REWARDS SECTIONS & CARDS
+   --------------------------------------------------------- */
+.rewards-section {
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.milestones-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reward {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.reward-unlocked {
+  background: #ffffff;
+  border-color: #22c55e;
+  box-shadow: 0 6px 16px rgba(34, 197, 94, 0.12);
+}
+
+.reward-locked {
+  opacity: 0.85;
+}
+
+/* ---------------------------------------------------------
+   7. FORM FIELDS
+   --------------------------------------------------------- */
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.profile-field label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.profile-field input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid #cbd5e1;
+  background: #f8fafc;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.profile-field input:focus {
+  border-color: #ff6a00;
+  background: #ffffff;
+}
+
+/* ---------------------------------------------------------
+   8. REWARD CHOICE & SPIN WHEEL MODALS
+   --------------------------------------------------------- */
+.reward-modal-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 24px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  position: relative;
+  box-sizing: border-box;
+  animation: modalPopIn 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes modalPopIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.reward-modal-icon {
+  font-size: 44px;
+  margin-bottom: 8px;
+}
+
+.reward-modal-card h3 {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.reward-modal-card p {
+  margin: 0 0 20px 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-reward-redeem {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #25d366, #1ebe57);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+}
+
+.btn-reward-later {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 14px;
+  background: #f59e0b;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.btn-reward-cancel {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px;
+  cursor: pointer;
+}
+
+/* ---------------------------------------------------------
+   9. SPIN WHEEL CANVAS & POINTER
+   --------------------------------------------------------- */
+.wheel-container {
+  position: relative;
+  width: 260px;
+  height: 260px;
+  margin: 16px auto 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wheel-pointer {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 22px solid #ef4444;
+  z-index: 10;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.3));
+}
+
+#wheelCanvas {
+  width: 260px !important;
+  height: 260px !important;
+  border-radius: 50%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
+}
+    
   </style>
 </head>
 
