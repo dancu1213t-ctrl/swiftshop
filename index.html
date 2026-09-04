@@ -5378,6 +5378,165 @@ box-shadow:
     border-radius: 20px;
   }
 }
+   /* ================= BEST SELLERS (DARK THEME SLIDER) ================= */
+.bestsellers-section {
+  margin: 20px 0;
+  padding: 0 16px;
+}
+
+.bestsellers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.bestsellers-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
+  margin: 0;
+}
+
+.bestsellers-see-all {
+  color: #22c55e;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.bestsellers-slider {
+  display: flex;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.bestsellers-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.bestseller-card {
+  position: relative;
+  min-width: 150px;
+  width: 150px;
+  background: #0f172a; /* Dark background matching image */
+  border-radius: 18px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}
+
+/* Neon Green Off Discount Badge */
+.bestseller-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #22c55e;
+  color: #000;
+  font-size: 10px;
+  font-weight: 900;
+  padding: 4px 6px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  line-height: 1;
+  z-index: 2;
+}
+
+.bestseller-img-wrap {
+  width: 100%;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.bestseller-img-wrap img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.bestseller-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.bestseller-name {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1.2;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bestseller-sub {
+  color: #94a3b8;
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.bestseller-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bestseller-price-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.bestseller-price {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.bestseller-was {
+  color: #64748b;
+  font-size: 11px;
+  text-decoration: line-through;
+}
+
+/* Black Add Button requested */
+.bestseller-add-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.2s ease;
+}
+
+.bestseller-add-btn:active {
+  transform: scale(0.9);
+  background: #ff6a00; /* Subtle orange feedback when pressed */
+} 
   </style>
 </head>
 
@@ -6356,7 +6515,74 @@ box-shadow:
   <span class="beam-dot"></span>
 </div>
 
+<!-- 🔥 BEST SELLERS SECTION -->
+<div class="bestsellers-section">
+  <div class="bestsellers-header">
+    <h3 class="bestsellers-title">Best Sellers</h3>
+    <a class="bestsellers-see-all" onclick="fetchAndShowPromos()">See all ➔</a>
+  </div>
 
+  <div class="bestsellers-slider">
+
+    <!-- ITEM 1 -->
+    <div class="bestseller-card">
+      <span class="bestseller-badge">HOT</span>
+      <div class="bestseller-img-wrap">
+        <img src="https://i.imgur.com/iGqPGIq.png" alt="Dumplings" onclick="openImage(this.src)">
+      </div>
+      <div class="bestseller-info">
+        <span class="bestseller-name">Pork Dumplings</span>
+        <span class="bestseller-sub">10 Piece</span>
+        <div class="bestseller-bottom">
+          <div class="bestseller-price-wrap">
+            <span class="bestseller-price">$10</span>
+            <span class="bestseller-was">$12</span>
+          </div>
+          <button class="bestseller-add-btn" onclick="add('Pork Dumplings', 10, this, 12)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 2 -->
+    <div class="bestseller-card">
+      <span class="bestseller-badge">$1 OFF</span>
+      <div class="bestseller-img-wrap">
+        <img src="https://i.imgur.com/Ln6j7h9.jpeg" alt="Waffles" onclick="openImage(this.src)">
+      </div>
+      <div class="bestseller-info">
+        <span class="bestseller-name">Waffles(Ham and Cheese)</span>
+        <span class="bestseller-sub">El Delish</span>
+        <div class="bestseller-bottom">
+          <div class="bestseller-price-wrap">
+            <span class="bestseller-price">$4</span>
+            <span class="bestseller-was">$5</span>
+          </div>
+          <button class="bestseller-add-btn" onclick="add('Waffles', 4, this, 5)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ITEM 3 -->
+    <div class="bestseller-card">
+      <span class="bestseller-badge">Top Rated</span>
+      <div class="bestseller-img-wrap">
+        <img src="https://superdtodo.com/assets/uploads/6526bab88fea35cc44b811f65f357459.png" alt="Frutz" onclick="openImage(this.src)">
+      </div>
+      <div class="bestseller-info">
+        <span class="bestseller-name">Gameza Frutz</span>
+        <span class="bestseller-sub">Biscuit</span>
+        <div class="bestseller-bottom">
+          <div class="bestseller-price-wrap">
+            <span class="bestseller-price">$3.50</span>
+            <span class="bestseller-was">$3.75</span>
+          </div>
+          <button class="bestseller-add-btn" onclick="add('Gameza Frutz', 3.50, this, 3.75)">+</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 <div class="media-section">
 
