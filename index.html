@@ -10473,7 +10473,7 @@ const BASE_POINTS_SECTORS = [
   { id: "pts_8", label: "+8 PTS", description: "8 SwiftShop Points", type: "points", points: 8, weight: 45,  icon: "⭐" }
 ];
 
-// Major prizes pool shuffled dynamically daily
+// Major prizes pool
 const MAJOR_REWARDS_POOL = [
   { id: "swiftcredit_8", label: "$8 CREDIT", description: "$8 SwiftCredit JACKPOT!", type: "reward", points: 0, weight: 5, icon: "💰" },
   { id: "frappe_brew",    label: "FREE FRAPPE", description: "Free Frappe from Brew and Browse", type: "reward", points: 0, weight: 15, icon: "🥤" },
@@ -10483,11 +10483,8 @@ const MAJOR_REWARDS_POOL = [
 
 // Returns the active wheel slices for the current date
 function getDailyWheelSectors() {
-  const today = new Date();
-  const dateSeed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-  
-  // Pick one active major reward based on date
-  const selectedReward = MAJOR_REWARDS_POOL[dateSeed % MAJOR_REWARDS_POOL.length];
+  // Set active major reward specifically to FREE FRAPPE
+  const selectedReward = MAJOR_REWARDS_POOL.find(r => r.id === "frappe_brew") || MAJOR_REWARDS_POOL[1];
   
   // Combine base sectors with selected reward
   return [...BASE_POINTS_SECTORS, selectedReward];
@@ -10874,16 +10871,43 @@ function drawSpinWheelCanvas() {
   ctx.fillText("SHOP", center, center + 6);
 }
 
-function selectWeightedWheelOutcome() {
+async function selectWeightedWheelOutcome() {
   const sectors = getDailyWheelSectors();
-  const totalWeight = sectors.reduce((sum, item) => sum + item.weight, 0);
+
+  // Check if a major prize was already won today
+  const todayStart = new Date();
+  todayStart.setHours(0, 0, 0, 0);
+
+  let prizeAlreadyWon = false;
+  try {
+    const { data: winners } = await supabaseClient
+      .from("swiftshop_daily_spins")
+      .select("id")
+      .eq("outcome_type", "reward")
+      .gte("spun_at", todayStart.toISOString())
+      .limit(1);
+
+    if (winners && winners.length > 0) {
+      prizeAlreadyWon = true;
+    }
+  } catch (e) {
+    console.error("Error checking daily prize winner:", e);
+  }
+
+  // If someone already won today, remove major reward from winning calculation
+  let availableSectors = sectors;
+  if (prizeAlreadyWon) {
+    availableSectors = sectors.filter(item => item.type !== "reward");
+  }
+
+  const totalWeight = availableSectors.reduce((sum, item) => sum + item.weight, 0);
   let random = Math.random() * totalWeight;
 
-  for (const outcome of sectors) {
+  for (const outcome of availableSectors) {
     random -= outcome.weight;
     if (random < 0) return outcome;
   }
-  return sectors[0];
+  return availableSectors[0];
 }
 
 async function spinDailyWheel() {
@@ -10908,7 +10932,7 @@ async function spinDailyWheel() {
   }
 
   const sectors = getDailyWheelSectors();
-  const winner = selectWeightedWheelOutcome();
+  const winner = await selectWeightedWheelOutcome();
   const winnerIndex = sectors.findIndex(item => item.id === winner.id);
 
   const numSectors = sectors.length;
