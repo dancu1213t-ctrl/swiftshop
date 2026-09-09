@@ -5367,11 +5367,7 @@ box-shadow:
   }
 }
 
-/* ==========================================================================
-   IMAGE OVERLAY OVERRIDES (LIGHT / TRANSPARENT THEME)
-   ========================================================================== */
-
-/* Outer Backdrop Overlay (Dark glass overlay so the white box pops) */
+/* Outer Backdrop Overlay */
 div#imageOverlay {
   position: fixed !important;
   top: 0 !important;
@@ -5389,13 +5385,13 @@ div#imageOverlay {
   box-sizing: border-box !important;
 }
 
-/* Modal Main Frame Container (White Box) */
+/* Modal Main Frame Container */
 div#imageOverlay .overlay-content {
   position: relative !important;
-  background: #ffffff !important; /* Clean white card background */
+  background: #ffffff !important;
   border: 1px solid #e4e4e7 !important;
   border-radius: 16px !important;
-  max-width: 720px !important;
+  max-width: 680px !important;
   width: 100% !important;
   display: flex !important;
   flex-direction: row !important;
@@ -5433,8 +5429,8 @@ div#imageOverlay .close-btn:hover {
 div#imageOverlay .image-frame {
   flex: 1.2 !important;
   min-width: 0 !important;
-  max-height: 380px !important;
-  background-color: #f4f4f5 !important; /* Soft neutral background for image frame */
+  max-height: 360px !important;
+  background-color: #f4f4f5 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -5444,7 +5440,7 @@ div#imageOverlay .image-frame {
 
 div#imageOverlay img#overlayImg {
   max-width: 100% !important;
-  max-height: 350px !important;
+  max-height: 330px !important;
   width: auto !important;
   height: auto !important;
   object-fit: contain !important;
@@ -5464,7 +5460,7 @@ div#imageOverlay .overlay-details {
   box-sizing: border-box !important;
 }
 
-/* Header, Title & Description Area */
+/* Header, Title & Price Area */
 div#imageOverlay .details-header {
   display: flex !important;
   flex-direction: column !important;
@@ -5480,12 +5476,18 @@ div#imageOverlay .overlay-title {
   line-height: 1.3 !important;
 }
 
-div#imageOverlay p#overlayDesc,
-div#imageOverlay .overlay-desc {
-  margin: 0 !important;
-  color: #52525b !important;
-  font-size: 0.875rem !important;
-  line-height: 1.4 !important;
+div#imageOverlay .overlay-price {
+  color: #ea580c !important; /* Orange accent */
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+}
+
+div#imageOverlay .was-price {
+  color: #a1a1aa !important;
+  font-size: 0.9rem !important;
+  text-decoration: line-through !important;
+  margin-left: 6px !important;
+  font-weight: 400 !important;
 }
 
 /* Like Button Styling */
@@ -5576,7 +5578,7 @@ div#imageOverlay button#copyShareBtn:hover {
   }
 
   div#imageOverlay .image-frame {
-    max-height: 250px !important;
+    max-height: 240px !important;
   }
 }
   </style>
@@ -11791,15 +11793,15 @@ function selectTip(amount, element) {
     
     <!-- Left Section: Image Display Frame -->
     <div class="image-frame">
-      <img id="overlayImg" src="" alt="Zoomed Item">
+      <img id="overlayImg" src="" alt="Item Image">
     </div>
 
     <!-- Right Section: Details & Share Actions -->
     <div class="overlay-details">
       <div class="details-header">
-        <h3 id="overlayTitle" class="overlay-title">Item Title</h3>
-        <p id="overlayDesc" class="overlay-desc">Item description goes here...</p>
-        <button id="modalLikeBtn" type="button" class="modal-like-btn">🤍 Like Item</button>
+        <h3 id="overlayTitle" class="overlay-title">Item Name</h3>
+        <div id="overlayPrice" class="overlay-price">$0.00</div>
+        <button id="modalLikeBtn" type="button" class="modal-like-btn">🤍 Like (0)</button>
       </div>
       
       <!-- Share Link Box -->
@@ -11807,7 +11809,7 @@ function selectTip(amount, element) {
         <label for="shareUrlInput" class="share-label">Share Link</label>
         <div class="share-input-group">
           <input type="text" id="shareUrlInput" readonly>
-          <button type="button" id="copyShareBtn" onclick="copyItemLink()">Copy</button>
+          <button type="button" id="copyShareBtn" onclick="copyItemLink()">Copy Link</button>
         </div>
       </div>
     </div>
