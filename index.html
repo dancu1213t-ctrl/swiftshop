@@ -5366,219 +5366,6 @@ box-shadow:
     border-radius: 20px;
   }
 }
-
-/* ==========================================================================
-   IMAGE OVERLAY STYLES
-   ========================================================================== */
-
-/* Outer Backdrop Overlay */
-div#imageOverlay {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background-color: rgba(0, 0, 0, 0.65) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  display: none;
-  align-items: center !important;
-  justify-content: center !important;
-  z-index: 999999 !important;
-  padding: 16px !important;
-  box-sizing: border-box !important;
-}
-
-/* Main Modal Card */
-div#imageOverlay .overlay-content {
-  position: relative !important;
-  background: #ffffff !important;
-  border: 1px solid #e2e8f0 !important;
-  border-radius: 16px !important;
-  max-width: 650px !important;
-  width: 100% !important;
-  display: flex !important;
-  flex-direction: row !important;
-  overflow: hidden !important;
-  box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.3) !important;
-  box-sizing: border-box !important;
-}
-
-/* Close Circular Button */
-div#imageOverlay .close-btn {
-  position: absolute !important;
-  top: 12px !important;
-  right: 12px !important;
-  background: rgba(0, 0, 0, 0.08) !important;
-  color: #1e293b !important;
-  border: none !important;
-  width: 32px !important;
-  height: 32px !important;
-  border-radius: 50% !important;
-  font-size: 20px !important;
-  line-height: 1 !important;
-  cursor: pointer !important;
-  z-index: 20 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  transition: background 0.2s ease !important;
-}
-
-div#imageOverlay .close-btn:hover {
-  background: rgba(0, 0, 0, 0.18) !important;
-}
-
-/* Left Section: Image Display Frame */
-div#imageOverlay .image-frame {
-  flex: 1.1 !important;
-  min-width: 0 !important;
-  max-height: 320px !important;
-  background-color: #f8fafc !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 16px !important;
-  box-sizing: border-box !important;
-}
-
-div#imageOverlay img#overlayImg {
-  max-width: 100% !important;
-  max-height: 280px !important;
-  width: auto !important;
-  height: auto !important;
-  object-fit: contain !important;
-  border-radius: 8px !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
-/* Right Section: Item Information */
-div#imageOverlay .overlay-details {
-  flex: 1 !important;
-  padding: 24px !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-between !important;
-  gap: 16px !important;
-  border-left: 1px solid #e2e8f0 !important;
-  background: #ffffff !important;
-  box-sizing: border-box !important;
-}
-
-div#imageOverlay .details-header {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-}
-
-div#imageOverlay h3#overlayTitle,
-div#imageOverlay .overlay-title {
-  margin: 0 !important;
-  color: #0f172a !important;
-  font-size: 1.15rem !important;
-  font-weight: 700 !important;
-  line-height: 1.3 !important;
-}
-
-div#imageOverlay .overlay-price {
-  color: #ea580c !important; /* SwiftShop Orange */
-  font-size: 1.25rem !important;
-  font-weight: 700 !important;
-  margin-bottom: 4px !important;
-}
-
-/* Like Button */
-div#imageOverlay button#modalLikeBtn,
-div#imageOverlay .modal-like-btn {
-  align-self: flex-start !important;
-  background: #f1f5f9 !important;
-  color: #334155 !important;
-  border: 1px solid #cbd5e1 !important;
-  padding: 6px 14px !important;
-  border-radius: 20px !important;
-  font-size: 0.85rem !important;
-  font-weight: 500 !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-}
-
-div#imageOverlay button#modalLikeBtn.liked,
-div#imageOverlay .modal-like-btn.liked {
-  background: #fef2f2 !important;
-  border-color: #ef4444 !important;
-  color: #ef4444 !important;
-}
-
-/* Share Box Section */
-div#imageOverlay .share-box {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 6px !important;
-}
-
-div#imageOverlay .share-label {
-  color: #64748b !important;
-  font-size: 0.72rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-}
-
-div#imageOverlay .share-input-group {
-  display: flex !important;
-  gap: 8px !important;
-}
-
-div#imageOverlay input#shareUrlInput {
-  flex: 1 !important;
-  background: #f8fafc !important;
-  border: 1px solid #cbd5e1 !important;
-  color: #334155 !important;
-  padding: 8px 12px !important;
-  border-radius: 8px !important;
-  font-size: 0.85rem !important;
-  outline: none !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
-
-div#imageOverlay button#copyShareBtn {
-  background: #0f172a !important;
-  color: #ffffff !important;
-  border: 1px solid #0f172a !important;
-  padding: 8px 14px !important;
-  border-radius: 8px !important;
-  font-weight: 500 !important;
-  cursor: pointer !important;
-  font-size: 0.85rem !important;
-  white-space: nowrap !important;
-  transition: all 0.2s ease !important;
-}
-
-div#imageOverlay button#copyShareBtn:hover {
-  background: #1e293b !important;
-}
-
-/* Responsive Mobile Breakpoint */
-@media (max-width: 640px) {
-  div#imageOverlay .overlay-content {
-    flex-direction: column !important;
-    max-height: 85vh !important;
-    overflow-y: auto !important;
-  }
-
-  div#imageOverlay .overlay-details {
-    border-left: none !important;
-    border-top: 1px solid #e2e8f0 !important;
-    padding: 18px !important;
-  }
-
-  div#imageOverlay .image-frame {
-    max-height: 220px !important;
-  }
-}
   </style>
 </head>
 
@@ -9017,87 +8804,32 @@ async function render() {
     });
   }
 
-
-
 let currentOpenProductId = null;
 
-async function openImage(srcOrElement) {
+function openImage(src, productId) {
   if (typeof buzz === "function") buzz(25);
 
-  // Get exact image URL from string or clicked element
-  let imageUrl = typeof srcOrElement === "string" ? srcOrElement : "";
-  if (srcOrElement && srcOrElement.src) {
-    imageUrl = srcOrElement.src;
-  } else if (srcOrElement && srcOrElement.querySelector) {
-    const imgTag = srcOrElement.querySelector("img");
-    if (imgTag) imageUrl = imgTag.src;
-  }
+  currentOpenProductId = productId;
 
   const overlay = document.getElementById("imageOverlay");
   const img = document.getElementById("overlayImg");
-  const titleEl = document.getElementById("overlayTitle");
-  const priceEl = document.getElementById("overlayPrice");
   const modalBtn = document.getElementById("modalLikeBtn");
-  const shareInput = document.getElementById("shareUrlInput");
 
-  // Show modal in loading state
-  if (overlay) overlay.style.display = "flex";
-  if (img) img.src = imageUrl || "";
-  if (titleEl) titleEl.textContent = "Loading...";
-  if (priceEl) priceEl.textContent = "";
+  if (img) img.src = src;
 
-  try {
-    // Look up product row in Supabase using the exact image link
-    const { data: item, error } = await supabase
-      .from("products")
-      .select("id, name, price, was, image, likes_count")
-      .eq("image", imageUrl)
-      .maybeSingle();
-
-    if (error || !item) {
-      console.warn("No Supabase record found for image:", imageUrl);
-      if (titleEl) titleEl.textContent = "Item Preview";
-      return;
+  // Check if item is already liked
+  if (modalBtn && productId) {
+    let likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
+    if (likedItems[productId]) {
+      modalBtn.innerHTML = "❤️ Liked";
+      modalBtn.classList.add("liked");
+    } else {
+      modalBtn.innerHTML = "🤍 Like Item";
+      modalBtn.classList.remove("liked");
     }
-
-    currentOpenProductId = item.id;
-
-    // Populate overlay fields directly from Supabase columns
-    if (img) img.src = item.image || imageUrl;
-    if (titleEl) titleEl.textContent = item.name;
-
-    // Format Price & Was Price
-    if (priceEl) {
-      let priceHTML = `$${parseFloat(item.price || 0).toFixed(2)}`;
-      if (item.was && Number(item.was) > Number(item.price)) {
-        priceHTML += ` <span class="was-price">$${parseFloat(item.was).toFixed(2)}</span>`;
-      }
-      priceEl.innerHTML = priceHTML;
-    }
-
-    // Build the shareable direct URL using the retrieved Supabase product ID
-    const directLink = `${window.location.origin}${window.location.pathname}?item=${item.id}`;
-    if (shareInput) shareInput.value = directLink;
-
-    // Sync Like Status with LocalStorage & Database count
-    if (modalBtn) {
-      let likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
-      const isLiked = !!likedItems[item.id];
-      const likesCount = item.likes_count || 0;
-
-      if (isLiked) {
-        modalBtn.innerHTML = `❤️ Liked (${likesCount})`;
-        modalBtn.classList.add("liked");
-      } else {
-        modalBtn.innerHTML = `🤍 Like (${likesCount})`;
-        modalBtn.classList.remove("liked");
-      }
-    }
-
-  } catch (err) {
-    console.error("Error fetching product from Supabase:", err);
-    if (titleEl) titleEl.textContent = "Item Preview";
   }
+
+  if (overlay) overlay.style.display = "flex";
 }
 
 function closeImage() {
@@ -9106,47 +8838,6 @@ function closeImage() {
   currentOpenProductId = null;
 }
 
-function copyItemLink() {
-  const input = document.getElementById("shareUrlInput");
-  const copyBtn = document.getElementById("copyShareBtn");
-  
-  if (!input || !input.value) return;
-
-  navigator.clipboard.writeText(input.value).then(() => {
-    if (copyBtn) {
-      const originalText = copyBtn.textContent;
-      copyBtn.textContent = "Copied!";
-      copyBtn.style.background = "#16a34a";
-      copyBtn.style.borderColor = "#16a34a";
-      copyBtn.style.color = "#ffffff";
-      
-      setTimeout(() => {
-        copyBtn.textContent = originalText;
-        copyBtn.style.background = "";
-        copyBtn.style.borderColor = "";
-        copyBtn.style.color = "";
-      }, 2000);
-    }
-  });
-}
-
-// Auto-open modal when a visitor opens a shared link (?item=PRODUCT_ID)
-window.addEventListener("DOMContentLoaded", async () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const sharedItemId = urlParams.get("item");
-
-  if (sharedItemId && typeof supabase !== "undefined") {
-    const { data: item, error } = await supabase
-      .from("products")
-      .select("id, name, price, was, image, likes_count")
-      .eq("id", sharedItemId)
-      .single();
-
-    if (item && !error) {
-      openImage(item.image);
-    }
-  }
-});
 function toggleModalLike() {
   if (!currentOpenProductId) return;
   if (typeof buzz === "function") buzz(25);
@@ -11818,35 +11509,10 @@ function selectTip(amount, element) {
     </div>
   </div>
 </div>
-
-
-  <div id="imageOverlay" onclick="closeImage()">
+<!-- 🖼️ IMAGE POP-UP OVERLAY -->
+<div id="imageOverlay" onclick="closeImage()">
   <div class="overlay-content" onclick="event.stopPropagation()">
-    <!-- Close Button -->
-    <button type="button" class="close-btn" onclick="closeImage()">&times;</button>
-    
-    <!-- Left Section: Image Display Frame -->
-    <div class="image-frame">
-      <img id="overlayImg" src="" alt="Item Image">
-    </div>
-
-    <!-- Right Section: Details, Price, Like Button & Share Box -->
-    <div class="overlay-details">
-      <div class="details-header">
-        <h3 id="overlayTitle" class="overlay-title">Loading...</h3>
-        <div id="overlayPrice" class="overlay-price"></div>
-        <button id="modalLikeBtn" type="button" class="modal-like-btn">🤍 Like (0)</button>
-      </div>
-      
-      <!-- Share Link Box -->
-      <div class="share-box">
-        <label for="shareUrlInput" class="share-label">Share Link</label>
-        <div class="share-input-group">
-          <input type="text" id="shareUrlInput" readonly>
-          <button type="button" id="copyShareBtn" onclick="copyItemLink()">Copy Link</button>
-        </div>
-      </div>
-    </div>
+    <img id="overlayImg" src="" alt="Zoomed Item">
   </div>
 </div>
 
