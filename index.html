@@ -5366,124 +5366,6 @@ box-shadow:
     border-radius: 20px;
   }
 }
-    /* ==========================================
-   TOP RECOMMENDED SECTION & HORIZONTAL SLIDER
-   ========================================== */
-
-/* Outer Section Layout */
-.media-section {
-  margin: 15px 0 25px 0;
-  padding: 0 10px;
-}
-
-/* Header Styling */
-.media-title {
-  font-size: 15px;
-  font-weight: 800;
-  color: #111;
-  margin-bottom: 12px;
-  letter-spacing: 0.5px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Horizontal Touch-Scroll Container */
-.media-slider {
-  display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  padding: 4px 2px 12px 2px;
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
-}
-
-/* Hide Scrollbar for Chrome, Safari, Edge */
-.media-slider::-webkit-scrollbar {
-  display: none;
-}
-
-/* Track holding the cards side-by-side */
-.media-track {
-  display: flex;
-  gap: 12px;
-}
-
-/* Individual Recommended Item Card */
-.media-card {
-  min-width: 140px;
-  max-width: 140px;
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  border: 1px solid #f0f0f0;
-  flex-shrink: 0;
-}
-
-/* Card Image */
-.media-card img {
-  width: 100%;
-  height: 110px;
-  object-fit: cover;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-/* Card Content Details */
-.media-info {
-  margin-top: 8px;
-  flex-grow: 1;
-}
-
-.media-info h4 {
-  font-size: 13px;
-  font-weight: 700;
-  color: #222;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Like Counter Tag */
-.media-info p {
-  font-size: 11px;
-  color: #e63946;
-  font-weight: 700;
-  margin: 3px 0;
-}
-
-/* Price Label */
-.media-info span {
-  font-size: 13px;
-  font-weight: 800;
-  color: #111;
-  display: block;
-}
-
-/* Quick Add Button (+ Button) */
-.media-card .add-btn {
-  margin-top: 8px;
-  width: 100%;
-  background: #111111;
-  color: #ffffff;
-  border: none;
-  border-radius: 8px;
-  padding: 6px 0;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.1s ease, background-color 0.2s ease;
-}
-
-.media-card .add-btn:active {
-  transform: scale(0.95);
-  background: #333333;
-}
   </style>
 </head>
 
@@ -6453,15 +6335,7 @@ box-shadow:
 </body>
 
 
-<!-- RECOMMENDED ITEMS (BASED ON LIKES) -->
-<div class="media-section" id="recommendedSection" style="display: none;">
-  <h3 class="media-title">Top Liked</h3>
-  <div class="media-slider">
-    <div class="media-track" id="recommendedTrack">
-      <!-- Dynamically populated from Supabase -->
-    </div>
-  </div>
-</div>
+
 
 
 
@@ -10431,58 +10305,13 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
     }
   }
 }
-async function toggleLike(btn, event, productId) {
+  function toggleLike(btn, event) {
   event.stopPropagation(); // Prevents image pop-up trigger
-
-  const phone = localStorage.getItem("userPhone");
-  if (!phone) {
-    alert("Please log in or enter your phone number to like items!");
-    return;
-  }
-
+  btn.classList.toggle("liked");
+  
   // Optional light vibration feedback if supported
   if (navigator.vibrate) {
     navigator.vibrate(20);
-  }
-
-  // 1. Optimistic UI toggle (immediate feedback)
-  const isCurrentlyLiked = btn.classList.contains("liked");
-  btn.classList.toggle("liked");
-
-  // 2. Call Supabase RPC to toggle like in DB
-  const { data, error } = await supabaseClient.rpc('toggle_product_like', {
-    p_product_id: String(productId),
-    p_user_phone: String(phone)
-  });
-
-  // Revert UI if query failed
-  if (error) {
-    console.error("Error toggling like:", error);
-    btn.classList.toggle("liked", isCurrentlyLiked);
-    return;
-  }
-
-  // 3. Process backend result
-  if (data && data.length > 0) {
-    const result = data[0]; // Returns { liked: boolean, new_likes_count: int }
-
-    // Update global set tracking user's liked items
-    if (result.liked) {
-      userLikedProductIds.add(String(productId));
-    } else {
-      userLikedProductIds.delete(String(productId));
-    }
-
-    // Update local product state like count
-    const prod = allProducts.find(p => String(p.id) === String(productId));
-    if (prod) {
-      prod.likes_count = result.new_likes_count;
-    }
-
-    // 4. Update the Top Recommended slider live
-    if (typeof renderRecommendedSection === "function") {
-      renderRecommendedSection();
-    }
   }
 }
 const canvas = document.getElementById('fireworksCanvas');
@@ -11186,39 +11015,6 @@ function saveProfile() {
 document.addEventListener("DOMContentLoaded", () => {
   drawSpinWheelCanvas();
 });
-  function renderRecommendedSection() {
-  const section = document.getElementById("recommendedSection");
-  const track = document.getElementById("recommendedTrack");
-  if (!section || !track) return;
-
-  // Filter products with at least 1 like and sort descending by like count
-  const recommended = [...allProducts]
-    .filter(p => p.likes_count > 0)
-    .sort((a, b) => b.likes_count - a.likes_count)
-    .slice(0, 10);
-
-  // Hide section if no items have likes yet
-  if (recommended.length === 0) {
-    section.style.display = "none";
-    return;
-  }
-
-  section.style.display = "block";
-  track.innerHTML = recommended.map(p => {
-    const safeName = p.name.replace(/'/g, "\\'");
-    return `
-      <div class="media-card">
-        <img src="${p.image}" onclick="openImage('${p.image}', '${p.id}')">
-        <div class="media-info">
-          <h4>${p.name}</h4>
-          <p>❤️ ${p.likes_count} likes</p>
-          <span>$${p.price.toFixed(2)} BZD</span>
-        </div>
-        <button class="add-btn" onclick="quickAdd('${safeName}', ${p.price}, ${p.was || 'null'})">+</button>
-      </div>
-    `;
-  }).join('');
-}
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
 <div id="suggestOverlay" class="suggest-overlay">
