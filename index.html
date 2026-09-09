@@ -5366,6 +5366,232 @@ box-shadow:
     border-radius: 20px;
   }
 }
+
+    /* ==========================================================================
+   IMAGE OVERLAY OVERRIDES (HIGH SPECIFICITY)
+   ========================================================================== */
+
+/* Outer Backdrop Overlay */
+div#imageOverlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  display: none; /* Handled by JS flex display */
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 999999 !important;
+  padding: 16px !important;
+  box-sizing: border-box !important;
+}
+
+/* Modal Main Frame Container */
+div#imageOverlay .overlay-content {
+  position: relative !important;
+  background: #18181b !important; /* High contrast dark background */
+  border: 1px solid #27272a !important;
+  border-radius: 16px !important;
+  max-width: 760px !important;
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: row !important; /* Left / Right side-by-side */
+  overflow: hidden !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+  box-sizing: border-box !important;
+}
+
+/* Close Circular Button */
+div#imageOverlay .close-btn {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  color: #ffffff !important;
+  border: none !important;
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  z-index: 20 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background 0.2s ease !important;
+}
+
+div#imageOverlay .close-btn:hover {
+  background: rgba(0, 0, 0, 0.9) !important;
+}
+
+/* Left Section: Image Display Frame */
+div#imageOverlay .image-frame {
+  flex: 1.2 !important;
+  min-width: 0 !important;
+  max-height: 420px !important;
+  background-color: #09090b !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
+}
+
+div#imageOverlay img#overlayImg {
+  max-width: 100% !important;
+  max-height: 390px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 8px !important;
+}
+
+/* Right Section: Details, Share Box, Actions */
+div#imageOverlay .overlay-details {
+  flex: 1 !important;
+  padding: 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  border-left: 1px solid #27272a !important;
+  background: #18181b !important;
+  box-sizing: border-box !important;
+}
+
+/* Header & Title Area */
+div#imageOverlay .details-header {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+}
+
+div#imageOverlay h3#overlayTitle,
+div#imageOverlay .overlay-title {
+  margin: 0 !important;
+  color: #f4f4f5 !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+}
+
+/* Existing Like Button Override */
+div#imageOverlay button#modalLikeBtn,
+div#imageOverlay .modal-like-btn {
+  align-self: flex-start !important;
+  background: #27272a !important;
+  color: #f4f4f5 !important;
+  border: 1px solid #3f3f46 !important;
+  padding: 6px 14px !important;
+  border-radius: 20px !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+div#imageOverlay button#modalLikeBtn.liked,
+div#imageOverlay .modal-like-btn.liked {
+  background: rgba(239, 68, 68, 0.15) !important;
+  border-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+/* Share Box Section */
+div#imageOverlay .share-box {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+div#imageOverlay .share-label {
+  color: #a1a1aa !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+div#imageOverlay .share-input-group {
+  display: flex !important;
+  gap: 8px !important;
+}
+
+div#imageOverlay input#shareUrlInput {
+  flex: 1 !important;
+  background: #09090b !important;
+  border: 1px solid #3f3f46 !important;
+  color: #a1a1aa !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  font-size: 0.85rem !important;
+  outline: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+div#imageOverlay button#copyShareBtn {
+  background: #27272a !important;
+  color: #f4f4f5 !important;
+  border: 1px solid #3f3f46 !important;
+  padding: 8px 14px !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  font-size: 0.85rem !important;
+  white-space: nowrap !important;
+  transition: all 0.2s ease !important;
+}
+
+div#imageOverlay button#copyShareBtn:hover {
+  background: #3f3f46 !important;
+}
+
+/* Primary Action Button (View Full Item) */
+div#imageOverlay a#overlayItemLink,
+div#imageOverlay .view-item-btn {
+  display: block !important;
+  text-align: center !important;
+  background: #f97316 !important; /* Accent Brand Color */
+  color: #ffffff !important;
+  text-decoration: none !important;
+  padding: 12px 16px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  transition: background 0.2s ease !important;
+}
+
+div#imageOverlay a#overlayItemLink:hover,
+div#imageOverlay .view-item-btn:hover {
+  background: #ea580c !important;
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVE BREAKPOINT
+   ========================================================================== */
+@media (max-width: 640px) {
+  div#imageOverlay .overlay-content {
+    flex-direction: column !important; /* Stack vertically on small screens */
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+  }
+
+  div#imageOverlay .overlay-details {
+    border-left: none !important;
+    border-top: 1px solid #27272a !important;
+    padding: 18px !important;
+  }
+
+  div#imageOverlay .image-frame {
+    max-height: 260px !important;
+  }
+}
   </style>
 </head>
 
@@ -8806,7 +9032,8 @@ async function render() {
 
 let currentOpenProductId = null;
 
-function openImage(src, productId) {
+// Open overlay with image, title, and link logic integrated
+function openImage(src, productId, title, itemUrl) {
   if (typeof buzz === "function") buzz(25);
 
   currentOpenProductId = productId;
@@ -8814,10 +9041,28 @@ function openImage(src, productId) {
   const overlay = document.getElementById("imageOverlay");
   const img = document.getElementById("overlayImg");
   const modalBtn = document.getElementById("modalLikeBtn");
+  const titleEl = document.getElementById("overlayTitle");
+  const itemLinkEl = document.getElementById("overlayItemLink");
+  const shareInput = document.getElementById("shareUrlInput");
 
+  // 1. Set Image
   if (img) img.src = src;
 
-  // Check if item is already liked
+  // 2. Set Item Title (falls back to generic title if not passed)
+  if (titleEl) {
+    titleEl.textContent = title || "Item Details";
+  }
+
+  // 3. Resolve Link (Constructs full URL if a relative path or ID is passed)
+  const resolvedUrl = itemUrl 
+    ? new URL(itemUrl, window.location.origin).href 
+    : `${window.location.origin}${window.location.pathname}?item=${productId || ''}`;
+
+  // 4. Update Link Buttons & Input Field
+  if (itemLinkEl) itemLinkEl.href = resolvedUrl;
+  if (shareInput) shareInput.value = resolvedUrl;
+
+  // 5. Like Status Check (Preserved from your original logic)
   if (modalBtn && productId) {
     let likedItems = JSON.parse(localStorage.getItem("likedItems") || "{}");
     if (likedItems[productId]) {
@@ -8829,6 +9074,7 @@ function openImage(src, productId) {
     }
   }
 
+  // 6. Display Overlay
   if (overlay) overlay.style.display = "flex";
 }
 
@@ -8838,6 +9084,33 @@ function closeImage() {
   currentOpenProductId = null;
 }
 
+// Copy link handler with visual feedback
+function copyItemLink() {
+  const input = document.getElementById("shareUrlInput");
+  const copyBtn = document.getElementById("copyShareBtn");
+  
+  if (!input || !input.value) return;
+
+  navigator.clipboard.writeText(input.value).then(() => {
+    if (copyBtn) {
+      const originalText = copyBtn.textContent;
+      copyBtn.textContent = "Copied!";
+      copyBtn.style.background = "#22c55e";
+      copyBtn.style.color = "#ffffff";
+      
+      setTimeout(() => {
+        copyBtn.textContent = originalText;
+        copyBtn.style.background = "";
+        copyBtn.style.color = "";
+      }, 2000);
+    }
+  }).catch(() => {
+    // Fallback for older browsers / webview restrictions
+    input.select();
+    document.execCommand("copy");
+    if (copyBtn) copyBtn.textContent = "Copied!";
+  });
+}
 function toggleModalLike() {
   if (!currentOpenProductId) return;
   if (typeof buzz === "function") buzz(25);
@@ -11509,10 +11782,36 @@ function selectTip(amount, element) {
     </div>
   </div>
 </div>
-<!-- 🖼️ IMAGE POP-UP OVERLAY -->
 <div id="imageOverlay" onclick="closeImage()">
   <div class="overlay-content" onclick="event.stopPropagation()">
-    <img id="overlayImg" src="" alt="Zoomed Item">
+    <!-- Close Button -->
+    <button type="button" class="close-btn" onclick="closeImage()">&times;</button>
+    
+    <!-- Left Panel: Image -->
+    <div class="image-frame">
+      <img id="overlayImg" src="" alt="Zoomed Item">
+    </div>
+
+    <!-- Right Panel: Details & Actions -->
+    <div class="overlay-details">
+      <div class="details-header">
+        <h3 id="overlayTitle" class="overlay-title">Item Title</h3>
+        <!-- Your original Like Button -->
+        <button id="modalLikeBtn" type="button" class="modal-like-btn">🤍 Like Item</button>
+      </div>
+      
+      <!-- Share Link Box -->
+      <div class="share-box">
+        <label for="shareUrlInput" class="share-label">Share Link</label>
+        <div class="share-input-group">
+          <input type="text" id="shareUrlInput" readonly>
+          <button type="button" id="copyShareBtn" onclick="copyItemLink()">Copy</button>
+        </div>
+      </div>
+
+      <!-- Main Action Link -->
+      <a id="overlayItemLink" href="#" class="view-item-btn">View Full Item &rarr;</a>
+    </div>
   </div>
 </div>
 
