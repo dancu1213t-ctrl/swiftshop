@@ -5366,6 +5366,124 @@ box-shadow:
     border-radius: 20px;
   }
 }
+    /* ==========================================
+   TOP RECOMMENDED SECTION & HORIZONTAL SLIDER
+   ========================================== */
+
+/* Outer Section Layout */
+.media-section {
+  margin: 15px 0 25px 0;
+  padding: 0 10px;
+}
+
+/* Header Styling */
+.media-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Horizontal Touch-Scroll Container */
+.media-slider {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 2px 12px 2px;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+/* Hide Scrollbar for Chrome, Safari, Edge */
+.media-slider::-webkit-scrollbar {
+  display: none;
+}
+
+/* Track holding the cards side-by-side */
+.media-track {
+  display: flex;
+  gap: 12px;
+}
+
+/* Individual Recommended Item Card */
+.media-card {
+  min-width: 140px;
+  max-width: 140px;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid #f0f0f0;
+  flex-shrink: 0;
+}
+
+/* Card Image */
+.media-card img {
+  width: 100%;
+  height: 110px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* Card Content Details */
+.media-info {
+  margin-top: 8px;
+  flex-grow: 1;
+}
+
+.media-info h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: #222;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Like Counter Tag */
+.media-info p {
+  font-size: 11px;
+  color: #e63946;
+  font-weight: 700;
+  margin: 3px 0;
+}
+
+/* Price Label */
+.media-info span {
+  font-size: 13px;
+  font-weight: 800;
+  color: #111;
+  display: block;
+}
+
+/* Quick Add Button (+ Button) */
+.media-card .add-btn {
+  margin-top: 8px;
+  width: 100%;
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 0;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.media-card .add-btn:active {
+  transform: scale(0.95);
+  background: #333333;
+}
   </style>
 </head>
 
