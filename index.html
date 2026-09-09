@@ -9017,11 +9017,7 @@ async function render() {
     });
   }
 
-// Variable to store current open item
-let currentOpenProductId = null;
 
-// Open Overlay Function
-let currentOpenProductId = null;
 
 let currentOpenProductId = null;
 
@@ -11822,7 +11818,9 @@ function selectTip(amount, element) {
     </div>
   </div>
 </div>
-<div id="imageOverlay" onclick="closeImage()">
+
+
+  <div id="imageOverlay" onclick="closeImage()">
   <div class="overlay-content" onclick="event.stopPropagation()">
     <!-- Close Button -->
     <button type="button" class="close-btn" onclick="closeImage()">&times;</button>
@@ -11851,5 +11849,6 @@ function selectTip(amount, element) {
     </div>
   </div>
 </div>
+
 </body>
 </html>
