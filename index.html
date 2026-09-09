@@ -5371,6 +5371,108 @@ box-shadow:
     border-radius: 20px;
   }
 }
+    @media (min-width: 900px) {
+  /* 1. Constrain App Screen & Center Content */
+  #appScreen {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  /* 2. Top Bar Navigation Alignment */
+  .top-bar {
+    max-width: 1200px;
+    margin: 0 auto;
+    left: 50% !important;
+    transform: translateX(-50%);
+  }
+
+  /* 3. Header Banner Alignment */
+  .header {
+    max-width: 1200px;
+    margin: 0 auto 20px auto;
+    border-radius: 0 0 32px 32px;
+  }
+
+  /* 4. Two-Column Hero Section Layout */
+  .hero-section {
+    max-width: 1200px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .hero-content {
+    margin-bottom: 0;
+  }
+
+  .hero-toggle-row,
+  .hero-search-wrapper {
+    grid-column: 1 / -1;
+  }
+
+  .hero-image {
+    width: 220px;
+    height: 220px;
+  }
+
+  /* 5. Restrain Sliders & Promos */
+  .pill-container-v2,
+  .hero-promo-card,
+  .ticker-container {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* 6. Expand Product Grid to 4 Columns with Hover Effects */
+  .section {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 24px !important;
+  }
+
+  .product {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+  }
+
+  /* 7. Center Floating Bottom Buttons & Order Dialogs */
+  .order-btn {
+    max-width: 500px;
+    left: 50% !important;
+    transform: translateX(-50%);
+    border-radius: 24px 24px 0 0;
+  }
+
+  #pickupOrderBox,
+  #tacoOrderBox,
+  #requestRideBox {
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* =========================================================
+   EXTRA WIDE DESKTOP SCREENS (MIN-WIDTH: 1400PX)
+   ========================================================= */
+
+@media (min-width: 1400px) {
+  /* Expand Product Grid to 5 Columns */
+  .section {
+    grid-template-columns: repeat(5, 1fr) !important;
+  }
+}
   </style>
 </head>
 
