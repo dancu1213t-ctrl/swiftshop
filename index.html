@@ -5366,6 +5366,239 @@ box-shadow:
     border-radius: 20px;
   }
 }
+    /* =========================================================
+   ✨ ULTRA-PREMIUM SIDE PANEL (GLASSMORPHIC ONYX THEME)
+   ========================================================= */
+
+/* Hamburger Menu Trigger Button */
+.menu-btn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  width: 44px;
+  height: 44px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 1002;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+}
+
+.menu-btn:active {
+  transform: scale(0.92);
+}
+
+/* Side Panel Drawer Base */
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: -320px;
+  width: 290px;
+  height: 100vh;
+  height: 100dvh;
+  background: #0f172a; /* Rich Onyx Navy */
+  color: #f8fafc;
+  box-shadow: 12px 0 40px rgba(0, 0, 0, 0.4);
+  z-index: 1003;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  border-top-right-radius: 28px;
+  border-bottom-right-radius: 28px;
+  overflow: hidden;
+}
+
+/* Slide Open State */
+.side-panel.open,
+.side-panel.active {
+  transform: translateX(320px);
+}
+
+/* Premium Gradient Header */
+.panel-header {
+  background: linear-gradient(135deg, #ff7a18 0%, #ff3d00 100%);
+  color: #ffffff;
+  padding: 24px 20px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(255, 61, 0, 0.3);
+  position: relative;
+}
+
+.panel-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.panel-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-title {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  color: #ffffff;
+}
+
+.panel-subtitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 3px;
+}
+
+/* Close Button */
+.side-panel .close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #ffffff;
+}
+
+.side-panel .close-btn:active {
+  transform: scale(0.88);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Nav Menu Content Container */
+.panel-content {
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  flex: 1;
+  scrollbar-width: none; /* Hide Firefox scrollbar */
+}
+
+.panel-content::-webkit-scrollbar {
+  display: none; /* Hide Webkit scrollbar */
+}
+
+/* Individual Panel Menu Items */
+.side-panel .panel-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #cbd5e1;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.side-panel .panel-item span:last-child {
+  flex: 1;
+  letter-spacing: -0.2px;
+}
+
+/* Icon Container Pill */
+.side-panel .menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ff7a18;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.side-panel .menu-icon svg {
+  width: 19px;
+  height: 19px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+/* Interactive States */
+.side-panel .panel-item:hover,
+.side-panel .panel-item:active {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.side-panel .panel-item:active {
+  transform: scale(0.97);
+}
+
+.side-panel .panel-item:hover .menu-icon,
+.side-panel .panel-item:active .menu-icon {
+  background: linear-gradient(135deg, #ff7a18, #ff3d00);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow: 0 4px 12px rgba(255, 61, 0, 0.35);
+  transform: scale(1.05);
+}
+
+/* Admin Portal Specific Accent Style */
+#adminMenuButton .menu-icon {
+  background: rgba(255, 152, 0, 0.12);
+  color: #ff9800;
+  border-color: rgba(255, 152, 0, 0.2);
+}
+
+/* Backdrop Overlay */
+#overlay,
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1001;
+}
+
+#overlay.show,
+.menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
   </style>
 </head>
 
@@ -5374,14 +5607,15 @@ box-shadow:
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
 <div id="sidePanel" class="side-panel">
-  
   <div class="panel-header">
-    <span class="panel-title">SwiftShop</span>
+    <div class="panel-title-group">
+      <span class="panel-title">SwiftShop</span>
+      <span class="panel-subtitle">Orange Walk</span>
+    </div>
     <span class="close-btn" onclick="toggleMenu()">✕</span>
   </div>
 
   <div class="panel-content">
-
     <button class="panel-item" onclick="openProfile()">
       <span class="menu-icon">
         <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -5424,16 +5658,14 @@ box-shadow:
       <span>Contact Us</span>
     </button>
 
-
-
     <button class="panel-item" onclick="openAdminPortal()" id="adminMenuButton">
-  <span class="menu-icon">⚙️</span>
-  <span>Admin Portal</span>
-</button>
-
+      <span class="menu-icon">⚙️</span>
+      <span>Admin Portal</span>
+    </button>
   </div>
-
 </div>
+
+<div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()"></div>
 
 <style>
 .side-panel .panel-item {
