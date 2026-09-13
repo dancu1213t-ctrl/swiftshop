@@ -2671,9 +2671,7 @@ box-shadow:
 .menu-btn {
   position: fixed;
 
-  /* Moves it down below the phone/PWA top area */
-  top: calc(12px + env(safe-area-inset-top));
-
+  top: calc(36px + env(safe-area-inset-top));
   left: 12px;
 
   font-size: 22px;
@@ -2687,18 +2685,21 @@ box-shadow:
   z-index: 1001;
 }
 
+
 /* PANEL */
 .side-panel {
   position: fixed;
 
-  top: env(safe-area-inset-top);
+  top: calc(36px + env(safe-area-inset-top));
 
   left: -300px;
   width: 280px;
-  height: calc(100% - env(safe-area-inset-top));
+
+  height: calc(100dvh - 36px - env(safe-area-inset-top));
 
   background: #ffffff;
   color: #0f172a;
+
   box-shadow: 10px 0 40px rgba(15, 23, 42, 0.15);
 
   z-index: 1003;
