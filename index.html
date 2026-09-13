@@ -2690,15 +2690,21 @@ box-shadow:
 /* PANEL */
 .side-panel {
   position: fixed;
-  top: 0;
+
+  top: env(safe-area-inset-top);
+
   left: -300px;
   width: 280px;
-  height: 100%;
+  height: calc(100% - env(safe-area-inset-top));
+
   background: #ffffff;
   color: #0f172a;
   box-shadow: 10px 0 40px rgba(15, 23, 42, 0.15);
+
   z-index: 1003;
+
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
   display: flex;
   flex-direction: column;
 }
@@ -3178,14 +3184,21 @@ box-shadow:
 
 .side-panel {
   position: fixed;
-  top: 0;
-  left: -260px;
-  width: 260px;
-  height: 100%;
-  background: #fff;
-  box-shadow: 5px 0 25px rgba(0,0,0,0.15);
-  transition: left 0.3s ease;
-  z-index: 2000;
+
+  top: env(safe-area-inset-top);
+
+  left: -300px;
+  width: 280px;
+  height: calc(100% - env(safe-area-inset-top));
+
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 10px 0 40px rgba(15, 23, 42, 0.15);
+
+  z-index: 1003;
+
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
   display: flex;
   flex-direction: column;
 }
