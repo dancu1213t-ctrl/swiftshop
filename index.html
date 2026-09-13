@@ -2669,7 +2669,40 @@ box-shadow:
   display: none !important;
 }
 /* ☰ BUTTON */
+.menu-btn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 1002;
 
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* PANEL */
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100%;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 10px 0 40px rgba(15, 23, 42, 0.15);
+  z-index: 1003;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* OPEN STATE */
+.side-panel.open {
+  left: 0;
+}
 
 .panel-header {
   background: linear-gradient(180deg, #ff7a18, #ff3d00); /* 🍊 orange */
@@ -5333,418 +5366,111 @@ box-shadow:
     border-radius: 20px;
   }
 }
-    /* =========================================================
-   SWIFTSHOP BOTTOM NAVIGATION
-   ========================================================= */
-
-:root {
-  --swift-nav-height: 72px;
-  --swift-orange: #ff6a00;
-  --swift-orange-dark: #ff5a1f;
-}
-
-/* Give the page enough room so content is never hidden */
-body {
-  padding-bottom: calc(
-    var(--swift-nav-height) + env(safe-area-inset-bottom) + 12px
-  );
-}
-
-/* =========================================================
-   BOTTOM NAV
-   ========================================================= */
-
-.swift-bottom-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  height: calc(
-    var(--swift-nav-height) + env(safe-area-inset-bottom)
-  );
-
-  padding: 0 8px env(safe-area-inset-bottom);
-
-  background: rgba(255,255,255,0.98);
-
-  border-top: 1px solid #eeeeee;
-
-  box-shadow:
-    0 -8px 28px rgba(15,23,42,0.10);
-
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-
-  align-items: stretch;
-
-  z-index: 9000;
-
-  font-family: "Poppins",
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
-}
-
-/* =========================================================
-   NAV BUTTON
-   ========================================================= */
-
-.swift-nav-item {
-  position: relative;
-
-  border: none;
-  outline: none;
-
-  background: transparent;
-
-  color: #777;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  gap: 3px;
-
-  padding: 6px 2px;
-
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    color 0.2s ease,
-    transform 0.15s ease;
-}
-
-.swift-nav-item:active {
-  transform: scale(0.92);
-}
-
-.swift-nav-item.active {
-  color: var(--swift-orange);
-}
-
-/* =========================================================
-   ICON
-   ========================================================= */
-
-.swift-nav-icon {
-  position: relative;
-
-  width: 25px;
-  height: 25px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.swift-nav-icon svg {
-  width: 23px;
-  height: 23px;
-
-  fill: none;
-
-  stroke: currentColor;
-
-  stroke-width: 2;
-
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* =========================================================
-   ACTIVE INDICATOR
-   ========================================================= */
-
-.swift-nav-item.active::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-
-  width: 28px;
-  height: 3px;
-
-  background: var(--swift-orange);
-
-  border-radius: 0 0 8px 8px;
-}
-
-/* =========================================================
-   CART BADGE
-   ========================================================= */
-
-.swift-cart-badge {
-  position: absolute;
-
-  top: -5px;
-  right: -7px;
-
-  min-width: 18px;
-  height: 18px;
-
-  padding: 0 4px;
-
-  border-radius: 999px;
-
-  background: #111;
-  color: #fff;
-
-  border: 2px solid #fff;
-
-  display: none;
-
-  align-items: center;
-  justify-content: center;
-
-  font-size: 9px;
-  font-weight: 900;
-
-  line-height: 1;
-}
-
-/* =========================================================
-   PROFILE AVATAR IN NAV
-   ========================================================= */
-
-.swift-nav-profile-avatar {
-  width: 25px;
-  height: 25px;
-
-  border-radius: 50%;
-
-  background: linear-gradient(
-    135deg,
-    #ff9a00,
-    #ff5a1f
-  );
-
-  color: white;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 11px;
-  font-weight: 900;
-
-  box-shadow:
-    0 3px 10px rgba(255,106,0,0.25);
-}
-
-/* =========================================================
-   PROFILE QUICK ACTIONS
-   ========================================================= */
-
-.swift-profile-actions {
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  padding: 16px;
-
-  background: #f8fafc;
-
-  border: 1px solid #eeeeee;
-
-  border-radius: 20px;
-}
-
-.swift-profile-actions-title {
-  margin: 0 0 12px;
-
-  font-size: 14px;
-  font-weight: 900;
-
-  color: #111;
-}
-
-.swift-profile-actions-grid {
-  display: grid;
-
-  grid-template-columns: repeat(2, 1fr);
-
-  gap: 10px;
-}
-
-.swift-profile-action {
-  min-height: 72px;
-
-  border: 1px solid #eeeeee;
-
-  border-radius: 16px;
-
-  background: #fff;
-
-  display: flex;
-  flex-direction: column;
-
-  align-items: center;
-  justify-content: center;
-
-  gap: 5px;
-
-  color: #111;
-
-  font-family: inherit;
-
-  font-size: 11px;
-  font-weight: 800;
-
-  cursor: pointer;
-
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
-}
-
-.swift-profile-action:active {
-  transform: scale(0.96);
-}
-
-.swift-profile-action:hover {
-  border-color: #ffb15c;
-  box-shadow: 0 5px 15px rgba(15,23,42,0.07);
-}
-
-.swift-profile-action-icon {
-  width: 30px;
-  height: 30px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 10px;
-
-  background: #fff4e8;
-
-  color: #ff6a00;
-
-  font-size: 17px;
-}
-
-.swift-profile-action.full {
-  grid-column: 1 / -1;
-}
-
-.swift-profile-divider {
-  height: 1px;
-
-  background: #eeeeee;
-
-  margin: 14px 0;
-}
-
-/* =========================================================
-   CART BOTTOM SHEET
-   ========================================================= */
-
-#cartPanel.swift-cart-panel {
-  position: fixed;
-
-  left: 0;
-
-  bottom: calc(
-    -100% - var(--swift-nav-height)
-  );
-
-  width: 100%;
-
-  height: min(72dvh, 720px);
-
-  max-height: calc(
-    100dvh -
-    var(--swift-nav-height) -
-    env(safe-area-inset-bottom) -
-    8px
-  );
-
-  background: #fff;
-
-  border-radius: 24px 24px 0 0;
-
-  box-shadow:
-    0 -12px 35px rgba(15,23,42,0.18);
-
-  z-index: 8999;
-
-  padding: 20px 20px 28px;
-
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-
-  transition: bottom 0.35s ease;
-}
-
-#cartPanel.swift-cart-panel.swift-cart-open {
-  bottom: calc(
-    var(--swift-nav-height) +
-    env(safe-area-inset-bottom)
-  );
-}
-
-/*
-   Extra space at the bottom guarantees the Next
-   button is completely above the navigation.
-*/
-#cartPanel.swift-cart-panel .next-btn-outer {
-  margin-bottom: 12px;
-}
-
-/* =========================================================
-   HIDE OLD FLOATING CART
-   ========================================================= */
-
-#cartBubble {
-  display: none !important;
-}
-
-/* =========================================================
-   SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 380px) {
-
-  .swift-bottom-nav {
-    padding-left: 4px;
-    padding-right: 4px;
-  }
-
-  .swift-nav-item {
-    font-size: 9px;
-  }
-
-  .swift-nav-icon,
-  .swift-nav-profile-avatar {
-    width: 23px;
-    height: 23px;
-  }
-
-  .swift-nav-icon svg {
-    width: 21px;
-    height: 21px;
-  }
-
-  .swift-profile-actions-grid {
-    gap: 8px;
-  }
-}
   </style>
 </head>
 
 <body>
 
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<div id="sidePanel" class="side-panel">
+  
+  <div class="panel-header">
+    <span class="panel-title">SwiftShop</span>
+    <span class="close-btn" onclick="toggleMenu()">✕</span>
+  </div>
+
+  <div class="panel-content">
+
+    <button class="panel-item" onclick="openProfile()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </span>
+      <span>Profile</span>
+    </button>
+
+    <button class="panel-item" onclick="openFoodMap()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"></path><path d="M15 2v20"></path><path d="M17 22H13"></path><path d="M6 2v6a3 3 0 0 0 3 3 3 3 0 0 0 3-3V2"></path><path d="M9 2v20"></path><path d="M7 22h4"></path></svg>
+      </span>
+      <span>Food Near Me</span>
+    </button>
+
+    <button class="panel-item" onclick="fetchAndShowPromos()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.229 1-3 1 1 1.5 2 1.5 2z"></path></svg>
+      </span>
+      <span>Live Promos</span>
+    </button>
+
+    <button class="panel-item" onclick="openLeaderBoard()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17h4v-2.34"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+      </span>
+      <span>Leaderboard</span>
+    </button>
+
+    <button class="panel-item" onclick="openCreditPurchase()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+      </span>
+      <span>Purchase Credit</span>
+    </button>
+
+    <button class="panel-item" onclick="window.open('https://wa.me/5016080205?text=Hello%20Swiftshop','_blank')">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+      </span>
+      <span>Contact Us</span>
+    </button>
+
+
+
+    <button class="panel-item" onclick="openAdminPortal()" id="adminMenuButton">
+  <span class="menu-icon">⚙️</span>
+  <span>Admin Portal</span>
+</button>
+
+  </div>
+
+</div>
+
+<style>
+.side-panel .panel-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+.side-panel .menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #fff7ed;
+  color: #ff6a00;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.side-panel .menu-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.side-panel .panel-item:hover .menu-icon {
+  background: #ff6a00;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+</style>
+
+<div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()"></div>
 
 
 <!-- CENTERED PROFILE OVERLAY BACKDROP -->
@@ -5797,117 +5523,6 @@ body {
         <h4 class="section-title">🎁 Saved Rewards</h4>
         <div id="savedRewardsListContainer" class="milestones-container"></div>
       </div>
-
-      <!-- =========================================================
-     PROFILE QUICK ACTIONS
-     ========================================================= -->
-
-<div class="swift-profile-actions">
-
-  <h4 class="swift-profile-actions-title">
-    Quick Access
-  </h4>
-
-  <div class="swift-profile-actions-grid">
-
-    <!-- FOOD NEAR ME -->
-    <button
-      class="swift-profile-action"
-      type="button"
-      onclick="profileAction('food')"
-    >
-      <span class="swift-profile-action-icon">🍔</span>
-      <span>Food Near Me</span>
-    </button>
-
-    <!-- LIVE PROMOS -->
-    <button
-      class="swift-profile-action"
-      type="button"
-      onclick="profileAction('promos')"
-    >
-      <span class="swift-profile-action-icon">🔥</span>
-      <span>Live Promos</span>
-    </button>
-
-    <!-- LEADERBOARD -->
-    <button
-      class="swift-profile-action"
-      type="button"
-      onclick="profileAction('leaderboard')"
-    >
-      <span class="swift-profile-action-icon">🏆</span>
-      <span>Leaderboard</span>
-    </button>
-
-    <!-- TOPUP -->
-    <button
-      class="swift-profile-action"
-      type="button"
-      onclick="profileAction('topup')"
-    >
-      <span class="swift-profile-action-icon">💳</span>
-      <span>Purchase Credit</span>
-    </button>
-
-    <!-- CONTACT -->
-    <button
-      class="swift-profile-action full"
-      type="button"
-      onclick="profileAction('contact')"
-    >
-      <span class="swift-profile-action-icon">💬</span>
-      <span>Contact SwiftShop</span>
-    </button>
-
-    <div class="swift-profile-divider full"></div>
-
-    <!-- LANGUAGE -->
-    <button
-      class="swift-profile-action"
-      type="button"
-      onclick="profileAction('spanish')"
-    >
-      <span class="swift-profile-action-icon">🇪🇸</span>
-      <span>Español</span>
-    </button>
-
-    <button
-      class="swift-profile-action"
-      type="button"
-      onclick="profileAction('english')"
-    >
-      <span class="swift-profile-action-icon">🇺🇸</span>
-      <span>English</span>
-    </button>
-
-    <!-- ADMIN -->
-    <button
-      class="swift-profile-action full"
-      id="profileAdminButton"
-      type="button"
-      onclick="profileAction('admin')"
-    >
-      <span class="swift-profile-action-icon">⚙️</span>
-      <span>Admin Portal</span>
-    </button>
-
-    <!-- LOGOUT -->
-    <button
-      class="swift-profile-action full"
-      type="button"
-      onclick="profileAction('logout')"
-      style="color:#dc2626;"
-    >
-      <span
-        class="swift-profile-action-icon"
-        style="color:#dc2626;background:#fff1f1;"
-      >🚪</span>
-      <span>Logout</span>
-    </button>
-
-  </div>
-</div>
 
       <div class="profile-field" style="margin-top:20px;">
         <label>Full Name</label>
@@ -6319,103 +5934,6 @@ body {
 
 
 <div id="appScreen" style="display:none;">
-
-  <!-- =========================================================
-     SWIFTSHOP BOTTOM NAVIGATION
-     ========================================================= -->
-
-<nav class="swift-bottom-nav" id="swiftBottomNav">
-
-  <!-- HOME -->
-  <button
-    class="swift-nav-item active"
-    id="swiftNavHome"
-    type="button"
-    onclick="swiftNavigate('home')"
-  >
-    <span class="swift-nav-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M3 10.5 12 3l9 7.5"></path>
-        <path d="M5 9.5V21h14V9.5"></path>
-        <path d="M9 21v-6h6v6"></path>
-      </svg>
-    </span>
-    <span>Home</span>
-  </button>
-
-  <!-- SEARCH -->
-  <button
-    class="swift-nav-item"
-    id="swiftNavSearch"
-    type="button"
-    onclick="swiftNavigate('search')"
-  >
-    <span class="swift-nav-icon">
-      <svg viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="7"></circle>
-        <path d="m20 20-4-4"></path>
-      </svg>
-    </span>
-    <span>Search</span>
-  </button>
-
-  <!-- CART -->
-  <button
-    class="swift-nav-item"
-    id="swiftNavCart"
-    type="button"
-    onclick="swiftNavigate('cart')"
-  >
-    <span class="swift-nav-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M3 4h2l2 13h10l3-9H6"></path>
-        <circle cx="9" cy="21" r="1"></circle>
-        <circle cx="18" cy="21" r="1"></circle>
-      </svg>
-
-      <span
-        id="swiftBottomCartBadge"
-        class="swift-cart-badge"
-      >0</span>
-    </span>
-
-    <span>Cart</span>
-  </button>
-
-  <!-- TOPUP -->
-  <button
-    class="swift-nav-item"
-    id="swiftNavTopup"
-    type="button"
-    onclick="swiftNavigate('topup')"
-  >
-    <span class="swift-nav-icon">
-      <svg viewBox="0 0 24 24">
-        <rect x="4" y="3" width="16" height="18" rx="2"></rect>
-        <path d="M8 7h8"></path>
-        <path d="M12 10v6"></path>
-        <path d="M9 13h6"></path>
-      </svg>
-    </span>
-    <span>Topup</span>
-  </button>
-
-  <!-- PROFILE -->
-  <button
-    class="swift-nav-item"
-    id="swiftNavProfile"
-    type="button"
-    onclick="swiftNavigate('profile')"
-  >
-    <span
-      class="swift-nav-profile-avatar"
-      id="swiftBottomProfileAvatar"
-    >?</span>
-
-    <span>Profile</span>
-  </button>
-
-</nav>
 
 
 <div class="header">
@@ -8343,57 +7861,57 @@ body {
   }
 
 function updateCartBubble() {
-  const badge = document.getElementById("swiftBottomCartBadge");
+  const bubble = document.getElementById("cartBubble");
+  const countBadge = document.getElementById("cartItemCount");
+  if (!bubble) return;
 
-  const count = Object.values(window.cart || {})
-    .reduce((total, item) => total + Number(item.q || 0), 0);
+  const count = Object.values(cart).reduce((a, b) => a + b.q, 0);
+  
+  if (count > 0) {
+    bubble.style.display = "flex";
+    if (countBadge) {
+      countBadge.style.display = "flex";
+      countBadge.textContent = count;
+    }
+    
+    // Trigger the pop animation whenever the count changes
+    bubble.classList.remove("bubble-pop");
+    void bubble.offsetWidth; // forces reflow to restart animation
+    bubble.classList.add("bubble-pop");
+  } else {
+    bubble.style.display = "none";
+    if (countBadge) countBadge.style.display = "none";
+  }
+}
 
-  if (badge) {
-    if (count > 0) {
-      badge.style.display = "flex";
-      badge.textContent = count > 99 ? "99+" : count;
+ function openCart() {
+    const panel = document.getElementById("cartPanel");
+    const bubble = document.getElementById("cartBubble");
+    if (!panel) return;
+
+    const isOpen = panel.style.bottom === "0px";
+
+    if (isOpen) {
+      panel.style.bottom = "-100%";
+      // Show bubble again when closing
+      if (bubble) bubble.style.display = "flex"; 
     } else {
-      badge.style.display = "none";
+      panel.style.bottom = "0";             // Open cart panel
+      // Completely hide the bubble while the cart is open
+      if (bubble) bubble.style.display = "none"; 
+
+      requestAnimationFrame(() => {
+        renderCartPanel();                  // Render items
+        
+        setTimeout(() => {
+          if (typeof initCartMap === "function") {
+            initCartMap();
+          }
+        }, 350); 
+      });
     }
   }
 
-  updateSwiftBottomCartBadge();
-}
-function openCart() {
-
-  const panel =
-    document.getElementById("cartPanel");
-
-  if (!panel) return;
-
-  const isOpen =
-    panel.classList.contains("swift-cart-open");
-
-  if (isOpen) {
-
-    closeCart();
-
-    return;
-  }
-
-  swiftSetActiveNav("cart");
-
-  panel.classList.add("swift-cart-open");
-
-  requestAnimationFrame(() => {
-
-    renderCartPanel();
-
-    setTimeout(() => {
-
-      if (typeof initCartMap === "function") {
-        initCartMap();
-      }
-
-    }, 350);
-
-  });
-}
   // 🌮 TACO DELIVERY FEE (same zones & prices as grocery)
   function updateTacoDeliveryFee() {
     const zone = document.getElementById("tacoDeliveryZone").value;
@@ -8409,18 +7927,15 @@ function openCart() {
   }
 
 function closeCart() {
-
-  const panel =
-    document.getElementById("cartPanel");
-
-  if (panel) {
-    panel.classList.remove("swift-cart-open");
+    const cp = document.getElementById("cartPanel");
+    const cb = document.getElementById("cartBubble");
+    if (cp) cp.style.bottom = "-100%";
+    // Make sure the bubble reappears when closed/minimized
+    if (cb && Object.values(cart).reduce((a, b) => a + b.q, 0) > 0) {
+      cb.style.display = "flex";
+    }
   }
 
-  swiftSetActiveNav("home");
-
-  updateSwiftBottomCartBadge();
-}
   function renderCartPanel() {
     const cartTitle = document.getElementById("cartTitle");
     const userName = localStorage.getItem("userName");
@@ -8521,24 +8036,11 @@ function closeCart() {
     enterApp();
   }
 
-function goToOrder() {
-
-  closeCart();
-
-  const box =
-    document.getElementById("orderBox");
-
-  if (box) {
-    box.style.display = "block";
-
-    setTimeout(() => {
-      box.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    }, 50);
+  function goToOrder() {
+    closeCart();
+    const box = document.getElementById("orderBox");
+    if (box) box.style.display = "block";   // ✅ SHOW ORDER BOX
   }
-}
 
   function fillPickupName() {
     const name = localStorage.getItem("userName") || "Customer";
@@ -8578,7 +8080,7 @@ function openProfile() {
   if (typeof toggleMenu === "function") {
     const sidePanel = document.getElementById("sidePanel");
     if (sidePanel && (sidePanel.classList.contains("open") || sidePanel.classList.contains("active"))) {
-      
+      toggleMenu();
     }
   }
 }
@@ -9741,7 +9243,16 @@ function toggleModalLike() {
     refreshCartTotals();
   }
 
+  function toggleMenu() {
+    const panel = document.getElementById("sidePanel");
+    const overlay = document.getElementById("overlay");
+    const menuOverlay = document.getElementById("menuOverlay");
 
+    if (panel) panel.classList.toggle("open");
+    if (panel) panel.classList.toggle("active");
+    if (overlay) overlay.classList.toggle("show");
+    if (menuOverlay) menuOverlay.classList.toggle("active");
+  }
 
   document.querySelectorAll(".toggle-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -9794,7 +9305,46 @@ function toggleModalLike() {
   /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━
       PROFILE SCREEN LOGIC
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
- 
+  function openProfile() {
+    // Show the profile screen
+    const pScreen = document.getElementById("profileScreen");
+    const pOverlay = document.getElementById("profileOverlay");
+    if (pScreen) pScreen.classList.add("active");
+    if (pOverlay) pOverlay.style.display = "flex";
+    
+    // Load saved data from LocalStorage
+    const name = localStorage.getItem("userName") || "Customer";
+    const phone = localStorage.getItem("userPhone") || "—";
+    const points = localStorage.getItem("points") || "0";
+    
+    const pName = document.getElementById("profileName");
+    const pPhone = document.getElementById("profilePhone");
+    const pPoints = document.getElementById("profilePoints");
+    const pInitials = document.getElementById("profileInitials");
+    const pInit = document.getElementById("profileInitial");
+
+    if (pName) {
+      if (pName.tagName === "INPUT") pName.value = name;
+      else pName.innerText = name;
+    }
+    if (pPhone) {
+      if (pPhone.tagName === "INPUT") pPhone.value = phone;
+      else pPhone.innerText = phone;
+    }
+    if (pPoints) pPoints.innerText = points;
+    if (pInitials) pInitials.innerText = getInitials(name);
+    updateAvatar(name);
+
+    // Close the side menu if open
+    toggleMenu(); 
+  }
+
+  function closeProfile() {
+    const pScreen = document.getElementById("profileScreen");
+    const pOverlay = document.getElementById("profileOverlay");
+    if (pScreen) pScreen.classList.remove("active");
+    if (pOverlay) pOverlay.style.display = "none";
+  }
 
   /* DATA PERSISTENCE */
   function saveProfile() {
@@ -9929,17 +9479,12 @@ function toggleModalLike() {
     }
   });
 
-function openLeaderBoard() {
-
-  const lbScreen =
-    document.getElementById("leaderBoardScreen");
-
-  if (lbScreen) {
-    lbScreen.style.display = "block";
+  function openLeaderBoard() {
+    const lbScreen = document.getElementById("leaderBoardScreen");
+    if (lbScreen) lbScreen.style.display = "block";
+    toggleMenu();
+    fetchLeaderBoard();
   }
-
-  fetchLeaderBoard();
-}
 
   function closeLeaderBoard() {
     const lbScreen = document.getElementById("leaderBoardScreen");
@@ -10030,38 +9575,38 @@ function openLeaderBoard() {
     if (element) element.classList.add("active");
   }
 
-function openCreditPurchase() {
+  function openCreditPurchase(){
+    const profileName = document.getElementById("profileName")?.value || "";
+    const cName = document.getElementById("creditName");
+    if (cName) cName.value = profileName;
 
-  const profileName =
-    localStorage.getItem("userName") ||
-    getRewardsUserName() ||
-    "";
+    const cScreen = document.getElementById("creditPurchaseScreen");
+    if (cScreen) cScreen.style.display = "block";
 
-  const cName =
-    document.getElementById("creditName");
+    const sidePanel = document.getElementById("sidePanel");
+    if (sidePanel) sidePanel.style.display = "none";
 
-  if (cName) {
-    cName.value = profileName;
+    const menuOverlay = document.getElementById("menuOverlay");
+    if(menuOverlay){
+      menuOverlay.style.display = "none";
+    }
   }
 
-  const cScreen =
-    document.getElementById("creditPurchaseScreen");
+  function closeCreditPurchase() {
+    const cScreen = document.getElementById("creditPurchaseScreen");
+    if (cScreen) cScreen.style.display = "none";
 
-  if (cScreen) {
-    cScreen.style.display = "block";
+    const sidePanel = document.getElementById("sidePanel");
+    const menuOverlay = document.getElementById("menuOverlay");
+
+    if(sidePanel){
+      sidePanel.style.display = "";
+    }
+
+    if(menuOverlay){
+      menuOverlay.style.display = "";
+    }
   }
-}
-function closeCreditPurchase() {
-
-  const cScreen =
-    document.getElementById("creditPurchaseScreen");
-
-  if (cScreen) {
-    cScreen.style.display = "none";
-  }
-
-  swiftSetActiveNav("home");
-}
 
   function showCreditConfirmation() {
     const network = document.getElementById("creditNetwork").value;
@@ -10295,29 +9840,17 @@ function convertFileToPngBlob(file) {
 
 // 👑 OPEN & CLOSE ADMIN PORTAL
 function openAdminPortal() {
+  const savedName = localStorage.getItem("userName");
+  const savedPhone = localStorage.getItem("userPhone");
 
-  const savedName =
-    localStorage.getItem("userName");
-
-  const savedPhone =
-    localStorage.getItem("userPhone");
-
-  if (
-    savedName !== ADMIN_NAME ||
-    savedPhone !== ADMIN_PHONE
-  ) {
+  if (savedName !== ADMIN_NAME || savedPhone !== ADMIN_PHONE) {
     alert("Unauthorized Access");
     return;
   }
 
-  const adminScreen =
-    document.getElementById("adminScreen");
-
-  if (adminScreen) {
-    adminScreen.style.display = "block";
-  }
-
-  switchAdminTab("products");
+  toggleMenu(); // Close side menu
+  document.getElementById("adminScreen").style.display = "block";
+  switchAdminTab('products');
 }
 
 function closeAdminPortal() {
@@ -10961,95 +10494,31 @@ function getRewardsUserName() {
    OPEN / CLOSE OVERLAY
    ========================================================= */
 
-/* =========================================================
-   PROFILE
-   ========================================================= */
-
 async function openProfile() {
+  const pOverlay = document.getElementById("profileOverlay");
+  if (pOverlay) pOverlay.classList.add("active");
 
-  const pOverlay =
-    document.getElementById("profileOverlay");
+  const name = getRewardsUserName();
+  const phone = getRewardsUserPhone();
 
-  if (pOverlay) {
-    pOverlay.classList.add("active");
-  }
+  const pName = document.getElementById("profileName");
+  const pPhone = document.getElementById("profilePhone");
+  const pDisplayName = document.getElementById("profileDisplayName");
+  const pInitial = document.getElementById("profileInitial");
 
-  const name =
-    getRewardsUserName();
-
-  const phone =
-    getRewardsUserPhone();
-
-  const pName =
-    document.getElementById("profileName");
-
-  const pPhone =
-    document.getElementById("profilePhone");
-
-  const pDisplayName =
-    document.getElementById("profileDisplayName");
-
-  const pInitial =
-    document.getElementById("profileInitial");
-
-  if (pName) {
-    pName.value = name;
-  }
-
-  if (pPhone) {
-    pPhone.value = phone;
-  }
-
-  if (pDisplayName) {
-    pDisplayName.innerText =
-      name || "Customer";
-  }
-
-  if (pInitial) {
-    pInitial.innerText =
-      name
-        ? name.charAt(0).toUpperCase()
-        : "?";
-  }
-
-  updateSwiftBottomProfile();
-
-  updateProfileAdminAction();
+  if (pName) pName.value = name;
+  if (pPhone) pPhone.value = phone;
+  if (pDisplayName) pDisplayName.innerText = name;
+  if (pInitial) pInitial.innerText = name ? name.charAt(0).toUpperCase() : "?";
 
   await loadGamificationData();
 }
 
 function closeProfile() {
-
-  const pOverlay =
-    document.getElementById("profileOverlay");
-
-  if (pOverlay) {
-    pOverlay.classList.remove("active");
-  }
-
-  swiftSetActiveNav("home");
+  const pOverlay = document.getElementById("profileOverlay");
+  if (pOverlay) pOverlay.classList.remove("active");
 }
-  function updateProfileAdminAction() {
 
-  const button =
-    document.getElementById("profileAdminButton");
-
-  if (!button) return;
-
-  const savedName =
-    localStorage.getItem("userName");
-
-  const savedPhone =
-    localStorage.getItem("userPhone");
-
-  const isAdmin =
-    savedName === ADMIN_NAME &&
-    savedPhone === ADMIN_PHONE;
-
-  button.style.display =
-    isAdmin ? "flex" : "none";
-}
 /* =========================================================
    LOAD DATA
    ========================================================= */
@@ -11546,274 +11015,6 @@ function saveProfile() {
 document.addEventListener("DOMContentLoaded", () => {
   drawSpinWheelCanvas();
 });
-  /* =========================================================
-   SWIFTSHOP BOTTOM NAVIGATION LOGIC
-   ========================================================= */
-
-function swiftSetActiveNav(name) {
-  document
-    .querySelectorAll(".swift-nav-item")
-    .forEach(btn => btn.classList.remove("active"));
-
-  const target = document.getElementById(
-    "swiftNav" +
-    name.charAt(0).toUpperCase() +
-    name.slice(1)
-  );
-
-  if (target) {
-    target.classList.add("active");
-  }
-}
-
-function updateSwiftBottomCartBadge() {
-  const badge = document.getElementById("swiftBottomCartBadge");
-
-  if (!badge) return;
-
-  const count = Object.values(window.cart || {})
-    .reduce((total, item) => total + Number(item.q || 0), 0);
-
-  if (count > 0) {
-    badge.style.display = "flex";
-    badge.textContent = count > 99 ? "99+" : count;
-  } else {
-    badge.style.display = "none";
-  }
-}
-
-function updateSwiftBottomProfile() {
-  const avatar =
-    document.getElementById("swiftBottomProfileAvatar");
-
-  if (!avatar) return;
-
-  const name =
-    localStorage.getItem("userName") ||
-    window.customerName ||
-    "Customer";
-
-  avatar.textContent =
-    name.charAt(0).toUpperCase() || "?";
-}
-
-function swiftCloseScreens() {
-
-  const screens = [
-    "foodMapScreen",
-    "leaderBoardScreen",
-    "creditPurchaseScreen",
-    "creditConfirmScreen",
-    "adminScreen",
-    "orderBox"
-  ];
-
-  screens.forEach(id => {
-    const el = document.getElementById(id);
-
-    if (el) {
-      el.style.display = "none";
-    }
-  });
-
-  const profileOverlay =
-    document.getElementById("profileOverlay");
-
-  if (profileOverlay) {
-    profileOverlay.classList.remove("active");
-  }
-
-  const cartPanel =
-    document.getElementById("cartPanel");
-
-  if (cartPanel) {
-    cartPanel.classList.remove("swift-cart-open");
-  }
-}
-
-function swiftNavigate(destination) {
-
-  switch (destination) {
-
-    case "home":
-
-      swiftSetActiveNav("home");
-
-      swiftCloseScreens();
-
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-      break;
-
-
-    case "search":
-
-      swiftSetActiveNav("search");
-
-      swiftCloseScreens();
-
-      setTimeout(() => {
-
-        const searchInput =
-          document.getElementById("searchInput");
-
-        if (searchInput) {
-
-          searchInput.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
-
-          setTimeout(() => {
-            searchInput.focus();
-          }, 350);
-
-        }
-
-      }, 50);
-
-      break;
-
-
-    case "cart":
-
-      swiftSetActiveNav("cart");
-
-      openCart();
-
-      break;
-
-
-    case "topup":
-
-      swiftSetActiveNav("topup");
-
-      swiftCloseScreens();
-
-      openCreditPurchase();
-
-      break;
-
-
-    case "profile":
-
-      swiftSetActiveNav("profile");
-
-      swiftCloseScreens();
-
-      openProfile();
-
-      break;
-  }
-}
-  /* =========================================================
-   PROFILE QUICK ACTIONS
-   ========================================================= */
-
-function profileAction(action) {
-
-  switch (action) {
-
-    case "food":
-
-      closeProfile();
-
-      setTimeout(() => {
-        openFoodMap();
-      }, 150);
-
-      break;
-
-
-    case "promos":
-
-      closeProfile();
-
-      setTimeout(() => {
-        fetchAndShowPromos();
-      }, 150);
-
-      break;
-
-
-    case "leaderboard":
-
-      closeProfile();
-
-      setTimeout(() => {
-        openLeaderBoard();
-      }, 150);
-
-      break;
-
-
-    case "topup":
-
-      closeProfile();
-
-      setTimeout(() => {
-        swiftNavigate("topup");
-      }, 150);
-
-      break;
-
-
-    case "contact":
-
-      window.open(
-        "https://wa.me/5016080205?text=" +
-        encodeURIComponent(
-          "Hello SwiftShop, I need assistance."
-        ),
-        "_blank"
-      );
-
-      break;
-
-
-    case "spanish":
-
-      if (typeof changeLang === "function") {
-        changeLang("es");
-      }
-
-      break;
-
-
-    case "english":
-
-      if (typeof changeLang === "function") {
-        changeLang("en");
-      }
-
-      break;
-
-
-    case "admin":
-
-      closeProfile();
-
-      setTimeout(() => {
-        openAdminPortal();
-      }, 150);
-
-      break;
-
-
-    case "logout":
-
-      closeProfile();
-
-      setTimeout(() => {
-        handleLogout();
-      }, 150);
-
-      break;
-  }
-}
 </script>
 <!-- 📝 SUGGEST ITEM MODAL -->
 <div id="suggestOverlay" class="suggest-overlay">
@@ -11827,10 +11028,30 @@ function profileAction(action) {
 
 <div id="thankYouToast">✅ Thank you for your order!</div>
 
-
+<!-- 🛒 Floating Cart Button -->
+<div id="cartBubble" onclick="openCart()">
+  <span id="cartItemCount" style="
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #111;
+    color: white;
+    font-size: 11px;
+    font-weight: 800;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    display: none;
+  ">0</span>
+</div>
 
 <!-- 🧾 Cart Panel -->
-<div id="cartPanel" class="swift-cart-panel">
+<div id="cartPanel" style="
   position:fixed;
   bottom:-100%;
   left:0;
