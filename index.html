@@ -2668,7 +2668,109 @@ box-shadow:
 .top-banner {
   display: none !important;
 }
+/* ☰ BUTTON */
+.menu-btn {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 1002;
 
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* PANEL */
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100%;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 10px 0 40px rgba(15, 23, 42, 0.15);
+  z-index: 1003;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* OPEN STATE */
+.side-panel.open {
+  left: 0;
+}
+
+.panel-header {
+  background: linear-gradient(180deg, #ff7a18, #ff3d00); /* 🍊 orange */
+  color: #fff;
+
+  padding: 18px;
+  font-weight: 800;
+  font-size: 16px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* CLOSE */
+.close-btn {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* ITEMS */
+.panel-content {
+  padding: 10px;
+}
+
+.panel-item {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  background: none;
+
+  text-align: left;
+  font-size: 15px;
+  font-weight: 600;
+
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.panel-item:hover {
+  background: #f5f5f5;
+}
+
+.panel-item.logout {
+  color: #ff3b30;
+}
+
+/* OVERLAY */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background: rgba(0,0,0,0.3);
+
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+
+  z-index: 1001;
+}
+
+#overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
 /* ================= 1. FLOATING TOP BAR (TOGGLE ONLY) ================= */
 
 .top-bar {
@@ -5264,332 +5366,6 @@ box-shadow:
     border-radius: 20px;
   }
 }
-/* =========================================================
-   SWIFTSHOP — MODERN SIDE MENU
-   ========================================================= */
-
-```css
-/* =========================================================
-   SWIFTSHOP SIDE MENU
-   VISUAL OVERRIDE ONLY
-   Keeps original opening, closing & overlay behavior
-   ========================================================= */
-
-
-/* ☰ BUTTON */
-.menu-btn {
-  top: 14px !important;
-  left: 14px !important;
-
-  width: 46px;
-  height: 46px;
-
-  padding: 0 !important;
-
-  display: grid;
-  place-items: center;
-
-  background: #ffffff !important;
-  color: #172033 !important;
-
-  border: 1px solid #edf0f4 !important;
-  border-radius: 14px !important;
-
-  font-size: 21px !important;
-  line-height: 1;
-
-  box-shadow:
-    0 4px 12px rgba(15, 23, 42, 0.08),
-    0 10px 24px rgba(15, 23, 42, 0.08) !important;
-
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease !important;
-}
-
-.menu-btn:hover {
-  background: #fff8f3 !important;
-
-  box-shadow:
-    0 6px 16px rgba(15, 23, 42, 0.10),
-    0 12px 28px rgba(15, 23, 42, 0.10) !important;
-
-  transform: translateY(-1px);
-}
-
-.menu-btn:active {
-  transform: scale(0.95);
-}
-
-
-/* =========================================================
-   PANEL
-   IMPORTANT:
-   left / open / transition behavior stays ORIGINAL
-   ========================================================= */
-
-.side-panel {
-  width: 280px !important;
-
-  background: #ffffff !important;
-  color: #172033 !important;
-
-  border-right: 1px solid #edf0f4 !important;
-
-  box-shadow:
-    10px 0 32px rgba(15, 23, 42, 0.10),
-    18px 0 45px rgba(15, 23, 42, 0.06) !important;
-
-  /* DO NOT CHANGE:
-     position
-     top
-     left
-     height
-     z-index
-     transition
-     transform
-     display
-     flex-direction
-  */
-}
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.panel-header {
-  min-height: 78px;
-
-  padding: 18px 18px !important;
-
-  background:
-    linear-gradient(
-      135deg,
-      #ff861f 0%,
-      #ff6810 55%,
-      #f45100 100%
-    ) !important;
-
-  color: #ffffff !important;
-
-  font-size: 17px !important;
-  font-weight: 800 !important;
-
-  border: none !important;
-
-  box-shadow:
-    0 5px 16px rgba(255, 96, 0, 0.14);
-}
-
-
-/* =========================================================
-   TITLE
-   ========================================================= */
-
-.panel-title {
-  font-size: 18px !important;
-  font-weight: 800 !important;
-
-  letter-spacing: -0.3px;
-}
-
-
-/* =========================================================
-   CLOSE BUTTON
-   ========================================================= */
-
-.close-btn {
-  width: 34px;
-  height: 34px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 10px;
-
-  color: #ffffff !important;
-
-  background: rgba(255, 255, 255, 0.14) !important;
-
-  font-size: 20px !important;
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease !important;
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.24) !important;
-
-  transform: rotate(90deg);
-}
-
-.close-btn:active {
-  transform: scale(0.92);
-}
-
-
-/* =========================================================
-   CONTENT
-   ========================================================= */
-
-.panel-content {
-  padding: 12px 10px !important;
-
-  background: #ffffff !important;
-}
-
-
-/* =========================================================
-   MENU ITEMS
-   ========================================================= */
-
-.panel-item {
-  min-height: 52px;
-
-  padding: 9px 11px !important;
-
-  margin: 3px 0;
-
-  display: flex;
-  align-items: center;
-
-  gap: 12px;
-
-  border: 1px solid transparent !important;
-
-  border-radius: 13px !important;
-
-  background: transparent !important;
-
-  color: #344054 !important;
-
-  font-size: 14px !important;
-  font-weight: 700 !important;
-
-  transition:
-    background 0.18s ease,
-    color 0.18s ease,
-    border-color 0.18s ease,
-    transform 0.18s ease !important;
-}
-
-
-/* HOVER */
-.panel-item:hover {
-  background: #fff7f2 !important;
-
-  color: #ed5a00 !important;
-
-  border-color: #ffe5d5 !important;
-}
-
-
-/* PRESS */
-.panel-item:active {
-  transform: scale(0.985);
-}
-
-
-/* =========================================================
-   ICONS
-   ========================================================= */
-
-.panel-item .menu-icon {
-  width: 36px !important;
-  height: 36px !important;
-
-  min-width: 36px;
-
-  display: grid;
-  place-items: center;
-
-  border-radius: 11px !important;
-
-  background: #fff3eb !important;
-
-  color: #f26000 !important;
-
-  transition:
-    background 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease !important;
-}
-
-
-/* ICON HOVER */
-.panel-item:hover .menu-icon {
-  background: #ff6808 !important;
-
-  color: #ffffff !important;
-
-  transform: scale(1.04);
-}
-
-
-/* SVG */
-.panel-item .menu-icon svg {
-  width: 18px !important;
-  height: 18px !important;
-}
-
-
-/* =========================================================
-   LOGOUT
-   ========================================================= */
-
-.panel-item.logout {
-  color: #ef4444 !important;
-}
-
-.panel-item.logout:hover {
-  background: #fff1f1 !important;
-
-  color: #dc2626 !important;
-
-  border-color: #fee2e2 !important;
-}
-
-.panel-item.logout .menu-icon {
-  background: #fff1f1 !important;
-
-  color: #ef4444 !important;
-}
-
-.panel-item.logout:hover .menu-icon {
-  background: #ef4444 !important;
-
-  color: #ffffff !important;
-}
-
-
-/* =========================================================
-   OVERLAY
-   IMPORTANT:
-   DO NOT CHANGE #overlay DISPLAY / SHOW / VISIBILITY FLOW
-   ========================================================= */
-
-#overlay {
-  background: rgba(15, 23, 42, 0.34) !important;
-
-  /* Original opacity / visibility / transition / z-index
-     remain untouched */
-}
-
-
-/* =========================================================
-   SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 380px) {
-  .side-panel {
-    width: 280px !important;
-  }
-}
-```
-
   </style>
 </head>
 
