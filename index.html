@@ -2669,108 +2669,7 @@ box-shadow:
   display: none !important;
 }
 /* ☰ BUTTON */
-.menu-btn {
-  position: fixed;
-  top: 14px;
-  left: 14px;
-  font-size: 22px;
-  cursor: pointer;
-  z-index: 1002;
 
-  background: #fff;
-  padding: 8px 12px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* PANEL */
-.side-panel {
-  position: fixed;
-  top: 0;
-  left: -300px;
-  width: 280px;
-  height: 100%;
-  background: #ffffff;
-  color: #0f172a;
-  box-shadow: 10px 0 40px rgba(15, 23, 42, 0.15);
-  z-index: 1003;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  flex-direction: column;
-}
-
-/* OPEN STATE */
-.side-panel.open {
-  left: 0;
-}
-
-.panel-header {
-  background: linear-gradient(180deg, #ff7a18, #ff3d00); /* 🍊 orange */
-  color: #fff;
-
-  padding: 18px;
-  font-weight: 800;
-  font-size: 16px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* CLOSE */
-.close-btn {
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* ITEMS */
-.panel-content {
-  padding: 10px;
-}
-
-.panel-item {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  background: none;
-
-  text-align: left;
-  font-size: 15px;
-  font-weight: 600;
-
-  border-radius: 10px;
-  transition: 0.2s;
-}
-
-.panel-item:hover {
-  background: #f5f5f5;
-}
-
-.panel-item.logout {
-  color: #ff3b30;
-}
-
-/* OVERLAY */
-#overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0,0,0,0.3);
-
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.3s;
-
-  z-index: 1001;
-}
-
-#overlay.show {
-  opacity: 1;
-  visibility: visible;
-}
 /* ================= 1. FLOATING TOP BAR (TOGGLE ONLY) ================= */
 
 .top-bar {
@@ -3155,13 +3054,19 @@ box-shadow:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .menu-btn {
   position: fixed;
-  top: 12px;
+
+  /* Moves it down below the phone/PWA top area */
+  top: calc(12px + env(safe-area-inset-top));
+
   left: 12px;
+
   font-size: 22px;
   background: #fff;
   padding: 8px 12px;
   border-radius: 10px;
+
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+
   cursor: pointer;
   z-index: 1001;
 }
