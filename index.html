@@ -3159,13 +3159,19 @@ box-shadow:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .menu-btn {
   position: fixed;
-  top: 12px;
+
+  /* Moves it down below the phone/PWA top area */
+  top: calc(12px + env(safe-area-inset-top));
+
   left: 12px;
+
   font-size: 22px;
   background: #fff;
   padding: 8px 12px;
   border-radius: 10px;
+
   box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+
   cursor: pointer;
   z-index: 1001;
 }
