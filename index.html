@@ -300,7 +300,7 @@
 /* 🫧 Custom White Image Cart Bubble with Outer Ring */
 #cartBubble {
   position: fixed;
-bottom: calc(82px + env(safe-area-inset-bottom));
+  bottom: calc(20px + env(safe-area-inset-bottom));
   right: 20px;
   width: 62px;
   height: 62px;
@@ -2776,7 +2776,7 @@ box-shadow:
 .top-bar {
   position: fixed;
   top: 12px;
- left: 16px; /* Space for hamburger icon */
+  left: 60px; /* Space for hamburger icon */
   height: 44px;
   z-index: 100;
   display: flex;
@@ -5366,202 +5366,111 @@ box-shadow:
     border-radius: 20px;
   }
 }
-    /* =========================================================
-   PROFILE MENU OPTIONS
-   ========================================================= */
-
-.profile-menu-options {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-}
-
-.profile-menu-item {
-  width: 100%;
-  min-height: 54px;
-  padding: 8px 12px;
-  border: 1px solid #eeeeee;
-  border-radius: 16px;
-  background: #ffffff;
-  color: #111111;
-
-  display: flex;
-  align-items: center;
-  gap: 12px;
-
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
-
-  cursor: pointer;
-  text-align: left;
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    box-shadow 0.15s ease;
-}
-
-.profile-menu-item:active {
-  transform: scale(0.98);
-  background: #fff7ed;
-}
-
-.profile-menu-icon {
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 12px;
-  background: #fff5ec;
-  font-size: 19px;
-}
-
-.profile-menu-arrow {
-  margin-left: auto;
-  color: #999;
-  font-size: 24px;
-  line-height: 1;
-}
-
-.admin-profile-item {
-  margin-top: 4px;
-}
-
-.profile-close {
-  margin-top: 18px !important;
-  width: 100%;
-}
-    /* =========================================================
-   SWIFTSHOP BOTTOM NAVIGATION
-   ========================================================= */
-
-.bottom-nav {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-
-  height: calc(68px + env(safe-area-inset-bottom));
-
-  padding:
-    6px
-    8px
-    calc(6px + env(safe-area-inset-bottom));
-
-  background: rgba(255, 255, 255, 0.98);
-
-  border-top: 1px solid #eeeeee;
-
-  box-shadow:
-    0 -8px 25px rgba(0, 0, 0, 0.10);
-
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-around;
-
-  z-index: 9000;
-}
-
-.bottom-nav-item {
-  flex: 1;
-
-  height: 58px;
-
-  border: none;
-  background: transparent;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  gap: 3px;
-
-  color: #777;
-
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  position: relative;
-}
-
-.bottom-nav-icon {
-  position: relative;
-
-  width: 28px;
-  height: 28px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 20px;
-  line-height: 1;
-}
-
-.bottom-nav-item.active {
-  color: #ff6a00;
-}
-
-.bottom-nav-item:active {
-  transform: scale(0.94);
-}
-
-.bottom-cart-badge {
-  position: absolute;
-
-  top: -7px;
-  right: -8px;
-
-  min-width: 17px;
-  height: 17px;
-
-  padding: 0 4px;
-
-  border-radius: 999px;
-
-  background: #ff3b30;
-  color: white;
-
-  font-size: 9px;
-  font-weight: 900;
-
-  display: none;
-  align-items: center;
-  justify-content: center;
-
-  border: 2px solid white;
-}
-
-/* Keep normal page content above the navigation */
-body {
-  padding-bottom: calc(90px + env(safe-area-inset-bottom)) !important;
-}
-
-/* Desktop: keep it clean and centered */
-@media (min-width: 700px) {
-  .bottom-nav {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
-    width: min(100%, 650px);
-    border-radius: 20px 20px 0 0;
-  }
-}
   </style>
 </head>
 
 <body>
 
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<div id="sidePanel" class="side-panel">
+  
+  <div class="panel-header">
+    <span class="panel-title">SwiftShop</span>
+    <span class="close-btn" onclick="toggleMenu()">✕</span>
+  </div>
+
+  <div class="panel-content">
+
+    <button class="panel-item" onclick="openProfile()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      </span>
+      <span>Profile</span>
+    </button>
+
+    <button class="panel-item" onclick="openFoodMap()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M18 2v6a3 3 0 0 1-3 3 3 3 0 0 1-3-3V2"></path><path d="M15 2v20"></path><path d="M17 22H13"></path><path d="M6 2v6a3 3 0 0 0 3 3 3 3 0 0 0 3-3V2"></path><path d="M9 2v20"></path><path d="M7 22h4"></path></svg>
+      </span>
+      <span>Food Near Me</span>
+    </button>
+
+    <button class="panel-item" onclick="fetchAndShowPromos()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.229 1-3 1 1 1.5 2 1.5 2z"></path></svg>
+      </span>
+      <span>Live Promos</span>
+    </button>
+
+    <button class="panel-item" onclick="openLeaderBoard()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17h4v-2.34"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+      </span>
+      <span>Leaderboard</span>
+    </button>
+
+    <button class="panel-item" onclick="openCreditPurchase()">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"></rect><path d="M12 18h.01"></path></svg>
+      </span>
+      <span>Purchase Credit</span>
+    </button>
+
+    <button class="panel-item" onclick="window.open('https://wa.me/5016080205?text=Hello%20Swiftshop','_blank')">
+      <span class="menu-icon">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+      </span>
+      <span>Contact Us</span>
+    </button>
+
+
+
+    <button class="panel-item" onclick="openAdminPortal()" id="adminMenuButton">
+  <span class="menu-icon">⚙️</span>
+  <span>Admin Portal</span>
+</button>
+
+  </div>
+
+</div>
+
+<style>
+.side-panel .panel-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+}
+.side-panel .menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #fff7ed;
+  color: #ff6a00;
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+.side-panel .menu-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.side-panel .panel-item:hover .menu-icon {
+  background: #ff6a00;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+</style>
+
+<div id="menuOverlay" class="menu-overlay" onclick="toggleMenu()"></div>
 
 
 <!-- CENTERED PROFILE OVERLAY BACKDROP -->
@@ -5620,53 +5529,10 @@ body {
         <input type="text" id="profileName" placeholder="Name" oninput="saveProfile()">
       </div>
 
-           <div class="profile-field">
+      <div class="profile-field">
         <label>Phone Number</label>
         <input type="tel" id="profilePhone" placeholder="Phone" oninput="saveProfile()">
       </div>
-
-      <!-- PROFILE MENU -->
-      <div class="profile-menu-options">
-
-        <button class="profile-menu-item" onclick="openFoodMap(); closeProfile();">
-          <span class="profile-menu-icon">📍</span>
-          <span>Food Near Me</span>
-          <span class="profile-menu-arrow">›</span>
-        </button>
-
-        <button class="profile-menu-item" onclick="fetchAndShowPromos(); closeProfile();">
-          <span class="profile-menu-icon">🔥</span>
-          <span>Live Promos</span>
-          <span class="profile-menu-arrow">›</span>
-        </button>
-
-        <button class="profile-menu-item" onclick="openLeaderBoard(); closeProfile();">
-          <span class="profile-menu-icon">🏆</span>
-          <span>Leaderboard</span>
-          <span class="profile-menu-arrow">›</span>
-        </button>
-
-        <button class="profile-menu-item" onclick="openCreditPurchase(); closeProfile();">
-          <span class="profile-menu-icon">💳</span>
-          <span>Purchase Credit</span>
-          <span class="profile-menu-arrow">›</span>
-        </button>
-
-        <button class="profile-menu-item" onclick="window.open('https://wa.me/5016080205?text=Hello%20Swiftshop','_blank');">
-          <span class="profile-menu-icon">💬</span>
-          <span>Contact Us</span>
-          <span class="profile-menu-arrow">›</span>
-        </button>
-
-        <button class="profile-menu-item admin-profile-item" id="adminMenuButton" onclick="openAdminPortal(); closeProfile();">
-          <span class="profile-menu-icon">⚙️</span>
-          <span>Admin Portal</span>
-          <span class="profile-menu-arrow">›</span>
-        </button>
-
-      </div>
-
-      <button class="profile-close" onclick="closeProfile()">Close</button>
 
     </div>
   </div>
@@ -5982,7 +5848,7 @@ body {
 
 </div>
 
-
+<div id="overlay" onclick="toggleMenu()"></div>
 
   <!-- 🔐 AUTH SCREEN -->
 <div id="authScreen" class="auth-screen">
@@ -8018,59 +7884,34 @@ function updateCartBubble() {
   }
 }
 
-function openCart() {
-  const panel = document.getElementById("cartPanel");
-  const bubble = document.getElementById("cartBubble");
+ function openCart() {
+    const panel = document.getElementById("cartPanel");
+    const bubble = document.getElementById("cartBubble");
+    if (!panel) return;
 
-  if (!panel) return;
+    const isOpen = panel.style.bottom === "0px";
 
-  const closedBottom =
-    "calc(-100% - 68px - env(safe-area-inset-bottom))";
+    if (isOpen) {
+      panel.style.bottom = "-100%";
+      // Show bubble again when closing
+      if (bubble) bubble.style.display = "flex"; 
+    } else {
+      panel.style.bottom = "0";             // Open cart panel
+      // Completely hide the bubble while the cart is open
+      if (bubble) bubble.style.display = "none"; 
 
-  const openBottom =
-    "calc(68px + env(safe-area-inset-bottom))";
-
-  const isOpen =
-    panel.style.bottom === openBottom ||
-    panel.classList.contains("cart-open");
-
-  if (isOpen) {
-
-    // Close cart
-    panel.style.bottom = closedBottom;
-    panel.classList.remove("cart-open");
-
-    // Show cart bubble again
-    if (bubble) {
-      bubble.style.display = "flex";
+      requestAnimationFrame(() => {
+        renderCartPanel();                  // Render items
+        
+        setTimeout(() => {
+          if (typeof initCartMap === "function") {
+            initCartMap();
+          }
+        }, 350); 
+      });
     }
-
-  } else {
-
-    // Open cart ABOVE the bottom navigation
-    panel.style.bottom = openBottom;
-    panel.classList.add("cart-open");
-
-    // Hide bubble while cart is open
-    if (bubble) {
-      bubble.style.display = "none";
-    }
-
-    requestAnimationFrame(() => {
-
-      renderCartPanel();
-
-      setTimeout(() => {
-
-        if (typeof initCartMap === "function") {
-          initCartMap();
-        }
-
-      }, 350);
-
-    });
   }
-}
+
   // 🌮 TACO DELIVERY FEE (same zones & prices as grocery)
   function updateTacoDeliveryFee() {
     const zone = document.getElementById("tacoDeliveryZone").value;
@@ -8086,24 +7927,14 @@ function openCart() {
   }
 
 function closeCart() {
-  const cp = document.getElementById("cartPanel");
-  const cb = document.getElementById("cartBubble");
-
-  if (cp) {
-    cp.style.bottom =
-      "calc(-100% - 68px - env(safe-area-inset-bottom))";
-
-    cp.classList.remove("cart-open");
+    const cp = document.getElementById("cartPanel");
+    const cb = document.getElementById("cartBubble");
+    if (cp) cp.style.bottom = "-100%";
+    // Make sure the bubble reappears when closed/minimized
+    if (cb && Object.values(cart).reduce((a, b) => a + b.q, 0) > 0) {
+      cb.style.display = "flex";
+    }
   }
-
-  // Make sure the bubble reappears when closed/minimized
-  if (
-    cb &&
-    Object.values(cart).reduce((a, b) => a + b.q, 0) > 0
-  ) {
-    cb.style.display = "flex";
-  }
-}
 
   function renderCartPanel() {
     const cartTitle = document.getElementById("cartTitle");
@@ -8226,7 +8057,38 @@ function closeCart() {
       .toUpperCase();
   }
 
+function openProfile() {
+  const pOverlay = document.getElementById("profileOverlay");
+  if (pOverlay) pOverlay.classList.add("active"); // Displays the overlay flex container
 
+  const name = getRewardsUserName();
+  const phone = getRewardsUserPhone();
+
+  const pName = document.getElementById("profileName");
+  const pPhone = document.getElementById("profilePhone");
+  const pDisplayName = document.getElementById("profileDisplayName");
+  const pInitial = document.getElementById("profileInitial");
+
+  if (pName) pName.value = name;
+  if (pPhone) pPhone.value = phone;
+  if (pDisplayName) pDisplayName.innerText = name;
+  if (pInitial) pInitial.innerText = name ? name.charAt(0).toUpperCase() : "?";
+
+  loadGamificationData();
+
+  // Close side menu if open
+  if (typeof toggleMenu === "function") {
+    const sidePanel = document.getElementById("sidePanel");
+    if (sidePanel && (sidePanel.classList.contains("open") || sidePanel.classList.contains("active"))) {
+      toggleMenu();
+    }
+  }
+}
+
+function closeProfile() {
+  const pOverlay = document.getElementById("profileOverlay");
+  if (pOverlay) pOverlay.classList.remove("active");
+}
 
 function enterApp() {
     const appScr = document.getElementById("appScreen");
@@ -8760,12 +8622,7 @@ async function render() {
     const ob = document.getElementById("orderBox");
     const cp = document.getElementById("cartPanel");
     if (ob) ob.style.display = "none";
-    if (cp) {
-  cp.style.bottom =
-    "calc(-100% - 68px - env(safe-area-inset-bottom))";
-
-  cp.classList.remove("cart-open");
-} Also close the cart panel
+    if (cp) cp.style.bottom = "-100%"; // Also close the cart panel
 
     // 8. Show Thank You Message
     const toast = document.getElementById("thankYouToast");
@@ -9386,114 +9243,16 @@ function toggleModalLike() {
     refreshCartTotals();
   }
 
-function toggleMenu() {
-  // Side menu has been removed.
-  // Kept only as a safe compatibility function
-  // for any older code that may still call it.
-  return;
-}
-  /* =========================================================
-   BOTTOM NAVIGATION
-   ========================================================= */
+  function toggleMenu() {
+    const panel = document.getElementById("sidePanel");
+    const overlay = document.getElementById("overlay");
+    const menuOverlay = document.getElementById("menuOverlay");
 
-function setBottomNavActive(name) {
-  document.querySelectorAll(".bottom-nav-item").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  const target = document.querySelector(
-    `.bottom-nav-item[data-nav="${name}"]`
-  );
-
-  if (target) {
-    target.classList.add("active");
+    if (panel) panel.classList.toggle("open");
+    if (panel) panel.classList.toggle("active");
+    if (overlay) overlay.classList.toggle("show");
+    if (menuOverlay) menuOverlay.classList.toggle("active");
   }
-}
-
-function bottomNavHome() {
-  document.querySelectorAll(".bottom-nav-item").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  document.querySelector(".bottom-nav-item:nth-child(1)")
-    ?.classList.add("active");
-
-  // Close open screens
-  closeCart();
-
-  const orderBox = document.getElementById("orderBox");
-  if (orderBox) orderBox.style.display = "none";
-
-  const pickupBox = document.getElementById("pickupOrderBox");
-  if (pickupBox) pickupBox.style.display = "none";
-
-  const tacoBox = document.getElementById("tacoOrderBox");
-  if (tacoBox) tacoBox.style.display = "none";
-
-  // Return to normal products
-  const products = document.getElementById("products");
-  if (products) products.style.display = "grid";
-
-  render();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-}
-
-function bottomNavSearch() {
-  document.querySelectorAll(".bottom-nav-item").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  document.querySelector(".bottom-nav-item:nth-child(2)")
-    ?.classList.add("active");
-
-  const search = document.getElementById("searchInput");
-
-  if (search) {
-    search.focus();
-
-    search.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-  }
-}
-
-function bottomNavCart() {
-  document.querySelectorAll(".bottom-nav-item").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  document.querySelector(".bottom-nav-item:nth-child(3)")
-    ?.classList.add("active");
-
-  openCart();
-}
-
-function bottomNavTopup() {
-  document.querySelectorAll(".bottom-nav-item").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  document.querySelector(".bottom-nav-item:nth-child(4)")
-    ?.classList.add("active");
-
-  openCreditPurchase();
-}
-
-function bottomNavProfile() {
-  document.querySelectorAll(".bottom-nav-item").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  document.querySelector(".bottom-nav-item:nth-child(5)")
-    ?.classList.add("active");
-
-  openProfile();
-}
 
   document.querySelectorAll(".toggle-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -11294,53 +11053,18 @@ document.addEventListener("DOMContentLoaded", () => {
 <!-- 🧾 Cart Panel -->
 <div id="cartPanel" style="
   position:fixed;
-  bottom:calc(68px + env(safe-area-inset-bottom));
+  bottom:-100%;
   left:0;
   width:100%;
-  height:calc(70% - 68px);
+  height:70%;
   background:white;
   border-radius:24px 24px 0 0;
   box-shadow:0 -10px 30px rgba(0,0,0,0.2);
   transition:bottom 0.35s ease;
-  z-index:8999;
+  z-index:999;
   padding:20px;
   overflow-y:auto;
 ">
-
-  <!-- =========================================================
-     SWIFTSHOP BOTTOM NAVIGATION
-     ========================================================= -->
-<nav id="bottomNav" class="bottom-nav">
-
-  <button class="bottom-nav-item active" onclick="bottomNavHome()">
-    <span class="bottom-nav-icon">⌂</span>
-    <span>Home</span>
-  </button>
-
-  <button class="bottom-nav-item" onclick="bottomNavSearch()">
-    <span class="bottom-nav-icon">⌕</span>
-    <span>Search</span>
-  </button>
-
-  <button class="bottom-nav-item bottom-cart-item" onclick="bottomNavCart()">
-    <span class="bottom-nav-icon">
-      🛒
-      <span id="bottomCartBadge" class="bottom-cart-badge">0</span>
-    </span>
-    <span>Cart</span>
-  </button>
-
-  <button class="bottom-nav-item" onclick="bottomNavTopup()">
-    <span class="bottom-nav-icon">＋</span>
-    <span>Topup</span>
-  </button>
-
-  <button class="bottom-nav-item" onclick="bottomNavProfile()">
-    <span class="bottom-nav-icon">●</span>
-    <span>Profile</span>
-  </button>
-
-</nav>
 <!-- ❌ CLOSE BUTTON -->
   <button onclick="closeCart()" style="
     position:absolute;
@@ -11354,7 +11078,6 @@ document.addEventListener("DOMContentLoaded", () => {
   ">
     ✕
   </button>
-  
 
   <h2 id="cartTitle">Your Cart</h2>
 
