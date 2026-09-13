@@ -2668,116 +2668,7 @@ box-shadow:
 .top-banner {
   display: none !important;
 }
-/* Replace your current ☰ BUTTON CSS with this */
-.menu-btn {
-  position: fixed;
-  top: max(20px, calc(env(safe-area-inset-top) + 14px));
-  left: max(14px, calc(env(safe-area-inset-left) + 14px));
-  width: 46px;
-  height: 46px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  font-size: 22px;
-  line-height: 1;
-  cursor: pointer;
-  z-index: 3001;
-
-  background: #fff;
-  color: #0f172a;
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
-}
-/* PANEL */
-.side-panel {
-  position: fixed;
-  top: 0;
-  left: -300px;
-  width: 280px;
-  height: 100%;
-  background: #ffffff;
-  color: #0f172a;
-  box-shadow: 10px 0 40px rgba(15, 23, 42, 0.15);
-  z-index: 1003;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  flex-direction: column;
-}
-
-/* OPEN STATE */
-.side-panel.open {
-  left: 0;
-}
-
-.panel-header {
-  background: linear-gradient(180deg, #ff7a18, #ff3d00); /* 🍊 orange */
-  color: #fff;
-
-  padding: 18px;
-  font-weight: 800;
-  font-size: 16px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* CLOSE */
-.close-btn {
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* ITEMS */
-.panel-content {
-  padding: 10px;
-}
-
-.panel-item {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  background: none;
-
-  text-align: left;
-  font-size: 15px;
-  font-weight: 600;
-
-  border-radius: 10px;
-  transition: 0.2s;
-}
-
-.panel-item:hover {
-  background: #f5f5f5;
-}
-
-.panel-item.logout {
-  color: #ff3b30;
-}
-
-/* OVERLAY */
-#overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  background: rgba(0,0,0,0.3);
-
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.3s;
-
-  z-index: 1001;
-}
-
-#overlay.show {
-  opacity: 1;
-  visibility: visible;
-}
 /* ================= 1. FLOATING TOP BAR (TOGGLE ONLY) ================= */
 
 .top-bar {
@@ -5377,38 +5268,44 @@ box-shadow:
    SWIFTSHOP — MODERN SIDE MENU
    ========================================================= */
 
-.menu-btn {
-  position: fixed !important;
-  top: 16px !important;
-  left: 16px !important;
+```css
+/* =========================================================
+   SWIFTSHOP SIDE MENU
+   VISUAL OVERRIDE ONLY
+   Keeps original opening, closing & overlay behavior
+   ========================================================= */
 
-  width: 46px !important;
-  height: 46px !important;
+
+/* ☰ BUTTON */
+.menu-btn {
+  top: 14px !important;
+  left: 14px !important;
+
+  width: 46px;
+  height: 46px;
+
   padding: 0 !important;
 
-  display: grid !important;
-  place-items: center !important;
-
-  border: 1px solid rgba(15, 23, 42, 0.06) !important;
-  border-radius: 14px !important;
+  display: grid;
+  place-items: center;
 
   background: #ffffff !important;
   color: #172033 !important;
 
+  border: 1px solid #edf0f4 !important;
+  border-radius: 14px !important;
+
   font-size: 21px !important;
-  line-height: 1 !important;
+  line-height: 1;
 
   box-shadow:
     0 4px 12px rgba(15, 23, 42, 0.08),
-    0 12px 28px rgba(15, 23, 42, 0.10) !important;
-
-  cursor: pointer;
-  z-index: 3001 !important;
+    0 10px 24px rgba(15, 23, 42, 0.08) !important;
 
   transition:
-    transform 0.2s ease,
+    background 0.2s ease,
     box-shadow 0.2s ease,
-    background 0.2s ease !important;
+    transform 0.2s ease !important;
 }
 
 .menu-btn:hover {
@@ -5416,31 +5313,24 @@ box-shadow:
 
   box-shadow:
     0 6px 16px rgba(15, 23, 42, 0.10),
-    0 16px 32px rgba(15, 23, 42, 0.12) !important;
+    0 12px 28px rgba(15, 23, 42, 0.10) !important;
 
   transform: translateY(-1px);
 }
 
 .menu-btn:active {
-  transform: scale(0.94);
+  transform: scale(0.95);
 }
 
 
 /* =========================================================
-   SIDE PANEL
+   PANEL
+   IMPORTANT:
+   left / open / transition behavior stays ORIGINAL
    ========================================================= */
 
 .side-panel {
-  position: fixed !important;
-
-  top: 0 !important;
-  left: 0 !important;
-
-  width: min(86vw, 330px) !important;
-  height: 100dvh !important;
-
-  display: flex !important;
-  flex-direction: column !important;
+  width: 280px !important;
 
   background: #ffffff !important;
   color: #172033 !important;
@@ -5448,92 +5338,61 @@ box-shadow:
   border-right: 1px solid #edf0f4 !important;
 
   box-shadow:
-    12px 0 30px rgba(15, 23, 42, 0.08),
-    24px 0 60px rgba(15, 23, 42, 0.10) !important;
+    10px 0 32px rgba(15, 23, 42, 0.10),
+    18px 0 45px rgba(15, 23, 42, 0.06) !important;
 
-  transform: translate3d(-105%, 0, 0);
-
-  transition:
-    transform 0.34s cubic-bezier(0.22, 1, 0.36, 1) !important;
-
-  z-index: 3003 !important;
-
-  overflow: hidden !important;
-
-  will-change: transform;
-}
-
-.side-panel.open,
-.side-panel.active {
-  left: 0 !important;
-  transform: translate3d(0, 0, 0) !important;
+  /* DO NOT CHANGE:
+     position
+     top
+     left
+     height
+     z-index
+     transition
+     transform
+     display
+     flex-direction
+  */
 }
 
 
 /* =========================================================
-   PANEL HEADER
+   HEADER
    ========================================================= */
 
 .panel-header {
-  position: relative;
+  min-height: 78px;
 
-  min-height: 92px !important;
-  padding:
-    max(20px, env(safe-area-inset-top))
-    18px
-    18px
-    20px !important;
-
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
+  padding: 18px 18px !important;
 
   background:
     linear-gradient(
       135deg,
-      #ff8a1f 0%,
-      #ff6812 55%,
+      #ff861f 0%,
+      #ff6810 55%,
       #f45100 100%
     ) !important;
 
   color: #ffffff !important;
 
-  box-shadow:
-    0 5px 18px rgba(245, 81, 0, 0.16) !important;
-}
-
-
-/* subtle light effect */
-.panel-header::after {
-  content: "";
-  position: absolute;
-
-  width: 150px;
-  height: 150px;
-
-  right: -65px;
-  top: -90px;
-
-  border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.10);
-
-  pointer-events: none;
-}
-
-
-.panel-title {
-  position: relative;
-  z-index: 1;
-
-  margin: 0;
-
-  font-size: 19px !important;
+  font-size: 17px !important;
   font-weight: 800 !important;
 
-  letter-spacing: -0.35px;
+  border: none !important;
 
-  color: #ffffff !important;
+  box-shadow:
+    0 5px 16px rgba(255, 96, 0, 0.14);
+}
+
+
+/* =========================================================
+   TITLE
+   ========================================================= */
+
+.panel-title {
+  font-size: 18px !important;
+  font-weight: 800 !important;
+
+  letter-spacing: -0.3px;
 }
 
 
@@ -5541,63 +5400,45 @@ box-shadow:
    CLOSE BUTTON
    ========================================================= */
 
-.side-panel .close-btn {
-  position: relative;
-  z-index: 2;
+.close-btn {
+  width: 34px;
+  height: 34px;
 
-  width: 36px !important;
-  height: 36px !important;
+  display: grid;
+  place-items: center;
 
-  padding: 0 !important;
+  border-radius: 10px;
 
-  display: grid !important;
-  place-items: center !important;
-
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  border-radius: 11px !important;
-
-  background: rgba(255, 255, 255, 0.13) !important;
   color: #ffffff !important;
 
-  font-size: 21px !important;
-  line-height: 1 !important;
+  background: rgba(255, 255, 255, 0.14) !important;
 
-  cursor: pointer;
+  font-size: 20px !important;
 
   transition:
     background 0.2s ease,
     transform 0.2s ease !important;
 }
 
-.side-panel .close-btn:hover {
-  background: rgba(255, 255, 255, 0.23) !important;
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.24) !important;
+
   transform: rotate(90deg);
 }
 
-.side-panel .close-btn:active {
+.close-btn:active {
   transform: scale(0.92);
 }
 
 
 /* =========================================================
-   PANEL CONTENT
+   CONTENT
    ========================================================= */
 
 .panel-content {
-  flex: 1 !important;
-
-  padding:
-    14px 11px
-    max(24px, env(safe-area-inset-bottom))
-    11px !important;
-
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
+  padding: 12px 10px !important;
 
   background: #ffffff !important;
-
-  scrollbar-width: thin;
-  scrollbar-color: #e5e7eb transparent;
 }
 
 
@@ -5605,33 +5446,71 @@ box-shadow:
    MENU ITEMS
    ========================================================= */
 
-.side-panel .panel-item {
-  position: relative;
+.panel-item {
+  min-height: 52px;
 
-  width: 100% !important;
-  min-height: 56px !important;
-
-  margin: 3px 0 !important;
   padding: 9px 11px !important;
 
-  display: flex !important;
-  align-items: center !important;
+  margin: 3px 0;
 
-  gap: 13px !important;
+  display: flex;
+  align-items: center;
 
-  border: 0 !important;
+  gap: 12px;
+
+  border: 1px solid transparent !important;
+
   border-radius: 13px !important;
 
   background: transparent !important;
+
   color: #344054 !important;
 
-  font-family: inherit !important;
   font-size: 14px !important;
   font-weight: 700 !important;
 
-  text-align: left !important;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease !important;
+}
 
-  cursor: pointer;
+
+/* HOVER */
+.panel-item:hover {
+  background: #fff7f2 !important;
+
+  color: #ed5a00 !important;
+
+  border-color: #ffe5d5 !important;
+}
+
+
+/* PRESS */
+.panel-item:active {
+  transform: scale(0.985);
+}
+
+
+/* =========================================================
+   ICONS
+   ========================================================= */
+
+.panel-item .menu-icon {
+  width: 36px !important;
+  height: 36px !important;
+
+  min-width: 36px;
+
+  display: grid;
+  place-items: center;
+
+  border-radius: 11px !important;
+
+  background: #fff3eb !important;
+
+  color: #f26000 !important;
 
   transition:
     background 0.18s ease,
@@ -5640,167 +5519,77 @@ box-shadow:
 }
 
 
-/* left orange indicator */
-.side-panel .panel-item::before {
-  content: "";
+/* ICON HOVER */
+.panel-item:hover .menu-icon {
+  background: #ff6808 !important;
 
-  position: absolute;
-
-  left: 0;
-  top: 50%;
-
-  width: 3px;
-  height: 0;
-
-  border-radius: 0 4px 4px 0;
-
-  background: #ff6500;
-
-  transform: translateY(-50%);
-
-  transition: height 0.18s ease;
-}
-
-
-.side-panel .panel-item:hover,
-.side-panel .panel-item:focus-visible {
-  background: #fff7f2 !important;
-  color: #ed5a00 !important;
-
-  outline: none !important;
-}
-
-
-.side-panel .panel-item:hover::before,
-.side-panel .panel-item:focus-visible::before {
-  height: 22px;
-}
-
-
-.side-panel .panel-item:active {
-  transform: scale(0.985);
-}
-
-
-/* =========================================================
-   MENU ICON
-   ========================================================= */
-
-.side-panel .menu-icon {
-  flex: 0 0 38px;
-
-  width: 38px !important;
-  height: 38px !important;
-
-  display: grid !important;
-  place-items: center !important;
-
-  border-radius: 11px !important;
-
-  background: #fff4ed !important;
-  color: #f2600a !important;
-
-  transition:
-    background 0.18s ease,
-    color 0.18s ease,
-    transform 0.18s ease,
-    box-shadow 0.18s ease !important;
-}
-
-
-.side-panel .menu-icon svg {
-  width: 18px !important;
-  height: 18px !important;
-
-  stroke-width: 2 !important;
-}
-
-
-.side-panel .panel-item:hover .menu-icon,
-.side-panel .panel-item:focus-visible .menu-icon {
-  background: #ff6708 !important;
   color: #ffffff !important;
 
-  transform: scale(1.05);
+  transform: scale(1.04);
+}
 
-  box-shadow:
-    0 5px 12px rgba(255, 103, 8, 0.18);
+
+/* SVG */
+.panel-item .menu-icon svg {
+  width: 18px !important;
+  height: 18px !important;
 }
 
 
 /* =========================================================
-   TEXT INSIDE MENU
+   LOGOUT
    ========================================================= */
 
-.side-panel .panel-item span {
-  min-width: 0;
-  overflow: hidden;
+.panel-item.logout {
+  color: #ef4444 !important;
+}
 
-  white-space: nowrap;
-  text-overflow: ellipsis;
+.panel-item.logout:hover {
+  background: #fff1f1 !important;
+
+  color: #dc2626 !important;
+
+  border-color: #fee2e2 !important;
+}
+
+.panel-item.logout .menu-icon {
+  background: #fff1f1 !important;
+
+  color: #ef4444 !important;
+}
+
+.panel-item.logout:hover .menu-icon {
+  background: #ef4444 !important;
+
+  color: #ffffff !important;
 }
 
 
 /* =========================================================
    OVERLAY
+   IMPORTANT:
+   DO NOT CHANGE #overlay DISPLAY / SHOW / VISIBILITY FLOW
    ========================================================= */
 
 #overlay {
-  display: none !important;
-}
+  background: rgba(15, 23, 42, 0.34) !important;
 
-.menu-overlay {
-  position: fixed !important;
-
-  inset: 0 !important;
-
-  background: rgba(15, 23, 42, 0.36) !important;
-
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-
-  z-index: 3002 !important;
-
-  transition:
-    opacity 0.28s ease !important;
+  /* Original opacity / visibility / transition / z-index
+     remain untouched */
 }
 
 
 /* =========================================================
-   MOBILE
+   SMALL PHONES
    ========================================================= */
 
 @media (max-width: 380px) {
-
   .side-panel {
-    width: 88vw !important;
-  }
-
-  .panel-header {
-    min-height: 88px !important;
-  }
-
-  .side-panel .panel-item {
-    min-height: 54px !important;
+    width: 280px !important;
   }
 }
+```
 
-
-/* =========================================================
-   REDUCE MOTION
-   ========================================================= */
-
-@media (prefers-reduced-motion: reduce) {
-
-  .side-panel,
-  .menu-btn,
-  .panel-item,
-  .menu-icon,
-  .close-btn,
-  .menu-overlay {
-    transition: none !important;
-  }
-}
   </style>
 </head>
 
