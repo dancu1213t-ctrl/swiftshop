@@ -2668,21 +2668,28 @@ box-shadow:
 .top-banner {
   display: none !important;
 }
-/* ☰ BUTTON */
+/* Replace your current ☰ BUTTON CSS with this */
 .menu-btn {
   position: fixed;
-  top: 14px;
-  left: 14px;
+  top: max(20px, calc(env(safe-area-inset-top) + 14px));
+  left: max(14px, calc(env(safe-area-inset-left) + 14px));
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   font-size: 22px;
+  line-height: 1;
   cursor: pointer;
-  z-index: 1002;
+  z-index: 3001;
 
   background: #fff;
-  padding: 8px 12px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  color: #0f172a;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
 }
-
 /* PANEL */
 .side-panel {
   position: fixed;
