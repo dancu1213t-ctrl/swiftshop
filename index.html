@@ -2668,44 +2668,33 @@ box-shadow:
 .top-banner {
   display: none !important;
 }
+/* ☰ BUTTON */
 .menu-btn {
   position: fixed;
-
-  top: calc(36px + env(safe-area-inset-top));
-  left: 12px;
-
+  top: 14px;
+  left: 14px;
   font-size: 22px;
+  cursor: pointer;
+  z-index: 1002;
+
   background: #fff;
   padding: 8px 12px;
   border-radius: 10px;
-
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-
-  cursor: pointer;
-  z-index: 1001;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-
 
 /* PANEL */
 .side-panel {
   position: fixed;
-
-  top: calc(36px + env(safe-area-inset-top));
-
+  top: 0;
   left: -300px;
   width: 280px;
-
-  height: calc(100dvh - 36px - env(safe-area-inset-top));
-
+  height: 100%;
   background: #ffffff;
   color: #0f172a;
-
   box-shadow: 10px 0 40px rgba(15, 23, 42, 0.15);
-
   z-index: 1003;
-
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-
   display: flex;
   flex-direction: column;
 }
@@ -3161,7 +3150,48 @@ box-shadow:
   display: block;
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   SIDE PANEL & OVERLAY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.menu-btn {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  font-size: 22px;
+  background: #fff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  cursor: pointer;
+  z-index: 1001;
+}
 
+.side-panel {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100%;
+  background: #fff;
+  box-shadow: 5px 0 25px rgba(0,0,0,0.15);
+  transition: left 0.3s ease;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+}
+
+.side-panel.active { left: 0; }
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+  z-index: 1999;
+}
+.menu-overlay.active { opacity: 1; pointer-events: all; }
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━
    EXCLUSIVE PROFILE UI (Orange Blend)
