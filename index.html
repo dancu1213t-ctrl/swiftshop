@@ -6713,36 +6713,53 @@ box-shadow:
 
 </select>
 
- <!-- 🚚 DELIVERY AREA -->
-<label style="font-weight:700;">Delivery Area</label>
-<select id="tacoDeliveryZone" onchange="updateTacoDeliveryFee()" style="
-  width:100%;
+<div style="
+  margin-bottom:14px;
   padding:14px;
+  background:#fff7ef;
   border-radius:14px;
-  border:none;
-  font-size:16px;
-  font-weight:600;
-  background:#f5f5f5;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  outline:none;
-  margin-bottom:10px;
+  border:1px solid #ffe3cc;
 ">
-  <option value="">Select delivery area</option>
-  <option value="town">In Town (Orange Walk)</option>
-  <option value="muffles">Muffles Junior College</option>
-  <option value="trial_farm">Trial Farm</option>
-  <option value="pasadita">Pasadita Area</option>
-  <option value="palmar">Palmar</option>
-  <option value="chan_pine_ridge">Chan Pine Ridge</option>
-  <option value="yo_creek">Yo Creek</option>
-  <option value="san_estevan">San Estevan</option>
-  <option value="carmelita">Carmelita</option>
-  <option value="san_jose">San Jose</option>
-  <option value="san_pablo">San Pablo</option>
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+  ">
+    <span style="font-weight:800; color:#666;">
+      🚚 Delivery
+    </span>
 
-</select>
+    <span style="font-weight:900; color:#ff6a00;">
+      $3.50 BZD
+    </span>
+  </div>
 
-<div id="tacoFeeText" style="font-weight:700;color:#ff6a00;margin-bottom:12px;"></div>
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  ">
+    <span style="font-weight:800; color:#666;">
+      Platform Fee
+    </span>
+
+    <span style="font-weight:900; color:#ff6a00;">
+      $0.50 BZD
+    </span>
+  </div>
+
+  <div style="
+    border-top:1px solid #ffd9bd;
+    margin-top:10px;
+    padding-top:10px;
+    display:flex;
+    justify-content:space-between;
+  ">
+    <strong>Delivery Total</strong>
+    <strong style="color:#ff5a1f;">$4.00 BZD</strong>
+  </div>
+</div>
 
 
 
@@ -6851,32 +6868,56 @@ box-shadow:
       </select>
     </div>
   </div>
-  <label style="font-weight:800; font-size:13px; color:#666; display:block; margin:15px 0 10px;">
-  DELIVERY AREA:
-</label>
-
-<select id="deliveryZoneSelect" onchange="setDeliveryZone(this.value)" style="
-  width:100%;
+ <div style="
+  margin:15px 0 5px;
   padding:14px;
+  background:#fff7ef;
   border-radius:14px;
-  border:none;
-  font-size:16px;
-  font-weight:600;
-  background:#f5f5f5;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  outline:none;
+  border:1px solid #ffe3cc;
 ">
-  <option disabled selected>Select delivery area</option>
-  <option value="Brew and Browse|1">Brew and Browse Promo - $1</option>
-  <option value="In-Town|3">In Town - $3</option>
-  <option value="Trial Farm|4">Trial Farm - $4</option>
-  <option value="Black Water|4.50">Black Water - $4.50</option>
-  <option value="San Lorenzo|4.00">San Lorenzo - $4.00</option>
-  <option value="Pasadita|3">Pasadita - $3</option>
-  <option value="Palmar|4.50">Palmar - $4.50</option>
-  <option value="Petville|4.50">Petville - $4.50</option>
-  <option value="Muffles Junior College|3.50">Muffles Junior College - $3.50</option>
-</select>
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:6px;
+  ">
+    <span style="font-weight:800; font-size:13px; color:#666;">
+      DELIVERY
+    </span>
+    <span style="font-weight:800; color:#ff6a00;">
+      $3.50 BZD
+    </span>
+  </div>
+
+  <div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  ">
+    <span style="font-weight:800; font-size:13px; color:#666;">
+      PLATFORM FEE
+    </span>
+    <span style="font-weight:800; color:#ff6a00;">
+      $0.50 BZD
+    </span>
+  </div>
+
+  <div style="
+    border-top:1px solid #ffd9bd;
+    margin-top:10px;
+    padding-top:10px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  ">
+    <span style="font-weight:900; font-size:14px;">
+      DELIVERY TOTAL
+    </span>
+    <span style="font-weight:900; font-size:16px; color:#ff5a1f;">
+      $4.00 BZD
+    </span>
+  </div>
+</div>
 
   <!-- TIP BOX -->
   <div style="margin-top:20px; padding:0 10px;">
@@ -7062,25 +7103,20 @@ box-shadow:
   }
 
   // --- SERVICE FEE HELPER ---
-  function getServiceFee(zone) {
-    const fees = {
-      "town": 3.00,
-      "muffles": 3.50,
-      "trial_farm": 4.00,
-      "black_water": 4.50,
-      "san_lorenzo": 4.00,
-      "pasadita": 3.00,
-      "palmar": 4.50,
-      "petville": 4.50,
-      "chan_pine_ridge": 5.00,
-      "yo_creek": 6.00,
-      "san_estevan": 6.00,
-      "carmelita": 6.00,
-      "san_jose": 7.00,
-      "san_pablo": 7.00
-    };
-    return fees[zone] || 3.00;
-  }
+ // ==========================================
+// SWIFTSHOP STANDARD DELIVERY PRICING
+// ==========================================
+const SWIFTSHOP_DELIVERY_FEE = 3.50;
+const SWIFTSHOP_PLATFORM_FEE = 0.50;
+
+function getServiceFee(zone) {
+  // One standard delivery price for all delivery locations
+  return SWIFTSHOP_DELIVERY_FEE;
+}
+
+function getPlatformFee() {
+  return SWIFTSHOP_PLATFORM_FEE;
+}
 
   function buzz(ms = 30) {
     if (navigator.vibrate) navigator.vibrate(ms);
@@ -7407,24 +7443,31 @@ box-shadow:
     refreshCartTotals(); 
   }
 
-  function refreshCartTotals() {
-    // Find the text elements on your screen
-    const feeText = document.getElementById("cartDeliveryFee");
-    const grandTotalText = document.getElementById("cartGrandTotal");
+function refreshCartTotals() {
+  const feeText = document.getElementById("cartDeliveryFee");
+  const grandTotalText = document.getElementById("cartGrandTotal");
 
-    if (feeText) {
-      // This updates the $3 or $4 text live
-      feeText.innerHTML = `🚚 Delivery (${window.lastCartZone || "In-Town"}): <b>$${(window.lastCartFee || 3).toFixed(2)} BZD</b>`;
-    }
+  const itemsTotal = window.total || 0;
 
-    if (grandTotalText) {
-      // This updates the Final Total live
-      const itemsTotal = window.total || 0;
-      const finalAmount = itemsTotal + (window.lastCartFee || 3);
-      grandTotalText.innerText = `Grand Total: $${finalAmount.toFixed(2)} BZD`;
-    }
+  const deliveryFee = SWIFTSHOP_DELIVERY_FEE;
+  const platformFee = SWIFTSHOP_PLATFORM_FEE;
+
+  const deliveryTotal = deliveryFee + platformFee;
+  const finalAmount = itemsTotal + deliveryTotal;
+
+  if (feeText) {
+    feeText.innerHTML = `
+      🚚 Delivery: <b>$${deliveryFee.toFixed(2)} BZD</b>
+      &nbsp; + &nbsp;
+      Platform Fee: <b>$${platformFee.toFixed(2)} BZD</b>
+    `;
   }
 
+  if (grandTotalText) {
+    grandTotalText.innerText =
+      `Grand Total: $${finalAmount.toFixed(2)} BZD`;
+  }
+}
   function sendRideRequest() {
     if (!rideLocation) {
       alert("Please pin your location first");
@@ -7578,28 +7621,38 @@ box-shadow:
   }
 
   // ➜ GO FROM TACOS TO NORMAL ORDER FLOW
-  function goToOrderFromTacos(){
-    const place = document.getElementById("tacoPlace").value;
-    const details = document.getElementById("tacoDetails").value.trim();
-    const zone = document.getElementById("tacoDeliveryZone").value;
+  function goToOrderFromTacos() {
+  const place =
+    document.getElementById("tacoPlace").value;
 
-    if(!place || !details || !zone){
-      alert("Please select taco place, delivery area, and enter your order.");
-      return;
-    }
+  const details =
+    document.getElementById("tacoDetails").value.trim();
 
-    // ✅ save taco info
-    localStorage.setItem("tacoPlace", place);
-    localStorage.setItem("tacoOrder", details);
-    localStorage.setItem("tacoZone", zone); // ✅ SAVE DELIVERY AREA
-
-    // ✅ close taco order box
-    document.getElementById("tacoOrderBox").style.display = "none";
-
-    // ✅ SKIP CART → OPEN ORDER BOX DIRECTLY
-    goToOrder();
+  if (!place || !details) {
+    alert(
+      "Please select a taco place and enter your order."
+    );
+    return;
   }
 
+  // Save taco information
+  localStorage.setItem("tacoPlace", place);
+  localStorage.setItem("tacoOrder", details);
+
+  // Keep compatibility with existing storage
+  localStorage.setItem(
+    "tacoZone",
+    "Standard Delivery"
+  );
+
+  // Close taco order box
+  document.getElementById(
+    "tacoOrderBox"
+  ).style.display = "none";
+
+  // Continue through the existing checkout flow
+  goToOrder();
+}
   function openPickupOrder(btn){
     document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
@@ -7835,30 +7888,28 @@ box-shadow:
     });
   }
 
-  function updateDeliveryFee() {
-    const zoneEl = document.getElementById("deliveryZone");
-    const zone = zoneEl ? zoneEl.value : "";
+function updateDeliveryFee() {
+  const feeLine = document.getElementById("cartDeliveryFee");
+  const cartGrand = document.getElementById("cartGrandTotal");
 
-    const feeLine = document.getElementById("cartDeliveryFee");
-    const cartGrand = document.getElementById("cartGrandTotal");
+  const itemsTotal = window.total || 0;
+  const deliveryFee = SWIFTSHOP_DELIVERY_FEE;
+  const platformFee = SWIFTSHOP_PLATFORM_FEE;
 
-    if (!zone) {
-      if (feeLine) feeLine.textContent = "";
-      if (cartGrand) cartGrand.textContent = "";
-      return;
-    }
+  const grand = itemsTotal + deliveryFee + platformFee;
 
-    const fee = getServiceFee(zone);
-
-    // ✅ REMOVED PLATFORM FEE: Now it's just the cart total + the delivery fee
-    const grand = total + fee;
-
-    // ✅ SHOW DELIVERY FEE ABOVE GRAND TOTAL
-    if (feeLine) feeLine.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
-
-    // ✅ GRAND TOTAL BELOW IT
-    if (cartGrand) cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
+  if (feeLine) {
+    feeLine.innerHTML =
+      `🚚 Delivery Fee: $${deliveryFee.toFixed(2)} BZD
+       &nbsp; + &nbsp;
+       Platform Fee: $${platformFee.toFixed(2)} BZD`;
   }
+
+  if (cartGrand) {
+    cartGrand.textContent =
+      `Grand Total: $${grand.toFixed(2)} BZD`;
+  }
+}
 
 function updateCartBubble() {
   const bubble = document.getElementById("cartBubble");
@@ -7912,19 +7963,17 @@ function updateCartBubble() {
     }
   }
 
-  // 🌮 TACO DELIVERY FEE (same zones & prices as grocery)
-  function updateTacoDeliveryFee() {
-    const zone = document.getElementById("tacoDeliveryZone").value;
-    const feeText = document.getElementById("tacoFeeText");
+function updateTacoDeliveryFee() {
+  const feeText =
+    document.getElementById("tacoFeeText");
 
-    if (!zone) {
-      if (feeText) feeText.textContent = "";
-      return;
-    }
-
-    const fee = getServiceFee(zone);
-    if (feeText) feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
+  if (feeText) {
+    feeText.innerHTML =
+      `🚚 Delivery: $${SWIFTSHOP_DELIVERY_FEE.toFixed(2)} BZD
+       &nbsp; + &nbsp;
+       Platform: $${SWIFTSHOP_PLATFORM_FEE.toFixed(2)} BZD`;
   }
+}
 
 function closeCart() {
     const cp = document.getElementById("cartPanel");
@@ -7993,19 +8042,26 @@ function closeCart() {
     if (totalDiv) totalDiv.innerHTML = savingsDisplay + "Items Total: $" + sum.toFixed(2) + " BZD";
 
     // --- MAP FEE INTEGRATION ---
-    const feeLine = document.getElementById("cartDeliveryFee");
-    const cartGrand = document.getElementById("cartGrandTotal");
+   // --- STANDARD DELIVERY + PLATFORM FEE ---
+const feeLine = document.getElementById("cartDeliveryFee");
+const cartGrand = document.getElementById("cartGrandTotal");
 
-    if (feeLine && cartGrand) {
-      // Uses the values set by the Map Pin dragging
-      const fee = window.lastCartFee || 3;
-      const zone = window.lastCartZone || "In-Town";
-      const grand = sum + fee;
+if (feeLine && cartGrand) {
+  const deliveryFee = SWIFTSHOP_DELIVERY_FEE;
+  const platformFee = SWIFTSHOP_PLATFORM_FEE;
 
-      feeLine.innerHTML = `Delivery Fee (${zone}): $${fee.toFixed(2)} BZD`;
-      cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
-    }
-  }
+  const deliveryTotal = deliveryFee + platformFee;
+  const grand = sum + deliveryTotal;
+
+  feeLine.innerHTML = `
+    🚚 Delivery: $${deliveryFee.toFixed(2)} BZD
+    &nbsp; + &nbsp;
+    Platform: $${platformFee.toFixed(2)} BZD
+  `;
+
+  cartGrand.textContent =
+    `Grand Total: $${grand.toFixed(2)} BZD`;
+}
 
   function openAdminLogin() {
     document.getElementById("adminLoginBox").style.display = "flex";
@@ -8445,143 +8501,228 @@ async function render() {
     "FLOWER": "18.084406,-88.565955"
   };
 
-  function order() {
-    let forcedTotal = 0;
+ function order() {
+  let forcedTotal = 0;
 
-    for (let name in cart) {
-      forcedTotal += cart[name].q * cart[name].p;
-    }
+  for (let name in cart) {
+    forcedTotal += cart[name].q * cart[name].p;
+  }
 
-    total = forcedTotal;
+  total = forcedTotal;
 
-    const userName = localStorage.getItem("userName") || "";
-    const userPhone = localStorage.getItem("userPhone") || "";
-    const tacoPlace = localStorage.getItem("tacoPlace");
-    const tacoOrder = localStorage.getItem("tacoOrder");
-    const hasTacos = !!tacoOrder;
+  const userName = localStorage.getItem("userName") || "";
+  const userPhone = localStorage.getItem("userPhone") || "";
 
-    const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
-    const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
-    const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
+  const tacoPlace = localStorage.getItem("tacoPlace");
+  const tacoOrder = localStorage.getItem("tacoOrder");
+  const hasTacos = !!tacoOrder;
 
-    const orderNum = Math.floor(100 + Math.random() * 900);
+  const paymentMethod =
+    document.getElementById("paymentMethod")?.value || "Cash";
 
-    if (forcedTotal <= 0 && !hasTacos) {
-      alert("Your cart is empty");
-      return;
-    }
+  const walletBalance =
+    typeof getWalletBalance === "function"
+      ? getWalletBalance()
+      : 0;
 
-    if (!window.lastCartCoords && total > 0) {
-      alert("Please pin your location on the map!");
-      return;
-    }
+  const tipAmount =
+    parseFloat(
+      document.getElementById("selectedTipAmount")?.value || 0
+    );
 
-    if (!window.lastCartZone) {
-      alert("Please select your delivery area");
-      return;
-    }
+  const orderNum = Math.floor(100 + Math.random() * 900);
 
-    const deliverySelect = document.getElementById("deliveryZoneSelect");
-    const selectedValue = deliverySelect?.value;
+  // ==========================================
+  // CHECK CART
+  // ==========================================
+  if (forcedTotal <= 0 && !hasTacos) {
+    alert("Your cart is empty");
+    return;
+  }
 
-    if (!selectedValue) {
-      alert("Please select your delivery area");
-      return;
-    }
+  // ==========================================
+  // LOCATION IS STILL REQUIRED
+  // ==========================================
+  if (!window.lastCartCoords) {
+    alert("Please pin your location on the map!");
+    return;
+  }
 
-    const [deliveryZone, fee] = selectedValue.split("|");
-    const deliveryFee = parseFloat(fee);
-    const itemsTotal = total;
-    const grandTotal = itemsTotal + deliveryFee + tipAmount;
-    const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
+  // ==========================================
+  // STANDARD SWIFTSHOP FEES
+  // ==========================================
+  const deliveryZone = "Standard Delivery";
+  const deliveryFee = SWIFTSHOP_DELIVERY_FEE;
+  const platformFee = SWIFTSHOP_PLATFORM_FEE;
 
-    if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
-      alert(`Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`);
-      return;
-    }
+  const itemsTotal = total;
 
-    let msg = `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
+  const grandTotal =
+    itemsTotal +
+    deliveryFee +
+    platformFee +
+    tipAmount;
 
-    const groupedCart = {};
-    const activeBusinesses = new Set();
+  const customerCoords =
+    window.lastCartCoords || "18.0777,-88.5667";
 
-    if (itemsTotal > 0) {
-      msg += `ITEMS%0A`;
-      msg += `----------------------------%0A`;
+  // ==========================================
+  // SWIFTPAY BALANCE CHECK
+  // ==========================================
+  if (
+    paymentMethod === "SwiftPay" &&
+    grandTotal > walletBalance
+  ) {
+    alert(
+      `Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`
+    );
+    return;
+  }
 
-      for (let i in cart) {
-        const biz = (cart[i].cat || "GENERAL").toUpperCase();
-        activeBusinesses.add(biz);
-        if (!groupedCart[biz]) groupedCart[biz] = [];
-        groupedCart[biz].push({ name: i, details: cart[i] });
+  // ==========================================
+  // BUILD WHATSAPP ORDER
+  // ==========================================
+  let msg =
+    `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
+
+  const groupedCart = {};
+  const activeBusinesses = new Set();
+
+  // ==========================================
+  // CART ITEMS
+  // ==========================================
+  if (itemsTotal > 0) {
+    msg += `ITEMS%0A`;
+    msg += `----------------------------%0A`;
+
+    for (let i in cart) {
+      const biz =
+        (cart[i].cat || "GENERAL").toUpperCase();
+
+      activeBusinesses.add(biz);
+
+      if (!groupedCart[biz]) {
+        groupedCart[biz] = [];
       }
 
-      for (let bizName in groupedCart) {
-        msg += `${bizName}%0A`;
-
-        groupedCart[bizName].forEach(item => {
-          const price = item.details.p.toFixed(2);
-          msg += `- ${item.name}%0A`;
-          msg += `    Qty: ${item.details.q} x $${price} BZD%0A`;
-        });
-
-        msg += `----------------------------%0A`;
-      }
-
-      msg += `%0A`;
-    }
-
-    if (hasTacos) {
-      msg += `TACO ORDER%0A`;
-      msg += `PLACE: ${tacoPlace}%0A`;
-      msg += `----------------------------%0A`;
-      msg += `${tacoOrder}%0A`;
-      msg += `----------------------------%0A`;
-
-      msg += `RUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A`;
-      msg += `----------------------------%0A%0A`;
-    }
-
-    if (itemsTotal > 0) {
-      msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
-      msg += `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
-      
-      if (tipAmount > 0) {
-        msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
-      }
-
-      msg += `----------------------------%0A`;
-      msg += `GRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
-      msg += `PAYMENT METHOD: ${paymentMethod}%0A`;
-
-      if (paymentMethod.includes("Online")) {
-        msg += `Bank: Belize Bank%0A`;
-        msg += `Account Name: Danilo Cu%0A`;
-        msg += `Account Number: 275378010160000%0A`;
-      }
-
-      msg += `%0A`;
-    }
-
-    // 📍 DYNAMIC MULTI-STORE MAP LINKS WITH "RUNNER ROUTE" LABEL & BLACK LINE SEPARATOR
-    if (itemsTotal > 0) {
-      msg += `----------------------------%0A`;
-      msg += `RUNNER ROUTE:%0A`;
-      
-      activeBusinesses.forEach(bizName => {
-        const storeCoords = storeLocations[bizName] || storeLocations["GENERAL"];
-        const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
-        
-        msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
+      groupedCart[biz].push({
+        name: i,
+        details: cart[i]
       });
     }
 
-    msg += `CUSTOMER: ${userName}%0A`;
-    msg += `PHONE: ${userPhone}`;
+    for (let bizName in groupedCart) {
+      msg += `${bizName}%0A`;
 
-    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
-    window.open(waUrl, "_blank");
+      groupedCart[bizName].forEach(item => {
+        const price =
+          item.details.p.toFixed(2);
+
+        msg += `- ${item.name}%0A`;
+        msg +=
+          `    Qty: ${item.details.q} x $${price} BZD%0A`;
+      });
+
+      msg +=
+        `----------------------------%0A`;
+    }
+
+    msg += `%0A`;
   }
+
+  // ==========================================
+  // TACO ORDER
+  // ==========================================
+  if (hasTacos) {
+    msg += `TACO ORDER%0A`;
+    msg += `PLACE: ${tacoPlace}%0A`;
+    msg += `----------------------------%0A`;
+    msg += `${tacoOrder}%0A`;
+    msg += `----------------------------%0A`;
+
+    msg +=
+      `DELIVERY: $${deliveryFee.toFixed(2)} BZD%0A`;
+
+    msg +=
+      `PLATFORM FEE: $${platformFee.toFixed(2)} BZD%0A`;
+
+    msg +=
+      `----------------------------%0A%0A`;
+  }
+
+  // ==========================================
+  // ORDER TOTAL
+  // ==========================================
+  if (itemsTotal > 0) {
+    msg +=
+      `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
+
+    msg +=
+      `PLATFORM FEE: $${platformFee.toFixed(2)} BZD%0A`;
+
+    msg +=
+      `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
+
+    if (tipAmount > 0) {
+      msg +=
+        `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
+    }
+
+    msg +=
+      `----------------------------%0A`;
+
+    msg +=
+      `GRAND TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
+
+    msg +=
+      `PAYMENT METHOD: ${paymentMethod}%0A`;
+
+    if (paymentMethod.includes("Online")) {
+      msg += `Bank: Belize Bank%0A`;
+      msg += `Account Name: Danilo Cu%0A`;
+      msg += `Account Number: 275378010160000%0A`;
+    }
+
+    msg += `%0A`;
+  }
+
+  // ==========================================
+  // RUNNER ROUTE / STORE MAP LINKS
+  // ==========================================
+  if (itemsTotal > 0) {
+    msg +=
+      `----------------------------%0A`;
+
+    msg +=
+      `RUNNER ROUTE:%0A`;
+
+    activeBusinesses.forEach(bizName => {
+      const storeCoords =
+        storeLocations[bizName] ||
+        storeLocations["GENERAL"];
+
+      const routeMapLink =
+        `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
+
+      msg +=
+        ` ${bizName}:%0A${routeMapLink}%0A%0A`;
+    });
+  }
+
+  // ==========================================
+  // CUSTOMER INFORMATION
+  // ==========================================
+  msg += `CUSTOMER: ${userName}%0A`;
+  msg += `PHONE: ${userPhone}`;
+
+  const waUrl =
+    `https://wa.me/5016080205?text=` +
+    encodeURIComponent(
+      msg.replace(/%0A/g, '\n')
+    );
+
+  window.open(waUrl, "_blank");
+}
 
   function doneOrder() {
     // 1. Clear Taco Data from Storage
@@ -8603,10 +8744,9 @@ async function render() {
     cart = {};
     total = 0;
     
-    // 4. IMPORTANT: Clear the last pinned location so next order is fresh
-    window.lastCartCoords = null;
-    window.lastCartFee = 3.00;
-    window.lastCartZone = "In-Town";
+   window.lastCartCoords = null;
+window.lastCartFee = SWIFTSHOP_DELIVERY_FEE;
+window.lastCartZone = "Standard Delivery";
 
     // 5. Reset Payment Dropdown
     const pm = document.getElementById("paymentMethod");
@@ -9234,14 +9374,13 @@ function toggleModalLike() {
     // Single interval without double-calling or innerHTML resets
     setInterval(rotateFeatures2, 4000);
   }
-  function setDeliveryZone(val) {
-    const [zone, fee] = val.split("|");
+ function setDeliveryZone(val) {
+  // SwiftShop now uses one standard delivery fee everywhere
+  window.lastCartZone = "Standard Delivery";
+  window.lastCartFee = 3.50;
 
-    window.lastCartZone = zone;
-    window.lastCartFee = parseFloat(fee);
-
-    refreshCartTotals();
-  }
+  refreshCartTotals();
+}
 
   function toggleMenu() {
     const panel = document.getElementById("sidePanel");
