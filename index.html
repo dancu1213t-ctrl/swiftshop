@@ -591,23 +591,29 @@ body {
 .header {
   background: linear-gradient(135deg, #ff9a00, #ff5a1f);
   color: white;
-  
-  /* 🚀 THE STRETCH: Change 280px to 350px if you want it even longer */
-  height: 280px; 
-  
-  /* This centers your "SwiftShop" text inside the big orange area */
+
+  height: 190px;
+
   display: flex;
   flex-direction: column;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
-  
+
   text-align: center;
-  position: relative; /* Keeps icons pinned to the header */
-  
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
-  box-shadow: 0 10px 30px rgba(255, 106, 0, 0.35);
+  position: relative;
+
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+  box-shadow: 0 8px 24px rgba(255, 106, 0, 0.26);
   box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .header {
+    height: 170px;
+    border-bottom-left-radius: 26px;
+    border-bottom-right-radius: 26px;
+  }
 }
 
     .header h1 span {
