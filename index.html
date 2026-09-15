@@ -2781,7 +2781,7 @@ box-shadow:
 
 .top-bar {
   position: fixed;
-  top: 12px;
+top: max(12px, calc(env(safe-area-inset-top) + 12px));
   left: 60px; /* Space for hamburger icon */
   height: 44px;
   z-index: 100;
@@ -3156,12 +3156,13 @@ box-shadow:
   display: block;
 }
 
+
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━
    SIDE PANEL & OVERLAY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 .menu-btn {
   position: fixed;
-  top: 12px;
+  top: max(12px, calc(env(safe-area-inset-top) + 12px));
   left: 12px;
   font-size: 22px;
   background: #fff;
@@ -3174,10 +3175,11 @@ box-shadow:
 
 .side-panel {
   position: fixed;
-  top: 0;
+  top: env(safe-area-inset-top);
   left: -260px;
   width: 260px;
-  height: 100%;
+  height: calc(100dvh - env(safe-area-inset-top));
+  padding-bottom: env(safe-area-inset-bottom);
   background: #fff;
   box-shadow: 5px 0 25px rgba(0,0,0,0.15);
   transition: left 0.3s ease;
@@ -3186,7 +3188,9 @@ box-shadow:
   flex-direction: column;
 }
 
-.side-panel.active { left: 0; }
+.side-panel.active {
+  left: 0;
+}
 
 .menu-overlay {
   position: fixed;
@@ -3197,7 +3201,11 @@ box-shadow:
   transition: 0.3s;
   z-index: 1999;
 }
-.menu-overlay.active { opacity: 1; pointer-events: all; }
+
+.menu-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━
    EXCLUSIVE PROFILE UI (Orange Blend)
