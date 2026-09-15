@@ -5509,6 +5509,25 @@ top: max(12px, calc(env(safe-area-inset-top) + 12px));
     border-radius: 20px;
   }
 }
+    /* Keep the SwiftShop menu above every screen/page */
+.menu-btn {
+  z-index: 10050;
+}
+
+#overlay,
+.menu-overlay {
+  z-index: 10055;
+}
+
+.side-panel {
+  z-index: 10060;
+}
+
+/* Prevent the page behind the panel from scrolling */
+body:has(.side-panel.open),
+body:has(.side-panel.active) {
+  overflow: hidden;
+}
   </style>
 </head>
 
