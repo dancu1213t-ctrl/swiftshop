@@ -2677,7 +2677,7 @@ box-shadow:
 /* ☰ BUTTON */
 .menu-btn {
   position: fixed;
-  top: 14px;
+  top: calc(14px + env(safe-area-inset-top));
   left: 14px;
   font-size: 22px;
   cursor: pointer;
@@ -2692,10 +2692,11 @@ box-shadow:
 /* PANEL */
 .side-panel {
   position: fixed;
-  top: 0;
+  top: env(safe-area-inset-top);
   left: -300px;
   width: 280px;
-  height: 100%;
+  height: calc(100dvh - env(safe-area-inset-top));
+  padding-bottom: env(safe-area-inset-bottom);
   background: #ffffff;
   color: #0f172a;
   box-shadow: 10px 0 40px rgba(15, 23, 42, 0.15);
@@ -2709,7 +2710,6 @@ box-shadow:
 .side-panel.open {
   left: 0;
 }
-
 .panel-header {
   background: linear-gradient(180deg, #ff7a18, #ff3d00); /* 🍊 orange */
   color: #fff;
