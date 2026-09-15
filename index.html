@@ -5528,6 +5528,37 @@ body:has(.side-panel.open),
 body:has(.side-panel.active) {
   overflow: hidden;
 }
+    /* Use only one consistent menu backdrop */
+#overlay {
+  display: none !important;
+}
+
+/* One neutral overlay for every SwiftShop screen */
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(43, 24, 15, 0.42);
+  backdrop-filter: blur(2px);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+
+  z-index: 10055;
+}
+
+.menu-overlay.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.side-panel {
+  z-index: 10060;
+}
+
+.menu-btn {
+  z-index: 10050;
+}
   </style>
 </head>
 
