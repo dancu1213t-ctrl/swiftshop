@@ -4681,6 +4681,61 @@ top: max(12px, calc(env(safe-area-inset-top) + 12px));
     right: -4px;
   }
 }
+
+/* Hero promo carousel — each offer uses the same existing category flow. */
+.hero-promo-slider {
+  position: relative;
+  display: grid;
+  width: 100%;
+  margin: 20px auto;
+}
+
+.hero-promo-slider .hero-promo-card {
+  grid-area: 1 / 1;
+  margin: 0 auto;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(18px);
+  transition: opacity .45s ease, transform .45s ease, visibility .45s ease;
+}
+
+.hero-promo-slider .hero-promo-card.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.hero-promo-dots {
+  grid-area: 1 / 1;
+  align-self: end;
+  justify-self: center;
+  z-index: 5;
+  display: flex;
+  gap: 7px;
+  padding-bottom: 12px;
+}
+
+.hero-promo-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .42);
+  cursor: pointer;
+  transition: width .2s ease, background .2s ease;
+}
+
+.hero-promo-dot.is-active {
+  width: 22px;
+  background: #ffffff;
+}
+
+@media (max-width: 480px) {
+  .hero-promo-dots { padding-bottom: 9px; }
+}
     /* Hero Toggle Placement */
 .hero-toggle-row {
   display: flex;
@@ -6627,21 +6682,52 @@ body:has(.side-panel.active) {
   <!-- Keep this: Needed to draw the background fireworks -->
 <canvas id="fireworksCanvas"></canvas>
 
-<div class="hero-promo-card">
-  <div class="hero-promo-content">
-    <span class="hero-promo-tag">Brew and Browse</span>
-    <div class="hero-promo-title">1$ Delivery Fee</div>
-    <div class="hero-promo-sub">Free when you purchase 3+ Drinks</div>
-    <button class="hero-promo-btn" onclick="bannerCategory('Brew')">
-      Shop Now ➔
-    </button>
+<section id="heroPromoSlider" class="hero-promo-slider" aria-label="Featured offers">
+  <article class="hero-promo-card promo-slide is-active">
+    <div class="hero-promo-content">
+      <span class="hero-promo-tag">Brew and Browse</span>
+      <div class="hero-promo-title">$1 Delivery Fee</div>
+      <div class="hero-promo-sub">Free when you purchase 3+ drinks.</div>
+      <button class="hero-promo-btn" onclick="bannerCategory('Brew')">Shop now ➔</button>
+    </div>
+    <div class="hero-promo-image-wrap">
+      <div class="hero-badge-icon">★</div>
+      <img src="https://i.imgur.com/fBD37P7.png" alt="Brew and Browse drinks">
+    </div>
+  </article>
+
+  <article class="hero-promo-card promo-slide">
+    <div class="hero-promo-content">
+      <span class="hero-promo-tag">Local favourites</span>
+      <div class="hero-promo-title">Something good is close.</div>
+      <div class="hero-promo-sub">Explore meals from the local places you already love.</div>
+      <button class="hero-promo-btn" onclick="bannerCategory('TFC')">Explore food ➔</button>
+    </div>
+    <div class="hero-promo-image-wrap">
+      <div class="hero-badge-icon">★</div>
+      <img src="https://i.imgur.com/WHXTIpe.png" alt="Local food delivery">
+    </div>
+  </article>
+
+  <article class="hero-promo-card promo-slide">
+    <div class="hero-promo-content">
+      <span class="hero-promo-tag">Everyday essentials</span>
+      <div class="hero-promo-title">Groceries, right to you.</div>
+      <div class="hero-promo-sub">Snacks, drinks and staples in one easy order.</div>
+      <button class="hero-promo-btn" onclick="bannerCategory('Snack')">Shop groceries ➔</button>
+    </div>
+    <div class="hero-promo-image-wrap">
+      <div class="hero-badge-icon">★</div>
+      <img src="https://i.imgur.com/8x8yYOr.png" alt="Groceries delivery">
+    </div>
+  </article>
+
+  <div class="hero-promo-dots" aria-label="Choose promotion">
+    <button class="hero-promo-dot is-active" type="button" aria-label="Show Brew and Browse offer" aria-current="true"></button>
+    <button class="hero-promo-dot" type="button" aria-label="Show local food offer" aria-current="false"></button>
+    <button class="hero-promo-dot" type="button" aria-label="Show groceries offer" aria-current="false"></button>
   </div>
-  
-  <div class="hero-promo-image-wrap">
-    <div class="hero-badge-icon">★</div>
-    <img src="https://i.imgur.com/fBD37P7.png" alt="Brew">
-  </div>
-</div>
+</section>
 
 <div id="locationModal" style="
   display:none;
@@ -11864,6 +11950,52 @@ function selectTip(amount, element) {
     <img id="overlayImg" src="" alt="Zoomed Item">
   </div>
 </div>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    const slider = document.getElementById('heroPromoSlider');
+    if (!slider) return;
+
+    const slides = Array.from(slider.querySelectorAll('.promo-slide'));
+    const dots = Array.from(slider.querySelectorAll('.hero-promo-dot'));
+    let current = 0;
+    let timer;
+
+    function showSlide(next) {
+      current = (next + slides.length) % slides.length;
+      slides.forEach((slide, index) => {
+        slide.classList.toggle('is-active', index === current);
+      });
+      dots.forEach((dot, index) => {
+        const active = index === current;
+        dot.classList.toggle('is-active', active);
+        dot.setAttribute('aria-current', String(active));
+      });
+    }
+
+    function startAutoPlay() {
+      window.clearInterval(timer);
+      timer = window.setInterval(() => showSlide(current + 1), 5000);
+    }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => {
+        showSlide(index);
+        startAutoPlay();
+      });
+    });
+
+    slider.addEventListener('mouseenter', () => window.clearInterval(timer));
+    slider.addEventListener('mouseleave', startAutoPlay);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) window.clearInterval(timer);
+      else startAutoPlay();
+    });
+
+    showSlide(0);
+    startAutoPlay();
+  });
+</script>
 
 </body>
 </html>
