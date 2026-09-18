@@ -11865,106 +11865,36 @@ function selectTip(amount, element) {
   </div>
 </div>
 
-<!-- SwiftShop customer delivery-app UX layer: presentation only; existing flows remain unchanged. -->
+<!-- Visualizer-matched customer home. Existing ordering/data functions stay in place. -->
 <style>
-  :root { --swift-orange:#ff6a00; --swift-black:#151515; --swift-green:#00a63e; --swift-ink:#1d2522; --swift-muted:#6d7874; --swift-surface:#ffffff; --swift-line:#e9ecea; }
-  body { background:#f7f8f7 !important; color:var(--swift-ink); }
-
-  /* A calmer, more focused home experience. */
-  .header { min-height:148px !important; height:auto !important; padding:26px 18px 22px !important; background:linear-gradient(135deg,#ff820f 0%,#f35b16 100%) !important; }
-  .header h1 { margin:8px 70px 0 !important; font-size:1.45rem !important; letter-spacing:-.7px; }
-  .header p { margin:4px 72px 0 !important; font-size:.74rem !important; line-height:1.4; }
-  .suggest-btn { left:14px !important; bottom:12px !important; padding:8px 11px !important; border-radius:11px !important; font-size:11px !important; box-shadow:0 6px 16px rgba(69,28,8,.18) !important; }
-  .social-follow { transform:scale(.88); transform-origin:center; }
-
-  .hero-section { position:relative; margin:-14px 12px 12px !important; border-radius:22px !important; overflow:hidden; box-shadow:0 12px 28px rgba(34,48,43,.1) !important; }
-  .swift-delivery-context { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:11px 14px; background:#fff; border:1px solid var(--swift-line); border-radius:15px; box-shadow:0 7px 18px rgba(15,32,25,.08); cursor:pointer; }
-  .swift-delivery-context__copy { min-width:0; }
-  .swift-delivery-context__eyebrow { display:block; color:#68756f; font-size:10px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
-  .swift-delivery-context__destination { display:block; overflow:hidden; margin-top:2px; color:var(--swift-ink); font-size:13px; font-weight:800; text-overflow:ellipsis; white-space:nowrap; }
-  .swift-delivery-context__change { flex:0 0 auto; color:var(--swift-orange); font-size:12px; font-weight:800; }
-  .hero-delivery-context { margin:0 14px 13px; }
-  .hero-search-wrapper { box-shadow:0 8px 20px rgba(26,42,34,.09); }
-
-  /* Promotion space reads as a clean offer, not a distraction. */
-  .pill-container-v2 { margin:14px 12px 6px !important; border-radius:18px !important; overflow:hidden; box-shadow:0 7px 18px rgba(30,45,36,.08); }
-  .pill-action-btn { background:var(--swift-black) !important; border-radius:10px !important; font-weight:800 !important; }
-
-  /* Merchant/category browsing. */
-  .categories { gap:12px !important; padding:14px 18px 16px !important; }
-  .cat-btn { border-radius:15px !important; transition:transform .16s ease, box-shadow .16s ease !important; }
-  .cat-btn:active { transform:scale(.96); }
-  .subcategory-title { margin-top:20px !important; padding-top:4px; font-size:17px !important; color:var(--swift-ink) !important; }
-
-  /* Consistent product shelf, including both legacy card templates. */
-  .section { padding-left:12px !important; padding-right:12px !important; gap:12px !important; }
-  .product { padding:10px !important; border:1px solid #e9edeb !important; border-radius:17px !important; background:#fff !important; box-shadow:0 6px 16px rgba(20,38,28,.055) !important; }
-  .product:hover { border-color:#d7e1dc !important; box-shadow:0 11px 24px rgba(20,38,28,.09) !important; }
-  .product-img-wrap, .product > img { background:transparent !important; border:0 !important; border-radius:13px !important; }
-  .product-img-wrap { margin-bottom:9px !important; }
-  .product > img { display:block; width:100% !important; aspect-ratio:1/.9; object-fit:contain !important; margin-bottom:9px; }
-  .product-info strong { color:var(--swift-ink) !important; font-size:13px !important; font-weight:800 !important; }
-  .price { color:var(--swift-green) !important; font-size:14px !important; font-weight:900 !important; }
-  .product button:not(.heart-btn), .store-add-btn { background:var(--swift-black) !important; box-shadow:none !important; }
-  .product button:not(.heart-btn):hover, .store-add-btn:hover { background:#303030 !important; }
-  .heart-btn { background:rgba(255,255,255,.94) !important; border-radius:50% !important; box-shadow:0 3px 10px rgba(20,35,26,.12) !important; }
-  .sale-badge { background:#d94d21 !important; border-radius:8px !important; font-weight:800 !important; }
-
-  /* Every partner gets a tidy mini-storefront when opened. */
-  #store-detail-view { max-width:980px; margin:0 auto; padding:14px; }
-  .store-header { gap:14px !important; padding:17px !important; border:1px solid var(--swift-line) !important; border-radius:20px !important; box-shadow:0 8px 20px rgba(23,37,29,.07) !important; }
-  .store-header::after { content:'Delivered by SwiftShop'; display:block; margin-left:auto; color:#087a52; font-size:10px; font-weight:800; white-space:nowrap; }
-  .detail-logo { width:64px !important; height:64px !important; border:1px solid #e7ece9 !important; }
-  .items-grid { gap:13px !important; margin-top:16px !important; }
-  .item-card { overflow:hidden; padding:10px !important; border:1px solid #e9edeb !important; border-radius:17px !important; box-shadow:0 6px 16px rgba(20,38,28,.055) !important; }
-  .item-card img { height:150px !important; object-fit:contain !important; background:transparent !important; }
-  .item-card .item-info > div:nth-child(2) { color:var(--swift-green) !important; font-weight:900 !important; }
-
-  /* Cart has a clear, dependable checkout affordance. */
-  #cartBubble { width:60px !important; height:60px !important; background-color:#fff !important; border-color:#fff !important; box-shadow:0 12px 28px rgba(15,30,22,.24) !important; }
-  #cartBubble::before { border-color:rgba(0,166,62,.42) !important; box-shadow:0 0 12px rgba(0,166,62,.18) !important; }
-  #cartItemCount { background:var(--swift-black) !important; }
-  #cartPanel { border-top-left-radius:24px !important; border-top-right-radius:24px !important; }
-
-  @media (min-width:700px) {
-    .section { max-width:1180px; margin-left:auto; margin-right:auto; grid-template-columns:repeat(4,minmax(0,1fr)) !important; gap:16px !important; }
-    .hero-section { max-width:1180px; margin-left:auto !important; margin-right:auto !important; }
-    .pill-container-v2 { max-width:1180px; margin-left:auto !important; margin-right:auto !important; }
-  }
-  @media (max-width:390px) {
-    .header h1 { font-size:1.22rem !important; }
-    .swift-delivery-context__destination { max-width:190px; }
-    .store-header::after { display:none; }
-    .product { border-radius:14px !important; padding:8px !important; }
-  }
+  #swiftExactShell{padding:0 13px 18px;background:#f7f8f7;color:#17211d;font-family:Poppins,Arial,sans-serif}
+  #swiftExactShell *{box-sizing:border-box} #appScreen>.header,#appScreen>#installWrap,#appScreen>.hero-section,.pill-container-v2,.light-beam,.media-section{display:none!important}
+  .swift-exact-top{position:relative;min-height:162px;margin:0 -13px;padding:18px;color:#fff;background:linear-gradient(135deg,#ff9a00,#ff5a1f);text-align:center}
+  .swift-exact-top h1{margin:48px 0 3px;font-size:24px;letter-spacing:-.6px}.swift-exact-top p{margin:0;font-size:11px;font-weight:600;opacity:.92}
+  .swift-exact-icon{position:absolute;top:15px;display:grid;width:34px;height:34px;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.95);color:#242424;font-size:14px;cursor:pointer}.swift-exact-icon.left{left:16px}.swift-exact-icon.right{right:16px}
+  .swift-exact-location{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:-16px 0 11px;padding:11px 12px;border:0;border-radius:14px;background:#fff;box-shadow:0 7px 16px rgba(24,35,28,.12);text-align:left;width:100%;cursor:pointer}.swift-exact-location b{display:block;color:#6e7973;font-size:9px;letter-spacing:.08em;text-transform:uppercase}.swift-exact-location span{display:block;margin-top:2px;color:#17211d;font-size:12px;font-weight:800}.swift-exact-location em{color:#f05b18;font-size:11px;font-style:normal;font-weight:800}
+  .swift-exact-choice{display:flex;gap:7px;margin:11px 0;padding:4px;border-radius:13px;background:#e9eeea}.swift-exact-choice button{flex:1;padding:8px;border:0;border-radius:9px;background:transparent;color:#607068;font-size:11px;font-weight:800;cursor:pointer}.swift-exact-choice button.active{background:#161817;color:#fff}
+  .swift-exact-search{width:100%;padding:12px 13px;border:1px solid #e3e8e4;border-radius:15px;background:#fff;color:#17211d;font:600 12px Poppins,Arial,sans-serif;outline:none}.swift-exact-search::placeholder{color:#87918b}
+  .swift-exact-deal{display:flex;align-items:center;justify-content:space-between;margin:12px 0 16px;padding:13px;border-radius:17px;background:#282d29;color:#fff}.swift-exact-deal small{display:block;color:#c9d3cc;font-size:9px;font-weight:700;letter-spacing:.08em}.swift-exact-deal strong{display:block;margin-top:3px;font-size:14px}.swift-exact-deal button{padding:8px 10px;border:0;border-radius:10px;background:#def8e6;color:#202520;font-size:10px;font-weight:800;cursor:pointer}
+  .swift-exact-heading{margin:16px 1px 9px;font-size:15px;letter-spacing:-.25px}.swift-exact-merchants{display:grid;grid-template-columns:1fr 1fr;gap:9px}.swift-exact-merchant{padding:10px;border:1px solid #e5e9e6;border-radius:15px;background:#fff;text-align:left;cursor:pointer}.swift-exact-merchant-art{height:48px;margin-bottom:8px;border-radius:10px;background:linear-gradient(135deg,#ffe3cc,#fff5eb)}.swift-exact-merchant strong{display:block;font-size:11px}.swift-exact-merchant small{display:block;margin-top:4px;color:#008d3a;font-size:9px;font-weight:800}
+  .swift-exact-cart{display:none;justify-content:space-between;align-items:center;margin:14px 0 0;padding:11px 12px;border:0;border-radius:13px;background:#171917;color:#fff;font-size:11px;font-weight:800;width:100%;cursor:pointer}.swift-exact-cart strong{color:#cdf8dc}
+  .store-navigation-wrapper{padding:0 13px 20px!important;background:#f7f8f7}.main-tabs-scroll{display:flex!important;gap:8px!important;overflow-x:auto!important;padding:0 0 11px!important;scrollbar-width:none}.main-tab-btn{min-width:72px!important;padding:9px 10px!important;border:1px solid #e4e8e5!important;border-radius:13px!important;background:#fff!important;color:#435049!important;font-size:10px!important;font-weight:800!important;box-shadow:none!important}.main-tab-btn.active{border-color:#161817!important;background:#161817!important;color:#fff!important}.category-panel{padding:0!important}.categories{gap:8px!important;padding:0 0 12px!important}.cat-btn{border-radius:13px!important}.subcategory-title{margin-top:16px!important;font-size:15px!important;color:#17211d!important}.section{padding:0!important;gap:9px!important}.product{padding:9px!important;border:1px solid #e5e9e6!important;border-radius:15px!important;background:#fff!important;box-shadow:none!important}.product-img-wrap,.product>img{background:transparent!important;border:0!important;border-radius:10px!important}.product-info strong{color:#17211d!important;font-size:10px!important}.price{color:#00a63e!important;font-size:12px!important;font-weight:900!important}.product button:not(.heart-btn){background:#141514!important;border-radius:8px!important;font-size:10px!important}.heart-btn{background:rgba(255,255,255,.94)!important;border-radius:50%!important}.sale-badge{border-radius:8px!important}
+  #cartBubble{display:none!important}#settingsDropdown{position:fixed!important;top:58px!important;right:16px!important;z-index:100000!important}@media(min-width:700px){#swiftExactShell,.store-navigation-wrapper{max-width:760px;margin:auto!important}.swift-exact-top{border-radius:0 0 22px 22px}}
 </style>
 <script>
-  /* Adds a familiar delivery-location control without replacing the existing location flow. */
-  window.addEventListener('DOMContentLoaded', function () {
-    var hero = document.querySelector('.hero-section');
-    if (hero && !document.getElementById('swiftDeliveryContext')) {
-      var context = document.createElement('button');
-      context.type = 'button';
-      context.id = 'swiftDeliveryContext';
-      context.className = 'swift-delivery-context hero-delivery-context';
-      context.setAttribute('aria-label', 'Choose delivery location');
-      context.innerHTML = '<span class="swift-delivery-context__copy"><span class="swift-delivery-context__eyebrow">Delivering to</span><span id="swiftDeliveryDestination" class="swift-delivery-context__destination">Choose your delivery location</span></span><span class="swift-delivery-context__change">Change</span>';
-      context.addEventListener('click', function () { if (typeof openLocationModal === 'function') openLocationModal(); });
-      hero.insertBefore(context, hero.firstChild);
-    }
-
-    var cart = document.getElementById('cartBubble');
-    if (cart) cart.setAttribute('aria-label', 'Open cart');
-
-    var locationText = document.getElementById('locationText');
-    var destination = document.getElementById('swiftDeliveryDestination');
-    function syncDestination() {
-      if (!locationText || !destination) return;
-      var value = locationText.textContent.trim();
-      if (value) destination.textContent = value;
-    }
-    syncDestination();
-    if (locationText && window.MutationObserver) new MutationObserver(syncDestination).observe(locationText, { childList:true, characterData:true, subtree:true });
+  window.addEventListener('DOMContentLoaded',function(){
+    var app=document.getElementById('appScreen'); if(!app||document.getElementById('swiftExactShell'))return;
+    var settings=document.getElementById('settingsDropdown'); if(settings)document.body.appendChild(settings);
+    var shell=document.createElement('section'); shell.id='swiftExactShell';
+    shell.innerHTML='<div class="swift-exact-top"><button class="swift-exact-icon left" type="button" aria-label="Suggest an item" onclick="openSuggest()">＋</button><button class="swift-exact-icon right" type="button" aria-label="Open settings" onclick="toggleSettings()">⚙</button><h1>SwiftShop OW</h1><p>Browse items · Order · Get it delivered</p></div><button id="swiftExactLocation" class="swift-exact-location" type="button"><span><b>Delivering to</b><span id="swiftExactDestination">Choose your location</span></span><em>Change</em></button><div class="swift-exact-choice"><button id="swiftExactDelivery" class="active" type="button">Delivery</button><button id="swiftExactPickup" type="button">Pickup</button></div><input id="swiftExactSearch" class="swift-exact-search" type="search" placeholder="⌕  Search products, food, or stores"><div class="swift-exact-deal"><div><small>LIVE DEAL</small><strong>1$ delivery on drinks</strong></div><button type="button" onclick="bannerCategory(\'Drink\')">Shop now</button></div><h2 class="swift-exact-heading">Popular near you</h2><div class="swift-exact-merchants"><button class="swift-exact-merchant" type="button" onclick="bannerCategory(\'TFC\')"><div class="swift-exact-merchant-art"></div><strong>TFC</strong><small>Open now · 25–35 min</small></button><button class="swift-exact-merchant" type="button" onclick="bannerCategory(\'Brew\')"><div class="swift-exact-merchant-art"></div><strong>Brew</strong><small>Open now · 20–30 min</small></button></div><button id="swiftExactCart" class="swift-exact-cart" type="button"><strong id="swiftExactCartText">View cart</strong><span>View cart →</span></button>';
+    app.insertBefore(shell,app.firstChild);
+    document.getElementById('swiftExactLocation').addEventListener('click',function(){if(typeof openLocationModal==='function')openLocationModal()});
+    function choose(type){var source=Array.from(document.querySelectorAll('.toggle-btn')).find(function(btn){return btn.textContent.trim()===type});if(source)source.click();document.getElementById('swiftExactDelivery').classList.toggle('active',type==='Delivery');document.getElementById('swiftExactPickup').classList.toggle('active',type==='Pickup')}
+    document.getElementById('swiftExactDelivery').addEventListener('click',function(){choose('Delivery')});document.getElementById('swiftExactPickup').addEventListener('click',function(){choose('Pickup')});
+    document.getElementById('swiftExactSearch').addEventListener('input',function(e){var old=document.getElementById('searchInput');if(old)old.value=e.target.value;if(typeof handleSearchInput==='function')handleSearchInput(e.target.value)});
+    document.getElementById('swiftExactCart').addEventListener('click',function(){if(typeof openCart==='function')openCart()});
+    var cartCount=document.getElementById('cartItemCount'),cartBar=document.getElementById('swiftExactCart');function syncCart(){var count=cartCount?Number(cartCount.textContent||0):0;cartBar.style.display=count>0?'flex':'none';document.getElementById('swiftExactCartText').textContent=count>0?count+' item'+(count===1?'':'s')+' in cart':'View cart'}syncCart();if(cartCount&&window.MutationObserver)new MutationObserver(syncCart).observe(cartCount,{childList:true,characterData:true,subtree:true});
+    var locationText=document.getElementById('locationText');function syncLocation(){if(locationText&&locationText.textContent.trim())document.getElementById('swiftExactDestination').textContent=locationText.textContent.trim()}syncLocation();if(locationText&&window.MutationObserver)new MutationObserver(syncLocation).observe(locationText,{childList:true,characterData:true,subtree:true});
   });
 </script>
 </body>
