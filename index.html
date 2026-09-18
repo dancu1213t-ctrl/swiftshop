@@ -2935,49 +2935,6 @@ top: max(12px, calc(env(safe-area-inset-top) + 12px));
   }
 }
 
-/* Small transparent orange figure beside the welcome copy. */
-.mini-figure-carousel {
-  position: relative;
-  width: 82px;
-  height: 106px;
-  margin-right: clamp(0px, 6vw, 92px);
-  flex: 0 0 auto;
-  pointer-events: none;
-}
-
-.mini-figure-carousel::after {
-  content: '';
-  position: absolute;
-  left: 16%;
-  right: 16%;
-  bottom: 4px;
-  height: 9px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(15, 23, 42, .17), transparent 70%);
-}
-
-.mini-figure-slide {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: end center;
-  opacity: 1;
-
-.mini-figure-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  filter: drop-shadow(0 9px 10px rgba(15, 23, 42, .14));
-}
-
-@media (max-width: 480px) {
-  .mini-figure-carousel {
-    width: 60px;
-    height: 78px;
-    margin-right: 0;
-  }
-}
-
 /* Floating Soft 3D Search & Filter */
 .hero-search-wrapper {
   display: flex;
@@ -4545,7 +4502,7 @@ top: max(12px, calc(env(safe-area-inset-top) + 12px));
   box-sizing: border-box;
 
   /* Rich Gradient + Glassmorphism Outline */
-  background: radial-gradient(circle at 85% 20%, #17522a 0%, #0c2b16 55%, #06170b 100%);
+ background: radial-gradient(circle at 88% 15%, #ff9b4a 0%, #d85a20 42%, #8f2f13 100%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35), 
               inset 0 1px 0 rgba(255, 255, 255, 0.15);
@@ -4593,7 +4550,7 @@ top: max(12px, calc(env(safe-area-inset-top) + 12px));
   display: inline-block;
   font-size: 11px;
   font-weight: 800;
-  color: #4ade80;
+  color: #fff0df;
   text-transform: uppercase;
   letter-spacing: 1.5px;
   margin-bottom: 8px;
@@ -4604,7 +4561,7 @@ top: max(12px, calc(env(safe-area-inset-top) + 12px));
 .hero-promo-title {
   font-size: clamp(20px, 3.5vw, 36px); /* Responsive Scaling */
   font-weight: 900;
-  color: #ffffff;
+ color: #fffaf4;
   line-height: 1.15;
   margin-bottom: 8px;
   letter-spacing: -0.5px;
@@ -4613,7 +4570,7 @@ top: max(12px, calc(env(safe-area-inset-top) + 12px));
 /* Subtitle */
 .hero-promo-sub {
   font-size: clamp(12px, 1.8vw, 16px); /* Responsive Scaling */
-  color: rgba(255, 255, 255, 0.8);
+color: rgba(255, 250, 244, 0.86);
   font-weight: 500;
   margin-bottom: 20px;
   line-height: 1.4;
@@ -4625,7 +4582,7 @@ top: max(12px, calc(env(safe-area-inset-top) + 12px));
   align-items: center;
   justify-content: center;
   gap: 10px;
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+ background: #111111;
   color: #ffffff;
   padding: 12px 24px;
   border-radius: 999px;
@@ -6487,8 +6444,12 @@ body:has(.side-panel.active) {
       <p class="hero-subtitle">Groceries, fresh produce & more at your fingertips.</p>
     </div>
     
-    <div class="mini-figure-carousel" aria-hidden="true">
-      <div class="mini-figure-slide"><img src="https://fifth-gentle-45902158.figma.site/_components/v2/4de492f6d9cf8244ad5293233e5c6f52407d42fc/1.02464a56.png" alt=""></div>
+    <div class="hero-image-container">
+      <img 
+        src="https://i.imgur.com/8x8yYOr.png" 
+        alt="3D Groceries" 
+        class="hero-image"
+      />
     </div>
   </div>
 
@@ -6744,20 +6705,20 @@ body:has(.side-panel.active) {
     </div>
     <div class="hero-promo-image-wrap">
       <div class="hero-badge-icon">★</div>
-      <img src="https://i.imgur.com/WHXTIpe.png" alt="Local food delivery">
+      <img src="https://i.imgur.com/mlEVNcu.png" alt="Local food delivery">
     </div>
   </article>
 
   <article class="hero-promo-card promo-slide">
     <div class="hero-promo-content">
-      <span class="hero-promo-tag">Everyday essentials</span>
-      <div class="hero-promo-title">Groceries, right to you.</div>
-      <div class="hero-promo-sub">Snacks, drinks and staples in one easy order.</div>
-      <button class="hero-promo-btn" onclick="bannerCategory('Snack')">Shop groceries ➔</button>
+      <span class="hero-promo-tag">Everyday Drinks</span>
+      <div class="hero-promo-title">Treats, right to you.</div>
+      <div class="hero-promo-sub">Easy ordering.</div>
+      <button class="hero-promo-btn" onclick="bannerCategory('Urban')">View Items ➔</button>
     </div>
     <div class="hero-promo-image-wrap">
       <div class="hero-badge-icon">★</div>
-      <img src="https://i.imgur.com/8x8yYOr.png" alt="Groceries delivery">
+      <img src="https://i.imgur.com/9VWxbSS.png" alt="Urban">
     </div>
   </article>
 
