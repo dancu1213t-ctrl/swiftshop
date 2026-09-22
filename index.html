@@ -5774,6 +5774,24 @@ body:has(.side-panel.active) {
   display: none !important;
 }
   </style>
+<style>
+/* Compact order summary */
+#cartPanel > hr { display:none; }
+#cartPanel .checkout-summary { margin:20px 0 24px; padding:20px; background:#f8fafc; border:1px solid #e5e7eb; border-radius:18px; color:#172033; }
+#cartPanel .checkout-summary-heading { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; font-size:14px; font-weight:700; }
+#cartPanel .checkout-summary-heading > span { color:#8490a1; font-size:10px; font-weight:500; }
+#cartPanel #cartPanelTotal { margin:0 0 10px; font-size:14px; }
+#cartPanel #cartDeliveryFee { margin:0 !important; color:#647084 !important; text-align:left !important; font-size:13px; font-weight:500 !important; }
+#cartPanel .checkout-row { display:flex; align-items:baseline; justify-content:space-between; gap:16px; margin:0 0 10px; line-height:1.5; }
+#cartPanel .checkout-row > span { color:#647084; font-weight:500; }
+#cartPanel .checkout-row > strong { color:#253247; font-weight:600; white-space:nowrap; font-variant-numeric:tabular-nums; }
+#cartPanel .checkout-row .checkout-free { color:#16834a; }
+#cartPanel .checkout-promo { margin:12px 0; padding:10px 12px; background:#eaf7ef; color:#167442; border-radius:10px; font-size:11px; font-weight:600; line-height:1.6; }
+#cartPanel #cartGrandTotal { display:flex; justify-content:space-between; align-items:baseline; gap:16px; border-top:1px solid #dfe5ec; padding-top:15px; margin-top:14px !important; color:#172033; font-size:18px !important; font-weight:700 !important; text-align:left !important; }
+#cartPanel #cartGrandTotal small { margin-left:4px; font-size:10px; font-weight:500; color:#8490a1; }
+#cartPanel #cartGrandTotal strong { font-size:24px; letter-spacing:-.6px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+@media(max-width:380px) { #cartPanel .checkout-summary { padding:15px; } #cartPanel .checkout-summary-heading { flex-wrap:wrap; gap:4px; } }
+</style>
 </head>
 
 <body>
@@ -6689,8 +6707,8 @@ body:has(.side-panel.active) {
   <article class="hero-promo-card promo-slide is-active">
     <div class="hero-promo-content">
       <span class="hero-promo-tag">Brew and Browse</span>
-      <div class="hero-promo-title">$1 Delivery Fee</div>
-      <div class="hero-promo-sub">Free when you purchase 3+ drinks.</div>
+      <div class="hero-promo-title">3+ Drinks, Free Delivery</div>
+      <div class="hero-promo-sub">Brew &amp; Browse orders only. $0.50 platform fee applies.</div>
       <button class="hero-promo-btn" onclick="bannerCategory('Brew')">Shop now ➔</button>
     </div>
     <div class="hero-promo-image-wrap">
@@ -7304,31 +7322,30 @@ body:has(.side-panel.active) {
   box-shadow:0 6px 18px rgba(0,0,0,0.08);
   outline:none;
 ">
-  <option disabled selected>Select delivery area</option>
-  <option value="Brew and Browse|1">Brew and Browse Promo - $1</option>
-  <option value="In-Town|3">In Town - $3</option>
-  <option value="Trial Farm|4">Trial Farm - $4</option>
-  <option value="Black Water|4.50">Black Water - $4.50</option>
-  <option value="San Lorenzo|4.00">San Lorenzo - $4.00</option>
-  <option value="Pasadita|3">Pasadita - $3</option>
-  <option value="Palmar|4.50">Palmar - $4.50</option>
-  <option value="Petville|4.50">Petville - $4.50</option>
-  <option value="Muffles Junior College|3.50">Muffles Junior College - $3.50</option>
+<option value="" disabled selected>Select delivery area</option>
+<option value="In-Town">In Town</option>
+<option value="Trial Farm">Trial Farm</option>
+<option value="Black Water">Black Water</option>
+<option value="San Lorenzo">San Lorenzo</option>
+<option value="Pasadita">Pasadita</option>
+<option value="Palmar">Palmar</option>
+<option value="Petville">Petville</option>
+<option value="Muffles Junior College">Muffles Junior College</option>
 </select>
 
   <!-- TIP BOX -->
   <div style="margin-top:20px; padding:0 10px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-      <label style="font-weight:800; font-size:13px; color:#666; display:block;">TIP YOUR RUNNER:</label>
+      <label style="font-weight:800; font-size:13px; color:#666; display:block;">RUNNER TIP (OPTIONAL):</label>
       <span style="font-size:11px; font-weight:700; color:#ff6a00;">100% Tips go to Runner</span>
     </div>
     <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;">
-      <button type="button" class="tip-btn" onclick="selectTip(0, this)">No Tip</button>
-      <button type="button" class="tip-btn active" onclick="selectTip(1, this)">$1</button>
+      <button type="button" class="tip-btn active" onclick="selectTip(0, this)">No Tip</button>
+      <button type="button" class="tip-btn" onclick="selectTip(1, this)">$1</button>
       <button type="button" class="tip-btn" onclick="selectTip(2, this)">$2</button>
       <button type="button" class="tip-btn" onclick="selectTip(3, this)">$3</button>
     </div>
-    <input type="hidden" id="selectedTipAmount" value="1">
+    <input type="hidden" id="selectedTipAmount" value="0">
   </div>
 
   <div class="submit-track" onclick="order()" style="margin-top:25px;">
@@ -7500,25 +7517,18 @@ body:has(.side-panel.active) {
   }
 
   // --- SERVICE FEE HELPER ---
-  function getServiceFee(zone) {
-    const fees = {
-      "town": 3.00,
-      "muffles": 3.50,
-      "trial_farm": 4.00,
-      "black_water": 4.50,
-      "san_lorenzo": 4.00,
-      "pasadita": 3.00,
-      "palmar": 4.50,
-      "petville": 4.50,
-      "chan_pine_ridge": 5.00,
-      "yo_creek": 6.00,
-      "san_estevan": 6.00,
-      "carmelita": 6.00,
-      "san_jose": 7.00,
-      "san_pablo": 7.00
-    };
-    return fees[zone] || 3.00;
-  }
+const FIXED_DELIVERY_FEE = 3.00;
+const PLATFORM_FEE = 0.50;
+function getServiceFee(zone) { return FIXED_DELIVERY_FEE; }
+function getCartDeliveryFee() {
+  const items = Object.values(cart).filter(item => Number(item.q) > 0);
+  const onlyBrew = items.length > 0 && items.every(item =>
+    String(item.cat || '').trim().toLowerCase() === 'brew'
+  );
+  const drinkCount = items.reduce((sum, item) => sum + Number(item.q), 0);
+  const hasTacos = !!localStorage.getItem('tacoOrder');
+  return onlyBrew && drinkCount >= 3 && !hasTacos ? 0 : FIXED_DELIVERY_FEE;
+}
 
   function buzz(ms = 30) {
     if (navigator.vibrate) navigator.vibrate(ms);
@@ -7845,23 +7855,25 @@ body:has(.side-panel.active) {
     refreshCartTotals(); 
   }
 
-  function refreshCartTotals() {
-    // Find the text elements on your screen
-    const feeText = document.getElementById("cartDeliveryFee");
-    const grandTotalText = document.getElementById("cartGrandTotal");
-
-    if (feeText) {
-      // This updates the $3 or $4 text live
-      feeText.innerHTML = `🚚 Delivery (${window.lastCartZone || "In-Town"}): <b>$${(window.lastCartFee || 3).toFixed(2)} BZD</b>`;
-    }
-
-    if (grandTotalText) {
-      // This updates the Final Total live
-      const itemsTotal = window.total || 0;
-      const finalAmount = itemsTotal + (window.lastCartFee || 3);
-      grandTotalText.innerText = `Grand Total: $${finalAmount.toFixed(2)} BZD`;
-    }
+function refreshCartTotals() {
+  const feeText = document.getElementById('cartDeliveryFee');
+  const grandTotalText = document.getElementById('cartGrandTotal');
+  const itemsTotal = Object.values(cart).reduce((sum, item) => sum + item.q * item.p, 0);
+  const tipAmount = parseFloat(document.getElementById('selectedTipAmount')?.value || '0') || 0;
+  const deliveryFee = getCartDeliveryFee();
+  const finalAmount = itemsTotal + deliveryFee + PLATFORM_FEE + tipAmount;
+  window.lastCartFee = deliveryFee;
+  if (feeText) {
+    feeText.innerHTML =
+      `<div class="checkout-row"><span>Delivery</span><strong class="${deliveryFee === 0 ? 'checkout-free' : ''}">${deliveryFee === 0 ? 'FREE' : '$' + deliveryFee.toFixed(2)}</strong></div>` +
+      `<div class="checkout-row"><span>Platform fee</span><strong>$${PLATFORM_FEE.toFixed(2)}</strong></div>` +
+      (tipAmount > 0 ? `<div class="checkout-row"><span>Runner tip (optional)</span><strong>$${tipAmount.toFixed(2)}</strong></div>` : '') +
+      (deliveryFee === 0 ? '<div class="checkout-promo">Brew &amp; Browse · 3+ drinks: free delivery applied</div>' : '');
   }
+  if (grandTotalText) {
+    grandTotalText.innerHTML = `<span>Total <small>BZD</small></span><strong>$${finalAmount.toFixed(2)}</strong>`;
+  }
+}
 
   function sendRideRequest() {
     if (!rideLocation) {
@@ -8273,30 +8285,7 @@ body:has(.side-panel.active) {
     });
   }
 
-  function updateDeliveryFee() {
-    const zoneEl = document.getElementById("deliveryZone");
-    const zone = zoneEl ? zoneEl.value : "";
-
-    const feeLine = document.getElementById("cartDeliveryFee");
-    const cartGrand = document.getElementById("cartGrandTotal");
-
-    if (!zone) {
-      if (feeLine) feeLine.textContent = "";
-      if (cartGrand) cartGrand.textContent = "";
-      return;
-    }
-
-    const fee = getServiceFee(zone);
-
-    // ✅ REMOVED PLATFORM FEE: Now it's just the cart total + the delivery fee
-    const grand = total + fee;
-
-    // ✅ SHOW DELIVERY FEE ABOVE GRAND TOTAL
-    if (feeLine) feeLine.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
-
-    // ✅ GRAND TOTAL BELOW IT
-    if (cartGrand) cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
-  }
+function updateDeliveryFee() { refreshCartTotals(); }
 
 function updateCartBubble() {
   const bubble = document.getElementById("cartBubble");
@@ -8361,7 +8350,7 @@ function updateCartBubble() {
     }
 
     const fee = getServiceFee(zone);
-    if (feeText) feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
+    if (feeText) feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD + Platform Fee: $${PLATFORM_FEE.toFixed(2)} BZD`;
   }
 
 function closeCart() {
@@ -8428,21 +8417,9 @@ function closeCart() {
       : "";
 
     const totalDiv = document.getElementById("cartPanelTotal");
-    if (totalDiv) totalDiv.innerHTML = savingsDisplay + "Items Total: $" + sum.toFixed(2) + " BZD";
+    if (totalDiv) totalDiv.innerHTML = savingsDisplay + `<div class="checkout-row"><span>Items subtotal</span><strong>$${sum.toFixed(2)}</strong></div>`;
 
-    // --- MAP FEE INTEGRATION ---
-    const feeLine = document.getElementById("cartDeliveryFee");
-    const cartGrand = document.getElementById("cartGrandTotal");
-
-    if (feeLine && cartGrand) {
-      // Uses the values set by the Map Pin dragging
-      const fee = window.lastCartFee || 3;
-      const zone = window.lastCartZone || "In-Town";
-      const grand = sum + fee;
-
-      feeLine.innerHTML = `Delivery Fee (${zone}): $${fee.toFixed(2)} BZD`;
-      cartGrand.textContent = `Grand Total: $${grand.toFixed(2)} BZD`;
-    }
+    refreshCartTotals();
   }
 
   function openAdminLogin() {
@@ -8927,10 +8904,11 @@ async function render() {
       return;
     }
 
-    const [deliveryZone, fee] = selectedValue.split("|");
-    const deliveryFee = parseFloat(fee);
+    const deliveryZone = selectedValue;
+    const deliveryFee = getCartDeliveryFee();
+    const platformFee = PLATFORM_FEE;
     const itemsTotal = total;
-    const grandTotal = itemsTotal + deliveryFee + tipAmount;
+    const grandTotal = itemsTotal + deliveryFee + platformFee + tipAmount;
     const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
 
     if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
@@ -8976,13 +8954,23 @@ async function render() {
       msg += `${tacoOrder}%0A`;
       msg += `----------------------------%0A`;
 
-      msg += `RUN (${deliveryZone}): $${deliveryFee.toFixed(2)} BZD%0A`;
+      msg += `DELIVERY AREA: ${deliveryZone}%0A`;
+      if (itemsTotal <= 0) {
+        msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
+        msg += `PLATFORM FEE: $${platformFee.toFixed(2)} BZD%0A`;
+        if (tipAmount > 0) msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
+        msg += `FEES + TIP TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
+        msg += `Taco food cost is additional.%0A`;
+      }
       msg += `----------------------------%0A%0A`;
     }
 
     if (itemsTotal > 0) {
+      msg += `DELIVERY AREA: ${deliveryZone}%0A`;
       msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
+      msg += `PLATFORM FEE: $${platformFee.toFixed(2)} BZD%0A`;
       msg += `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
+      if (hasTacos) msg += `Taco food cost is additional.%0A`;
       
       if (tipAmount > 0) {
         msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
@@ -9022,6 +9010,8 @@ async function render() {
   }
 
   function doneOrder() {
+    // Each new order starts without an optional tip.
+    selectTip(0, document.querySelector('.tip-btn[onclick="selectTip(0, this)"]'));
     // 1. Clear Taco Data from Storage
     localStorage.removeItem("tacoPlace");
     localStorage.removeItem("tacoOrder");
@@ -9672,14 +9662,11 @@ function toggleModalLike() {
     // Single interval without double-calling or innerHTML resets
     setInterval(rotateFeatures2, 4000);
   }
-  function setDeliveryZone(val) {
-    const [zone, fee] = val.split("|");
-
-    window.lastCartZone = zone;
-    window.lastCartFee = parseFloat(fee);
-
-    refreshCartTotals();
-  }
+function setDeliveryZone(val) {
+  window.lastCartZone = val;
+  window.lastCartFee = getCartDeliveryFee();
+  refreshCartTotals();
+}
 
   function toggleMenu() {
     const panel = document.getElementById("sidePanel");
@@ -11523,6 +11510,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   <hr>
 
+  <section class="checkout-summary" aria-label="Order summary">
+  <div class="checkout-summary-heading">Order summary <span>All prices in BZD</span></div>
   <h3 id="cartPanelTotal"></h3>
   <div id="cartDeliveryFee" style="
   margin-top:6px;
@@ -11536,6 +11525,7 @@ document.addEventListener("DOMContentLoaded", () => {
   font-size:18px;
   text-align:center;
 "></div>
+</section>
 
   <div style="
   font-size:10px;
@@ -11758,6 +11748,7 @@ function selectTip(amount, element) {
   if (element) element.classList.add('active');
   const tipInput = document.getElementById('selectedTipAmount');
   if (tipInput) tipInput.value = amount;
+  refreshCartTotals();
 }
 </script>
 
