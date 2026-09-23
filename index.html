@@ -5959,6 +5959,137 @@ body #imageOverlay.shop-active-page{background:#faf8f4!important}
 #promoPage #products{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 #promoPage #products>h2,#promoPage #products>#loadingDeals,#promoPage #products>div:only-child{grid-column:1/-1}
 @media(max-width:480px){.service-page-header h1{font-size:25px}.shop-service-page .profile-card{padding:18px!important}}
+
+/* White, edge-to-edge surfaces and unboxed product photography. */
+:root{--shop-cream:#fff;--shop-paper:#fff;--shop-line:#f2e4d7}
+html{background:#fff;box-sizing:border-box;width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+*,*::before,*::after{box-sizing:inherit}
+body{background:#fff!important;margin:0;width:100%;min-width:0;touch-action:manipulation}
+#appScreen{width:100%;max-width:none!important;margin:0!important;background:#fff!important;min-width:0;padding-left:clamp(14px,3vw,48px)!important;padding-right:clamp(14px,3vw,48px)!important}
+#appScreen .header{border-bottom:1px solid #f4d8bc!important}
+#appScreen .header #title{color:#26382e!important}
+.shop-bottom-nav{width:100%!important;border-top:1px solid #f4d8bc!important;background:#fff!important}
+.screen,#profileOverlay,#profileOverlay .profile-card,body .shop-active-page,#appScreen .shop-active-page,#cartPanel,#orderBox,#pickupOrderBox,#tacoOrderBox{background:#fff!important}
+#profileOverlay .profile-top,.profile-services-grid .panel-item,.shop-service-page .profile-card{border-color:#f1dfcf!important;box-shadow:none!important}
+.service-page-header{border-bottom-color:#f1d3b7!important}
+#appScreen .store-navigation-wrapper::before,.subcategory-title{border-left:3px solid #ee943f;padding-left:10px!important}
+#appScreen #products,#promoPage #products{width:100%;min-width:0;align-items:start;overflow:visible!important;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:22px 16px!important}
+#appScreen .product,#promoPage .product{background:transparent!important;border:0!important;border-bottom:1px solid #f3dfcd!important;box-shadow:none!important;border-radius:0!important;padding:0 0 14px!important;overflow:visible!important;min-width:0;transform:none!important}
+#appScreen .product .product-img-wrap,#promoPage .product .product-img-wrap{display:flex!important;align-items:center;justify-content:center;width:100%!important;height:auto!important;min-height:0!important;aspect-ratio:1/1;background:transparent!important;border:0!important;border-radius:0!important;overflow:visible!important;padding:0!important;transform:none!important}
+#appScreen .product .product-img-wrap img,#promoPage .product .product-img-wrap img{display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:none!important;object-fit:contain!important;border:0!important;border-radius:0!important;background:transparent!important;transform:none!important;animation:none!important;opacity:1!important;visibility:visible!important}
+.product{content-visibility:visible!important}.product-img-wrap{contain:none!important}
+.product button{background:#fff1e3!important;color:#af581a!important;border:1px solid #f2cfae!important}
+input:not([type=hidden]),select,textarea,#searchInput,#loginBox input,.shop-service-page input:not([type=hidden]),.shop-service-page select,#tacoOrderBox select,#tacoOrderBox textarea,#pickupOrderBox input,#pickupOrderBox select,#pickupOrderBox textarea,#orderBox select{font-size:16px!important;max-width:100%;min-width:0}
+button,a,[onclick],input,select,textarea{touch-action:manipulation}
+#appScreen .hero-promo-slider,#appScreen .hero-promo-card{min-width:0;max-width:100%!important}
+#appScreen .hero-promo-slider .hero-promo-image-wrap{min-width:0;overflow:visible!important}
+#appScreen .hero-promo-slider .hero-promo-image-wrap img{display:block;max-width:100%!important;height:auto!important;object-fit:contain!important}
+@media(max-width:600px){#appScreen #products,#promoPage #products{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:20px 12px!important}#appScreen .product .product-img-wrap,#promoPage .product .product-img-wrap{height:auto!important}#appScreen{padding-left:max(14px,env(safe-area-inset-left))!important;padding-right:max(14px,env(safe-area-inset-right))!important}}
+
+/* White cards, neutral edges, and black product actions. */
+#appScreen .product,#promoPage .product{background:#fff!important;border:1px solid #e9e9e9!important;border-radius:16px!important;padding:10px!important;box-shadow:0 2px 8px rgba(0,0,0,.025)!important}
+#appScreen .product .product-img-wrap,#promoPage .product .product-img-wrap{background:#fff!important;border-radius:10px!important}
+#appScreen .product button:not(.heart-btn),#promoPage .product button:not(.heart-btn),.media-card .add-btn{background:#111!important;color:#fff!important;border:1px solid #111!important;box-shadow:none!important}
+#appScreen .header,.shop-bottom-nav,.service-page-header,#profileOverlay .profile-top,.profile-services-grid .panel-item,.shop-service-page .profile-card{border-color:#e9e9e9!important}
+#appScreen .store-navigation-wrapper::before,.subcategory-title{border-left:0!important;padding-left:0!important}
+#appScreen .categories .cat-btn img{background:#fff!important;border-color:#e9e9e9!important}
+#appScreen .categories .cat-btn.active{background:#fafafa!important;border-color:#dedede!important}
+
+/* Neutral search and delivery controls. */
+#appScreen .toggle-box{background:#f1f2f3!important;border:1px solid #e3e5e7!important;box-shadow:none!important}
+#appScreen .toggle-btn{background:transparent!important;color:#60666d!important}
+#appScreen .toggle-btn.active{background:#202124!important;color:#fff!important;box-shadow:0 2px 4px rgba(0,0,0,.08)!important}
+#appScreen .hero-search-box{background:#f7f8f9!important;border:1px solid #e4e6e8!important;box-shadow:none!important}
+#appScreen #searchInput{color:#202124!important}
+#appScreen #searchInput::placeholder{color:#707780!important;opacity:1}
+#appScreen .hero-search-box svg{stroke:#7a828b!important}
+#appScreen .filter-btn{background:#202124!important;color:#fff!important;border:1px solid #202124!important;box-shadow:none!important}
+#appScreen .filter-btn svg{stroke:#fff!important}
+#appScreen .hero-search-box:focus-within{border-color:#949ba3!important;box-shadow:0 0 0 3px rgba(32,33,36,.06)!important}
+
+/* Final hierarchy and navigation refinements. */
+#appScreen .header p{font-size:12px!important;color:#72777b!important}
+#appScreen .hero-promo-slider .hero-promo-card{min-height:190px!important;padding:22px 24px 34px!important}
+#appScreen .hero-promo-slider .hero-promo-title{font-size:clamp(23px,2.5vw,30px)!important;line-height:1.15!important;margin:8px 0!important}
+#appScreen .hero-promo-slider .hero-promo-image-wrap img{max-height:155px!important}
+#appScreen .hero-promo-slider .hero-promo-btn{margin-top:10px!important;padding:9px 14px!important}
+#appScreen .hero-promo-slider{margin-bottom:18px!important}
+.shop-bottom-nav button,.shop-bottom-nav button:first-child{color:#7a8085!important}
+.shop-bottom-nav button[aria-current="page"]{color:#202124!important;font-weight:700}
+.shop-bottom-nav button[aria-current="page"] svg{stroke-width:2.2}
+.shop-bottom-nav button:focus-visible{outline:2px solid #737a80!important;border-radius:10px}
+.promo-extra-content{margin-top:32px;padding-top:24px;border-top:1px solid #e9e9e9;min-width:0}
+.promo-extra-content>h2{font-size:18px;letter-spacing:-.3px;color:#26332b;margin:0 0 18px}
+.promo-extra-content .pill-container-v2,.promo-extra-content .feature-slider{max-width:100%!important}
+#appScreen .hero-promo-slider .hero-promo-image-wrap{height:150px!important;aspect-ratio:auto!important;max-width:230px!important}
+#appScreen .hero-toggle-row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;width:100%}
+#appScreen .hero-live-promos{margin-left:auto;flex-shrink:0;min-height:38px;padding:9px 14px;border:1px solid #202124;border-radius:11px;background:#202124;color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap}
+#appScreen .hero-live-promos:hover{background:#383a3d}
+#appScreen .hero-live-promos:focus-visible{outline:2px solid #737a80!important;outline-offset:3px}
+
+/* Live Promos: a dedicated editorial storefront. */
+body #promoPage.shop-active-page{background:#fff!important;padding:28px max(18px,calc((100vw - 1000px)/2)) 70px!important}
+#promoPage .service-page-header{position:relative;border:0!important;margin-bottom:22px;padding-bottom:0}
+#promoPage .service-page-header h1{font-size:30px;letter-spacing:-1.2px;margin:16px 0 4px}
+#promoPage .service-page-header p{font-size:13px;color:#7a807b}
+#promoPage .shop-page-back{border:0;background:#f5f6f4;padding:10px 14px;font-size:12px;margin-bottom:8px}
+#promoPage .promo-cart-action{position:absolute;right:0;top:0;border:1px solid #dedfd9;border-radius:12px;padding:11px 16px;background:#fff;color:#26352b;font-size:12px;font-weight:600;cursor:pointer}
+#promoPage .promo-spotlight{position:relative;isolation:isolate;overflow:hidden;border-radius:24px;padding:34px 36px;background:#183b32;color:#fff;min-height:270px;margin-bottom:30px}
+#promoPage .promo-spotlight::after{content:'';position:absolute;z-index:-1;right:-50px;top:-90px;width:340px;height:340px;border:1px solid #ffffff20;border-radius:50%;box-shadow:0 0 0 50px #ffffff05,0 0 0 100px #ffffff04}
+#promoPage .promo-eyebrow{display:flex;align-items:center;gap:7px;font-size:9px;font-weight:600;letter-spacing:1.8px;line-height:1.5}
+#promoPage .promo-spotlight .promo-eyebrow{color:#d0dfb7}
+#promoPage .promo-spotlight .promo-eyebrow>span{width:6px;height:6px;border-radius:50%;background:#c4df99}
+#promoPage .promo-spotlight h2{font-size:clamp(34px,5vw,48px);font-weight:600;line-height:1.07;letter-spacing:-1.8px;margin:20px 0 14px;color:#fff;position:relative;z-index:1}
+#promoPage .promo-spotlight p{color:#cfdbd2;font-size:12px;line-height:1.7;margin:0;max-width:70%;position:relative;z-index:1}
+#promoPage .promo-spotlight-foot{margin-top:24px;color:#d0dfb7;font-size:10px}
+#promoPage .promo-art{position:absolute;right:48px;top:70px;font-size:125px;line-height:1;font-weight:600;color:#d4e7af;transform:rotate(12deg);letter-spacing:-8px}
+#promoPage .promo-collection-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:0 0 18px}
+#promoPage .promo-collection-heading .promo-eyebrow{color:#7c887c;font-size:8px}
+#promoPage .promo-collection-heading h2{font-size:21px;letter-spacing:-.7px;color:#24382c;margin:6px 0 0;font-weight:600}
+#promoPage #promoOfferCount{font-size:11px;color:#758076;white-space:nowrap;padding-bottom:3px}
+#promoPage #products{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:20px!important;padding:0!important}
+#promoPage #dealsHeader{display:none!important}
+#promoPage #products .product{position:relative;background:#fff!important;border:1px solid #e7e9e3!important;border-radius:19px!important;padding:12px!important;display:flex;flex-direction:column;gap:8px;overflow:hidden!important;box-shadow:0 3px 12px #183b3203!important}
+#promoPage #products .product>img{width:100%!important;height:190px!important;object-fit:contain!important;display:block;padding:20px 8px 8px;background:#f8f9f6!important;border-radius:12px!important;cursor:pointer}
+#promoPage #products .product-info{padding:4px 3px!important;display:flex;flex-direction:column;gap:8px;flex:1}
+#promoPage #products .product-info>strong{font-size:13px!important;line-height:1.5;color:#27372b;font-weight:600!important}
+#promoPage #products .price{font-size:16px!important;color:#203728!important;font-weight:700;line-height:1.6}
+#promoPage #products .price-was{font-size:11px!important;color:#8c938c!important;font-weight:400;margin-right:5px}
+#promoPage #products .sale-badge{position:absolute!important;top:20px!important;left:20px!important;right:auto!important;background:#dfedc8!important;color:#25452a!important;border:0!important;border-radius:7px!important;padding:6px 8px!important;font-size:9px!important;letter-spacing:.2px;font-weight:700;box-shadow:none!important;transform:none!important;z-index:2}
+#promoPage #products .product>button{margin-top:auto;width:100%;min-height:40px;border-radius:11px!important;background:#151a17!important;border:1px solid #151a17!important;color:white!important;font-size:12px!important;font-weight:600}
+#promoPage #loadingDeals{background:#f7f9f4;border:1px dashed #d9e1d2;border-radius:18px;padding:40px!important;color:#64775f;font-size:13px}
+#promoPage .promo-extra-content{margin-top:36px;padding-top:26px;border-top:1px solid #e7e9e3}
+#promoPage .promo-extra-content>h2{font-size:20px;font-weight:600;color:#24382c}
+@media(max-width:600px){body #promoPage.shop-active-page{padding-top:20px!important}#promoPage .promo-spotlight{padding:26px 22px;min-height:255px;border-radius:20px}#promoPage .promo-art{font-size:85px;right:23px;top:85px;opacity:.6}#promoPage .promo-spotlight h2{font-size:35px}#promoPage .promo-spotlight p{max-width:78%;font-size:11px}#promoPage #products{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}#promoPage #products .product{padding:9px!important;border-radius:15px!important}#promoPage #products .product>img{height:145px!important}#promoPage #products .price{font-size:14px!important}#promoPage .promo-collection-heading h2{font-size:19px}}
+.shopping-store-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid #e6e8e4;border-radius:12px;padding:13px 15px;margin:0 0 16px;font-size:12px;color:#687268}
+.shopping-store-status:empty{display:none}.shopping-store-status small{flex-basis:100%;font-size:11px;color:#6e796e}
+.store-open{color:#187644;font-weight:600}.store-closed{color:#b82c35;font-weight:600}
+.shopping-store-dot{position:absolute!important;top:5px!important;right:8px!important;width:9px!important;height:9px!important;border:2px solid white!important;border-radius:50%!important;box-shadow:0 0 0 1px #e8e8e8!important}
+.shopping-store-dot.is-open{background:#23854b!important}.shopping-store-dot.is-closed{background:#cf3c42!important}.shopping-store-dot.is-unknown{background:#939b98!important}
+.shop-bottom-nav button{position:relative}.shopping-cart-count{position:absolute;top:0;right:10px;background:#202124;color:white;border-radius:20px;min-width:17px;padding:2px 4px;font-size:9px;line-height:1.3}
+.shopping-quantity{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;background:#f6f7f4;border-radius:10px;padding:3px}
+.shopping-quantity button{width:34px!important;min-height:32px!important;padding:0!important;margin:0!important}.shopping-quantity span{font-size:13px;font-weight:600}
+.shopping-quantity[hidden],.shopping-cart-count[hidden],.product button[hidden]{display:none!important}
+.shopping-list-card{border:1px solid #e6e8e3;border-radius:16px;padding:20px;margin-bottom:16px;background:white}
+.shopping-list-card h3{font-size:16px;margin:0 0 8px}.shopping-list-card p{font-size:13px;line-height:1.6;color:#6d766e}
+.shopping-button{border:1px solid #dedfd9;border-radius:10px;padding:11px 14px;background:#202124;color:white;font-size:12px;font-weight:600;margin:8px 8px 0 0;cursor:pointer}
+.shopping-button:disabled{opacity:.5;cursor:not-allowed}.shopping-notice{font-size:11px!important;line-height:1.6;color:#6b766c}
+.shopping-address-tools{padding:18px;margin:18px 0;border:1px solid #e5e8e2;border-radius:14px}.shopping-address-tools h3{font-size:14px;margin:0 0 12px}
+.shopping-address-tools select,.shopping-address-tools input{width:100%;border:1px solid #dedfd9;background:#fafbf9;border-radius:10px;padding:11px;margin:7px 0;font-size:16px}
+.shopping-address-tools label{display:block;font-size:12px;color:#6b756b}
+#appScreen .categories .cat-btn .shopping-store-dot.is-open{background:#23854b!important}
+#appScreen .categories .cat-btn .shopping-store-dot.is-closed{background:#cf3c42!important}
+#appScreen .categories .cat-btn .shopping-store-dot.is-unknown{background:#939b98!important}
+
+/* Keep category labels aligned; status belongs on the logo, not below the text. */
+#appScreen .categories .cat-btn{position:relative!important;align-self:stretch;min-height:112px!important}
+#appScreen .categories .cat-btn>span:not(.status-dot){min-height:28px;display:flex;align-items:flex-start;justify-content:center;line-height:1.35!important;margin-top:8px!important}
+#appScreen .categories .cat-btn span.status-dot.shopping-store-dot{position:absolute!important;top:52px!important;right:12px!important;bottom:auto!important;left:auto!important;display:block!important;width:9px!important;height:9px!important;min-height:0!important;padding:0!important;margin:0!important;border:2px solid #fff!important;border-radius:50%!important;transform:none!important;box-shadow:0 0 0 1px #eceeeb!important}
+#appScreen .categories .cat-btn .shopping-store-dot.is-unknown{display:none!important}
+#shoppingStoreStatus{gap:5px;padding:13px 16px;border-color:#eceeeb;background:#fff}
+#shoppingStoreStatus strong{font-size:13px;color:#344039}
+#shoppingStoreStatus small{font-size:11px;line-height:1.6}
+@media(max-width:600px){#appScreen .hero-promo-slider .hero-promo-card{min-height:195px!important;padding:18px 16px 32px!important}#appScreen .hero-promo-slider .hero-promo-title{font-size:23px!important}#appScreen .hero-promo-slider .hero-promo-image-wrap img{max-height:135px!important}}
 </style>
 </head>
 
@@ -8772,7 +8903,7 @@ async function render() {
     .eq('category', cat)
     .single();
 
-  const isOpen = storeData ? storeData.is_open : 'yes';
+  const isOpen = ['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(cat) ? 'yes' : (storeData ? storeData.is_open : 'yes');
 
   if (isOpen === 'no') {
     box.innerHTML = `
@@ -12166,6 +12297,16 @@ function selectTip(amount, element) {
   const header=app.querySelector('.header');
   const title=document.getElementById('title');
   if(title)title.textContent='SwiftShop OW';
+  const slogan=header?.querySelector('p');
+  if(slogan)slogan.textContent='Shop local. Earn rewards. Get it delivered.';
+  const toggleRow=app.querySelector('.hero-toggle-row');
+  if(toggleRow){
+    const promosButton=document.createElement('button');
+    promosButton.type='button';promosButton.className='hero-live-promos';
+    promosButton.textContent='Live Promos';
+    promosButton.addEventListener('click',()=>window.fetchAndShowPromos());
+    toggleRow.appendChild(promosButton);
+  }
   const profile=document.querySelector('#profileOverlay .profile-card');
   if(profile){
     const heading=document.createElement('h2');heading.className='profile-page-title';heading.textContent='Your profile';
@@ -12195,8 +12336,12 @@ function selectTip(amount, element) {
   const icons=['<path d="m3 10 9-7 9 7v10H4V10m5 10v-7h6v7"/>','<circle cx="10" cy="10" r="6"/><path d="m15 15 6 6"/>','<path d="M3 4h2l2 12h12l2-9H6"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>','<circle cx="12" cy="8" r="4"/><path d="M4 21v-2a8 8 0 0 1 16 0v2"/>'];
   ['Home','Search','Cart','Profile'].forEach((label,i)=>{
     const button=document.createElement('button');button.type='button';
+    button.dataset.destination=label.toLowerCase();
+    if(i===0)button.setAttribute('aria-current','page');
     button.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true">'+icons[i]+'</svg><span>'+label+'</span>';
     button.addEventListener('click',()=>{
+      nav.querySelectorAll('button').forEach(item=>item.removeAttribute('aria-current'));
+      button.setAttribute('aria-current','page');
       if(i===0)header?.scrollIntoView({behavior:'smooth',block:'start'});
       if(i===1){const search=document.getElementById('searchInput');search?.scrollIntoView({behavior:'smooth',block:'center'});search?.focus({preventScroll:true});}
       if(i===2)openCart();
@@ -12204,11 +12349,223 @@ function selectTip(amount, element) {
     });nav.appendChild(button);
   });app.appendChild(nav);
 });</script>
+<script>document.addEventListener('DOMContentLoaded', () => {
+  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
+  const button=(text,fn)=>{const n=el('button','shopping-button',text);n.type='button';n.addEventListener('click',fn);return n;};
+  const key=type=>'swiftshop.v1.'+(localStorage.getItem('userPhone')||'guest')+'.'+type;
+  const read=type=>{try{return JSON.parse(localStorage.getItem(key(type))||'[]');}catch{return [];}};
+  const write=(type,value)=>{try{localStorage.setItem(key(type),JSON.stringify(value));return true;}catch{alert('Your browser could not save this. Please check available storage.');return false;}};
+  const productKey=p=>String(p.id ?? (p.category+'::'+p.name));
+  const money=value=>'$'+Number(value).toFixed(2)+' BZD';
+  const makePage=(id,title,subtitle)=>{
+    const page=el('section','shopping-page');page.id=id;page.style.display='none';
+    const head=el('header','service-page-header');head.append(button('← Back',()=>{page.style.display='none';openProfile();}),el('h1','',title),el('p','',subtitle));
+    const body=el('div','shopping-page-content');page.append(head,body);document.body.append(page);
+    return {page,body};
+  };
+  const favourites=makePage('favouritesPage','Favourites','Your saved finds. Stored on this browser for your account.');
+  const history=makePage('orderHistoryPage','Order history','WhatsApp requests from this browser. Sending and acceptance are not confirmed here.');
+  const addresses=makePage('savedAddressesPage','Saved addresses','Save a pinned location in your cart, then reuse it next time. Stored on this browser.');
+  const services=document.querySelector('.profile-services-grid');
+  [['♡ Favourites',()=>showFavourites()],['Order history',()=>showHistory()],['Saved addresses',()=>showAddresses()]].forEach(([text,fn])=>{const b=button(text,fn);b.classList.add('panel-item');services?.append(b);});
+  function matchProduct(card){
+    const name=card.querySelector('.product-info strong')?.textContent.trim();
+    const matches=allProducts.filter(p=>p.name===name);
+    return matches.length===1?matches[0]:matches.find(p=>p.category===cat);
+  }
+  function setFavourite(p){
+    const list=read('favourites'),id=productKey(p),found=list.some(x=>productKey(x)===id);
+    if(write('favourites',found?list.filter(x=>productKey(x)!==id):[...list,{id:p.id,name:p.name,category:p.category,image:p.image}])){enhanceCards();if(favourites.page.style.display!=='none')showFavourites();}
+  }
+  window.toggleLike=function(btn,event){event?.stopPropagation();const p=matchProduct(btn.closest('.product'));if(p)setFavourite(p);};
+  function refreshCount(){
+    const n=Object.values(cart).reduce((sum,item)=>sum+Number(item.q||0),0);
+    const cartButton=document.querySelector('.shop-bottom-nav [data-destination="cart"]');
+    if(cartButton){let badge=cartButton.querySelector('.shopping-cart-count');if(!badge){badge=el('span','shopping-cart-count');cartButton.append(badge);}badge.textContent=String(n);badge.hidden=!n;cartButton.setAttribute('aria-label',`Cart, ${n} items`);}
+  }
+  const originalAdd=window.add,originalRemove=window.remove;
+  window.add=function(...args){const result=originalAdd.apply(this,args);refreshCount();enhanceCards();return result;};
+  window.remove=function(...args){const result=originalRemove.apply(this,args);refreshCount();enhanceCards();return result;};
+  for(const name of ['updateCartBubble','doneOrder','quickAdd']){const fn=window[name];if(typeof fn==='function')window[name]=function(...args){const result=fn.apply(this,args);refreshCount();queueMicrotask(enhanceCards);return result;};}
+  function addCurrent(p,btn){
+    if(cart[p.name] && cart[p.name].cat!==p.category){alert('An item with this name from another store is already in your cart. Please order it separately.');return;}
+    const previous=cat;cat=p.category;try{window.add(p.name,Number(p.price),btn,p.was);}finally{cat=previous;}
+  }
+  function enhanceCards(){
+    const saved=new Set(read('favourites').map(productKey));
+    document.querySelectorAll('#products .product').forEach(card=>{
+      const p=matchProduct(card);if(!p)return;
+      const heart=card.querySelector('.heart-btn');if(heart){heart.classList.toggle('liked',saved.has(productKey(p)));heart.setAttribute('aria-pressed',String(saved.has(productKey(p))));heart.setAttribute('aria-label','Save '+p.name);}
+      const addButton=[...card.querySelectorAll('button[onclick]')].find(b=>(b.getAttribute('onclick')||'').startsWith('add('));
+      if(!addButton)return;
+      if(!addButton.dataset.storeBound){
+        const handler=addButton.onclick;
+        addButton.onclick=function(event){
+          if(cart[p.name] && cart[p.name].cat!==p.category){alert('An item with this name from another store is already in your cart. Please order it separately.');return;}
+          const previous=cat;cat=p.category;try{return handler?.call(this,event);}finally{cat=previous;}
+        };
+        addButton.dataset.storeBound='true';
+      }
+      // Reuse the original Add button; only attach quantity controls alongside it.
+      let controls=card.querySelector('.shopping-quantity');
+      if(!controls){controls=el('div','shopping-quantity');controls.append(button('−',()=>window.remove(p.name)),el('span','shopping-quantity-value'),button('+',()=>addButton.click()));controls.firstChild.setAttribute('aria-label','Remove one '+p.name);controls.lastChild.setAttribute('aria-label','Add one '+p.name);addButton.after(controls);}
+      const q=cart[p.name]?.cat===p.category?Number(cart[p.name].q):0;
+      controls.hidden=q===0;addButton.hidden=q>0;controls.querySelector('span').textContent=String(q);
+    });refreshCount();
+  }
+  let scheduled=false;
+  const products=document.getElementById('products');
+  if(products)new MutationObserver(records=>{
+    if(!records.some(r=>[...r.addedNodes].some(n=>n.nodeType===1 && (n.matches?.('.product')||n.querySelector?.('.product')))))return;
+    if(!scheduled){scheduled=true;queueMicrotask(()=>{scheduled=false;enhanceCards();});}
+  }).observe(products,{childList:true,subtree:true});
+  const storeNote=el('div','shopping-store-status');storeNote.id='shoppingStoreStatus';document.getElementById('subcategory-bar')?.before(storeNote);
+  let statusRequest=0;
+  const generalCategories=new Set(['snack','drink','household','hygiene','vegetables','treats']);
+  function deliveryEstimate(category){
+    const c=String(category||'').toLowerCase();
+    if(generalCategories.has(c))return 'Estimated delivery: 5–10 min · WhatsApp updates provided';
+    if(['apparel','cosmetics','electronics','pocket mobile','faye'].includes(c))return 'Delivery estimate confirmed on WhatsApp';
+    return 'Estimated delivery: 15–25 min · WhatsApp updates provided';
+  }
+  async function updateStoreDots(){
+    const paintGeneral=()=>document.querySelectorAll('#panel-general .cat-btn[data-cat]').forEach(btn=>{
+      btn.querySelectorAll('.status-dot').forEach(n=>n.remove());
+      const dot=el('span','status-dot shopping-store-dot is-open');dot.title='Always open';dot.setAttribute('aria-label','Always open');btn.append(dot);
+    });
+    paintGeneral();
+    try{
+      const {data,error}=await supabaseClient.from('stores').select('category,is_open');if(error)return;
+      document.querySelectorAll('.cat-btn').forEach(btn=>{
+        const category=(btn.getAttribute('onclick')||'').match(/setCategory\('([^']+)'/)?.[1];if(!category)return;
+        const store=(data||[]).find(s=>s.category===category);
+        const state=generalCategories.has(category.toLowerCase())?'yes':String(store?.is_open||'').toLowerCase();
+        btn.querySelectorAll('.status-dot').forEach(n=>n.remove());
+        if(state!=='yes' && state!=='no')return;
+        const dot=el('span','status-dot shopping-store-dot '+(state==='yes'?'is-open':state==='no'?'is-closed':'is-unknown'));
+        dot.title=state==='yes'?'Open':state==='no'?'Closed':'Status unconfirmed';dot.setAttribute('aria-label',dot.title);btn.append(dot);
+      });
+    }catch{}
+  }
+  window.updateCategoryStatusDots=updateStoreDots;
+  async function showStoreStatus(){
+    storeNote.replaceChildren(el('strong','',cat),el('small','',deliveryEstimate(cat)));
+    await updateStoreDots();
+  }
+  const originalRender=window.render;
+  window.render=async function(...args){showStoreStatus();const result=await originalRender.apply(this,args);enhanceCards();return result;};
+  // Read-only refresh: unlike getProducts(), this distinguishes network failure from an empty catalogue.
+  async function freshCatalogue(){
+    const [productsResult,storesResult]=await Promise.all([
+      supabaseClient.from('products').select('*').ilike('active','yes'),
+      supabaseClient.from('stores').select('category,is_open')
+    ]);
+    if(productsResult.error||storesResult.error)throw Error('Could not verify current products and store availability. Please try again.');
+    return {products:productsResult.data||[],stores:storesResult.data||[]};
+  }
+  function findCurrent(item,list){return item.id!=null?list.find(p=>String(p.id)===String(item.id)):list.find(p=>p.name===item.name && p.category===item.category);}
+  function storeOpen(p,stores){return generalCategories.has(String(p.category||'').toLowerCase()) || stores.some(s=>s.category===p.category && String(s.is_open).toLowerCase()==='yes');}
+  async function showFavourites(){
+    favourites.page.style.display='block';favourites.body.textContent='Checking your saved items…';
+    const list=read('favourites');if(!list.length){favourites.body.textContent='Tap a heart on a product to save it here.';return;}
+    let fresh;try{fresh=await freshCatalogue();}catch(e){favourites.body.replaceChildren(el('p','',e.message),button('Retry',showFavourites));return;}
+    favourites.body.replaceChildren();
+    list.forEach(item=>{
+      const p=findCurrent(item,fresh.products),row=el('article','shopping-list-card');
+      row.append(el('h3','',item.name),el('p','',item.category));
+      row.append(el('p','',p?money(p.price):'Currently unavailable'));
+      if(p){const add=button(storeOpen(p,fresh.stores)?'Add to cart':'Store closed / unconfirmed',()=>addCurrent({...p,price:Number(p.price)},add));add.disabled=!storeOpen(p,fresh.stores);row.append(add);}
+      row.append(button('Remove favourite',()=>{write('favourites',read('favourites').filter(x=>productKey(x)!==productKey(item)));enhanceCards();showFavourites();}));favourites.body.append(row);
+    });
+  }
+  const mapSection=document.getElementById('cartMapSection');
+  const addressTools=el('section','shopping-address-tools');
+  const addressLabel=el('label','','Name this location');
+  const addressName=el('input');addressName.placeholder='Home, Work…';addressName.maxLength=40;addressLabel.append(addressName);
+  const addressSelect=el('select');addressSelect.setAttribute('aria-label','Saved addresses');
+  const saveZone=el('select');saveZone.setAttribute('aria-label','Delivery area for saved location');
+  const checkoutZone=document.getElementById('deliveryZoneSelect');
+  if(checkoutZone){for(const option of checkoutZone.options)saveZone.add(option.cloneNode(true));saveZone.value=checkoutZone.value;}
+  saveZone.addEventListener('change',()=>{if(checkoutZone){checkoutZone.value=saveZone.value;setDeliveryZone(saveZone.value);}});
+  const addressNotice=el('p','shopping-notice','Addresses are saved on this browser for your account.');addressNotice.setAttribute('role','status');
+  function addressOptions(){addressSelect.replaceChildren(new Option('Choose a saved address',''));read('addresses').forEach(a=>addressSelect.add(new Option(a.label,a.id)));}
+  addressSelect.addEventListener('change',()=>{
+    const a=read('addresses').find(x=>x.id===addressSelect.value);if(!a)return;
+    window.lastCartCoords=a.coords;window.lastCartZone=a.zone;
+    const zone=document.getElementById('deliveryZoneSelect');if(zone){zone.value=a.zone;if(zone.value!==a.zone){window.lastCartZone='';addressNotice.textContent='Choose a current delivery area at checkout.';}else setDeliveryZone(zone.value);}
+    saveZone.value=a.zone;
+    const [lat,lng]=a.coords.split(',').map(Number);
+    if(typeof cartMarker!=='undefined' && cartMarker)cartMarker.setPosition({lat,lng});
+    if(typeof cartMap!=='undefined' && cartMap)cartMap.setCenter({lat,lng});
+    refreshCartTotals();addressNotice.textContent='Using '+a.label+'. You can adjust the map pin.';
+  });
+  addressTools.append(el('h3','','Saved delivery locations'),addressSelect,addressLabel,saveZone,button('Save pinned location',()=>{
+    const coords=String(window.lastCartCoords||''),pair=coords.split(',').map(Number),label=addressName.value.trim();
+    if(!label||pair.length!==2||!pair.every(Number.isFinite)||Math.abs(pair[0])>90||Math.abs(pair[1])>180){addressNotice.textContent='Enter a name and pin your location on the map first.';return;}
+    const zone=document.getElementById('deliveryZoneSelect')?.value||window.lastCartZone||'';
+    if(!zone){addressNotice.textContent='Select a delivery area above before saving.';return;}
+    const list=read('addresses'),existing=list.find(a=>a.label.toLowerCase()===label.toLowerCase());
+    const entry={id:existing?.id||String(Date.now()),label,coords,zone};
+    if(write('addresses',[...list.filter(a=>a.id!==entry.id),entry])){addressOptions();addressNotice.textContent='Saved '+label+'.';addressName.value='';}
+  }),addressNotice);mapSection?.after(addressTools);
+  function showAddresses(){addresses.page.style.display='block';addresses.body.replaceChildren();const list=read('addresses');if(!list.length)addresses.body.append(el('p','','No saved locations yet. Pin your location in the cart and choose Save pinned location.'));
+    list.forEach(a=>{const row=el('article','shopping-list-card');row.append(el('h3','',a.label),el('p','',a.zone),button('Delete',()=>{write('addresses',read('addresses').filter(x=>x.id!==a.id));addressOptions();showAddresses();}));addresses.body.append(row);});
+    addresses.body.append(button('Open cart',()=>openCart()));
+  }
+  const originalInitMap=window.initCartMap;
+  if(originalInitMap)window.initCartMap=function(...args){const r=originalInitMap.apply(this,args);if(window.lastCartCoords && cartMarker && cartMap){const [lat,lng]=window.lastCartCoords.split(',').map(Number);cartMarker.setPosition({lat,lng});cartMap.setCenter({lat,lng});}return r;};
+  const originalOpenCart=window.openCart;
+  window.openCart=function(...args){addressOptions();return originalOpenCart.apply(this,args);};
+  const originalOrder=window.order;
+  window.order=function(...args){
+    const open=window.open;
+    window.open=function(url,...rest){
+      if(typeof url==='string' && url.startsWith('https://wa.me/5016080205?text=')){
+        const items=Object.entries(cart).map(([name,item])=>{const p=allProducts.find(p=>p.name===name&&p.category===item.cat);return {id:p?.id,name,category:item.cat,quantity:item.q,price:item.p};});
+        const tip=Number(document.getElementById('selectedTipAmount')?.value||0);
+        const record={id:String(Date.now()),created:new Date().toISOString(),items,delivery:getCartDeliveryFee(),platform:PLATFORM_FEE,tip,tacos:!!localStorage.getItem('tacoOrder')};
+        write('history',[record,...read('history')].slice(0,50));
+      }
+      return open.call(window,url,...rest);
+    };
+    try{return originalOrder.apply(this,args);}finally{window.open=open;}
+  };
+  function showHistory(){
+    history.page.style.display='block';history.body.replaceChildren();const list=read('history');
+    if(!list.length){history.body.textContent='Your future WhatsApp order requests will appear here.';return;}
+    list.forEach(record=>{
+      const row=el('article','shopping-list-card');row.append(el('h3','',new Date(record.created).toLocaleString()),el('p','shopping-notice','WhatsApp request prepared · acceptance unconfirmed'));
+      record.items.forEach(item=>row.append(el('p','',item.quantity+' × '+item.name)));
+      const subtotal=record.items.reduce((s,i)=>s+i.price*i.quantity,0);row.append(el('strong','','Recorded total: '+money(subtotal+record.delivery+record.platform+record.tip)));
+      if(record.tacos)row.append(el('p','','Taco food cost was additional. Taco instructions are not included in reordering.'));
+      const result=el('p','shopping-notice');result.setAttribute('role','status');
+      const reorder=button('Add available items again',async()=>{
+        reorder.disabled=true;result.textContent='Checking current prices and availability…';
+        try{
+          const fresh=await freshCatalogue();let count=0;const skipped=[];
+          for(const item of record.items){const p=findCurrent(item,fresh.products);
+            if(!p||!storeOpen(p,fresh.stores)||!Number.isFinite(Number(p.price))){skipped.push(item.name);continue;}
+            if(cart[p.name] && cart[p.name].cat!==p.category){skipped.push(item.name);continue;}
+            const current=cart[p.name];cart[p.name]={q:(current?.q||0)+Number(item.quantity),p:Number(p.price),w:p.was?Number(p.was):null,cat:p.category};count+=Number(item.quantity);
+          }
+          total=Object.values(cart).reduce((sum,i)=>sum+i.q*i.p,0);update();updateCartBubble();renderCartPanel();enhanceCards();
+          result.textContent=count+' items added at current prices. '+(skipped.length?'Unavailable, closed or unverified: '+skipped.join(', ')+'. ':'')+'Review your cart before ordering.';
+        }catch(e){result.textContent=e.message;}finally{reorder.disabled=false;}
+      });row.append(reorder,button('Review cart',()=>openCart()),result);history.body.append(row);
+    });
+  }
+  addressOptions();enhanceCards();updateStoreDots();
+});
+</script>
 <script>// Keep existing screen functions; coordinate page focus and background scrolling.
 document.addEventListener('DOMContentLoaded', () => {
   const promo = document.createElement('section');
   promo.id = 'promoPage'; promo.style.display = 'none';
   document.body.appendChild(promo);
+  const extras=document.createElement('section');extras.className='promo-extra-content';
+  const extraHeading=document.createElement('h2');extraHeading.textContent='More from local shops';extras.appendChild(extraHeading);
+  document.querySelectorAll('#appScreen .pill-container-v2, #appScreen .feature-slider, #appScreen .logo-slider-container').forEach(node=>extras.appendChild(node));
+  if(extras.children.length>1)promo.appendChild(extras);
   const servicePages = {
     creditPurchaseScreen:['Purchase credit','Top up your phone in a few simple steps.'],
     creditConfirmScreen:['Review your top-up','Check your details before continuing.'],
@@ -12231,22 +12588,62 @@ document.addEventListener('DOMContentLoaded', () => {
     page.prepend(header);
   }
   let productAnchor=null;
+  const promoHeader=promo.querySelector('.service-page-header');
+  if(promoHeader){
+    promoHeader.querySelector('h1').textContent='Live Promos';
+    promoHeader.querySelector('p').textContent='Good finds. Better prices.';
+    const hero=document.createElement('section');hero.className='promo-spotlight';
+    hero.innerHTML='<div class="promo-eyebrow"><span></span> THE SWIFTSHOP EDIT</div><h2>A little less.<br>A lot to love.</h2><p>Explore current offers from local shops.<br>Your next favourite could be right here.</p><div class="promo-spotlight-foot"><span>Local finds, delivered.</span><span class="promo-art" aria-hidden="true">%</span></div>';
+    promoHeader.after(hero);
+    const collection=document.createElement('div');collection.className='promo-collection-heading';
+    collection.innerHTML='<div><span class="promo-eyebrow">CURATED FOR YOU</span><h2>Offers to explore</h2></div><span id="promoOfferCount" role="status">Loading offers…</span>';
+    hero.after(collection);
+    const cartButton=document.createElement('button');cartButton.type='button';cartButton.className='promo-cart-action';cartButton.textContent='View cart →';
+    cartButton.addEventListener('click',()=>openCart());promoHeader.appendChild(cartButton);
+  }
+  const promoProducts=document.getElementById('products');
+  if(promoProducts){
+    new MutationObserver(()=>{
+      if(!promo.contains(promoProducts))return;
+      const cards=promoProducts.querySelectorAll('.product');
+      const count=document.getElementById('promoOfferCount');
+      if(count)count.textContent=promoProducts.querySelector('#loadingDeals')?'Loading offers…':cards.length+' '+(cards.length===1?'offer':'offers');
+      // The original empty-state action renders the home catalogue. Use the page's exit instead.
+      const back=promoProducts.querySelector('button[onclick="render()"]');
+      if(back && !back.dataset.promoBack){back.dataset.promoBack='true';back.removeAttribute('onclick');back.addEventListener('click',()=>window.closePromoPage());}
+    }).observe(promoProducts,{childList:true,subtree:true});
+  }
   const originalPromos=window.fetchAndShowPromos;
   window.fetchAndShowPromos=function(...args){
     const products=document.getElementById('products');
-    if(products && !promo.contains(products)) {productAnchor=document.createComment('products position');products.before(productAnchor);promo.appendChild(products);}
+    if(products && !promo.contains(products)) {productAnchor=document.createComment('products position');products.before(productAnchor);promo.insertBefore(products,extras.parentNode===promo?extras:null);}
     promo.style.display='block';
     return originalPromos.apply(this,args);
   };
   function restoreProducts(){
     const products=document.getElementById('products');
-    if(productAnchor && products){productAnchor.replaceWith(products);productAnchor=null;if(typeof render==='function')render();}
+    if(productAnchor && products){
+      productAnchor.replaceWith(products);
+      productAnchor=null;
+      // The legacy promo renderer uses block layout; home needs its product grid.
+      products.style.display='grid';
+      if(typeof render==='function')render();
+    }
   }
-  window.closePromoPage=function(){promo.style.display='none';restoreProducts();openProfile();};
+  window.closePromoPage=function(){
+    promo.style.display='none';
+    restoreProducts();
+    closeProfile();
+    const nav=document.querySelector('.shop-bottom-nav');
+    nav?.querySelectorAll('button').forEach(button=>{
+      if(button.dataset.destination==='home')button.setAttribute('aria-current','page');
+      else button.removeAttribute('aria-current');
+    });
+  };
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -12288,6 +12685,17 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const el of open) if (!previous.has(el)) stack.push(el);
     previous = open;
     const top = stack[stack.length - 1];
+    const nav=document.querySelector('.shop-bottom-nav');
+    if(nav){
+      const destination=top ? (['cartPanel','orderBox'].includes(top.id)?'cart':'profile') : null;
+      const previousDestination=nav.querySelector('[aria-current]')?.dataset.destination;
+      if(destination || ['cart','profile'].includes(previousDestination)){
+        nav.querySelectorAll('button').forEach(button=>{
+          if(button.dataset.destination===(destination||'home'))button.setAttribute('aria-current','page');
+          else button.removeAttribute('aria-current');
+        });
+      }
+    }
     for (const el of pages) {
       const desired = el === top;
       if (el.classList.contains('shop-active-page') !== desired) el.classList.toggle('shop-active-page', desired);
