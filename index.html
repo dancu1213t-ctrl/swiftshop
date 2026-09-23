@@ -7129,69 +7129,7 @@ body #savedLocationPopover.shop-active-page{padding-top:18px!important;padding-b
 
   </div>
 </div>
-<script>/* Additive merchant feed. Existing checkout, maps and page navigation remain in place. */
-const merchantFeed=(()=>{
- const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
- const live=(r,now=Date.now())=>r.status==='published'&&Date.parse(r.starts_at)<=now&&(!r.ends_at||Date.parse(r.ends_at)>now);
- const imageURL=value=>/^(https?:\/\/|data:image\/(png|jpeg|jpg|webp|gif);base64,)/i.test(value||'')?value:'';
- async function campaigns(kind){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('kind',kind).eq('status','published').order('created_at',{ascending:false});if(error)throw error;return (data||[]).filter(r=>live(r));}
- const legacyPromos=window.getPromos;
- window.getPromos=async function(){
-  const results=await Promise.allSettled([legacyPromos(),campaigns('promo'),supabaseClient.from('products').select('*').ilike('active','yes')]);
-  const legacy=results[0].status==='fulfilled'?results[0].value:[];
-  if(results[1].status==='rejected'){console.warn('Merchant promo feed unavailable; showing existing promos.');return legacy;}
-  const products=results[2].status==='fulfilled'&&!results[2].value.error?results[2].value.data||[]:[];
-  const offers=results[1].value.flatMap(r=>{const p=products.find(p=>String(p.id)===r.product_id&&p.category===r.category);return p?[{id:p.id,name:p.name,title:r.title,subtitle:r.subtitle,price:Number(r.price),was:r.was?Number(r.was):null,image:r.image,category:r.category,campaignId:r.id,ends_at:r.ends_at}]:[];});
-  return [...offers,...legacy];
- };
- // Replaces only the legacy promo renderer, before the existing page coordinator wraps it.
- window.fetchAndShowPromos=async function(){
-  const box=document.getElementById('products');if(!box)return;
-  const request=String(Date.now())+Math.random();box.dataset.promoRequest=request;
-  const loading=el('p','Loading offers…');loading.id='loadingDeals';box.replaceChildren(loading);
-  try{
-   const items=await getPromos();
-   if(box.dataset.promoRequest!==request||document.getElementById('promoPage')?.style.display==='none')return;
-   box.replaceChildren();box.style.display='grid';
-   if(!items.length){box.append(el('p','No promos are active right now. Check back soon.'));return;}
-   for(const p of items){
-    if(!p.name||!Number.isFinite(p.price)||p.price<0)continue;
-    const card=el('div');card.className='product';card.dataset.merchantCategory=p.category||'';
-    if(p.was>p.price){const badge=el('span',`SAVE ${Math.round((1-p.price/p.was)*100)}%`);badge.className='sale-badge';card.append(badge);}
-    const img=el('img');img.src=imageURL(p.image);img.alt=p.name;img.loading='lazy';card.append(img);
-    const info=el('div');info.className='product-info';info.append(el('strong',p.name));
-    if(p.title&&p.title!==p.name)info.append(el('small',p.title));
-    if(p.subtitle)info.append(el('p',p.subtitle));
-    const price=el('div',`$${p.price.toFixed(2)} BZD`);price.className='price';info.append(price);card.append(info);
-    const b=el('button','Add');b.type='button';b.addEventListener('click',async()=>{
-     b.disabled=true;
-     try{
-      if(p.campaignId){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('id',p.campaignId).maybeSingle();if(error||!data||!live(data)||Number(data.price)!==p.price)throw new Error('This offer has changed or ended. Reopen Live Promos for current offers.');}
-      if(!['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(p.category)){
-       const {data,error}=await supabaseClient.from('stores').select('is_open').eq('category',p.category).maybeSingle();if(error||data?.is_open!=='yes')throw new Error('This store is closed or its availability could not be confirmed.');
-      }
-      if(cart[p.name]&&(cart[p.name].cat!==p.category||Number(cart[p.name].p)!==p.price))throw new Error('This item is already in your cart from another store or at a different price. Remove it first to use this offer.');
-      const prev=cat;cat=p.category;try{window.add(p.name,p.price,b,p.was);}finally{cat=prev;}
-     }catch(e){alert(e.message);}finally{b.disabled=false;}
-    });card.append(b);box.append(card);
-   }
-  }catch{box.replaceChildren(el('p','Offers could not load. Please try again.'));}
- };
- let track,holder,signature='',slides=[],index=0;
- function show(i){if(!slides.length)return;index=(i+slides.length)%slides.length;slides.forEach((s,j)=>s.hidden=j!==index);holder.querySelectorAll('[data-dot]').forEach((b,j)=>b.setAttribute('aria-current',String(index===j)));}
- async function refresh(){
-  try{
-   const rows=await campaigns('slide'),next=JSON.stringify(rows);if(next===signature)return;signature=next;
-   const original=document.getElementById('heroPromoSlider');if(!holder){holder=el('section');holder.id='merchantBannerSlider';holder.setAttribute('aria-label','Offers from local merchants');if(original)original.before(holder);else document.getElementById('products')?.before(holder);}
-   holder.replaceChildren();holder.hidden=!rows.length;if(original)original.hidden=!!rows.length;
-   slides=rows.map(r=>{const card=el('article');card.className='merchant-banner';const copy=el('div');copy.append(el('small',r.category),el('h2',r.title),el('p',r.subtitle));const b=el('button','Explore offers →');b.type='button';b.onclick=()=>window.fetchAndShowPromos();copy.append(b);const img=el('img');img.src=imageURL(r.image);img.alt=r.title;card.append(copy,img);holder.append(card);return card;});
-   if(rows.length>1){const controls=el('div');controls.className='merchant-banner-controls';rows.forEach((r,i)=>{const b=el('button',String(i+1));b.type='button';b.dataset.dot=i;b.setAttribute('aria-label','Show banner '+(i+1));b.onclick=()=>show(i);controls.append(b);});holder.append(controls);}show(0);
-  }catch{console.warn('Merchant banners unavailable; existing slider retained.');}
- }
- document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if(!document.hidden)refresh();},60000);window.addEventListener('focus',refresh);});
- return {live,imageURL};
-})();
-</script></body>
+</body>
 
 
 
@@ -12896,5 +12834,67 @@ document.addEventListener('DOMContentLoaded', () => {
   sync();
 });
 </script>
-</body>
+<script>/* Additive merchant feed. Existing checkout, maps and page navigation remain in place. */
+const merchantFeed=(()=>{
+ const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
+ const live=(r,now=Date.now())=>r.status==='published'&&Date.parse(r.starts_at)<=now&&(!r.ends_at||Date.parse(r.ends_at)>now);
+ const imageURL=value=>/^(https?:\/\/|data:image\/(png|jpeg|jpg|webp|gif);base64,)/i.test(value||'')?value:'';
+ async function campaigns(kind){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('kind',kind).eq('status','published').order('created_at',{ascending:false});if(error)throw error;return (data||[]).filter(r=>live(r));}
+ const legacyPromos=window.getPromos;
+ window.getPromos=async function(){
+  const results=await Promise.allSettled([legacyPromos(),campaigns('promo'),supabaseClient.from('products').select('*').ilike('active','yes')]);
+  const legacy=results[0].status==='fulfilled'?results[0].value:[];
+  if(results[1].status==='rejected'){console.warn('Merchant promo feed unavailable; showing existing promos.');return legacy;}
+  const products=results[2].status==='fulfilled'&&!results[2].value.error?results[2].value.data||[]:[];
+  const offers=results[1].value.flatMap(r=>{const p=products.find(p=>String(p.id)===r.product_id&&p.category===r.category);return p?[{id:p.id,name:p.name,title:r.title,subtitle:r.subtitle,price:Number(r.price),was:r.was?Number(r.was):null,image:r.image,category:r.category,campaignId:r.id,ends_at:r.ends_at}]:[];});
+  return [...offers,...legacy];
+ };
+ // Replaces only the legacy promo renderer, before the existing page coordinator wraps it.
+ window.fetchAndShowPromos=async function(){
+  const box=document.getElementById('products');if(!box)return;
+  const request=String(Date.now())+Math.random();box.dataset.promoRequest=request;
+  const loading=el('p','Loading offers…');loading.id='loadingDeals';box.replaceChildren(loading);
+  try{
+   const items=await getPromos();
+   if(box.dataset.promoRequest!==request||document.getElementById('promoPage')?.style.display==='none')return;
+   box.replaceChildren();box.style.display='grid';
+   if(!items.length){box.append(el('p','No promos are active right now. Check back soon.'));return;}
+   for(const p of items){
+    if(!p.name||!Number.isFinite(p.price)||p.price<0)continue;
+    const card=el('div');card.className='product';card.dataset.merchantCategory=p.category||'';
+    if(p.was>p.price){const badge=el('span',`SAVE ${Math.round((1-p.price/p.was)*100)}%`);badge.className='sale-badge';card.append(badge);}
+    const img=el('img');img.src=imageURL(p.image);img.alt=p.name;img.loading='lazy';card.append(img);
+    const info=el('div');info.className='product-info';info.append(el('strong',p.name));
+    if(p.title&&p.title!==p.name)info.append(el('small',p.title));
+    if(p.subtitle)info.append(el('p',p.subtitle));
+    const price=el('div',`$${p.price.toFixed(2)} BZD`);price.className='price';info.append(price);card.append(info);
+    const b=el('button','Add');b.type='button';b.addEventListener('click',async()=>{
+     b.disabled=true;
+     try{
+      if(p.campaignId){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('id',p.campaignId).maybeSingle();if(error||!data||!live(data)||Number(data.price)!==p.price)throw new Error('This offer has changed or ended. Reopen Live Promos for current offers.');}
+      if(!['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(p.category)){
+       const {data,error}=await supabaseClient.from('stores').select('is_open').eq('category',p.category).maybeSingle();if(error||data?.is_open!=='yes')throw new Error('This store is closed or its availability could not be confirmed.');
+      }
+      if(cart[p.name]&&(cart[p.name].cat!==p.category||Number(cart[p.name].p)!==p.price))throw new Error('This item is already in your cart from another store or at a different price. Remove it first to use this offer.');
+      const prev=cat;cat=p.category;try{window.add(p.name,p.price,b,p.was);}finally{cat=prev;}
+     }catch(e){alert(e.message);}finally{b.disabled=false;}
+    });card.append(b);box.append(card);
+   }
+  }catch{box.replaceChildren(el('p','Offers could not load. Please try again.'));}
+ };
+ let track,holder,signature='',slides=[],index=0;
+ function show(i){if(!slides.length)return;index=(i+slides.length)%slides.length;slides.forEach((s,j)=>s.hidden=j!==index);holder.querySelectorAll('[data-dot]').forEach((b,j)=>b.setAttribute('aria-current',String(index===j)));}
+ async function refresh(){
+  try{
+   const rows=await campaigns('slide'),next=JSON.stringify(rows);if(next===signature)return;signature=next;
+   const original=document.getElementById('heroPromoSlider');if(!holder){holder=el('section');holder.id='merchantBannerSlider';holder.setAttribute('aria-label','Offers from local merchants');if(original)original.before(holder);else document.getElementById('products')?.before(holder);}
+   holder.replaceChildren();holder.hidden=!rows.length;if(original)original.hidden=!!rows.length;
+   slides=rows.map(r=>{const card=el('article');card.className='merchant-banner';const copy=el('div');copy.append(el('small',r.category),el('h2',r.title),el('p',r.subtitle));const b=el('button','Explore offers →');b.type='button';b.onclick=()=>window.fetchAndShowPromos();copy.append(b);const img=el('img');img.src=imageURL(r.image);img.alt=r.title;card.append(copy,img);holder.append(card);return card;});
+   if(rows.length>1){const controls=el('div');controls.className='merchant-banner-controls';rows.forEach((r,i)=>{const b=el('button',String(i+1));b.type='button';b.dataset.dot=i;b.setAttribute('aria-label','Show banner '+(i+1));b.onclick=()=>show(i);controls.append(b);});holder.append(controls);}show(0);
+  }catch{console.warn('Merchant banners unavailable; existing slider retained.');}
+ }
+ document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if(!document.hidden)refresh();},60000);window.addEventListener('focus',refresh);});
+ return {live,imageURL};
+})();
+</script></body>
 </html>
