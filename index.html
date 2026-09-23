@@ -6105,6 +6105,31 @@ body #savedLocationPopover.shop-active-page{background:rgba(22,31,26,.22)!import
 .location-picker-card #cartMapSection{padding:0!important;border:0!important}.location-picker-card .shopping-address-tools{padding:0;border:0;margin:15px 0 0}
 .pac-container{z-index:30001!important}
 @media(max-width:600px){body #savedLocationPopover.shop-active-page{padding:70px 12px 20px!important}.location-picker-card{padding:16px;border-radius:18px}}
+#favouritesPage .favourite-item{display:grid;grid-template-columns:90px minmax(0,1fr);column-gap:16px;align-items:start}
+#favouritesPage .favourite-image{grid-column:1;grid-row:1/6;width:90px;height:100px;object-fit:contain;background:#f7f8f5;border-radius:12px;padding:7px}
+#favouritesPage .favourite-item>:not(.favourite-image){grid-column:2}
+#favouritesPage .favourite-item h3{margin:0 0 4px}#favouritesPage .favourite-item p{margin:3px 0}
+.favourite-image-missing{display:grid;place-items:center;font-size:10px;text-align:center;color:#7d847b}
+.favourite-added-message{font-size:11px;color:#247344;min-height:16px;margin-top:5px}
+.favourite-added{animation:favourite-confirm .45s ease}.favourite-added .shopping-button:first-of-type{background:#23633e}
+@keyframes favourite-confirm{0%,100%{transform:scale(1)}45%{transform:scale(1.015);border-color:#76a581}}
+body #savedLocationPopover.shop-active-page{padding-top:18px!important;padding-bottom:18px!important}
+.location-picker-card{max-height:calc(100dvh - 36px);overflow-y:auto;overscroll-behavior:contain;padding:16px}
+.location-picker-card .location-picker-top h2{font-size:16px}
+.location-picker-card #cartMapSection{margin-top:10px!important}
+.location-picker-card #cartDeliveryMap{height:clamp(130px,23dvh,180px)!important}
+.location-picker-card #geoBtn{padding:9px!important;min-height:36px!important;margin-bottom:7px!important;font-size:11px!important}
+.location-picker-card #cartMapSearch{padding:9px!important;margin-bottom:8px!important}
+.location-picker-card #cartMapSection>div:last-child:not(#cartDeliveryMap){display:none!important}
+.location-picker-card .shopping-address-tools{display:grid;grid-template-columns:1fr 1fr;gap:7px 10px;margin-top:10px}
+.location-picker-card .shopping-address-tools>h3{display:none}
+.location-picker-card .shopping-address-tools>select:first-of-type{grid-column:1/-1}
+.location-picker-card .shopping-address-tools label{font-size:10px}
+.location-picker-card .shopping-address-tools select,.location-picker-card .shopping-address-tools input{margin:0;padding:8px;min-height:38px}
+.location-picker-card .shopping-address-tools>select:last-of-type{align-self:end}
+.location-picker-card .shopping-address-tools>button{grid-column:1/-1;margin:0;min-height:40px}
+.location-picker-card .shopping-address-tools>.shopping-notice{grid-column:1/-1;margin:0;font-size:10px!important}
+@media(prefers-reduced-motion:reduce){.favourite-added{animation:none}}
 @media(max-width:600px){#appScreen .hero-promo-slider .hero-promo-card{min-height:195px!important;padding:18px 16px 32px!important}#appScreen .hero-promo-slider .hero-promo-title{font-size:23px!important}#appScreen .hero-promo-slider .hero-promo-image-wrap img{max-height:135px!important}}
 </style>
 </head>
@@ -7887,7 +7912,7 @@ function getCartDeliveryFee() {
 
     // CLOSE: 9:00 PM
     const closeHour = 23;
-    const closeMinute = 30;
+    const closeMinute = 0;
 
     let isOpen = false;
 
@@ -12488,9 +12513,26 @@ function selectTip(amount, element) {
     favourites.body.replaceChildren();
     list.forEach(item=>{
       const p=findCurrent(item,fresh.products),row=el('article','shopping-list-card');
+      row.classList.add('favourite-item');
+      const picture=el('img','favourite-image');picture.alt=item.name;picture.loading='lazy';
+      const imageUrl=p?.image||item.image;
+      const fallback=()=>{picture.replaceWith(el('div','favourite-image favourite-image-missing','Image unavailable'));};
+      picture.addEventListener('error',fallback,{once:true});row.append(picture);if(imageUrl)picture.src=imageUrl;else fallback();
       row.append(el('h3','',item.name),el('p','',item.category));
       row.append(el('p','',p?money(p.price):'Currently unavailable'));
-      if(p){const add=button(storeOpen(p,fresh.stores)?'Add to cart':'Store closed / unconfirmed',()=>addCurrent({...p,price:Number(p.price)},add));add.disabled=!storeOpen(p,fresh.stores);row.append(add);}
+      if(p){
+        let feedbackTimer;
+        const feedback=el('span','favourite-added-message');feedback.setAttribute('role','status');
+        const add=button(storeOpen(p,fresh.stores)?'Add to cart':'Store closed / unconfirmed',()=>{
+          const before=Number(cart[p.name]?.q||0);
+          addCurrent({...p,price:Number(p.price)},add);
+          if(Number(cart[p.name]?.q||0)<=before)return;
+          clearTimeout(feedbackTimer);add.textContent='Added ✓';feedback.textContent='Added to your cart';
+          row.classList.remove('favourite-added');void row.offsetWidth;row.classList.add('favourite-added');
+          feedbackTimer=setTimeout(()=>{add.textContent='Add to cart';feedback.textContent='';row.classList.remove('favourite-added');},1500);
+        });
+        add.disabled=!storeOpen(p,fresh.stores);row.append(add,feedback);
+      }
       row.append(button('Remove favourite',()=>{write('favourites',read('favourites').filter(x=>productKey(x)!==productKey(item)));enhanceCards();showFavourites();}));favourites.body.append(row);
     });
   }
@@ -12507,7 +12549,7 @@ function selectTip(amount, element) {
   const locationPopup=el('section');locationPopup.id='savedLocationPopover';locationPopup.style.display='none';locationPopup.setAttribute('role','dialog');locationPopup.setAttribute('aria-modal','true');locationPopup.setAttribute('aria-label','Choose delivery location');
   const locationCard=el('div','location-picker-card');
   const locationTop=el('div','location-picker-top');locationTop.append(el('h2','','Where should we deliver?'),button('✕',()=>closeLocationPicker()));
-  locationCard.append(locationTop,el('p','shopping-notice','Search, use your current location, or drag the pin. Save it as Home, Work, or another name.'));locationPopup.append(locationCard);document.body.append(locationPopup);
+  locationCard.append(locationTop);locationPopup.append(locationCard);document.body.append(locationPopup);
   let mapAnchor=null,toolsAnchor=null;
   function restoreLocationPicker(){
     if(mapAnchor){mapAnchor.replaceWith(mapSection);mapAnchor=null;}
