@@ -6089,6 +6089,22 @@ body #promoPage.shop-active-page{background:#fff!important;padding:28px max(18px
 #shoppingStoreStatus{gap:5px;padding:13px 16px;border-color:#eceeeb;background:#fff}
 #shoppingStoreStatus strong{font-size:13px;color:#344039}
 #shoppingStoreStatus small{font-size:11px;line-height:1.6}
+#appScreen .header{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(140px,230px);column-gap:18px!important;align-items:center!important}
+#appScreen .header #title{grid-column:1;grid-row:1}
+#appScreen .header>p{grid-column:1;grid-row:2}
+#appScreen .header .header-saved-location{grid-column:2;grid-row:1/3;display:flex;flex-direction:column;gap:4px;min-width:0;width:100%;padding:10px 12px;background:#f7f8f7;border:1px solid #e7e9e6;border-radius:12px;text-align:left}
+.header-saved-location>span{font-size:10px;font-weight:500;color:#7b827c;letter-spacing:.2px}
+#appScreen .header .header-saved-location select{width:100%;min-width:0;border:0;background:transparent;color:#26362c;font-weight:600;font-size:16px!important;padding:0 18px 0 0;box-shadow:none;cursor:pointer;text-overflow:ellipsis}
+@media(max-width:480px){#appScreen .header{grid-template-columns:minmax(0,1fr) 145px;column-gap:10px!important}#appScreen .header #title{font-size:21px!important}#appScreen .header>p{grid-column:1/3;grid-row:2;margin-top:8px!important}#appScreen .header .header-saved-location{grid-row:1;padding:8px 9px}}
+@media(max-width:340px){#appScreen .header{grid-template-columns:1fr!important}#appScreen .header .header-saved-location{grid-column:1;grid-row:3;margin-top:10px}#appScreen .header>p{grid-column:1}}
+#appScreen .header .header-saved-location{cursor:pointer;font-family:inherit}
+.header-saved-location strong{font-size:13px;color:#26362c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+body #savedLocationPopover.shop-active-page{background:rgba(22,31,26,.22)!important;padding:90px max(18px,calc((100vw - 1100px)/2)) 24px!important}
+.location-picker-card{width:min(100%,460px);margin-left:auto;background:white;border:1px solid #e6e9e4;border-radius:20px;padding:20px;box-shadow:0 20px 70px #14251924}
+.location-picker-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.location-picker-top h2{font-size:18px;letter-spacing:-.5px;margin:0}.location-picker-top button{margin:0;border:0;background:#f4f5f2;color:#323e34}
+.location-picker-card #cartMapSection{padding:0!important;border:0!important}.location-picker-card .shopping-address-tools{padding:0;border:0;margin:15px 0 0}
+.pac-container{z-index:30001!important}
+@media(max-width:600px){body #savedLocationPopover.shop-active-page{padding:70px 12px 20px!important}.location-picker-card{padding:16px;border-radius:18px}}
 @media(max-width:600px){#appScreen .hero-promo-slider .hero-promo-card{min-height:195px!important;padding:18px 16px 32px!important}#appScreen .hero-promo-slider .hero-promo-title{font-size:23px!important}#appScreen .hero-promo-slider .hero-promo-image-wrap img{max-height:135px!important}}
 </style>
 </head>
@@ -12483,12 +12499,50 @@ function selectTip(amount, element) {
   const addressLabel=el('label','','Name this location');
   const addressName=el('input');addressName.placeholder='Home, Work…';addressName.maxLength=40;addressLabel.append(addressName);
   const addressSelect=el('select');addressSelect.setAttribute('aria-label','Saved addresses');
+  const headerLocation=el('button','header-saved-location');headerLocation.type='button';headerLocation.setAttribute('aria-haspopup','dialog');headerLocation.setAttribute('aria-expanded','false');
+  const headerCaption=el('span','','Deliver to');
+  const headerSelect=el('strong','','Pin your location');
+  headerLocation.append(headerCaption,headerSelect);
+  document.querySelector('#appScreen .header')?.append(headerLocation);
+  const locationPopup=el('section');locationPopup.id='savedLocationPopover';locationPopup.style.display='none';locationPopup.setAttribute('role','dialog');locationPopup.setAttribute('aria-modal','true');locationPopup.setAttribute('aria-label','Choose delivery location');
+  const locationCard=el('div','location-picker-card');
+  const locationTop=el('div','location-picker-top');locationTop.append(el('h2','','Where should we deliver?'),button('✕',()=>closeLocationPicker()));
+  locationCard.append(locationTop,el('p','shopping-notice','Search, use your current location, or drag the pin. Save it as Home, Work, or another name.'));locationPopup.append(locationCard);document.body.append(locationPopup);
+  let mapAnchor=null,toolsAnchor=null;
+  function restoreLocationPicker(){
+    if(mapAnchor){mapAnchor.replaceWith(mapSection);mapAnchor=null;}
+    if(toolsAnchor){toolsAnchor.replaceWith(addressTools);toolsAnchor=null;}
+    headerLocation.setAttribute('aria-expanded','false');
+  }
+  function closeLocationPicker(){locationPopup.style.display='none';restoreLocationPicker();addressOptions();}
+  headerLocation.addEventListener('click',()=>{
+    addressOptions();
+    if(!mapAnchor && mapSection){mapAnchor=document.createComment('cart map');mapSection.before(mapAnchor);locationCard.append(mapSection);}
+    if(!toolsAnchor){toolsAnchor=document.createComment('cart address tools');addressTools.before(toolsAnchor);locationCard.append(addressTools);}
+    locationPopup.style.display='block';headerLocation.setAttribute('aria-expanded','true');
+    requestAnimationFrame(()=>{
+      if(!window.google?.maps){addressNotice.textContent='Google Maps is still loading. Close this card and try again shortly.';return;}
+      initCartMap();
+      if(cartMap){google.maps.event.trigger(cartMap,'resize');if(cartMarker)cartMap.setCenter(cartMarker.getPosition());}
+    });
+  });
+  locationPopup.addEventListener('click',event=>{if(event.target===locationPopup)closeLocationPicker();});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape' && locationPopup.style.display!=='none')closeLocationPicker();});
+  new MutationObserver(()=>{if(locationPopup.style.display==='none')restoreLocationPicker();}).observe(locationPopup,{attributes:true,attributeFilter:['style']});
   const saveZone=el('select');saveZone.setAttribute('aria-label','Delivery area for saved location');
   const checkoutZone=document.getElementById('deliveryZoneSelect');
   if(checkoutZone){for(const option of checkoutZone.options)saveZone.add(option.cloneNode(true));saveZone.value=checkoutZone.value;}
   saveZone.addEventListener('change',()=>{if(checkoutZone){checkoutZone.value=saveZone.value;setDeliveryZone(saveZone.value);}});
   const addressNotice=el('p','shopping-notice','Addresses are saved on this browser for your account.');addressNotice.setAttribute('role','status');
-  function addressOptions(){addressSelect.replaceChildren(new Option('Choose a saved address',''));read('addresses').forEach(a=>addressSelect.add(new Option(a.label,a.id)));}
+  function addressOptions(){
+    const list=read('addresses');
+    const selected=list.find(a=>a.coords===window.lastCartCoords && a.zone===window.lastCartZone)?.id||'';
+    addressSelect.replaceChildren(new Option('Choose a saved address',''));
+    list.forEach(a=>addressSelect.add(new Option(a.label,a.id)));
+    addressSelect.value=selected;
+    const active=list.find(a=>a.id===selected);
+    headerSelect.textContent=active?active.label+' · '+active.zone.replace('In-Town','In Town')+' ▾':'Pin your location ▾';
+  }
   addressSelect.addEventListener('change',()=>{
     const a=read('addresses').find(x=>x.id===addressSelect.value);if(!a)return;
     window.lastCartCoords=a.coords;window.lastCartZone=a.zone;
@@ -12498,6 +12552,7 @@ function selectTip(amount, element) {
     if(typeof cartMarker!=='undefined' && cartMarker)cartMarker.setPosition({lat,lng});
     if(typeof cartMap!=='undefined' && cartMap)cartMap.setCenter({lat,lng});
     refreshCartTotals();addressNotice.textContent='Using '+a.label+'. You can adjust the map pin.';
+    write('selectedAddress',a.id);addressOptions();
   });
   addressTools.append(el('h3','','Saved delivery locations'),addressSelect,addressLabel,saveZone,button('Save pinned location',()=>{
     const coords=String(window.lastCartCoords||''),pair=coords.split(',').map(Number),label=addressName.value.trim();
@@ -12506,7 +12561,7 @@ function selectTip(amount, element) {
     if(!zone){addressNotice.textContent='Select a delivery area above before saving.';return;}
     const list=read('addresses'),existing=list.find(a=>a.label.toLowerCase()===label.toLowerCase());
     const entry={id:existing?.id||String(Date.now()),label,coords,zone};
-    if(write('addresses',[...list.filter(a=>a.id!==entry.id),entry])){addressOptions();addressNotice.textContent='Saved '+label+'.';addressName.value='';}
+    if(write('addresses',[...list.filter(a=>a.id!==entry.id),entry])){write('selectedAddress',entry.id);window.lastCartZone=zone;addressOptions();addressNotice.textContent='Saved '+label+'.';addressName.value='';if(locationPopup.style.display!=='none')closeLocationPicker();}
   }),addressNotice);mapSection?.after(addressTools);
   function showAddresses(){addresses.page.style.display='block';addresses.body.replaceChildren();const list=read('addresses');if(!list.length)addresses.body.append(el('p','','No saved locations yet. Pin your location in the cart and choose Save pinned location.'));
     list.forEach(a=>{const row=el('article','shopping-list-card');row.append(el('h3','',a.label),el('p','',a.zone),button('Delete',()=>{write('addresses',read('addresses').filter(x=>x.id!==a.id));addressOptions();showAddresses();}));addresses.body.append(row);});
@@ -12515,7 +12570,9 @@ function selectTip(amount, element) {
   const originalInitMap=window.initCartMap;
   if(originalInitMap)window.initCartMap=function(...args){const r=originalInitMap.apply(this,args);if(window.lastCartCoords && cartMarker && cartMap){const [lat,lng]=window.lastCartCoords.split(',').map(Number);cartMarker.setPosition({lat,lng});cartMap.setCenter({lat,lng});}return r;};
   const originalOpenCart=window.openCart;
-  window.openCart=function(...args){addressOptions();return originalOpenCart.apply(this,args);};
+  window.openCart=function(...args){closeLocationPicker();addressOptions();return originalOpenCart.apply(this,args);};
+  const originalEnterApp=window.enterApp;
+  if(originalEnterApp)window.enterApp=function(...args){const result=originalEnterApp.apply(this,args);addressOptions();return result;};
   const originalOrder=window.order;
   window.order=function(...args){
     const open=window.open;
@@ -12554,7 +12611,9 @@ function selectTip(amount, element) {
       });row.append(reorder,button('Review cart',()=>openCart()),result);history.body.append(row);
     });
   }
-  addressOptions();enhanceCards();updateStoreDots();
+  addressOptions();
+  const remembered=read('selectedAddress');if(typeof remembered==='string' && read('addresses').some(a=>a.id===remembered)){addressSelect.value=remembered;addressSelect.dispatchEvent(new Event('change'));}
+  enhanceCards();updateStoreDots();
 });
 </script>
 <script>// Keep existing screen functions; coordinate page focus and background scrolling.
@@ -12643,7 +12702,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -12712,7 +12771,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Only the active page and its ancestor path remain interactive.
       for (let node = top; node && node !== document.body; node = node.parentElement) {
         for (const sibling of node.parentElement.children) {
-          if (sibling !== node && !['SCRIPT','STYLE','LINK'].includes(sibling.tagName)) {
+          if (sibling !== node && !sibling.classList.contains('pac-container') && !['SCRIPT','STYLE','LINK'].includes(sibling.tagName)) {
             muted.push([sibling, sibling.inert]); sibling.inert = true;
           }
         }
