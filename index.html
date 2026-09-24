@@ -6199,6 +6199,9 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 #storePublicDetails a{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px 12px;padding:12px 14px;min-height:46px;background:#f3f7f4;border:1px solid #e0e9e2;border-radius:10px;color:#2d533d}
 #storePublicDetails a strong{font-size:12px;font-weight:650}#storePublicDetails a span{font-size:12px;color:#75857b;font-weight:400}
 @media(max-width:600px){#merchantStorePage .store-hero.has-store-cover{min-height:180px;padding:22px 18px;gap:14px}#merchantStorePage .store-hero>img{width:64px;height:64px;border-width:3px}#merchantStorePage .store-hero h1{font-size:26px;letter-spacing:-.6px}#storePublicDetails{grid-template-columns:1fr;gap:18px;padding:18px;margin-top:14px}#storePublicDetails .store-contact-card{border-left:0;padding-left:0;border-top:1px solid #edf0ee;padding-top:16px}#storePublicDetails .store-contact-card:only-child{border-top:0;padding-top:0}}
+</style><style>.store-product .store-item-share{align-self:flex-start;margin:4px 0 0;padding:7px 9px;border:1px solid #e4e7e5;border-radius:8px;background:#fff;color:#52615a;font-size:11px;font-weight:600;min-height:32px;line-height:1.2}
+.store-product .store-item-share:hover{background:#f3f7f4;color:#202624}
+.store-product.store-shared-target{outline:2px solid #37785a;outline-offset:3px;box-shadow:0 4px 20px #37785a18;scroll-margin:24px}
 </style></head>
 
 <body>
@@ -13033,7 +13036,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   c.append(el('h3',p.name));if(p.was>p.price)c.append(el('del','$'+Number(p.was).toFixed(2)));
   c.append(el('strong','$'+Number(p.price).toFixed(2)+' BZD','store-price'));
   const add=btn(state==='yes'?'Add':'Unavailable',()=>addItem(p,add),'store-add');add.disabled=state!=='yes';c.append(add);
-  const qty=el('small',undefined,'store-item-quantity');qty.dataset.name=p.name;qty.dataset.category=p.category;qty.dataset.price=p.price;c.append(qty);return c;
+  const qty=el('small',undefined,'store-item-quantity');qty.dataset.name=p.name;qty.dataset.category=p.category;qty.dataset.price=p.price;c.append(qty);window.attachStoreItemShare(c,p);return c;
  }
  function drawProducts(){grid.replaceChildren();const list=items.filter(p=>(filter==='All'||(p.subcategory||'Items')===filter)&&p.name.toLowerCase().includes(query));if(!list.length)grid.append(el('p',items.length?'No matching items.':'No items are available yet.'));for(const p of list)grid.append(card(p));updateCounts();}
  function drawOffers(){offerBox.replaceChildren();if(!offers.length)return;offerBox.append(el('h2','Offers from this store'));const row=el('div',undefined,'store-offer-row');for(const p of offers)row.append(card(p,true));offerBox.append(row);updateCounts();}
@@ -13079,6 +13082,56 @@ document.addEventListener('DOMContentLoaded',()=>{
   }catch{/* Keep the existing header if cover loading is unavailable. */}
   return await opening;
  };
+});
+</script><script>/* Product URLs contain identifiers only; prices and availability stay live. */
+window.attachStoreItemShare=function(card,product){
+ const key=String(product.campaignId||product.id||product.name);
+ const kind=product.campaignId?'offer':product.id!=null?'item':'name';
+ card.dataset.shareKey=key;card.dataset.shareKind=kind;
+ const button=document.createElement('button');button.type='button';button.className='store-item-share';
+ button.textContent='↗ Share';button.setAttribute('aria-label','Share '+product.name);
+ button.onclick=async function(event){
+  event.stopPropagation();
+  if(!/^https?:$/.test(location.protocol)){
+   window.alert('Item sharing works from your published customer app. Open the published website to share a link customers can visit.');return;
+  }
+  const url=new URL(location.href);url.hash=new URLSearchParams({store:product.category,[kind]:key}).toString();
+  const data={title:product.name,text:'See '+product.name+' on SwiftShop OW',url:url.href};
+  try{
+   if(navigator.share){await navigator.share(data);return;}
+   if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url.href);button.textContent='Copied ✓';setTimeout(()=>button.textContent='↗ Share',1800);}
+   else window.prompt('Copy this item link:',url.href);
+  }catch(error){if(error.name!=='AbortError')window.prompt('Copy this item link:',url.href);}
+ };
+ card.append(button);
+};
+document.addEventListener('DOMContentLoaded',()=>{
+ let sequence=0,last='';
+ async function openSharedItem(){
+  const params=new URLSearchParams(location.hash.slice(1)),category=params.get('store');
+  if(!category){last='';sequence++;return;}
+  const app=document.getElementById('appScreen');
+  if(app&&getComputedStyle(app).display==='none')return;
+  if(last===location.hash)return;
+  last=location.hash;const token=++sequence;
+  await window.openMerchantStore(category);
+  if(token!==sequence)return;
+  const kind=['offer','item','name'].find(k=>params.has(k));if(!kind)return;
+  const cards=[...document.querySelectorAll('#merchantStorePage .store-product')];
+  const card=cards.find(c=>c.dataset.shareKind===kind&&c.dataset.shareKey===params.get(kind));
+  if(card){
+   card.classList.add('store-shared-target');card.tabIndex=-1;
+   requestAnimationFrame(()=>{card.scrollIntoView({block:'center',behavior:'auto'});card.focus({preventScroll:true});});
+  }else{
+   const notice=document.querySelector('#merchantStorePage .store-notice');
+   if(notice&&!notice.querySelector('button'))notice.textContent+=' This shared item is no longer available. Browse the store’s current items below.';
+  }
+ }
+ window.addEventListener('hashchange',openSharedItem);
+ const app=document.getElementById('appScreen');
+ if(app)new MutationObserver(openSharedItem).observe(app,{attributes:true,attributeFilter:['style','class']});
+ // Run after all existing page and sign-in handlers are registered.
+ setTimeout(openSharedItem,0);
 });
 </script></body>
 </html>
