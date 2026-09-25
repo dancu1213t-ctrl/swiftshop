@@ -6202,6 +6202,61 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 </style><style>.store-product .store-item-share{align-self:flex-start;margin:4px 0 0;padding:7px 9px;border:1px solid #e4e7e5;border-radius:8px;background:#fff;color:#52615a;font-size:11px;font-weight:600;min-height:32px;line-height:1.2}
 .store-product .store-item-share:hover{background:#f3f7f4;color:#202624}
 .store-product.store-shared-target{outline:2px solid #37785a;outline-offset:3px;box-shadow:0 4px 20px #37785a18;scroll-margin:24px}
+</style><style>
+/* Store profile: a shared, responsive layout for every merchant. */
+#merchantStorePage .store-profile-cover{height:190px;border-radius:20px 20px 0 0;overflow:hidden;background:linear-gradient(120deg,#dfece7,#eff5f8 55%,#dbe8ed)}
+#merchantStorePage .store-profile-cover img{width:100%;height:100%;object-fit:cover;display:block}
+#merchantStorePage .store-hero{display:block;background:white;border:0;border-radius:0;padding:0 20px 20px;min-height:0}
+#merchantStorePage .store-identity{display:flex;align-items:center;gap:18px;position:relative;padding-top:18px}
+#merchantStorePage .store-avatar{position:relative;flex:0 0 94px;width:94px;height:94px;margin-top:-42px;border:5px solid white;border-radius:50%;background:#f2f6f4;box-shadow:0 2px 8px #173d2512;display:grid;place-items:center;font-size:30px}
+#merchantStorePage .store-avatar img{width:100%;height:100%;object-fit:contain;border-radius:50%;background:white}
+#merchantStorePage .store-status-dot{position:absolute;right:0;bottom:2px;width:17px;height:17px;border:3px solid white;border-radius:50%;background:#94a3b8}
+#merchantStorePage .store-status-dot[data-status=yes]{background:#16a575}#merchantStorePage .store-status-dot[data-status=no]{background:#be5360}
+#merchantStorePage .store-identity-copy{flex:1;min-width:0}
+#merchantStorePage .store-hero h1{display:flex;align-items:center;gap:8px;font-size:clamp(22px,3vw,32px);letter-spacing:-.7px;line-height:1.25;margin:0;color:#182c26}
+.store-blue-check{display:inline-flex;align-items:center;justify-content:center;flex:0 0 21px;width:21px;height:21px;background:#1689ed;color:#fff;font-size:13px;font-weight:800;line-height:1;vertical-align:middle;margin-left:5px;clip-path:polygon(50% 0,63% 8%,78% 6%,85% 20%,98% 29%,95% 45%,100% 60%,88% 71%,83% 87%,66% 89%,50% 100%,36% 91%,19% 92%,13% 76%,1% 65%,6% 49%,1% 33%,15% 23%,22% 8%,38% 9%)}
+#merchantStorePage .store-hero .store-identity-copy p{display:block;margin:4px 0;font-size:12px;color:#77837e}
+#merchantStorePage .store-identity-copy>span{font-size:11px;font-weight:600}#merchantStorePage .store-open{color:#12815c}#merchantStorePage .store-closed{color:#b54756}#merchantStorePage .store-pending{color:#77837e}
+#merchantStorePage .store-profile-share{background:white;border:1px solid #e1e7e4;border-radius:10px;padding:10px 14px;font-size:12px;min-height:44px;white-space:nowrap;color:#283f34}
+#merchantStorePage .store-details{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;padding:0;margin:0 0 14px}
+#merchantStorePage .store-benefit{display:flex;align-items:center;gap:10px;background:#f5f7f6;border-radius:12px;padding:15px 12px;min-width:0}
+#merchantStorePage .store-benefit-icon{font-size:24px;color:#168969}#merchantStorePage .store-benefit:nth-child(2) .store-benefit-icon{color:#247fe2}#merchantStorePage .store-benefit:nth-child(3) .store-benefit-icon{color:#d05c75}
+#merchantStorePage .store-benefit strong{display:block;font-size:12px;font-weight:600;color:#34463e}#merchantStorePage .store-benefit small{display:block;font-size:10px;color:#728078;line-height:1.5;margin-top:3px}
+#merchantStorePage #storePublicDetails{display:flex;flex-direction:column;gap:12px;padding:0;margin:0 0 22px;border:0;background:none}
+#merchantStorePage #storePublicDetails:empty{display:none}
+#merchantStorePage .store-profile-about{border:1px solid #e3e9e6;border-radius:14px;padding:16px 18px}
+#merchantStorePage .store-profile-about summary{font-size:14px;font-weight:700;cursor:pointer;min-height:28px}
+#merchantStorePage #storePublicDetails p{font-size:12px;line-height:1.8;color:#65756c;margin:8px 0 0;white-space:pre-wrap;overflow-wrap:anywhere}
+#merchantStorePage .store-profile-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));border:1px solid #e3e9e6;border-radius:14px;padding:16px;gap:16px}
+#merchantStorePage .store-profile-facts small{text-transform:uppercase;font-size:9px;letter-spacing:.1em;color:#7d8a83;font-weight:700}
+#merchantStorePage #storePublicDetails .store-profile-call{display:flex;align-self:flex-start;gap:28px;min-height:46px;align-items:center;padding:12px 18px;border:0;border-radius:11px;background:#07865c;color:white;text-decoration:none}
+#merchantStorePage #storePublicDetails .store-profile-call span{color:#e1f4eb;border-left:1px solid #ffffff30;padding-left:20px;font-size:12px}
+.store-directory-card strong .store-blue-check{width:15px;height:15px;flex-basis:15px;font-size:10px}
+#merchantStorePage summary:focus-visible,#merchantStorePage a:focus-visible{outline:3px solid #80b9ef;outline-offset:4px}
+@media(max-width:600px){
+ #merchantStorePage .store-profile-cover{height:140px;border-radius:15px 15px 0 0}
+ #merchantStorePage .store-hero{padding:0 2px 18px}
+ #merchantStorePage .store-identity{gap:11px;flex-wrap:wrap;padding-top:13px}
+ #merchantStorePage .store-avatar{flex-basis:72px;width:72px;height:72px;margin-top:-28px;border-width:4px}
+ #merchantStorePage .store-hero h1{font-size:22px;gap:3px}
+ #merchantStorePage .store-profile-share{padding:9px 11px}
+ #merchantStorePage .store-details{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #merchantStorePage .store-benefit{padding:12px;gap:10px}
+ #merchantStorePage .store-profile-about{padding:14px}
+}
+@media(max-width:360px){#merchantStorePage .store-profile-share{margin-left:auto}#merchantStorePage .store-identity-copy{flex-basis:calc(100% - 90px)}}
+</style><style>
+/* Compact connected-dot share controls; generous transparent tap area. */
+#merchantStorePage .store-profile-share,.store-product .store-item-share{display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;margin-top:0;border:0;border-radius:50%;background:transparent;color:#52615a;box-shadow:none;line-height:1;cursor:pointer}
+#merchantStorePage .store-profile-share:hover,.store-product .store-item-share:hover{background:#f0f5f2;color:#203b2e}
+#merchantStorePage .store-profile-share svg,.store-product .store-item-share svg{display:block;width:18px;height:18px;pointer-events:none}
+.store-product .store-item-share{align-self:flex-end;margin-bottom:-5px;margin-right:-5px}
+</style><style>
+/* One always-visible card for the description and practical details. */
+#merchantStorePage .store-profile-about h2{margin:0;font-size:14px;line-height:1.5;font-weight:700;color:#263d30;letter-spacing:0}
+#merchantStorePage .store-profile-about .store-profile-facts{border:0;border-top:1px solid #e8edea;border-radius:0;padding:14px 0 0;margin-top:14px;gap:14px 24px;background:transparent}
+#merchantStorePage .store-profile-about .store-profile-facts:first-child{border-top:0;padding-top:0;margin-top:0}
+#merchantStorePage #storePublicDetails .store-profile-facts p{margin-top:5px}
 </style></head>
 
 <body>
@@ -12997,10 +13052,26 @@ document.addEventListener('DOMContentLoaded',()=>{
  function estimate(category){if(general.has(category))return '5–10 min';if(['Cosmetics','Faye','Sister','Electronics','AddToCart','Pocket Mobile'].includes(category))return 'Estimate confirmed on WhatsApp';return '15–25 min';}
  function describe(category){return meta.get(category)||{name:category,logo:'',group:'local'};}
  function setStatus(){
-  const m=describe(active);hero.replaceChildren();const copy=el('div');copy.append(el('small','LOCAL STOREFRONT'),el('h1',m.name),el('p','Your favourites, all in one place.'));
-  if(m.logo){const logo=el('img');logo.src=m.logo;logo.alt=m.name;hero.append(logo);}hero.append(copy);
-  details.replaceChildren(el('span',state==='yes'?'● Open':state==='no'?'● Closed':'Checking availability',state==='yes'?'store-open':state==='no'?'store-closed':''),el('span',estimate(active)),el('span','WhatsApp updates'));
+  const m=describe(active);hero.replaceChildren();
+  const identity=el('div',undefined,'store-identity');
+  const avatar=el('div',undefined,'store-avatar');
+  if(m.logo){const logo=el('img');logo.src=m.logo;logo.alt=m.name;avatar.append(logo);}else avatar.append(el('span',m.name.slice(0,1)));
+  const dot=el('span',undefined,'store-status-dot');dot.dataset.status=state;dot.title=state==='yes'?'Open':state==='no'?'Closed':'Availability unconfirmed';avatar.append(dot);
+  const copy=el('div',undefined,'store-identity-copy'),title=el('h1',m.name);
+  title.append(el('span','✓','store-blue-check'));title.lastChild.setAttribute('aria-hidden','true');
+  copy.append(title,el('p','Local storefront'));
+  copy.append(el('span',state==='yes'?'Open now':state==='no'?'Currently closed':'Checking availability',state==='yes'?'store-open':state==='no'?'store-closed':'store-pending'));
+  const share=btn('',async()=>{
+   if(!/^https?:$/.test(location.protocol)){notice.textContent='Open the published app to share this store.';return;}
+   const url=new URL(location.href);url.hash=new URLSearchParams({store:active}).toString();
+   try{if(navigator.share)await navigator.share({title:m.name,url:url.href});else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url.href);share.title='Link copied';share.setAttribute('aria-label','Store link copied');setTimeout(()=>{share.title='Share store';share.setAttribute('aria-label','Share '+m.name);},1800);}else window.prompt('Copy store link',url.href);}catch(e){if(e.name!=='AbortError')window.prompt('Copy store link',url.href);}
+  },'store-profile-share');share.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.7 10.5 6.6-4m-6.6 7 6.6 4"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="5" r="3"/><circle cx="18" cy="19" r="3"/></svg>';share.setAttribute('aria-label','Share '+m.name);share.title='Share store';identity.append(avatar,copy,share);hero.append(identity);
+  details.replaceChildren();
+  for(const [symbol,label,value] of [['↗','Delivery',estimate(active)],['▦','Browse','Products & offers'],['♡','Save','Your favourites'],['◌','Updates','Via WhatsApp']]){
+   const tile=el('div',undefined,'store-benefit'),icon=el('span',symbol,'store-benefit-icon'),text=el('div');icon.setAttribute('aria-hidden','true');text.append(el('strong',label),el('small',value));tile.append(icon,text);details.append(tile);
+  }
  }
+
  function close(){request++;storePage.style.display='none';active=null;document.querySelectorAll('.shop-bottom-nav button').forEach(n=>{if(n.dataset.destination==='home')n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});}
  window.closeMerchantStore=close;
  window.openMerchantStore=async function(category){
@@ -13056,30 +13127,35 @@ document.addEventListener('DOMContentLoaded',()=>{
  for(const name of ['add','remove','doneOrder']){const fn=window[name];if(typeof fn==='function')window[name]=function(...args){const result=fn.apply(this,args);updateCounts();return result;};}
  const directory=el('section',undefined,'store-directory');directory.id='shopStoreDirectory';directory.append(el('h2','Visit a store'),el('p','Browse menus, discover offers, and shop your local favourites.'));
  const row=el('div',undefined,'store-directory-row');directory.append(row);
- for(const [category,m] of meta){const b=btn('',()=>window.openMerchantStore(category),'store-directory-card');const img=el('img');img.src=m.logo;img.alt='';b.append(img,el('strong',m.name),el('small','Visit store →'));row.append(b);}
+ for(const [category,m] of meta){const b=btn('',()=>window.openMerchantStore(category),'store-directory-card');const img=el('img');img.src=m.logo;img.alt='';const name=el('strong',m.name);const check=el('span','✓','store-blue-check');check.setAttribute('aria-hidden','true');name.append(check);b.append(img,name,el('small','Visit store →'));row.append(b);}
  document.querySelector('.store-navigation-wrapper')?.before(directory);
 });
 </script><script>document.addEventListener('DOMContentLoaded',()=>{
+function storeHoursLabel(data){
+ const valid=value=>typeof value==='string'&&/^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?$/.test(value);
+ if(!valid(data.opens_at)||!valid(data.closes_at))return '';
+ const format=value=>{const [h,m]=value.split(':').map(Number);return (h%12||12)+':'+String(m).padStart(2,'0')+' '+(h>=12?'PM':'AM');};
+ const overnight=data.closes_at.slice(0,5)<data.opens_at.slice(0,5);
+ return format(data.opens_at)+' – '+format(data.closes_at)+(overnight?' (closes next day)':'');
+}
  const original=window.openMerchantStore;let request=0;
+ const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
  window.openMerchantStore=async function(category){
   const token=++request,hero=document.querySelector('#merchantStorePage .store-hero');
-  document.getElementById('storePublicDetails')?.remove();
-  hero?.classList.remove('has-store-cover');if(hero)hero.style.backgroundImage='';
-  const cover=supabaseClient.from('merchant_storefronts').select('*').eq('category',category).maybeSingle();
+  document.getElementById('storePublicDetails')?.remove();document.getElementById('storeProfileCover')?.remove();
   const opening=original.apply(this,arguments);
-  try{const r=await cover;if(token!==request||r.error||!r.data)return await opening;
-   const info=document.createElement('section');info.id='storePublicDetails';info.setAttribute('aria-label','About this store');
-   const about=document.createElement('div');about.className='store-about-copy';
-   if(r.data.description){const heading=document.createElement('h2');heading.textContent='About the store';const p=document.createElement('p');p.textContent=r.data.description;about.append(heading,p);info.append(about);}
-   const contact=document.createElement('div');contact.className='store-contact-card';
-   if(r.data.address){const label=document.createElement('span');label.className='store-contact-label';label.textContent='LOCATION';const p=document.createElement('p');p.className='store-public-address';p.textContent=r.data.address;contact.append(label,p);}
-   const phone=String(r.data.phone||'').trim(),digits=phone.replace(/\D/g,'');
-   if(/^\+?[\d\s().-]+$/.test(phone)&&digits.length>=7&&digits.length<=15){const link=document.createElement('a');link.href='tel:'+(phone.startsWith('+')?'+':'')+digits;const title=document.createElement('strong');title.textContent='Call store';const number=document.createElement('span');number.textContent=phone;link.append(title,number);contact.append(link);}
-   if(contact.children.length)info.append(contact);
-   if(info.children.length)hero.after(info);
-   const url=merchantFeed.imageURL(r.data.cover_image);if(!url)return await opening;
-   const image=new Image();image.onload=()=>{if(token!==request)return;hero.style.backgroundImage='linear-gradient(90deg,rgba(12,30,24,.78),rgba(12,30,24,.28)),url('+JSON.stringify(url)+')';hero.classList.add('has-store-cover');};image.src=url;
-  }catch{/* Keep the existing header if cover loading is unavailable. */}
+  const cover=el('div',undefined,'store-profile-cover');cover.id='storeProfileCover';cover.setAttribute('aria-hidden','true');hero.before(cover);
+  const info=el('section');info.id='storePublicDetails';info.setAttribute('aria-label','Store information');document.querySelector('#merchantStorePage .store-details').after(info);
+  try{const r=await supabaseClient.from('merchant_storefronts').select('*').eq('category',category).maybeSingle();if(token!==request)return await opening;
+   const data=r.error?{}:r.data||{};
+   const about=el('section',undefined,'store-profile-about');about.setAttribute('aria-label','About the store');if(data.description){about.append(el('h2','About the store'),el('p',data.description));}
+   const facts=el('div',undefined,'store-profile-facts');
+   for(const [label,value] of [['Location',data.address],['Hours · store local time',storeHoursLabel(data)]]){if(typeof value==='string'&&value.trim()){const item=el('div');item.append(el('small',label),el('p',value));facts.append(item);}}
+   if(facts.children.length)about.append(facts);if(about.children.length)info.append(about);
+   const phone=String(data.phone||'').trim(),digits=phone.replace(/\D/g,'');
+   if(/^\+?[\d\s().-]+$/.test(phone)&&digits.length>=7&&digits.length<=15){const link=el('a',undefined,'store-profile-call');link.href='tel:'+(phone.startsWith('+')?'+':'')+digits;link.append(el('strong','Call store'),el('span',phone));info.append(link);}
+   const url=merchantFeed.imageURL(data.cover_image);if(url){const image=new Image();image.alt='';image.onload=()=>{if(token===request)cover.replaceChildren(image);};image.src=url;}
+  }catch{/* The store remains usable when public details are unavailable. */}
   return await opening;
  };
 });
@@ -13089,7 +13165,7 @@ window.attachStoreItemShare=function(card,product){
  const kind=product.campaignId?'offer':product.id!=null?'item':'name';
  card.dataset.shareKey=key;card.dataset.shareKind=kind;
  const button=document.createElement('button');button.type='button';button.className='store-item-share';
- button.textContent='↗ Share';button.setAttribute('aria-label','Share '+product.name);
+ button.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.7 10.5 6.6-4m-6.6 7 6.6 4"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="5" r="3"/><circle cx="18" cy="19" r="3"/></svg>';button.title='Share item';button.setAttribute('aria-label','Share '+product.name);
  button.onclick=async function(event){
   event.stopPropagation();
   if(!/^https?:$/.test(location.protocol)){
@@ -13099,7 +13175,7 @@ window.attachStoreItemShare=function(card,product){
   const data={title:product.name,text:'See '+product.name+' on SwiftShop OW',url:url.href};
   try{
    if(navigator.share){await navigator.share(data);return;}
-   if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url.href);button.textContent='Copied ✓';setTimeout(()=>button.textContent='↗ Share',1800);}
+   if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url.href);button.title='Link copied';button.setAttribute('aria-label','Item link copied');setTimeout(()=>{button.title='Share item';button.setAttribute('aria-label','Share '+product.name);},1800);}
    else window.prompt('Copy this item link:',url.href);
   }catch(error){if(error.name!=='AbortError')window.prompt('Copy this item link:',url.href);}
  };
