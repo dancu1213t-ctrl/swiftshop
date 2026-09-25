@@ -6202,6 +6202,7 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 </style><style>.store-product .store-item-share{align-self:flex-start;margin:4px 0 0;padding:7px 9px;border:1px solid #e4e7e5;border-radius:8px;background:#fff;color:#52615a;font-size:11px;font-weight:600;min-height:32px;line-height:1.2}
 .store-product .store-item-share:hover{background:#f3f7f4;color:#202624}
 .store-product.store-shared-target{outline:2px solid #37785a;outline-offset:3px;box-shadow:0 4px 20px #37785a18;scroll-margin:24px}
+</style><style>.sf-actions{display:flex;gap:9px;flex-wrap:wrap;margin:0 0 18px}.sf-actions button,.sf-reviews button,.sf-followed button,.sf-banner button{border:1px solid #dce4df;background:white;color:#20392c;padding:10px 14px;border-radius:10px;font:inherit;font-size:13px;cursor:pointer}.sf-actions button[aria-pressed=true]{background:#eaf5ee;border-color:#a4cdb3}.sf-verified{display:inline-flex;vertical-align:middle;align-items:center;justify-content:center;width:22px;height:22px;background:#1686eb;color:white;border-radius:50%;font-size:15px;margin-left:8px;text-shadow:none}.sf-rating{font-weight:600;color:#48614f}.sf-gallery,.sf-reviews,.sf-featured{margin:24px 0}.sf-featured:empty{display:none}.sf-gallery h2,.sf-reviews h2,.sf-featured h2{font-size:20px;color:#263a2e;margin:0 0 14px}.sf-gallery-row{display:flex;gap:12px;overflow:auto;padding:3px 0 12px}.sf-gallery-row button{flex:0 0 170px;padding:0;background:#f5f7f5;border:0;border-radius:14px;overflow:hidden;cursor:pointer}.sf-gallery-row img{width:170px;height:130px;object-fit:cover;display:block}.sf-lightbox{max-width:90vw;max-height:90dvh;border:0;border-radius:16px;padding:16px}.sf-lightbox::backdrop{background:#14271ec9}.sf-lightbox img{display:block;max-width:80vw;max-height:72dvh;object-fit:contain;margin-top:12px}.sf-lightbox button{padding:10px;border:0;border-radius:8px}.sf-banner{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;align-items:center;border-radius:18px;padding:20px;min-height:170px}.sf-banner[hidden]{display:none}.sf-banner h2{font-size:21px;line-height:1.2;margin:8px 0;color:#20392c}.sf-banner p{font-size:13px;line-height:1.5;margin:8px 0 12px}.sf-banner small{font-size:9px;letter-spacing:.1em;color:#5d7865}.sf-banner img{width:100%;height:150px;object-fit:contain;mix-blend-mode:normal}.sf-banner-controls{display:flex;gap:8px;justify-content:center;margin:10px 0}.sf-banner-controls button{border:1px solid #dee7e0;background:white;color:#395a45;border-radius:16px;padding:5px 11px;font-size:12px}.sf-banner-controls button[aria-current=true]{background:#294d39;color:white}.sf-review{padding:18px 0;border-top:1px solid #e6ebe7}.sf-review>span{float:right;color:#9c7319;letter-spacing:2px}.sf-review p{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;color:#55645a;line-height:1.6}.sf-reply{background:#f4f7f5;border-radius:10px;padding:12px;margin-top:12px}.sf-review-form{display:grid;gap:10px;background:#f5f8f6;border:1px solid #dce5df;border-radius:14px;padding:18px;margin:16px 0}.sf-review-form input,.sf-review-form textarea,.sf-review-form select{display:block;box-sizing:border-box;width:100%;padding:10px;border:1px solid #ccd8cf;border-radius:8px;font:inherit;font-size:16px;margin:5px 0}.sf-review-form label{font-size:13px;font-weight:600}.sf-review-form small{font-size:12px;color:#66756b}.sf-followed{margin:24px 0;padding:20px;border:1px solid #e1e8e3;border-radius:16px}.sf-followed h3{margin:0 0 12px}.sf-followed p{font-size:13px;color:#66756b}.sf-followed button{margin:4px}.sf-preview-note{padding:16px;background:#fff6dd;border:1px solid #ead7a3;border-radius:12px}.sf-preview-note p{white-space:pre-wrap;font-size:14px}@media(max-width:600px){.sf-banner{padding:15px;gap:10px}.sf-banner h2{font-size:18px}.sf-banner img{height:140px}.sf-verified{width:20px;height:20px;font-size:13px}}
 </style></head>
 
 <body>
@@ -12961,7 +12962,7 @@ const merchantFeed=(()=>{
  function show(i){if(!slides.length)return;index=(i+slides.length)%slides.length;slides.forEach((s,j)=>s.hidden=j!==index);holder.querySelectorAll('[data-dot]').forEach((b,j)=>b.setAttribute('aria-current',String(index===j)));}
  async function refresh(){
   try{
-   const rows=await campaigns('slide'),next=JSON.stringify(rows);if(next===signature)return;signature=next;
+   const rows=(await campaigns('slide')).filter(r=>r.placement!=='store'),next=JSON.stringify(rows);if(next===signature)return;signature=next;
    const original=document.getElementById('heroPromoSlider');if(!holder){holder=el('section');holder.id='merchantBannerSlider';holder.setAttribute('aria-label','Offers from local merchants');if(original)original.before(holder);else document.getElementById('products')?.before(holder);}
    holder.onmouseenter=()=>{hovered=true;};holder.onmouseleave=()=>{hovered=false;restartRotation();};
    holder.replaceChildren();holder.hidden=!rows.length;if(original)original.hidden=!!rows.length;
@@ -12994,6 +12995,8 @@ document.addEventListener('DOMContentLoaded',()=>{
  const chips=el('nav',undefined,'store-chips');chips.setAttribute('aria-label','Product categories');
  const offerBox=el('section',undefined,'store-offers'),grid=el('div',undefined,'store-product-grid');
  storePage.append(toolbar,hero,details,search,chips,notice,offerBox,grid);
+const featured=el('section',undefined,'sf-featured');grid.before(featured);
+window.setStoreFeatured=function(category,ids){featured.replaceChildren();if(active!==category)return;const picks=items.filter(p=>ids.includes(String(p.id)));if(!picks.length)return;featured.append(el('h2','Featured picks'));const row=el('div',undefined,'store-offer-row');for(const p of picks.slice(0,6))row.append(card(p));featured.append(row);updateCounts();};
  function estimate(category){if(general.has(category))return '5–10 min';if(['Cosmetics','Faye','Sister','Electronics','AddToCart','Pocket Mobile'].includes(category))return 'Estimate confirmed on WhatsApp';return '15–25 min';}
  function describe(category){return meta.get(category)||{name:category,logo:'',group:'local'};}
  function setStatus(){
@@ -13004,7 +13007,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  function close(){request++;storePage.style.display='none';active=null;document.querySelectorAll('.shop-bottom-nav button').forEach(n=>{if(n.dataset.destination==='home')n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});}
  window.closeMerchantStore=close;
  window.openMerchantStore=async function(category){
-  const token=++request;active=category;items=[];offers=[];state='unknown';filter='All';query='';search.value='';
+  const token=++request;active=category;items=[];offers=[];state='unknown';filter='All';query='';search.value='';featured.replaceChildren();
   // Restore any promo-owned grid before opening another destination.
   if(document.getElementById('promoPage')?.style.display!=='none')window.closePromoPage?.();
   storePage.style.display='block';storePage.scrollTop=0;setStatus();grid.replaceChildren();chips.replaceChildren();offerBox.replaceChildren();notice.textContent='Loading this store…';
@@ -13132,6 +13135,99 @@ document.addEventListener('DOMContentLoaded',()=>{
  if(app)new MutationObserver(openSharedItem).observe(app,{attributes:true,attributeFilter:['style','class']});
  // Run after all existing page and sign-in handlers are registered.
  setTimeout(openSharedItem,0);
+});
+</script><script>/* Optional storefront enhancements. Existing order and inventory handlers remain authoritative. */
+document.addEventListener('DOMContentLoaded',()=>{
+ const page=document.getElementById('merchantStorePage');if(!page)return;
+ const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!=null)n.textContent=text;if(cls)n.className=cls;return n;};
+ const button=(text,fn)=>{const b=el('button',text);b.type='button';b.onclick=fn;return b;};
+ const safe=src=>merchantFeed.imageURL(src||'');
+ const check=r=>{if(r.error)throw r.error;return r.data;};
+ let current='',serial=0,rotation,authClient;
+ page.addEventListener('click',event=>{const heart=event.target.closest('.store-heart');if(!heart)return;const card=heart.closest('.store-product');page.querySelectorAll('.store-product').forEach(other=>{if(other.dataset.shareKey===card.dataset.shareKey&&other.dataset.shareKind===card.dataset.shareKind){const h=other.querySelector('.store-heart');if(h){h.textContent=heart.textContent;h.setAttribute('aria-pressed',heart.getAttribute('aria-pressed'));}}});});
+ const followKey=()=> 'swiftshop.v1.'+(localStorage.getItem('userPhone')||'guest')+'.stores';
+ function follows(){try{const a=JSON.parse(localStorage.getItem(followKey())||'[]');return Array.isArray(a)?a.filter(x=>typeof x.category==='string'):[];}catch{return [];}}
+ const followed=el('section',null,'sf-followed');followed.id='sfFollowedStores';
+ function drawFollowed(){followed.replaceChildren(el('h3','Your followed stores'));const list=follows();if(!list.length)followed.append(el('p','Follow a store to find it here.'));
+  list.forEach(s=>followed.append(button(s.name||s.category,()=>window.openMerchantStore(s.category))));
+ }
+ document.querySelector('#profileOverlay .profile-services')?.after(followed);drawFollowed();
+ async function shareStore(category){if(!/^https?:$/.test(location.protocol)){alert('Open the published customer website to share this store.');return;}
+  const u=new URL(location.href);u.searchParams.delete('storePreview');u.hash=new URLSearchParams({store:category}).toString();
+  try{if(navigator.share)await navigator.share({title:category+' · SwiftShop OW',url:u.href});else if(navigator.clipboard){await navigator.clipboard.writeText(u.href);return 'Link copied';}else prompt('Copy store link:',u.href);}catch(e){if(e.name!=='AbortError')prompt('Copy store link:',u.href);}
+ }
+ function actions(category){const row=el('div',null,'sf-actions'),name=page.querySelector('.store-hero h1')?.textContent||category;
+  const follow=button('',()=>{try{const list=follows(),found=list.some(s=>s.category===category);localStorage.setItem(followKey(),JSON.stringify(found?list.filter(s=>s.category!==category):[...list,{category,name}]));paint();drawFollowed();}catch{follow.textContent='Could not save';}});
+  function paint(){const yes=follows().some(s=>s.category===category);follow.textContent=yes?'Following ✓':'＋ Follow store';follow.setAttribute('aria-pressed',String(yes));}paint();
+  const share=button('↗ Share store',async()=>{const text=await shareStore(category);if(text){share.textContent=text;setTimeout(()=>share.textContent='↗ Share store',1800);}});row.append(follow,share);page.querySelector('.store-details').after(row);return row;
+ }
+ function gallery(images){const valid=images.filter(x=>typeof x==='string'&&safe(x)).slice(0,5);if(!valid.length)return;
+  const section=el('section',null,'sf-gallery');section.append(el('h2','A look inside'));const row=el('div',null,'sf-gallery-row');
+  valid.forEach((src,i)=>{const b=button('',()=>{const d=el('dialog',null,'sf-lightbox'),img=el('img');img.src=safe(src);img.alt='Store photo '+(i+1);const close=button('Close photo',()=>d.close());d.append(close,img);d.addEventListener('close',()=>d.remove());page.append(d);d.showModal();});b.setAttribute('aria-label','View store photo '+(i+1));const img=el('img');img.src=safe(src);img.alt='Store photo '+(i+1);img.loading='lazy';b.append(img);row.append(b);});section.append(row);page.append(section);
+ }
+ function banners(rows,anchor){if(!rows.length)return;const wrap=el('section',null,'sf-banners');wrap.setAttribute('aria-label','Store promotions');const cards=[];
+  const colours={mint:'#edf6ef',peach:'#fff0e2',lavender:'#f1ebfb',sky:'#eaf5fc',rose:'#fff0f4',sunset:'#fff0db',ocean:'#e7f8f8',lemon:'#fffbe2',berry:'#f9eefa',sand:'#faf3e7'};
+  rows.forEach(r=>{const card=el('article',null,'sf-banner'),copy=el('div'),img=el('img');card.style.background=colours[r.banner_theme]||colours.mint;
+   copy.append(el('small','IN THIS STORE'),el('h2',r.title),el('p',r.subtitle));copy.append(button('Browse items ↓',()=>page.querySelector('.store-product-grid').scrollIntoView({block:'start'})));img.src=safe(r.image);img.alt=r.title;card.append(copy,img);wrap.append(card);cards.push(card);});
+  let index=0,paused=false;const controls=el('div',null,'sf-banner-controls');function show(i){const live=rows.map((r,j)=>merchantFeed.live(r)?j:-1).filter(j=>j>=0);if(!live.length){wrap.hidden=true;return;}index=(i+cards.length)%cards.length;if(!live.includes(index))index=live[0];cards.forEach((c,j)=>c.hidden=j!==index);[...controls.querySelectorAll('[data-slide]')].forEach((b,j)=>b.setAttribute('aria-current',String(j===index)));}
+  if(cards.length>1){cards.forEach((c,i)=>{const b=button(String(i+1),()=>show(i));b.dataset.slide=i;b.setAttribute('aria-label','Store promotion '+(i+1));controls.append(b);});const pause=button('Pause',()=>{paused=!paused;pause.textContent=paused?'Play':'Pause';pause.setAttribute('aria-pressed',String(paused));});controls.append(pause);wrap.append(controls);
+   rotation=setInterval(()=>{if(!merchantFeed.live(rows[index]))show(index);if(document.hidden||page.style.display==='none'||paused||wrap.matches(':hover')||wrap.contains(document.activeElement)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;show(index+1);},5000);}
+  if(cards.length===1)rotation=setInterval(()=>{if(!merchantFeed.live(rows[0]))wrap.hidden=true;},5000);show(0);anchor.after(wrap);
+ }
+ function reviews(category,token){const box=el('section',null,'sf-reviews');box.append(el('h2','Customer reviews'));const summary=el('p','Loading reviews…'),list=el('div'),more=button('More reviews',()=>load(offset));more.hidden=true;
+  const write=button('Write a review',()=>reviewForm(category,box,()=>load(0)));box.append(summary,write,list,more);page.append(box);let offset=0;
+  async function load(start){try{const data=check(await supabaseClient.rpc('swiftshop_review_page',{store_category:category,page_offset:start}));if(token!==serial)return;
+    if(start===0)list.replaceChildren();summary.textContent=data.count?`${data.average} / 5 · ${data.count} customer review${data.count===1?'':'s'}`:'No reviews yet';
+    const badge=page.querySelector('.sf-rating');if(badge)badge.textContent=data.count?`★ ${data.average} (${data.count} ${data.count===1?'review':'reviews'})`:'No reviews yet';
+    for(const r of data.reviews||[]){const card=el('article',null,'sf-review');card.append(el('strong',r.display_name),el('span','★'.repeat(Math.max(1,Math.min(5,Number(r.rating))))));card.append(el('p',r.body));if(r.reply){const reply=el('div',null,'sf-reply');reply.append(el('strong','Store reply'),el('p',r.reply));card.append(reply);}list.append(card);}
+    offset=start+(data.reviews||[]).length;more.hidden=offset>=data.count;
+   }catch{if(token===serial){summary.textContent='Reviews are temporarily unavailable.';const badge=page.querySelector('.sf-rating');if(badge)badge.textContent='Reviews unavailable';write.disabled=true;more.hidden=true;}}
+  }load(0);
+ }
+ function reviewForm(category,box,reload){if(box.querySelector('.sf-review-form'))return;
+  // Separate auth storage avoids replacing the app or merchant sign-in session.
+  authClient ||= supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:'swiftshop-review-auth',detectSessionInUrl:false}});
+  const form=el('form',null,'sf-review-form'),message=el('p');message.setAttribute('role','status');box.insertBefore(form,box.children[2]);
+  const input=(label,type='text')=>{const l=el('label',label),i=el('input');i.type=type;l.append(i);form.append(l);return i;};
+  const email=input('Email for a review verification code','email');email.autocomplete='email';
+  const code=input('Verification code');code.inputMode='numeric';code.autocomplete='one-time-code';
+  const send=button('Send code',async()=>{send.disabled=true;try{if(!email.checkValidity()||!email.value.trim())throw Error('Enter your email address.');check(await authClient.auth.signInWithOtp({email:email.value.trim()}));message.textContent='Check your email for the code.';}catch(e){message.textContent=e.message;}finally{send.disabled=false;}});
+  const verify=button('Verify email',async()=>{verify.disabled=true;try{check(await authClient.auth.verifyOtp({email:email.value.trim(),token:code.value.trim(),type:'email'}));await showEditor();}catch(e){message.textContent=e.message;}finally{verify.disabled=false;}});
+  form.append(send,verify,message,button('Cancel',()=>form.remove()));form.onsubmit=e=>e.preventDefault();
+  async function showEditor(){const result=await authClient.auth.getUser();const user=result.data?.user;if(!user?.email)return;const own=check(await authClient.from('swiftshop_store_reviews').select('*').eq('category',category).eq('user_id',user.id).maybeSingle());
+   form.replaceChildren();const name=input('Public display name');name.maxLength=60;name.required=true;name.value=own?.display_name||'';
+   const label=el('label','Rating'),rating=el('select');for(let i=5;i>=1;i--){const option=el('option',i+' star'+(i===1?'':'s'));option.value=i;rating.append(option);}rating.value=own?.rating||5;label.append(rating);form.append(label);
+   const bodyLabel=el('label','Your experience'),body=el('textarea');body.maxLength=1000;body.rows=3;body.value=own?.body||'';bodyLabel.append(body);form.append(bodyLabel,el('small','One review per email account per store. These are customer reviews, not verified-purchase ratings.'));
+   const save=button(own?'Update review':'Post review',async()=>{save.disabled=true;try{if(!name.value.trim())throw Error('Enter a public display name.');const values={display_name:name.value.trim(),rating:Number(rating.value),body:body.value.trim()};
+    if(own)check(await authClient.from('swiftshop_store_reviews').update(values).eq('id',own.id));else check(await authClient.from('swiftshop_store_reviews').insert({...values,category,user_id:user.id}));form.remove();reload();
+   }catch(e){message.textContent=e.message;}finally{save.disabled=false;}});form.append(save,button('Cancel',()=>form.remove()),button('Use another email',async()=>{await authClient.auth.signOut();form.remove();reviewForm(category,box,reload);}),message);
+  }showEditor().catch(()=>{message.textContent='Sign in with your email to leave a review.';});
+ }
+ const original=window.openMerchantStore;
+ window.openMerchantStore=async function(category){const token=++serial;current=category;clearInterval(rotation);page.querySelectorAll('.sf-actions,.sf-banners,.sf-gallery,.sf-reviews,.sf-rating,.sf-verified,.sf-pickup,.sf-preview-note,.sf-lightbox').forEach(n=>n.remove());
+  const data=Promise.allSettled([supabaseClient.from('merchant_store_extras').select('*').eq('category',category).maybeSingle(),supabaseClient.from('swiftshop_verified_stores').select('category').eq('category',category).maybeSingle(),supabaseClient.from('merchant_campaigns').select('*').eq('category',category).eq('kind','slide').eq('status','published')]);
+  await original.apply(this,arguments);if(token!==serial||page.style.display==='none')return;
+  const row=actions(category),rating=el('span','Loading reviews…','sf-rating');page.querySelector('.store-details').append(rating);
+  const results=await data;if(token!==serial)return;const value=i=>results[i].status==='fulfilled'&&!results[i].value.error?results[i].value.data:null;
+  const about=page.querySelector('#storePublicDetails');if(about)page.append(about);const extras=value(0)||{};window.setStoreFeatured?.(category,extras.featured_ids||[]);gallery(extras.gallery||[]);
+  if(extras.pickup_available)page.querySelector('.store-details').append(el('span','Pickup available','sf-pickup'));
+  if(value(1)){const badge=el('span','✓','sf-verified');badge.title='Verified by SwiftShop';badge.setAttribute('aria-label','Verified by SwiftShop');page.querySelector('.store-hero h1')?.append(badge);}
+  banners((value(2)||[]).filter(r=>r.placement!=='home'&&merchantFeed.live(r)),row);reviews(category,token);
+ };
+ const close=window.closeMerchantStore;window.closeMerchantStore=function(){serial++;current='';clearInterval(rotation);page.querySelectorAll('dialog').forEach(d=>d.remove());return close.apply(this,arguments);};
+ // Same-origin, read-only draft preview. No settings are saved from this message.
+ const previewToken=new URLSearchParams(location.search).get('storePreview');
+ if(previewToken)page.addEventListener('click',event=>{if(event.target.closest('.store-add,.store-toolbar button,.store-heart,.store-item-share,.sf-actions button,.sf-reviews button,a[href^="tel:"]')){event.preventDefault();event.stopImmediatePropagation();}},true);
+ const previewHost=window.opener||(window.parent!==window?window.parent:null);
+ if(previewToken&&previewHost){window.addEventListener('message',async event=>{if(event.source!==previewHost||event.origin!==location.origin||event.data?.type!=='swiftshop-store-preview'||event.data.token!==previewToken)return;
+   const draft=event.data.draft;if(!draft||typeof draft.category!=='string')return;await window.openMerchantStore(draft.category);if(current!==draft.category)return;
+   const hero=page.querySelector('.store-hero');if(draft.cover_image&&safe(draft.cover_image)){hero.classList.add('has-store-cover');hero.style.backgroundImage='linear-gradient(90deg,#122b24aa,#122b2433),url('+JSON.stringify(safe(draft.cover_image))+')';}else{hero.classList.remove('has-store-cover');hero.style.backgroundImage='';}
+   page.querySelector('#storePublicDetails')?.remove();const note=el('p','Preview · unsaved changes','sf-preview-note');hero.before(note);
+   const info=el('section');info.id='storePublicDetails';const about=el('div',null,'store-about-copy');if(draft.description)about.append(el('h2','About the store'),el('p',draft.description));const contact=el('div',null,'store-contact-card');if(draft.address)contact.append(el('span','LOCATION','store-contact-label'),el('p',draft.address,'store-public-address'));if(draft.phone){const a=el('a');a.append(el('strong','Call store'),el('span',draft.phone));contact.append(a);}if(about.childNodes.length)info.append(about);if(contact.childNodes.length)info.append(contact);if(info.childNodes.length)page.querySelector('.store-product-grid').after(info);
+   page.querySelector('.sf-gallery')?.remove();gallery(draft.gallery||[]);window.setStoreFeatured?.(draft.category,draft.featured_ids||[]);
+   page.querySelectorAll('.sf-pickup').forEach(n=>n.remove());if(draft.pickup_available)page.querySelector('.store-details').append(el('span','Pickup available','sf-pickup'));
+   page.querySelectorAll('.store-add,.store-cart-link').forEach(b=>b.disabled=true);
+  });previewHost.postMessage({type:'swiftshop-preview-ready',token:previewToken},location.origin);}
 });
 </script></body>
 </html>
