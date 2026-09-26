@@ -9669,9 +9669,25 @@ async function render() {
       msg=lines.join('\n');
     }
     if(group){
-      const lines=['GROUP ORDER #'+orderNum,'Host: '+userName+' · '+userPhone,''];
-      for(const person of group){lines.push(person.name.toUpperCase());let subtotal=0;for(const item of person.items){subtotal+=item.quantity*item.price;lines.push(item.quantity+' × '+item.name+' ('+item.category+') — $'+(item.quantity*item.price).toFixed(2));}lines.push('Items: $'+subtotal.toFixed(2)+' BZD','');}
-      lines.push('GROUP TOTAL: $'+grandTotal.toFixed(2)+' BZD','Delivery $'+deliveryFee.toFixed(2)+' · Fee $'+platformFee.toFixed(2)+(tipAmount>0?' · Tip $'+tipAmount.toFixed(2):''),'Area: '+deliveryZone,'Map: https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(customerCoords),'Payment: '+paymentMethod+' · Host coordinates','Please label each person’s items with their name.');
+      const divider='----------------------------';
+      const lines=['GROUP ORDER #'+orderNum,divider,'HOST: '+userName,'PHONE: '+userPhone,''];
+      for(const person of group){
+        lines.push(divider,person.name.toUpperCase(),divider);
+        let subtotal=0;
+        for(const item of person.items){subtotal+=item.quantity*item.price;lines.push(item.quantity+' x '+item.name,'Store: '+item.category+' | $'+(item.quantity*item.price).toFixed(2)+' BZD');}
+        lines.push('Items subtotal: $'+subtotal.toFixed(2)+' BZD','');
+      }
+      lines.push(divider,'ORDER SUMMARY',divider,
+        'Items: $'+itemsTotal.toFixed(2)+' BZD',
+        'Delivery: $'+deliveryFee.toFixed(2)+' BZD',
+        'Platform fee: $'+platformFee.toFixed(2)+' BZD');
+      if(tipAmount>0)lines.push('Tip: $'+tipAmount.toFixed(2)+' BZD');
+      lines.push('TOTAL: $'+grandTotal.toFixed(2)+' BZD','',divider,'DELIVERY & PAYMENT',divider,
+        'Area: '+deliveryZone,
+        'Location: https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(customerCoords),
+        'Payment method: '+paymentMethod,
+        'Payment coordinated by host.','',divider,
+        'Please label each person’s items with their name.');
       msg=lines.join('\n');
     }
     const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
