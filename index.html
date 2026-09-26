@@ -11113,14 +11113,14 @@ function openImage(src) {
     if (overlay) overlay.style.display = "none";
   }
   function showAddCheck(btn) {
-  const check = document.createElement("div");
-  check.className = "add-check-exclusive";
-  check.textContent = "+1 Added";
-
+  const check = document.createElement('div');
+  check.className = 'add-check-exclusive';
+  check.textContent = '+1 Added';
   const rect = btn.getBoundingClientRect();
-  check.style.left = `${rect.left + rect.width / 2 - 30}px`;
-  check.style.top = `${rect.top + window.scrollY - 10}px`;
-
+  check.style.position = 'fixed';
+  check.style.left = Math.max(8, Math.min(window.innerWidth - 96, rect.left + rect.width / 2 - 42)) + 'px';
+  check.style.top = Math.max(48, rect.top - 10) + 'px';
+  check.style.zIndex = '2147483647';
   document.body.appendChild(check);
   setTimeout(() => check.remove(), 800);
 }
@@ -13129,12 +13129,12 @@ document.addEventListener('DOMContentLoaded',()=>{
   },'store-profile-share');share.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.7 10.5 6.6-4m-6.6 7 6.6 4"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="5" r="3"/><circle cx="18" cy="19" r="3"/></svg>';share.setAttribute('aria-label','Share '+m.name);share.title='Share store';identity.append(avatar,copy,share);hero.append(identity);
   details.replaceChildren();
   const benefitIcons={
-   'Food Prep':'<path d="M3 6h11v11H3zM14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>',
+   'Prep':'<path d="M3 6h11v11H3zM14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>',
    Browse:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
    Save:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>',
    Updates:'<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5a9 9 0 0 1-.9-4A8.5 8.5 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8v.5Z"/><path d="M8 11.5h.01M12 11.5h.01M16 11.5h.01"/>'
   };
-  for(const [symbol,label,value] of [['','Food Prep',estimate(active)],['','Browse','Shop & offers'],['','Save','Favourites'],['','Updates','WhatsApp']]){
+  for(const [symbol,label,value] of [['','Prep',estimate(active)],['','Browse','Shop & offers'],['','Save','Favourites'],['','Updates','WhatsApp']]){
    const tile=el('div',undefined,'store-benefit'),icon=el('span',symbol,'store-benefit-icon'),text=el('div');icon.setAttribute('aria-hidden','true');icon.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+benefitIcons[label]+'</svg>';text.append(el('strong',label),el('small',value));tile.append(icon,text);details.append(tile);
   }
  }
@@ -13186,8 +13186,8 @@ document.addEventListener('DOMContentLoaded',()=>{
    if(p.campaignId){const fresh=await supabaseClient.from('merchant_campaigns').select('*').eq('id',p.campaignId).maybeSingle();if(fresh.error||!fresh.data||!merchantFeed.live(fresh.data)||Number(fresh.data.price)!==Number(p.price))throw Error('This offer changed or ended. Reopen the store for current prices.');}
    else if(!offers.includes(p)){const fresh=await supabaseClient.from('products').select('*').eq('id',p.id).maybeSingle();if(fresh.error||!fresh.data||String(fresh.data.active).toLowerCase()!=='yes'||Number(fresh.data.price)!==Number(p.price))throw Error('This item changed or sold out. Reopen the store for current items.');}
    if(cart[p.name]&&(cart[p.name].cat!==category||Number(cart[p.name].p)!==Number(p.price)))throw Error('This item is already in your cart from another store or at another price. Remove it first to change it.');
-   const previous=cat;cat=category;try{window.add(p.name,Number(p.price),null,p.was);}finally{cat=previous;}
-   b.textContent='Added ✓';b.classList.add('store-added');setTimeout(()=>{b.textContent='Add';b.classList.remove('store-added');},1300);updateCounts();
+   const previous=cat;cat=category;try{window.add(p.name,Number(p.price),b,p.was);}finally{cat=previous;}
+   updateCounts();
   }catch(e){notice.textContent=e.message;}finally{b.disabled=state!=='yes';}
  }
  function updateCounts(){storePage.querySelectorAll('.store-item-quantity').forEach(n=>{const entry=cart[n.dataset.name],q=entry?.cat===n.dataset.category&&Number(entry.p)===Number(n.dataset.price)?entry.q:0;n.textContent=q?q+' in your cart':'';});const count=Object.values(cart).reduce((s,p)=>s+Number(p.q||0),0);toolbar.lastChild.textContent=count?'View cart · '+count:'View cart';}
