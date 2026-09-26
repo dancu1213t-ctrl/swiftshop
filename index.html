@@ -6314,26 +6314,6 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 #merchantStorePage .store-about-inner::after{content:"";display:block;height:16px}
 #merchantStorePage #storePublicDetails .store-about-inner>p{margin:0}
 @media(prefers-reduced-motion:reduce){#merchantStorePage .store-about-content,#merchantStorePage .store-about-chevron,#merchantStorePage .store-about-accordion{transition:none}}
-</style><style id="live-orders-style">.lo-screen{position:fixed;inset:0;z-index:100000;background:#f5f8f6;overflow:auto;padding:24px 16px 90px;color:#203b2e;font-family:inherit}
-.lo-wrap{max-width:720px;margin:auto}.lo-header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}.lo-header h1{font-size:26px;margin:0;letter-spacing:-.6px}
-.lo-card{padding:22px;background:#fff;border:1px solid #e0e8e3;border-radius:18px;margin:14px 0;box-shadow:0 4px 18px #153b2310}.lo-card h2{font-size:19px;margin:0 0 8px}.lo-card p{font-size:14px;line-height:1.6;color:#62756a}
-.lo-button{border:0;border-radius:11px;background:#215a41;color:white;padding:12px 18px;font:inherit;font-size:14px;font-weight:600;min-height:44px;cursor:pointer}.lo-button.secondary{background:#eaf1ed;color:#274434}.lo-button:disabled{opacity:.55;cursor:wait}.lo-button:focus-visible{outline:3px solid #3c9876;outline-offset:3px}
-.lo-row{display:flex;justify-content:space-between;gap:20px;padding:9px 0;border-bottom:1px solid #edf1ee;font-size:14px}.lo-row span:first-child{overflow-wrap:anywhere}.lo-total{font-weight:700;padding-top:16px}.lo-status{font-size:13px;color:#63756a;min-height:24px}.lo-status.error{color:#ac3448}
-.lo-steps{list-style:none;padding:0;margin:20px 0;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.lo-steps li{font-size:11px;line-height:1.5;color:#7b8981;border-top:4px solid #e5ebe7;padding-top:9px}.lo-steps li.done{border-color:#228359;color:#24573b}.lo-steps li.current{font-weight:700;color:#185637}
-.lo-field{display:block;font-size:13px;font-weight:600;margin:16px 0}.lo-field input{display:block;width:100%;padding:12px;margin-top:6px;border:1px solid #d7e2da;border-radius:10px;font:inherit;box-sizing:border-box}
-.lo-tracker-link{position:fixed;bottom:88px;right:16px;z-index:10001;box-shadow:0 4px 16px #173e3233}
-.lo-alert{border:0;border-radius:24px;padding:0;max-width:580px;width:calc(100% - 28px);max-height:85vh;overflow:auto;color:#203b2e;box-shadow:0 24px 90px #0c211c55}.lo-alert::backdrop{background:#0e241ccc;backdrop-filter:blur(5px)}.lo-alert-body{padding:26px}.lo-alert h2{font-size:26px;margin:6px 0}.lo-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#21805c;font-weight:700}.lo-alert-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}.lo-alert-actions .lo-button:first-child{flex:1}.lo-alert .lo-card{box-shadow:none;padding:0;border:0}
-@media(max-width:480px){.lo-card{padding:17px}.lo-header h1{font-size:22px}.lo-alert-body{padding:20px}.lo-steps{gap:5px}.lo-steps li{font-size:10px}}
-@media(prefers-reduced-motion:no-preference){.lo-alert[open]{animation:lo-arrive .2s ease-out}@keyframes lo-arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}}
-</style><style id="tracking-green-bar-motion">
-/* Animate only the completed/current green track surfaces. */
-.lo-steps li.done{position:relative}
-.lo-steps li.done::before{content:"";position:absolute;top:-4px;left:0;right:0;height:4px;pointer-events:none;background:linear-gradient(100deg,transparent 0%,transparent 35%,rgba(180,255,214,.75) 50%,transparent 65%,transparent 100%);background-size:250% 100%;animation:orderTrackShimmer 2.4s linear infinite}
-.lo-steps li.done:nth-child(2)::before{animation-delay:.18s}
-.lo-steps li.done:nth-child(3)::before{animation-delay:.36s}
-.lo-steps li.done:nth-child(4)::before{animation-delay:.54s}
-@keyframes orderTrackShimmer{from{background-position:180% 0}to{background-position:-80% 0}}
-@media(prefers-reduced-motion:reduce){.lo-steps li.done::before{animation:none;background:none}}
 </style></head>
 
 <body>
@@ -7330,63 +7310,7 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 
   </div>
 </div>
-<script id="live-orders-code">/* Store order checkout and capability-protected live tracking. */
-document.addEventListener('DOMContentLoaded',()=>{
- const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
- const button=(text,fn,secondary=false)=>{const b=el('button',text,'lo-button'+(secondary?' secondary':''));b.type='button';b.onclick=fn;return b;};
- const money=n=>'$'+Number(n).toFixed(2)+' BZD';
- const key=()=> 'swiftshop.liveorders.'+(localStorage.getItem('userPhone')||'guest');
- const read=()=>{try{return JSON.parse(localStorage.getItem(key())||'null');}catch{return null;}};
- const rpc=async(name,args)=>{const r=await supabaseClient.rpc(name,args);if(r.error){const e=Error(r.error.message);e.code=r.error.code;throw e;}return r.data;};
- let screen=null,timer=null,busy=false,generation=0;
- const resume=button('Track orders',()=>track(read()?.token));resume.classList.add('lo-tracker-link');resume.hidden=!read()?.token;document.body.append(resume);
- function shell(title){clearTimeout(timer);generation++;screen?.remove();screen=el('section',undefined,'lo-screen');screen.setAttribute('aria-label',title);const wrap=el('div',undefined,'lo-wrap'),header=el('div',undefined,'lo-header'),h=el('h1',title);h.tabIndex=-1;header.append(h,button('Close',()=>{if(busy)return;clearTimeout(timer);generation++;screen.remove();screen=null;},true));wrap.append(header);screen.append(wrap);document.body.append(screen);h.focus();return wrap;}
- function itemsCard(order){const card=el('article',undefined,'lo-card');card.append(el('h2',order.category));for(const item of order.items){const row=el('div',undefined,'lo-row');row.append(el('span',item.quantity+' × '+item.name),el('span',money(item.quantity*item.price)));card.append(row);}card.append(el('div','Items total · '+money(order.total),'lo-total'));return card;}
- async function track(token){if(!token)return;const wrap=shell('Your order'),state=el('p','Connecting to your store…','lo-status'),list=el('div');state.setAttribute('role','status');wrap.append(state,list);const version=generation;let signature='';
-  async function refresh(){if(version!==generation)return;try{const rows=await rpc('track_store_orders',{p_token:token});if(version!==generation)return;if(!rows.length)throw Error('No order found yet. Return to checkout and retry the submission.');const next=JSON.stringify(rows);if(next!==signature){signature=next;list.replaceChildren();for(const order of rows){const card=itemsCard(order),steps=el('ol',undefined,'lo-steps');const values=['pending','accepted','preparing','ready'],labels=['Sent to store','Accepted','Preparing','Ready for Pickup'],index=values.indexOf(order.status);values.forEach((v,i)=>{const step=el('li',labels[i],i<=index?'done':'');if(i===index){step.classList.add('current');step.setAttribute('aria-current','step');}steps.append(step);});card.prepend(el('p','Order #'+order.id.slice(0,8)+' · '+new Date(order.created_at).toLocaleString()));card.append(steps,el('p',order.status==='pending'?'Waiting for the store to accept your order.':order.status==='ready'?'Your order is ready for pickup.':order.status==='accepted'?'The store has accepted your order.':'The store is preparing your order.'));list.append(card);}}
-   state.textContent='Live updates · Last checked '+new Date().toLocaleTimeString();state.classList.remove('error');
-  }catch(e){if(version===generation){state.textContent='Updates interrupted: '+e.message+' Retrying…';state.classList.add('error');}}finally{if(version===generation)timer=setTimeout(refresh,document.hidden?15000:3000);}}
-  refresh();
- }
-
- function rememberedOrderCustomer(context){
-  const clean=value=>String(value??'').trim();
-  const name=clean(typeof getRewardsUserName==='function'?getRewardsUserName():'')||clean(localStorage.getItem('userName'))||clean(window.customerName)||clean(context.name);
-  const savedPhone=clean(typeof getRewardsUserPhone==='function'?getRewardsUserPhone():'')||clean(localStorage.getItem('userPhone'))||clean(window.userPhone)||clean(context.phone);
-  // Stored profile remains unchanged; normalize only the submission copy.
-  const formatted=savedPhone.normalize('NFKC').replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g,'').trim();
-  const phone=(formatted.startsWith('+')?'+':'')+formatted.replace(/[^0-9]/g,'');
-  return {name,phone};
- }
- window.sendCheckoutToStores=async function(context){
-  if(busy)return;
-  if(context.hasTacos){alert('Your separate taco request cannot be routed to a merchant account yet. No order was sent. Please remove that request before submitting store items.');return;}
-  const items=Object.entries(cart).map(([name,x])=>({name,category:x.cat,quantity:Number(x.q),price:Number(x.p)}));
-  if(!items.length){alert('Your cart is empty.');return;}
-  const customer=rememberedOrderCustomer(context);
-  if(!customer.name||!/^\+?[0-9]{7,15}$/.test(customer.phone)){alert('Your saved profile is missing a valid name or phone number. Please update it in Profile, then send again.');return;}
-  const ownerKey=key(),payload={name:customer.name,phone:customer.phone,items,details:context.details},signature=JSON.stringify(payload),previous=read();
-  if(previous?.pending&&previous.signature!==signature){alert('A previous submission is awaiting confirmation. Restore its checkout details and retry, or check Track orders before placing another order.');return;}
-  const draft=previous?.pending?previous:{token:crypto.randomUUID(),pending:true,signature,payload};
-  const send=document.querySelector('#orderBox .submit-track')||document.querySelector('.submit-track');
-  let message=document.getElementById('storeSendStatus');if(!message){message=el('p','','lo-status');message.id='storeSendStatus';message.setAttribute('role','status');send?.after(message);}
-  busy=true;if(send){send.style.pointerEvents='none';send.setAttribute('aria-disabled','true');}message.textContent='Sending your order to the store…';
-  try{
-   localStorage.setItem(ownerKey,JSON.stringify(draft));resume.hidden=false;
-   const rows=await rpc('submit_store_checkout',{p_token:draft.token,p_name:payload.name,p_phone:payload.phone,p_items:payload.items,p_details:payload.details});
-   if(!rows?.length)throw Error('No confirmation received. Please retry the same submission.');
-   localStorage.setItem(ownerKey,JSON.stringify({...draft,pending:false}));
-   for(const item of items){const entry=cart[item.name];if(entry&&entry.cat===item.category&&Number(entry.p)===item.price){entry.q-=item.quantity;if(entry.q<=0)delete cart[item.name];}}
-   total=Object.values(cart).reduce((sum,x)=>sum+x.q*x.p,0);window.updateCartBubble?.();window.renderCartPanel?.();
-   message.textContent='Order sent to your store.';document.getElementById('orderBox').style.display='none';track(draft.token);
-  }catch(e){
-   if(['P0001','PGRST202','42501'].includes(e.code)){localStorage.removeItem(ownerKey);message.textContent=e.message+' Order not submitted.';}else message.textContent=e.message+' Tap Send again to retry safely; your cart has been kept.';
-   message.classList.add('error');
-  }finally{busy=false;if(send){send.style.pointerEvents='';send.removeAttribute('aria-disabled');}}
- };
- setInterval(()=>{resume.hidden=!read()?.token;},3000);
-});
-</script></body>
+</body>
 
 
 
@@ -9601,7 +9525,8 @@ async function render() {
     msg += `CUSTOMER: ${userName}%0A`;
     msg += `PHONE: ${userPhone}`;
 
-    window.sendCheckoutToStores({name:userName,phone:userPhone,hasTacos,details:{delivery_zone:deliveryZone,customer_coordinates:customerCoords,payment_method:paymentMethod,delivery_fee:deliveryFee,platform_fee:platformFee,tip:tipAmount,checkout_total:grandTotal}});
+    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
+    window.open(waUrl, "_blank");
   }
 
   function doneOrder() {
