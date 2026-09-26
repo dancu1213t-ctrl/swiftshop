@@ -6314,6 +6314,57 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 #merchantStorePage .store-about-inner::after{content:"";display:block;height:16px}
 #merchantStorePage #storePublicDetails .store-about-inner>p{margin:0}
 @media(prefers-reduced-motion:reduce){#merchantStorePage .store-about-content,#merchantStorePage .store-about-chevron,#merchantStorePage .store-about-accordion{transition:none}}
+</style><style id="gift-checkout-style">
+#orderBox .gift-card{text-align:left;border:1px solid #dce7df;border-radius:16px;background:#fff;margin:18px 0 22px;overflow:hidden;color:#254233}
+#orderBox .gift-toggle{position:relative;display:flex;align-items:center;gap:12px;padding:17px;cursor:pointer;margin:0}
+.gift-icon{display:grid;place-items:center;flex:0 0 40px;height:40px;border-radius:12px;background:#edf5f0;color:#38775a}.gift-icon svg{width:24px;height:24px}
+.gift-toggle-copy{flex:1;min-width:0}.gift-toggle-copy strong{display:block;font-size:14px}.gift-toggle-copy small{display:block;font-size:11px;line-height:1.5;color:#7b887f;margin-top:3px}
+#giftEnabled{position:absolute;opacity:0;width:1px;height:1px}.gift-switch{width:38px;height:22px;flex-shrink:0;background:#dce4df;border-radius:22px;position:relative;transition:background .18s}.gift-switch:after{content:"";position:absolute;left:3px;top:3px;width:16px;height:16px;border-radius:50%;background:white;box-shadow:0 1px 3px #0002;transition:transform .18s}#giftEnabled:checked+.gift-switch{background:#287551}#giftEnabled:checked+.gift-switch:after{transform:translateX(16px)}#giftEnabled:focus-visible+.gift-switch{outline:3px solid #7eaf98;outline-offset:4px}
+#giftFields[hidden]{display:none!important}#giftFields{border-top:1px solid #e7eee9;padding:17px;animation:giftReveal .2s ease-out}#giftFields label{display:block;font-size:12px;font-weight:600;margin:0 0 14px}#giftFields input:not([type=checkbox]),#giftFields textarea{display:block;width:100%;box-sizing:border-box;margin-top:6px;padding:11px 12px;border:1px solid #dce5df;border-radius:10px;background:#fbfcfb;font:inherit;font-size:16px;color:#254233}#giftFields textarea{resize:vertical}#giftFields input:focus-visible,#giftFields textarea:focus-visible{outline:2px solid #77ac91;outline-offset:2px}.gift-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}.gift-optional{font-weight:400;color:#8b958f;margin-left:5px}#giftFields .gift-check{display:flex;gap:9px;align-items:flex-start;font-weight:400;line-height:1.6}.gift-check input{accent-color:#287551;width:17px;height:17px;flex-shrink:0;margin-top:2px}.gift-note,.gift-review{font-size:12px;line-height:1.6;padding:12px;border-radius:10px;background:#f0f6f2;margin-bottom:14px}.gift-review{background:#fafbf9;white-space:pre-wrap;overflow-wrap:anywhere}#giftError{font-size:12px;color:#b03c49;margin:0}#giftError:empty{display:none}@keyframes giftReveal{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}@media(max-width:480px){.gift-pair{grid-template-columns:1fr;gap:0}.gift-toggle-copy small{font-size:10px}}@media(prefers-reduced-motion:reduce){#giftFields{animation:none}.gift-switch,.gift-switch:after{transition:none}}
+</style><style id="group-checkout-style">
+#groupEnabled{position:absolute;opacity:0;width:1px;height:1px}#groupEnabled:checked+.gift-switch{background:#287551}#groupEnabled:checked+.gift-switch:after{transform:translateX(16px)}#groupEnabled:focus-visible+.gift-switch{outline:3px solid #7eaf98;outline-offset:4px}#groupFields[hidden]{display:none!important}#groupFields{padding:17px;border-top:1px solid #e7eee9}.group-intro{font-size:12px;line-height:1.7;color:#718176;margin:0 0 12px}#groupSummary{padding:9px 12px;background:#eef5f0;border-radius:8px;font-size:11px;font-weight:600;margin:0 0 14px}.group-person{border:1px solid #e0e8e3;border-radius:12px;padding:13px;margin-bottom:12px}.group-person-head{display:flex;align-items:center;gap:12px}.group-person-head label{flex:1;font-size:11px;font-weight:600}.group-person-head input{display:block;width:100%;box-sizing:border-box;font:inherit;font-size:16px;padding:9px 10px;border:1px solid #dbe5df;border-radius:8px;margin:5px 0 10px}.group-item{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #edf1ee;padding:10px 0;font-size:12px}.group-item>span{min-width:0;overflow-wrap:anywhere}.group-item small{display:block;font-size:10px;color:#819087;margin-top:3px}.group-item input{width:62px;flex-shrink:0;padding:8px;border:1px solid #dbe5df;border-radius:8px;font:inherit;font-size:16px;text-align:center}#orderBox .group-secondary{border:1px solid #d8e4dc;border-radius:9px;background:#f1f6f3;color:#2c6044;padding:10px 13px;font:inherit;font-size:12px;min-height:40px;cursor:pointer}#groupFields input:focus-visible,#groupFields button:focus-visible{outline:2px solid #77ac91;outline-offset:2px}#groupError{font-size:12px;line-height:1.5;color:#ad3d48}#groupError:empty{display:none}
+</style><style id="group-person-layout-fix">
+#orderBox .group-person{padding:16px;border-radius:14px}
+#orderBox .group-person-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:14px;margin-bottom:14px}
+#orderBox .group-person-head>label{display:block;min-width:0;width:auto;margin:0;font-size:11px;line-height:1.5;white-space:normal}
+#orderBox .group-person-head>label>input{display:block;width:100%;max-width:none;min-width:0;height:44px;margin:6px 0 0;padding:10px 12px;background:#fff;font-size:16px;font-weight:500;border-radius:9px;box-sizing:border-box}
+#orderBox .group-person-head>.group-secondary{width:auto!important;min-width:0!important;max-width:none;flex:none;margin:0 0 2px;padding:8px 11px!important;min-height:40px;font-size:11px!important;font-weight:500;background:transparent;border-color:#e3e9e5;box-shadow:none;white-space:nowrap}
+#orderBox .group-person-head>label:only-child{grid-column:1/-1}
+#orderBox .group-item{display:grid;grid-template-columns:minmax(0,1fr) 60px;align-items:center;gap:14px;margin:0;padding:13px 0;font-size:12px;line-height:1.5;font-weight:500}
+#orderBox .group-item input{width:60px!important;min-width:0;max-width:60px;height:40px;margin:0;padding:8px;background:#f7faf8;font-size:15px;font-weight:500;box-sizing:border-box}
+#orderBox #groupAddPerson{width:100%;margin:2px 0 0;padding:11px 14px;border-style:dashed;background:#f6faf7}
+@media(max-width:380px){#orderBox .group-person{padding:12px}#orderBox .group-person-head{gap:8px}#orderBox .group-person-head>.group-secondary{padding:8px!important}}
+</style><style id="home-group-entry-style">
+#appScreen .hero-toggle-row{flex-wrap:wrap;gap:10px}
+#appScreen .hero-group-order{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:0 0 auto;width:auto;min-height:42px;padding:10px 15px;border:1px solid #d9e4dd;border-radius:12px;background:#f1f6f3;color:#28533c;font:inherit;font-size:12px;font-weight:650;cursor:pointer;white-space:nowrap}
+#appScreen .hero-group-order svg{width:17px;height:17px}
+#appScreen .hero-group-order[aria-pressed=true]{background:#28533c;color:#fff;border-color:#28533c}
+#appScreen .home-group-hint{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0;padding:12px 14px;border:1px solid #dfebe2;background:#f5faf6;border-radius:12px;font-size:12px;line-height:1.5;color:#44634f}
+#appScreen .home-group-hint[hidden]{display:none!important}
+#appScreen .home-group-hint button{width:auto;flex-shrink:0;border:0;background:transparent;color:#28533c;font:inherit;font-weight:700;cursor:pointer;padding:8px}
+#appScreen .hero-group-order:focus-visible{outline:3px solid #85b69a;outline-offset:3px}
+@media(max-width:480px){#appScreen .hero-toggle-row{gap:7px}#appScreen .hero-group-order{padding:9px 11px;font-size:11px}#appScreen .home-group-hint{font-size:11px}}
+</style><style id="home-slider-brand-polish">
+#merchantBannerSlider{border:1px solid #e2e8e4;border-radius:22px;box-shadow:0 3px 16px #233a2e06;background:#fafbf9}
+#merchantBannerSlider .merchant-banner{min-height:260px;padding:24px 28px 56px;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:24px}
+#merchantBannerSlider .banner-copy{min-width:0;align-self:center}
+#merchantBannerSlider .banner-brand{display:flex;align-items:center;min-height:46px;margin-bottom:14px}
+#merchantBannerSlider .banner-brand-mark{display:flex;align-items:center;justify-content:center;width:46px;height:46px;background:#fff;border:1px solid #e9edea;border-radius:13px;box-shadow:0 2px 5px #1e3c2910;overflow:hidden}
+#merchantBannerSlider .banner-brand-mark img{display:block;position:static;width:100%;height:100%;padding:4px;object-fit:contain;transform:none;animation:none;mix-blend-mode:normal;border-radius:0}
+#merchantBannerSlider .banner-brand-fallback{width:auto;max-width:100%;padding:8px 12px;font-size:11px;font-weight:600;overflow-wrap:anywhere}
+#merchantBannerSlider .merchant-banner h2{font-size:clamp(22px,2.5vw,32px);line-height:1.15;letter-spacing:-.7px;font-weight:700;margin:0 0 10px;color:#202b26}
+#merchantBannerSlider .merchant-banner p{font-size:13px;line-height:1.65;font-weight:400;max-width:43ch;margin:0 0 18px;color:#67736b}
+#merchantBannerSlider .banner-copy>button{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:11px 16px;border-radius:11px;background:#202b26;color:white;font-size:12px;font-weight:600;letter-spacing:0}
+#merchantBannerSlider .merchant-banner>img,#merchantBannerSlider .merchant-banner.image-blended>img{right:3%;width:40%;max-width:40%;top:20px;bottom:40px;height:calc(100% - 60px);object-fit:contain;transform:none;animation:none}
+#merchantBannerSlider .merchant-banner-controls{left:24px;right:24px;bottom:13px;gap:2px;align-items:center}
+#merchantBannerSlider .merchant-banner-controls button[data-dot]{position:relative;width:26px;height:26px;min-height:26px;background:transparent;border-radius:8px}
+#merchantBannerSlider .merchant-banner-controls button[data-dot]::after{content:"";position:absolute;left:9px;top:10px;width:6px;height:6px;border-radius:6px;background:#cdd6d0;transition:width .2s,background .2s}
+#merchantBannerSlider .merchant-banner-controls button[data-dot][aria-current=true]{width:32px;background:transparent}
+#merchantBannerSlider .merchant-banner-controls button[data-dot][aria-current=true]::after{left:5px;width:22px;background:#385947}
+#merchantBannerSlider .merchant-banner-controls .banner-pause{margin-left:auto;padding:0 9px;height:28px;font-size:10px;color:#64766a;min-width:44px}
+#merchantBannerSlider button:focus-visible{outline:2px solid #44815e;outline-offset:3px}
+@media(max-width:600px){#merchantBannerSlider{border-radius:18px}#merchantBannerSlider .merchant-banner{min-height:235px;padding:18px 16px 49px;gap:12px;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}#merchantBannerSlider .banner-brand{min-height:38px;margin-bottom:12px}#merchantBannerSlider .banner-brand-mark{width:38px;height:38px;border-radius:11px}#merchantBannerSlider .banner-brand-fallback{width:auto}#merchantBannerSlider .merchant-banner h2{font-size:21px;line-height:1.18;letter-spacing:-.4px}#merchantBannerSlider .merchant-banner p{font-size:11px;line-height:1.6;margin-bottom:14px}#merchantBannerSlider .banner-copy>button{font-size:11px;min-height:40px;padding:10px 13px}#merchantBannerSlider .merchant-banner>img,#merchantBannerSlider .merchant-banner.image-blended>img{right:2%;width:36%;max-width:36%;top:34px;height:calc(100% - 83px)}#merchantBannerSlider .merchant-banner-controls{left:12px;right:14px;bottom:10px}}
+@media(prefers-reduced-motion:reduce){#merchantBannerSlider .merchant-banner-controls button[data-dot]::after{transition:none}}
 </style></head>
 
 <body>
@@ -7310,7 +7361,62 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 
   </div>
 </div>
-</body>
+<script id="gift-checkout-code">
+window.readGiftOrder=function(){
+ if(!document.getElementById('giftEnabled').checked)return null;
+ const get=id=>document.getElementById(id).value.trim();
+ const gift={name:get('giftName'),phone:get('giftPhone'),address:get('giftAddress'),message:get('giftMessage'),call:document.getElementById('giftCall').checked};
+ let error='';if(!gift.name)error='Please enter the recipient’s name.';else if(gift.phone.replace(/\D/g,'').length<7||gift.phone.replace(/\D/g,'').length>15)error='Please enter a valid recipient phone number.';else if(gift.address.length<8)error='Please enter a complete recipient delivery address.';else if(!document.getElementById('giftAreaConfirmed').checked)error='Please confirm the delivery area is the recipient’s area.';else if(document.getElementById('paymentMethod').value==='Cash on Delivery')error='Choose a sender-paid payment method for this gift.';
+ document.getElementById('giftError').textContent=error;if(error){document.getElementById('giftFields').scrollIntoView({block:'center'});return false;}return gift;
+};
+document.addEventListener('DOMContentLoaded',()=>{
+ const toggle=document.getElementById('giftEnabled'),fields=document.getElementById('giftFields'),payment=document.getElementById('paymentMethod'),zone=document.getElementById('deliveryZoneSelect');let previousPayment='';
+ function preview(){const name=document.getElementById('giftName').value.trim(),address=document.getElementById('giftAddress').value.trim();document.getElementById('giftReview').textContent='Gift for '+(name||'your recipient')+'\n'+(address||'Add their delivery address above.')+'\nArea: '+(zone.value||'Select below')+' · Sender pays';}
+ toggle.addEventListener('change',()=>{fields.hidden=!toggle.checked;toggle.setAttribute('aria-expanded',String(toggle.checked));const cash=[...payment.options].find(o=>o.value==='Cash on Delivery');if(cash)cash.disabled=toggle.checked;if(toggle.checked){previousPayment=payment.value;if(payment.value==='Cash on Delivery')payment.value='Online Transfer';}else if(previousPayment)payment.value=previousPayment;preview();});
+ fields.addEventListener('input',preview);zone.addEventListener('change',()=>{document.getElementById('giftAreaConfirmed').checked=false;preview();});
+ const original=window.doneOrder;window.doneOrder=function(){if(toggle.checked){toggle.checked=false;toggle.dispatchEvent(new Event('change'));}fields.querySelectorAll('input:not([type=checkbox]),textarea').forEach(n=>n.value='');document.getElementById('giftAreaConfirmed').checked=false;document.getElementById('giftCall').checked=true;document.getElementById('giftError').textContent='';return original.apply(this,arguments);};
+});
+</script><script id="group-checkout-code">document.addEventListener('DOMContentLoaded',()=>{
+ const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
+ const toggle=document.getElementById('groupEnabled'),fields=document.getElementById('groupFields'),list=document.getElementById('groupPeople'),error=document.getElementById('groupError');
+ let people=[],fingerprint='';
+ const entries=()=>Object.entries(cart).filter(([,v])=>v.q>0);
+ function reset(){people=[{name:localStorage.getItem('userName')||'',quantities:Object.fromEntries(entries().map(([n,v])=>[n,Number(v.q)]))}];fingerprint=JSON.stringify(entries());}
+ function summary(){const count=entries().reduce((n,[,v])=>n+Number(v.q),0),assigned=people.reduce((n,p)=>n+Object.values(p.quantities).reduce((a,q)=>a+(Number(q)||0),0),0);document.getElementById('groupSummary').textContent=assigned+' of '+count+' items assigned · '+people.length+' people';}
+ function draw(){list.replaceChildren();people.forEach((person,index)=>{const card=el('section',undefined,'group-person'),header=el('div',undefined,'group-person-head'),label=el('label','Person '+(index+1)),name=el('input');name.value=person.name;name.maxLength=80;name.placeholder='Name for this order';name.oninput=()=>person.name=name.value;label.append(name);header.append(label);if(people.length>1){const remove=el('button','Remove','group-secondary');remove.type='button';remove.onclick=()=>{people.splice(index,1);draw();};header.append(remove);}card.append(header);
+  for(const [item,data] of entries()){const row=el('label',undefined,'group-item'),copy=el('span',item),quantity=el('input');copy.append(el('small',data.cat+' · '+data.q+' in cart'));quantity.type='number';quantity.min='0';quantity.max=String(data.q);quantity.step='1';quantity.value=person.quantities[item]||0;quantity.setAttribute('aria-label',item+' quantity for person '+(index+1));quantity.oninput=()=>{person.quantities[item]=quantity.value===''?0:Number(quantity.value);summary();};row.append(copy,quantity);card.append(row);}list.append(card);});summary();}
+ function sync(){if(fingerprint!==JSON.stringify(entries())){reset();if(toggle.checked)error.textContent='Cart updated. Items have been reassigned to the first person; review the quantities.';}draw();}
+ toggle.addEventListener('change',()=>{fields.hidden=!toggle.checked;toggle.setAttribute('aria-expanded',String(toggle.checked));if(toggle.checked){const gift=document.getElementById('giftEnabled');if(gift.checked){gift.checked=false;gift.dispatchEvent(new Event('change'));}sync();}});
+ document.getElementById('giftEnabled').addEventListener('change',event=>{if(event.target.checked){toggle.checked=false;fields.hidden=true;toggle.setAttribute('aria-expanded','false');}});
+ document.getElementById('groupAddPerson').onclick=()=>{if(people.length>=20){error.textContent='You can include up to 20 people.';return;}people.push({name:'',quantities:{}});draw();list.lastChild.querySelector('input').focus();};
+ const previous=window.goToOrder;window.goToOrder=function(){const result=previous.apply(this,arguments);if(toggle.checked)sync();return result;};
+ const done=window.doneOrder;window.doneOrder=function(){toggle.checked=false;fields.hidden=true;toggle.setAttribute('aria-expanded','false');people=[];fingerprint='';error.textContent='';return done.apply(this,arguments);};
+ window.readGroupOrder=function(){if(!toggle.checked)return null;error.textContent='';
+  const fail=message=>{error.textContent=message;error.scrollIntoView({block:'center'});return false;};
+  if(fingerprint!==JSON.stringify(entries())){sync();return fail('Your cart changed. Review each person’s quantities before sending.');}
+  if(localStorage.getItem('tacoOrder'))return fail('Group orders support cart items only. Submit the separate taco request on its own.');
+  if(people.length<2)return fail('Add at least two people for a group order.');
+  if(people.some(p=>!p.name.trim()))return fail('Enter a name for each person.');
+  if(new Set(people.map(p=>p.name.trim().toLowerCase())).size!==people.length)return fail('Use a different name or initial for each person.');
+  for(const [item,data] of entries()){const quantities=people.map(p=>Number(p.quantities[item]||0));if(quantities.some(q=>!Number.isInteger(q)||q<0)||quantities.reduce((a,b)=>a+b,0)!==Number(data.q))return fail('Assign exactly '+data.q+' of “'+item+'” across the group.');}
+  if(people.some(p=>!entries().some(([n])=>Number(p.quantities[n])>0)))return fail('Assign at least one item to each person, or remove them.');
+  return people.map(p=>({name:p.name.trim(),items:entries().filter(([n])=>p.quantities[n]>0).map(([name,v])=>({name,category:v.cat,quantity:Number(p.quantities[name]),price:Number(v.p)}))}));
+ };
+});
+</script><script id="home-group-entry-code">
+document.addEventListener('DOMContentLoaded',()=>{
+ const row=document.querySelector('#appScreen .hero-toggle-row'),toggle=document.getElementById('groupEnabled');if(!row||!toggle)return;
+ const button=document.createElement('button');button.type='button';button.className='hero-group-order';button.setAttribute('aria-pressed','false');
+ button.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 4v3"/></svg><span>Group Order</span>';
+ const promos=row.querySelector('.hero-live-promos');if(promos)row.insertBefore(button,promos);else row.append(button);
+ const hint=document.createElement('div');hint.className='home-group-hint';hint.hidden=true;const message=document.createElement('span');message.setAttribute('role','status');message.textContent='Group order started. Add everyone’s items, then assign names and quantities at checkout.';
+ const cartButton=document.createElement('button');cartButton.type='button';cartButton.textContent='View cart →';cartButton.onclick=()=>window.openCart();hint.append(message,cartButton);row.after(hint);
+ function sync(){button.setAttribute('aria-pressed',String(toggle.checked));hint.hidden=!toggle.checked;}
+ button.onclick=()=>{toggle.checked=!toggle.checked;toggle.dispatchEvent(new Event('change'));sync();};toggle.addEventListener('change',sync);
+ document.getElementById('giftEnabled').addEventListener('change',sync);
+ const done=window.doneOrder;window.doneOrder=function(){const result=done.apply(this,arguments);sync();return result;};sync();
+});
+</script></body>
 
 
 
@@ -7823,6 +7929,22 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
     Finalize Your Order
   </div>
 
+<section class="gift-card group-card" aria-label="Group order">
+<label class="gift-toggle"><span class="gift-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 4v3"/></svg></span><span class="gift-toggle-copy"><strong>Group order</strong><small>One checkout. Everyone’s order, clearly labeled.</small></span><input id="groupEnabled" type="checkbox" aria-controls="groupFields" aria-expanded="false"><span class="gift-switch" aria-hidden="true"></span></label>
+<div id="groupFields" hidden><p class="group-intro">Add everyone’s items to your cart first, then assign the quantities below. Use one delivery address; the host arranges payment.</p><p id="groupSummary" aria-live="polite"></p><div id="groupPeople"></div><button id="groupAddPerson" type="button" class="group-secondary">+ Add person</button><p id="groupError" role="status"></p></div></section>
+<section class="gift-card" aria-label="Gift delivery">
+ <label class="gift-toggle"><span class="gift-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13"/><path d="M12 8H8a3 3 0 1 1 3-3l1 3Zm0 0h4a3 3 0 1 0-3-3l-1 3Z"/></svg></span><span class="gift-toggle-copy"><strong>Send as a gift</strong><small>A thoughtful surprise, delivered to their door.</small></span><input id="giftEnabled" type="checkbox" aria-controls="giftFields" aria-expanded="false"><span class="gift-switch" aria-hidden="true"></span></label>
+ <div id="giftFields" hidden>
+  <div class="gift-pair"><label>Recipient’s name<input id="giftName" maxlength="100" autocomplete="off" placeholder="Who is this for?"></label><label>Recipient’s phone<input id="giftPhone" type="tel" maxlength="30" autocomplete="off" placeholder="e.g. 6000 1234"></label></div>
+  <label>Recipient’s delivery address<textarea id="giftAddress" rows="2" maxlength="400" placeholder="Street, house details, town and a nearby landmark"></textarea></label>
+  <label>Gift message <span class="gift-optional">Optional</span><textarea id="giftMessage" rows="3" maxlength="300" placeholder="Write a little something to brighten their day…"></textarea></label>
+  <label class="gift-check"><input id="giftCall" type="checkbox" checked>Call the recipient on arrival</label>
+  <div class="gift-note">You’re the sender and payer. We’ll confirm payment with you on WhatsApp. Your saved profile and address stay unchanged.</div>
+  <label class="gift-check"><input id="giftAreaConfirmed" type="checkbox">I’ve selected the recipient’s delivery area below.</label>
+  <div id="giftReview" class="gift-review" aria-live="polite"></div>
+  <p id="giftError" role="status"></p>
+ </div>
+</section>
   <div class="payment-section" style="padding:0 10px;">
     <label style="font-weight:800; font-size:13px; color:#666; display:block; margin-bottom:10px;">PAYMENT METHOD:</label>
     <div class="select-area-outer">
@@ -9381,6 +9503,8 @@ async function render() {
   };
 
   function order() {
+    const gift=window.readGiftOrder();if(gift===false)return;
+    const group=window.readGroupOrder();if(group===false)return;
     let forcedTotal = 0;
 
     for (let name in cart) {
@@ -9406,7 +9530,7 @@ async function render() {
       return;
     }
 
-    if (!window.lastCartCoords && total > 0) {
+    if (!gift && !window.lastCartCoords && total > 0) {
       alert("Please pin your location on the map!");
       return;
     }
@@ -9429,7 +9553,7 @@ async function render() {
     const platformFee = PLATFORM_FEE;
     const itemsTotal = total;
     const grandTotal = itemsTotal + deliveryFee + platformFee + tipAmount;
-    const customerCoords = window.lastCartCoords || "18.0777,-88.5667";
+    const customerCoords = gift ? gift.address : window.lastCartCoords || "18.0777,-88.5667";
 
     if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
       alert(`Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`);
@@ -9516,7 +9640,7 @@ async function render() {
       
       activeBusinesses.forEach(bizName => {
         const storeCoords = storeLocations[bizName] || storeLocations["GENERAL"];
-        const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${customerCoords}`;
+        const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${encodeURIComponent(customerCoords)}`;
         
         msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
       });
@@ -9525,6 +9649,31 @@ async function render() {
     msg += `CUSTOMER: ${userName}%0A`;
     msg += `PHONE: ${userPhone}`;
 
+    if(gift){
+      const lines=['GIFT ORDER #'+orderNum,''];
+      for(const [store,entries] of Object.entries(groupedCart)){
+        lines.push(store);
+        for(const item of entries)lines.push(item.details.q+' × '+item.name+' — $'+(item.details.q*item.details.p).toFixed(2));
+      }
+      if(hasTacos)lines.push(tacoPlace+': '+tacoOrder);
+      lines.push('','TOTAL: $'+grandTotal.toFixed(2)+' BZD'+(hasTacos?' (taco cost extra)':''),
+        'Includes delivery $'+deliveryFee.toFixed(2)+', fee $'+platformFee.toFixed(2)+(tipAmount>0?', tip $'+tipAmount.toFixed(2):''),
+        '', 'TO: '+gift.name+' · '+gift.phone,
+        'Area: '+deliveryZone,
+        'Address: '+gift.address,
+        'Map: https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(gift.address));
+      if(gift.message)lines.push('Note: '+gift.message);
+      lines.push('','FROM: '+userName+' · '+userPhone,
+        'Sender pays · '+paymentMethod+' (unconfirmed)',
+        'No prices in gift. '+(gift.call?'Call recipient on arrival.':'Contact sender on arrival.'));
+      msg=lines.join('\n');
+    }
+    if(group){
+      const lines=['GROUP ORDER #'+orderNum,'Host: '+userName+' · '+userPhone,''];
+      for(const person of group){lines.push(person.name.toUpperCase());let subtotal=0;for(const item of person.items){subtotal+=item.quantity*item.price;lines.push(item.quantity+' × '+item.name+' ('+item.category+') — $'+(item.quantity*item.price).toFixed(2));}lines.push('Items: $'+subtotal.toFixed(2)+' BZD','');}
+      lines.push('GROUP TOTAL: $'+grandTotal.toFixed(2)+' BZD','Delivery $'+deliveryFee.toFixed(2)+' · Fee $'+platformFee.toFixed(2)+(tipAmount>0?' · Tip $'+tipAmount.toFixed(2):''),'Area: '+deliveryZone,'Map: https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(customerCoords),'Payment: '+paymentMethod+' · Host coordinates','Please label each person’s items with their name.');
+      msg=lines.join('\n');
+    }
     const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
     window.open(waUrl, "_blank");
   }
@@ -13077,7 +13226,13 @@ const merchantFeed=(()=>{
    const original=document.getElementById('heroPromoSlider');if(!holder){holder=el('section');holder.id='merchantBannerSlider';holder.setAttribute('aria-label','Offers from local merchants');if(original)original.before(holder);else document.getElementById('products')?.before(holder);}
    holder.onmouseenter=()=>{hovered=true;};holder.onmouseleave=()=>{hovered=false;restartRotation();};
    holder.replaceChildren();holder.hidden=!rows.length;if(original)original.hidden=!!rows.length;
-   slides=rows.map(r=>{const card=el('article');card.className='merchant-banner';card.dataset.theme=['mint','peach','lavender','sky','rose','sunset','ocean','lemon','berry','sand'].includes(r.banner_theme)?r.banner_theme:'mint';card.dataset.motion=r.banner_motion===false?'off':'on';const copy=el('div');copy.append(el('small',r.category),el('h2',r.title),el('p',r.subtitle));const b=el('button','Visit store →');b.type='button';b.onclick=()=>window.openMerchantStore(r.category);copy.append(b);const img=el('img');img.alt=r.title;
+   slides=rows.map(r=>{const card=el('article');card.className='merchant-banner';card.dataset.theme=['mint','peach','lavender','sky','rose','sunset','ocean','lemon','berry','sand'].includes(r.banner_theme)?r.banner_theme:'mint';card.dataset.motion=r.banner_motion===false?'off':'on';const copy=el('div');copy.className='banner-copy';
+   const brand=el('div');brand.className='banner-brand';
+   const source=[...document.querySelectorAll('.cat-btn')].find(n=>n.dataset.cat===r.category||n.getAttribute('onclick')?.includes("setCategory('"+r.category+"'"));
+   const logoUrl=source?.querySelector('img')?.getAttribute('src');
+   const brandMark=el('div');brandMark.className='banner-brand-mark';
+   if(logoUrl){const logo=el('img');logo.src=logoUrl;logo.alt=r.category;logo.onerror=()=>{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');};brandMark.append(logo);}else{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');}
+   brand.append(brandMark);copy.append(brand,el('h2',r.title),el('p',r.subtitle));const b=el('button','Visit store →');b.type='button';b.onclick=()=>window.openMerchantStore(r.category);copy.append(b);const img=el('img');img.alt=r.title;
    const artwork=imageURL(r.image);
    img.onload=()=>{card.style.setProperty('--slide-artwork','url('+JSON.stringify(artwork)+')');card.classList.add('image-blended');};
    img.onerror=()=>{card.classList.remove('image-blended');card.style.removeProperty('--slide-artwork');};
