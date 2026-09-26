@@ -6325,6 +6325,15 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 .lo-alert{border:0;border-radius:24px;padding:0;max-width:580px;width:calc(100% - 28px);max-height:85vh;overflow:auto;color:#203b2e;box-shadow:0 24px 90px #0c211c55}.lo-alert::backdrop{background:#0e241ccc;backdrop-filter:blur(5px)}.lo-alert-body{padding:26px}.lo-alert h2{font-size:26px;margin:6px 0}.lo-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#21805c;font-weight:700}.lo-alert-actions{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}.lo-alert-actions .lo-button:first-child{flex:1}.lo-alert .lo-card{box-shadow:none;padding:0;border:0}
 @media(max-width:480px){.lo-card{padding:17px}.lo-header h1{font-size:22px}.lo-alert-body{padding:20px}.lo-steps{gap:5px}.lo-steps li{font-size:10px}}
 @media(prefers-reduced-motion:no-preference){.lo-alert[open]{animation:lo-arrive .2s ease-out}@keyframes lo-arrive{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}}
+</style><style id="tracking-green-bar-motion">
+/* Animate only the completed/current green track surfaces. */
+.lo-steps li.done{position:relative}
+.lo-steps li.done::before{content:"";position:absolute;top:-4px;left:0;right:0;height:4px;pointer-events:none;background:linear-gradient(100deg,transparent 0%,transparent 35%,rgba(180,255,214,.75) 50%,transparent 65%,transparent 100%);background-size:250% 100%;animation:orderTrackShimmer 2.4s linear infinite}
+.lo-steps li.done:nth-child(2)::before{animation-delay:.18s}
+.lo-steps li.done:nth-child(3)::before{animation-delay:.36s}
+.lo-steps li.done:nth-child(4)::before{animation-delay:.54s}
+@keyframes orderTrackShimmer{from{background-position:180% 0}to{background-position:-80% 0}}
+@media(prefers-reduced-motion:reduce){.lo-steps li.done::before{animation:none;background:none}}
 </style></head>
 
 <body>
