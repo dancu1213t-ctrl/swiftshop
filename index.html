@@ -7340,12 +7340,23 @@ document.addEventListener('DOMContentLoaded',()=>{
   refresh();
  }
 
+ function rememberedOrderCustomer(context){
+  const clean=value=>String(value??'').trim();
+  const name=clean(typeof getRewardsUserName==='function'?getRewardsUserName():'')||clean(localStorage.getItem('userName'))||clean(window.customerName)||clean(context.name);
+  const savedPhone=clean(typeof getRewardsUserPhone==='function'?getRewardsUserPhone():'')||clean(localStorage.getItem('userPhone'))||clean(window.userPhone)||clean(context.phone);
+  // Stored profile remains unchanged; normalize only the submission copy.
+  const formatted=savedPhone.normalize('NFKC').replace(/[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]/g,'').trim();
+  const phone=(formatted.startsWith('+')?'+':'')+formatted.replace(/[^0-9]/g,'');
+  return {name,phone};
+ }
  window.sendCheckoutToStores=async function(context){
   if(busy)return;
   if(context.hasTacos){alert('Your separate taco request cannot be routed to a merchant account yet. No order was sent. Please remove that request before submitting store items.');return;}
   const items=Object.entries(cart).map(([name,x])=>({name,category:x.cat,quantity:Number(x.q),price:Number(x.p)}));
   if(!items.length){alert('Your cart is empty.');return;}
-  const ownerKey=key(),payload={name:context.name.trim(),phone:context.phone.trim(),items,details:context.details},signature=JSON.stringify(payload),previous=read();
+  const customer=rememberedOrderCustomer(context);
+  if(!customer.name||!/^\+?[0-9]{7,15}$/.test(customer.phone)){alert('Your saved profile is missing a valid name or phone number. Please update it in Profile, then send again.');return;}
+  const ownerKey=key(),payload={name:customer.name,phone:customer.phone,items,details:context.details},signature=JSON.stringify(payload),previous=read();
   if(previous?.pending&&previous.signature!==signature){alert('A previous submission is awaiting confirmation. Restore its checkout details and retry, or check Track orders before placing another order.');return;}
   const draft=previous?.pending?previous:{token:crypto.randomUUID(),pending:true,signature,payload};
   const send=document.querySelector('#orderBox .submit-track')||document.querySelector('.submit-track');
