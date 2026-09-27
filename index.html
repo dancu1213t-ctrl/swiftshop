@@ -6365,6 +6365,54 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 #merchantBannerSlider button:focus-visible{outline:2px solid #44815e;outline-offset:3px}
 @media(max-width:600px){#merchantBannerSlider{border-radius:18px}#merchantBannerSlider .merchant-banner{min-height:235px;padding:18px 16px 49px;gap:12px;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}#merchantBannerSlider .banner-brand{min-height:38px;margin-bottom:12px}#merchantBannerSlider .banner-brand-mark{width:38px;height:38px;border-radius:11px}#merchantBannerSlider .banner-brand-fallback{width:auto}#merchantBannerSlider .merchant-banner h2{font-size:21px;line-height:1.18;letter-spacing:-.4px}#merchantBannerSlider .merchant-banner p{font-size:11px;line-height:1.6;margin-bottom:14px}#merchantBannerSlider .banner-copy>button{font-size:11px;min-height:40px;padding:10px 13px}#merchantBannerSlider .merchant-banner>img,#merchantBannerSlider .merchant-banner.image-blended>img{right:2%;width:36%;max-width:36%;top:34px;height:calc(100% - 83px)}#merchantBannerSlider .merchant-banner-controls{left:12px;right:14px;bottom:10px}}
 @media(prefers-reduced-motion:reduce){#merchantBannerSlider .merchant-banner-controls button[data-dot]::after{transition:none}}
+</style><style id="editorial-store-slider">
+#merchantBannerSlider{max-width:1120px;margin:22px auto 28px;border:1px solid #e5e9e5;border-radius:20px;background:#fff;box-shadow:0 5px 22px #233c2c07;isolation:isolate}
+#merchantBannerSlider .merchant-banner,#merchantBannerSlider .merchant-banner.image-blended{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:stretch;min-height:290px;padding:0 0 48px;gap:0;background:#fbfcf9;overflow:hidden}
+#merchantBannerSlider .merchant-banner.image-blended::before,#merchantBannerSlider .merchant-banner.image-blended::after{display:none}
+#merchantBannerSlider .merchant-banner>.banner-copy{position:relative;z-index:1;align-self:center;display:flex;flex-direction:column;align-items:flex-start;padding:26px 10px 20px 30px;min-width:0}
+#merchantBannerSlider .banner-brand{gap:9px;margin:0 0 16px;min-height:32px}
+#merchantBannerSlider .banner-brand-mark{width:34px;height:34px;border-radius:50%;border:1px solid #e6ece5;box-shadow:none;flex-shrink:0;background:#fff}
+#merchantBannerSlider .banner-brand-mark img{border-radius:50%;padding:2px}
+#merchantBannerSlider .banner-brand-fallback{width:auto;border-radius:8px}
+#merchantBannerSlider .banner-editorial-label{font-size:9px;letter-spacing:.08em;line-height:1.4;color:#7b877d;font-weight:600;max-width:none;white-space:nowrap}
+#merchantBannerSlider .merchant-banner h2{font-size:clamp(23px,2.6vw,34px);font-weight:700;line-height:1.12;letter-spacing:-.9px;margin:0 0 10px;max-width:19ch;text-wrap:balance;color:#233329}
+#merchantBannerSlider .merchant-banner p{font-size:12px;line-height:1.65;max-width:36ch;margin:0 0 18px;color:#798279;font-weight:400}
+#merchantBannerSlider .banner-copy>button{min-height:40px;padding:10px 15px;background:#243d2e;border-radius:10px;font-size:12px;font-weight:600;transition:background .15s;box-shadow:none}
+#merchantBannerSlider .banner-copy>button:hover{background:#142a1d}
+#merchantBannerSlider .merchant-banner>.banner-art-panel{position:relative;z-index:0;align-self:stretch;display:grid;place-items:center;overflow:hidden;min-width:0;border:0;padding:0;background:transparent;isolation:isolate}
+#merchantBannerSlider .banner-art-panel::before{content:"";position:absolute;inset:-30px;background-image:var(--slide-artwork);background-position:center;background-size:cover;filter:blur(42px) saturate(.65);opacity:.22;z-index:-2}
+#merchantBannerSlider .banner-art-panel::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#fbfcf9 0%,#fbfcf900 45%),linear-gradient(0deg,#fbfcf9 0%,#fbfcf900 25%);z-index:-1}
+#merchantBannerSlider .banner-art-panel>img{position:relative;display:block;width:100%;height:260px;max-height:none;object-fit:contain;border-radius:0;background:transparent;mix-blend-mode:normal;transform:none;animation:none;filter:drop-shadow(0 10px 10px #23311e10)}
+#merchantBannerSlider .merchant-banner-controls{left:25px;right:25px;bottom:12px;display:flex;align-items:center;justify-content:flex-start;gap:3px;padding:0;border:0;background:transparent;flex-wrap:nowrap}
+#merchantBannerSlider .banner-count{display:none}
+#merchantBannerSlider .merchant-banner-controls button[data-dot]{display:block;position:relative;width:22px;height:26px;min-height:26px;border:0;background:transparent;padding:0}
+#merchantBannerSlider .merchant-banner-controls button[data-dot]::after{content:"";position:absolute;top:11px;left:8px;width:5px;height:5px;border-radius:5px;background:#d1d9d0;transition:width .2s}
+#merchantBannerSlider .merchant-banner-controls button[data-dot][aria-current=true]{width:30px;background:transparent}
+#merchantBannerSlider .merchant-banner-controls button[data-dot][aria-current=true]::after{left:4px;width:22px;background:#385c43}
+#merchantBannerSlider .merchant-banner-controls .banner-arrow{display:grid;place-items:center;width:28px;min-width:28px;height:28px;min-height:28px;padding:0;border:1px solid #e1e8df;border-radius:50%;background:#fff9;color:#47614c;font-size:14px;font-weight:400;order:2}
+#merchantBannerSlider .merchant-banner-controls .banner-pause{order:1;margin-left:auto;margin-right:9px;padding:0 5px;background:transparent;color:#7c887d;font-size:10px;min-width:40px;height:28px;min-height:28px}
+@media(max-width:600px){
+#merchantBannerSlider{margin:16px 0 22px;border-radius:16px}
+#merchantBannerSlider .merchant-banner,#merchantBannerSlider .merchant-banner.image-blended{min-height:245px;grid-template-columns:minmax(0,1.2fr) minmax(0,.9fr);padding-bottom:44px}
+#merchantBannerSlider .merchant-banner>.banner-copy{padding:18px 0 12px 18px}
+#merchantBannerSlider .banner-brand{gap:7px;margin-bottom:12px;min-height:28px}
+#merchantBannerSlider .banner-brand-mark{width:28px;height:28px}
+#merchantBannerSlider .banner-brand-fallback{width:auto;font-size:9px}
+#merchantBannerSlider .banner-editorial-label{font-size:7px;letter-spacing:.04em}
+#merchantBannerSlider .merchant-banner h2{font-size:21px;letter-spacing:-.5px;line-height:1.15;margin-bottom:8px}
+#merchantBannerSlider .merchant-banner p{font-size:10px;line-height:1.55;margin-bottom:14px}
+#merchantBannerSlider .banner-copy>button{font-size:11px;min-height:38px;padding:9px 12px}
+#merchantBannerSlider .banner-art-panel>img{height:215px;transform:none}
+#merchantBannerSlider .merchant-banner-controls{left:13px;right:16px;bottom:10px}
+}
+@media(prefers-reduced-motion:reduce){#merchantBannerSlider button,#merchantBannerSlider button::after{transition:none!important}}
+</style><style id="account-photo-css">.profile-top{flex-wrap:wrap}.profile-photo-edit{width:auto!important;flex:0 0 auto!important;padding:8px 12px!important;border:1px solid #d9e5dc!important;border-radius:10px!important;background:#f4f8f5!important;color:#2a6243!important;font:inherit;font-size:11px!important;cursor:pointer}
+#profileInitial.has-account-photo,#profileInitials.has-account-photo{background-image:var(--account-photo)!important;background-size:cover!important;background-position:center!important;font-size:0!important;color:transparent!important;overflow:hidden;border-radius:50%}
+.profile-photo-dialog{width:calc(100% - 32px);max-width:420px;max-height:85vh;overflow:auto;box-sizing:border-box;padding:24px;border:1px solid #e0e8e2;border-radius:20px;color:#244331;background:#fff;font-family:inherit}.profile-photo-dialog::backdrop{background:#152e24aa;backdrop-filter:blur(4px)}.profile-photo-dialog h2{font-size:21px;margin:12px 0}.profile-photo-dialog p{font-size:13px;line-height:1.6;color:#738177}.profile-photo-dialog label{display:block;font-size:12px;margin:16px 0}.profile-photo-dialog input{display:block;width:100%;box-sizing:border-box;padding:12px;border:1px solid #dce6df;border-radius:9px;margin-top:7px;font:inherit;font-size:16px}.profile-photo-dialog button{padding:11px 14px;border:0;border-radius:10px;background:#285b40;color:#fff;font:inherit;font-size:12px;cursor:pointer;margin:4px 6px 4px 0;min-height:40px}.profile-photo-dialog button:disabled{opacity:.5;cursor:default}.profile-photo-dialog .photo-close{display:block;margin-left:auto;background:#eef4ef;color:#3c6049}.photo-preview{display:block;width:150px;height:150px;border-radius:50%;object-fit:cover;margin:18px auto}.profile-photo-dialog [hidden]{display:none!important}.profile-photo-dialog :focus-visible{outline:3px solid #7fb995;outline-offset:3px}
+</style><style id="slider-artwork-fit">
+#merchantBannerSlider .merchant-banner>.banner-art-panel{padding:18px;box-sizing:border-box}
+#merchantBannerSlider .banner-art-panel>img{width:100%;max-width:100%;object-fit:contain;transform:none!important}
+@media(max-width:600px){#merchantBannerSlider .merchant-banner>.banner-art-panel{padding:10px}}
 </style></head>
 
 <body>
@@ -7415,6 +7463,37 @@ document.addEventListener('DOMContentLoaded',()=>{
  button.onclick=()=>{toggle.checked=!toggle.checked;toggle.dispatchEvent(new Event('change'));sync();};toggle.addEventListener('change',sync);
  document.getElementById('giftEnabled').addEventListener('change',sync);
  const done=window.doneOrder;window.doneOrder=function(){const result=done.apply(this,arguments);sync();return result;};sync();
+});
+</script><script id="account-photo-js">document.addEventListener('DOMContentLoaded',()=>{
+ const client=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+ const bucket=client.storage.from('profile-pictures');
+ const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
+ const button=(text,fn)=>{const n=el('button',text);n.type='button';n.onclick=fn;return n;};
+ const phone=()=>{const digits=String(localStorage.getItem('userPhone')||'').normalize('NFKC').replace(/\D/g,'');return digits.length===7?'501'+digits:digits;};
+ async function pathFor(value){if(!value)throw Error('Sign in to your profile first.');const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('swiftshop-profile:'+value));return [...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join('')+'/avatar.jpg';}
+ let busy=false,blob=null,blobPhone='',previewURL='',version=0,lastPhone=phone();
+ const avatar=document.getElementById('profileInitial');if(!avatar)return;
+ const edit=button('Edit profile photo',open);edit.className='profile-photo-edit';avatar.parentElement.append(edit);
+ const dialog=el('dialog');dialog.className='profile-photo-dialog';dialog.setAttribute('aria-labelledby','photoDialogTitle');
+ const title=el('h2','Your profile photo');title.id='photoDialogTitle';
+ const close=button('Close',()=>{if(!busy)dialog.close();});close.className='photo-close';
+ const preview=el('img');preview.className='photo-preview';preview.alt='Profile photo preview';preview.hidden=true;
+ const label=el('label','Choose a photo'),input=el('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';label.append(input);
+ const status=el('p');status.setAttribute('role','status');
+ const save=button('Save photo',()=>run(async()=>{const identity=phone();if(!blob||blobPhone!==identity)throw Error('Choose a photo for the current profile first.');const path=await pathFor(identity);check(await bucket.upload(path,blob,{contentType:'image/jpeg',upsert:true,cacheControl:'0'}));clearDraft();if(phone()===identity){await refresh();status.textContent='Photo saved. It will appear when you use this phone number on another device.';}}));
+ const remove=button('Remove photo',()=>run(async()=>{const identity=phone();check(await bucket.remove([await pathFor(identity)]));clearDraft();if(phone()===identity){paint('');preview.hidden=true;status.textContent='Photo removed.';}}));
+ dialog.append(close,title,el('p','Choose a photo and check the cropped preview before saving.'),preview,label,save,remove,status);document.body.append(dialog);save.disabled=true;
+ function check(r){if(r.error)throw r.error;return r.data;}
+ function clearDraft(){blob=null;blobPhone='';input.value='';if(previewURL)URL.revokeObjectURL(previewURL);previewURL='';save.disabled=true;}
+ function paint(url){for(const id of ['profileInitial','profileInitials']){const n=document.getElementById(id);if(n){n.classList.toggle('has-account-photo',!!url);n.style.setProperty('--account-photo',url?'url('+JSON.stringify(url)+')':'none');}}}
+ async function refresh(){const stamp=++version,identity=phone();paint('');if(!identity)return;try{const path=await pathFor(identity);const url=bucket.getPublicUrl(path).data.publicUrl+'?v='+Date.now();const image=new Image();image.onload=()=>{if(stamp!==version||phone()!==identity)return;paint(url);if(!blob){preview.src=url;preview.hidden=false;}};image.onerror=()=>{if(stamp===version&&!blob)preview.hidden=true;};image.src=url;}catch(e){if(dialog.open)status.textContent=e.message;}}
+ async function run(fn){if(busy)return;busy=true;dialog.querySelectorAll('button,input').forEach(n=>n.disabled=true);status.textContent='Please wait…';try{await fn();}catch(e){status.textContent=e.message||'Could not save your photo. Please try again.';}finally{busy=false;dialog.querySelectorAll('button,input').forEach(n=>n.disabled=false);save.disabled=!blob;}}
+ async function open(){status.textContent='';dialog.showModal();await refresh();}
+ input.onchange=()=>run(async()=>{const file=input.files[0],identity=phone();if(!file)return;clearDraft();if(!identity)throw Error('Sign in to your profile first.');if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>10485760)throw Error('Choose a JPG, PNG or WebP smaller than 10 MB.');const image=await createImageBitmap(file);try{const side=Math.min(image.width,image.height),canvas=document.createElement('canvas');canvas.width=canvas.height=512;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,512,512);ctx.drawImage(image,(image.width-side)/2,(image.height-side)/2,side,side,0,0,512,512);const prepared=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.85));if(!prepared||prepared.size>1048576)throw Error('Could not prepare this photo. Choose another image.');if(phone()!==identity)throw Error('Your profile changed. Choose the photo again.');blob=prepared;blobPhone=identity;previewURL=URL.createObjectURL(blob);preview.src=previewURL;preview.hidden=false;status.textContent='Preview ready. Tap Save photo.';}finally{image.close();}});
+ dialog.addEventListener('cancel',e=>{if(busy)e.preventDefault();});dialog.addEventListener('close',()=>{clearDraft();preview.hidden=true;});
+ const previous=window.openProfile;if(previous)window.openProfile=function(){const result=previous.apply(this,arguments);refresh();return result;};
+ setInterval(()=>{const value=phone();if(value!==lastPhone){lastPhone=value;version++;clearDraft();paint('');dialog.close();refresh();}},1000);
+ window.addEventListener('focus',()=>{if(!busy)refresh();});refresh();
 });
 </script></body>
 
@@ -13235,7 +13314,7 @@ const merchantFeed=(()=>{
  let holder,signature='',slides=[],index=0,rotationTimer,paused=false,hovered=false;
  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
  function restartRotation(){clearInterval(rotationTimer);if(slides.length<2)return;rotationTimer=setInterval(()=>{if(paused||hovered||reducedMotion.matches||document.hidden||holder.hidden||holder.contains(document.activeElement)||document.documentElement.classList.contains('shop-page-open'))return;show(index+1);},5000);}
- function show(i){if(!slides.length)return;index=(i+slides.length)%slides.length;slides.forEach((s,j)=>s.hidden=j!==index);holder.querySelectorAll('[data-dot]').forEach((b,j)=>b.setAttribute('aria-current',String(index===j)));}
+ function show(i){if(!slides.length)return;index=(i+slides.length)%slides.length;slides.forEach((s,j)=>s.hidden=j!==index);holder.querySelectorAll('[data-dot]').forEach((b,j)=>b.setAttribute('aria-current',String(index===j)));const count=holder.querySelector('.banner-count');if(count)count.textContent=String(index+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');}
  async function refresh(){
   try{
    const rows=await campaigns('slide'),next=JSON.stringify(rows);if(next===signature)return;signature=next;
@@ -13248,12 +13327,15 @@ const merchantFeed=(()=>{
    const logoUrl=source?.querySelector('img')?.getAttribute('src');
    const brandMark=el('div');brandMark.className='banner-brand-mark';
    if(logoUrl){const logo=el('img');logo.src=logoUrl;logo.alt=r.category;logo.onerror=()=>{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');};brandMark.append(logo);}else{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');}
-   brand.append(brandMark);copy.append(brand,el('h2',r.title),el('p',r.subtitle));const b=el('button','Visit store →');b.type='button';b.onclick=()=>window.openMerchantStore(r.category);copy.append(b);const img=el('img');img.alt=r.title;
+   brand.append(brandMark);const eyebrow=el('span','LOCAL FAVOURITES');eyebrow.className='banner-editorial-label';brand.append(eyebrow);copy.append(brand,el('h2',r.title),el('p',r.subtitle));const b=el('button','Visit store →');b.type='button';b.onclick=()=>window.openMerchantStore(r.category);copy.append(b);const img=el('img');img.alt=r.title;
    const artwork=imageURL(r.image);
    img.onload=()=>{card.style.setProperty('--slide-artwork','url('+JSON.stringify(artwork)+')');card.classList.add('image-blended');};
    img.onerror=()=>{card.classList.remove('image-blended');card.style.removeProperty('--slide-artwork');};
-   img.src=artwork;card.append(copy,img);holder.append(card);return card;});
-   if(rows.length>1){const controls=el('div');controls.className='merchant-banner-controls';rows.forEach((r,i)=>{const b=el('button',String(i+1));b.type='button';b.dataset.dot=i;b.setAttribute('aria-label','Show banner '+(i+1));b.onclick=()=>{show(i);restartRotation();};controls.append(b);});if(!reducedMotion.matches){const pause=el('button',paused?'Play':'Pause');pause.type='button';pause.className='banner-pause';pause.onclick=()=>{paused=!paused;pause.textContent=paused?'Play':'Pause';pause.setAttribute('aria-pressed',String(paused));restartRotation();};pause.setAttribute('aria-label','Pause automatic banners');pause.setAttribute('aria-pressed',String(paused));controls.append(pause);}holder.append(controls);}show(0);restartRotation();
+   img.src=artwork;const visual=el('div');visual.className='banner-art-panel';visual.append(img);card.append(copy,visual);holder.append(card);return card;});
+   if(rows.length>1){const controls=el('div');controls.className='merchant-banner-controls';
+   const count=el('span');count.className='banner-count';controls.append(count);
+   for(const [direction,label] of [[-1,'Previous offer'],[1,'Next offer']]){const arrow=el('button',direction<0?'←':'→');arrow.type='button';arrow.className='banner-arrow';arrow.setAttribute('aria-label',label);arrow.onclick=()=>{show(index+direction);restartRotation();};controls.append(arrow);}
+   rows.forEach((r,i)=>{const b=el('button',String(i+1));b.type='button';b.dataset.dot=i;b.setAttribute('aria-label','Show banner '+(i+1));b.onclick=()=>{show(i);restartRotation();};controls.append(b);});if(!reducedMotion.matches){const pause=el('button',paused?'Play':'Pause');pause.type='button';pause.className='banner-pause';pause.onclick=()=>{paused=!paused;pause.textContent=paused?'Play':'Pause';pause.setAttribute('aria-pressed',String(paused));restartRotation();};pause.setAttribute('aria-label','Pause automatic banners');pause.setAttribute('aria-pressed',String(paused));controls.append(pause);}holder.append(controls);}show(0);restartRotation();
   }catch{console.warn('Merchant banners unavailable; existing slider retained.');}
  }
  document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if(!document.hidden)refresh();},60000);window.addEventListener('focus',refresh);});
