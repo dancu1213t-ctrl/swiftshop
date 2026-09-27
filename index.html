@@ -6413,6 +6413,83 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 #merchantBannerSlider .merchant-banner>.banner-art-panel{padding:18px;box-sizing:border-box}
 #merchantBannerSlider .banner-art-panel>img{width:100%;max-width:100%;object-fit:contain;transform:none!important}
 @media(max-width:600px){#merchantBannerSlider .merchant-banner>.banner-art-panel{padding:10px}}
+</style><style id="login-welcome-style">
+#loginWelcome{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;background:#153c2b;color:#fff;overflow:hidden;pointer-events:auto;opacity:1;transition:opacity .22s ease}
+#loginWelcome.leaving{opacity:0;pointer-events:none}
+#loginWelcome .welcome-lockup{text-align:center;animation:welcomeRise .42s cubic-bezier(.2,.8,.2,1) both;padding:24px}
+#loginWelcome .welcome-brand{font-family:inherit;font-size:clamp(38px,9vw,64px);font-weight:800;letter-spacing:-2px;line-height:1.1;color:#fff}
+#loginWelcome .welcome-brand span{color:#abd4b5}
+#loginWelcome .welcome-tagline{margin:14px 0 0;font-size:12px;font-weight:500;letter-spacing:.09em;color:#d1e3d6}
+#loginWelcome .welcome-line{width:48px;height:3px;border-radius:3px;background:#ffffff20;margin:23px auto 0;overflow:hidden}
+#loginWelcome .welcome-line::after{content:"";display:block;width:100%;height:100%;background:#abd4b5;transform-origin:left;animation:welcomeLine .75s ease-out both}
+@keyframes welcomeRise{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes welcomeLine{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){#loginWelcome{transition:none}#loginWelcome .welcome-lockup,#loginWelcome .welcome-line::after{animation:none}}
+</style><style id="login-colour-refinement">
+#authScreen{background:#fffcf8!important;color:#302b26!important}
+#authScreen #loginBox h2{color:#302b26!important}
+#authScreen .login-slogan{color:#797168!important;opacity:1}
+#authScreen .login-steps{color:#8c847c!important;opacity:1}
+#authScreen #loginBox input{background:#fff!important;border-color:#e8e0d7!important;color:#302b26!important;box-shadow:0 2px 5px #402a1003}
+#authScreen #loginBox input::placeholder{color:#918a82;opacity:1}
+#authScreen #loginBox input:focus{outline:2px solid #ffc08a;outline-offset:2px;border-color:#ef8b37!important}
+#authScreen #loginBox button{background:#f47824!important;color:#231a12!important;box-shadow:0 4px 12px #e874201c}
+#authScreen #loginBox button:hover{background:#ed6d18!important}
+#authScreen #loginBox button:focus-visible{outline:3px solid #f6b37a;outline-offset:3px}
+#authScreen #closedBox,#authScreen #closedBox h2{color:#46382b!important}
+#authScreen #closedBox button{background:#fff0e2!important;color:#88430d!important}
+#loginWelcome{background:#f47824;color:#231a12}
+#loginWelcome .welcome-brand{color:#231a12}
+#loginWelcome .welcome-brand span{color:#fff}
+#loginWelcome .welcome-tagline{color:#382617}
+#loginWelcome .welcome-line{background:#231a1220}
+#loginWelcome .welcome-line::after{background:#231a12}
+</style><style id="profile-rewards-refinement">
+#profileOverlay .gamification-box{background:#fff7ef!important;border:1px solid #f3dfcc!important;border-radius:16px!important;padding:20px!important;box-shadow:none!important;margin:22px 0 14px!important}
+#profileOverlay .xp-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px}
+#profileOverlay .points-label{font-size:11px!important;font-weight:650!important;letter-spacing:.07em!important;color:#8a5a32!important;text-transform:uppercase}
+#profileOverlay .points-number{font-size:32px!important;font-weight:700!important;line-height:1;letter-spacing:-1px;color:#a9470a!important}
+#profileOverlay .points-number small{font-size:10px!important;font-weight:600;letter-spacing:0;color:#a16f49!important}
+#profileOverlay .xp-bar-container{height:6px!important;background:#f0dfd0!important;border-radius:6px!important;box-shadow:none!important;overflow:hidden}
+#profileOverlay .xp-bar-fill{background:#f47824!important;border-radius:6px!important;box-shadow:none!important}
+#profileOverlay .xp-subtext{display:block!important;text-align:left!important;margin-top:10px!important;font-size:11px!important;font-weight:400!important;color:#8a7767!important}
+#profileOverlay .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:0 0 26px}
+#profileOverlay .stat-card{display:grid;grid-template-columns:30px 1fr;align-items:center;gap:4px 10px;padding:16px!important;border:1px solid #e8e8e4!important;background:#fff!important;border-radius:13px!important;text-align:left!important;box-shadow:none!important;min-height:90px}
+#profileOverlay .stat-icon{grid-column:1;grid-row:1/3;font-size:21px!important;line-height:1;margin:0!important}
+#profileOverlay .stat-value{grid-column:2;font-size:19px!important;font-weight:650!important;line-height:1.3;margin:0!important;color:#30362f}
+#profileOverlay .stat-label{grid-column:2;font-size:10px!important;letter-spacing:.02em;color:#859084!important;font-weight:500!important;text-transform:none!important}
+#profileOverlay .stat-card:nth-child(2) .stat-value{font-size:13px!important}
+#profileOverlay .stat-card .btn-spin-shortcut{grid-column:2;justify-self:start;width:auto!important;padding:7px 12px!important;min-height:32px;background:#fff0e2!important;color:#a64d10!important;border:1px solid #f1d7c0!important;border-radius:8px!important;box-shadow:none!important;font-size:11px!important;font-weight:600!important;margin:3px 0 0!important}
+#profileOverlay .rewards-section{margin:0 0 24px}
+#profileOverlay .section-title{display:block;text-align:left!important;font-size:16px!important;font-weight:650!important;letter-spacing:-.2px;margin:0 0 13px!important;padding:0!important;border:0!important;color:#30392f}
+#profileOverlay .section-title::after{display:none!important}
+#profileOverlay .milestones-container{display:flex!important;flex-direction:column;gap:0!important;border:1px solid #e8e9e4;border-radius:15px;overflow:hidden;background:white}
+#profileOverlay #milestonesListContainer .reward{display:grid!important;grid-template-columns:40px minmax(0,1fr);gap:3px 13px;align-items:center;width:100%!important;min-height:90px!important;margin:0!important;padding:16px!important;border:0!important;border-bottom:1px solid #eef0eb!important;border-radius:0!important;background:#fff!important;text-align:left!important;box-shadow:none!important;opacity:1!important;transform:none!important}
+#profileOverlay #milestonesListContainer .reward:last-child{border-bottom:0!important}
+#profileOverlay #milestonesListContainer .reward>div:first-child{grid-column:1;grid-row:1/4;width:40px;height:40px;display:grid;place-items:center;background:#faf4ed;border-radius:11px;font-size:20px!important}
+#profileOverlay #milestonesListContainer .reward>div:nth-child(2){grid-column:2;font-size:13px!important;line-height:1.45;font-weight:600!important;margin:0!important;color:#344033}
+#profileOverlay #milestonesListContainer .reward>div:nth-child(3){grid-column:2;font-size:10px!important;color:#8b9389!important;margin:0!important;font-weight:400!important}
+#profileOverlay #milestonesListContainer .reward>div:nth-child(4){grid-column:2;font-size:10px!important;margin:4px 0 0!important;font-weight:500!important;color:#8b7968!important}
+#profileOverlay #milestonesListContainer .reward>button{grid-column:2;justify-self:start;width:auto!important;min-height:36px;padding:8px 12px!important;background:#f47824!important;color:#2d1d11!important;font-size:11px!important;font-weight:600!important;border-radius:8px!important;margin:7px 0 0!important}
+#profileOverlay .profile-field{margin-top:16px!important;text-align:left}
+#profileOverlay .profile-field label{font-size:11px!important;font-weight:600!important;letter-spacing:.03em!important;color:#7f897d!important;margin-bottom:7px!important}
+#profileOverlay .profile-field input{background:#fff!important;border:1px solid #dfe5dc!important;padding:13px 14px!important;border-radius:10px!important;color:#303a2e!important;box-shadow:none!important}
+@media(max-width:380px){#profileOverlay .stat-card{padding:12px!important;grid-template-columns:24px 1fr;gap:4px 7px}#profileOverlay .stats-grid{gap:8px}#profileOverlay #milestonesListContainer .reward{padding:13px!important;gap:3px 10px}}
+</style><style id="saved-locations-dropdown">
+#cartPanel .shopping-address-tools{padding:0!important;overflow:hidden;border:1px solid #e1e6df!important;border-radius:14px!important;background:#fff!important;text-align:left}
+#cartPanel .shopping-address-tools>h3{margin:0!important;padding:0!important}
+#cartPanel .shopping-address-tools .locations-toggle{display:flex!important;align-items:center;justify-content:space-between;gap:12px;width:100%!important;min-height:54px;margin:0!important;padding:15px 17px!important;background:transparent!important;border:0!important;border-radius:13px!important;color:#374336!important;font-size:13px!important;font-weight:600!important;box-shadow:none!important;text-align:left;cursor:pointer}
+.locations-chevron{font-size:22px;line-height:1;color:#8c9789;transition:transform .25s}
+.locations-expanded .locations-chevron{transform:rotate(180deg)}
+.locations-content{display:grid;grid-template-rows:0fr;opacity:0;visibility:hidden;transition:grid-template-rows .25s ease,opacity .2s ease,visibility .25s}
+.locations-expanded .locations-content{grid-template-rows:1fr;opacity:1;visibility:visible}
+.locations-inner{min-height:0;overflow:hidden;padding:0 17px}
+.locations-inner::after{content:"";display:block;height:16px}
+#cartPanel .locations-inner label{display:block;text-align:left;font-size:12px;margin-top:12px}
+#cartPanel .locations-inner select,#cartPanel .locations-inner input{width:100%;box-sizing:border-box;margin:6px 0 10px}
+#cartPanel .locations-inner button{width:auto!important;font-size:12px!important;padding:11px 14px!important;margin-top:5px}
+#cartPanel .locations-toggle:focus-visible{outline:2px solid #ed994c!important;outline-offset:-3px}
+@media(prefers-reduced-motion:reduce){.locations-content,.locations-chevron{transition:none}}
 </style></head>
 
 <body>
@@ -6538,7 +6615,7 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
           <span class="points-label">SwiftShop Points</span>
           <span class="points-number">
             <span id="profilePoints">0</span>
-            <small style="font-size:14px;color:#ff5a1f;">⭐ PTS</small>
+            <small style="font-size:14px;color:#ff5a1f;">PTS</small>
           </span>
         </div>
         <div class="xp-bar-container">
@@ -6561,12 +6638,12 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
       </div>
 
       <div class="rewards-section">
-        <h4 class="section-title">🏆 Milestone Rewards</h4>
+        <h4 class="section-title">Milestone rewards</h4>
         <div id="milestonesListContainer" class="milestones-container"></div>
       </div>
 
       <div class="rewards-section" id="savedRewardsSection" style="display:none;margin-top:20px;">
-        <h4 class="section-title">🎁 Saved Rewards</h4>
+        <h4 class="section-title">Saved rewards</h4>
         <div id="savedRewardsListContainer" class="milestones-container"></div>
       </div>
 
@@ -7495,6 +7572,17 @@ document.addEventListener('DOMContentLoaded',()=>{
  setInterval(()=>{const value=phone();if(value!==lastPhone){lastPhone=value;version++;clearDraft();paint('');dialog.close();refresh();}},1000);
  window.addEventListener('focus',()=>{if(!busy)refresh();});refresh();
 });
+</script><script id="login-welcome-code">
+window.showLoginWelcome=function(){
+ if(document.getElementById('loginWelcome'))return;
+ const overlay=document.createElement('div');overlay.id='loginWelcome';overlay.setAttribute('role','status');overlay.setAttribute('aria-label','Welcome to SwiftShop');
+ const content=document.createElement('div');content.className='welcome-lockup';content.setAttribute('aria-hidden','true');
+ const title=document.createElement('div');title.className='welcome-brand';title.append('Swift');const accent=document.createElement('span');accent.textContent='Shop';title.append(accent);
+ const tagline=document.createElement('p');tagline.className='welcome-tagline';tagline.textContent='Your neighbourhood. Delivered.';
+ const line=document.createElement('div');line.className='welcome-line';content.append(title,tagline,line);overlay.append(content);document.body.append(overlay);
+ const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ setTimeout(()=>{overlay.classList.add('leaving');setTimeout(()=>overlay.remove(),reduced?0:240);},reduced?350:1000);
+};
 </script></body>
 
 
@@ -8980,12 +9068,13 @@ function refreshCartTotals() {
         localStorage.setItem("points", res.points || 0); 
         localStorage.setItem("loggedIn", "true");
         
+        window.showLoginWelcome();
         enterApp();
         
         // Show the ad after login success
         setTimeout(() => {
             showPromoAd();
-        }, 500);
+        }, 1800);
 
       } else {
         // NEW USER: saves with 0 points initially
@@ -8995,12 +9084,13 @@ function refreshCartTotals() {
           localStorage.setItem("points", 0); 
           localStorage.setItem("loggedIn", "true");
           
-          enterApp();
+          window.showLoginWelcome();
+        enterApp();
           
           // Show the ad for the new user
           setTimeout(() => {
               showPromoAd();
-          }, 500);
+          }, 1800);
         });
       }
     });
@@ -13028,7 +13118,16 @@ function selectTip(amount, element) {
     const list=read('addresses'),existing=list.find(a=>a.label.toLowerCase()===label.toLowerCase());
     const entry={id:existing?.id||String(Date.now()),label,coords,zone};
     if(write('addresses',[...list.filter(a=>a.id!==entry.id),entry])){write('selectedAddress',entry.id);window.lastCartZone=zone;addressOptions();addressNotice.textContent='Saved '+label+'.';addressName.value='';if(locationPopup.style.display!=='none')closeLocationPicker();}
-  }),addressNotice);mapSection?.after(addressTools);
+  }),addressNotice);
+  const addressHeading=addressTools.querySelector('h3');
+  const addressToggle=button('',()=>{const expanded=addressToggle.getAttribute('aria-expanded')!=='true';addressToggle.setAttribute('aria-expanded',String(expanded));addressTools.classList.toggle('locations-expanded',expanded);addressContent.inert=!expanded;addressContent.setAttribute('aria-hidden',String(!expanded));});
+  addressToggle.className='locations-toggle';addressToggle.setAttribute('aria-expanded','false');addressToggle.setAttribute('aria-controls','savedLocationsContent');
+  addressToggle.append(el('span','','Saved delivery locations'));
+  const chevron=el('span','locations-chevron','⌄');chevron.setAttribute('aria-hidden','true');addressToggle.append(chevron);
+  const addressContent=el('div','locations-content');addressContent.id='savedLocationsContent';addressContent.inert=true;addressContent.setAttribute('aria-hidden','true');
+  const addressInner=el('div','locations-inner');
+  [...addressTools.children].filter(n=>n!==addressHeading).forEach(n=>addressInner.append(n));addressContent.append(addressInner);
+  addressHeading.replaceChildren(addressToggle);addressTools.append(addressContent);mapSection?.after(addressTools);
   function showAddresses(){addresses.page.style.display='block';addresses.body.replaceChildren();const list=read('addresses');if(!list.length)addresses.body.append(el('p','','No saved locations yet. Pin your location in the cart and choose Save pinned location.'));
     list.forEach(a=>{const row=el('article','shopping-list-card');row.append(el('h3','',a.label),el('p','',a.zone),button('Delete',()=>{write('addresses',read('addresses').filter(x=>x.id!==a.id));addressOptions();showAddresses();}));addresses.body.append(row);});
     addresses.body.append(button('Open cart',()=>openCart()));
