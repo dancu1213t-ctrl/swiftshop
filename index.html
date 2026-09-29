@@ -6490,6 +6490,7 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 #cartPanel .locations-inner button{width:auto!important;font-size:12px!important;padding:11px 14px!important;margin-top:5px}
 #cartPanel .locations-toggle:focus-visible{outline:2px solid #ed994c!important;outline-offset:-3px}
 @media(prefers-reduced-motion:reduce){.locations-content,.locations-chevron{transition:none}}
+</style><style id="live-order-style">#customerLiveOrder{position:fixed;inset:0;box-sizing:border-box;width:100vw;max-width:none;height:100dvh;max-height:none;margin:0;border:0;padding:0;background:#f5f6f3;color:#203b30;overflow-y:auto;z-index:2147483000;font-family:Manrope,system-ui,sans-serif}#customerLiveOrder *{box-sizing:border-box}#customerLiveOrder::backdrop{background:#f5f6f3}.clo-shell{max-width:680px;margin:auto;padding:24px 24px 56px}.clo-shell header{display:flex;justify-content:space-between;align-items:center;padding-bottom:32px}.clo-brand{font-size:13px;font-weight:800;letter-spacing:.1em}.clo-brand span{display:block;color:#8a948b;font-size:9px;margin-top:5px}.clo-shell button{cursor:pointer;font:inherit}.clo-shell header button{border:1px solid #dce2dc;border-radius:50%;width:40px;height:40px;background:#fff}.clo-eyebrow{font-size:11px;letter-spacing:.12em;color:#819083;margin:0 0 12px}.clo-shell h1{font-size:clamp(28px,6vw,40px);letter-spacing:-1px;line-height:1.15;margin:0 0 10px}.clo-subtitle{font-size:15px;color:#738174;line-height:1.6}.clo-progress{display:flex;gap:6px;margin:28px 0 12px}.clo-progress span{height:5px;flex:1;border-radius:6px;background:#dce3d9;overflow:hidden;position:relative}.clo-progress span.complete{background:#244f3d}.clo-progress span.current:after{content:'';position:absolute;inset:0;background:#e48339;animation:clo-scan 1.5s ease-in-out infinite}@keyframes clo-scan{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}.clo-sync{color:#758172;font-size:11px;min-height:18px;line-height:1.6}.clo-steps{list-style:none;margin:28px 0;padding:0}.clo-steps li{display:flex;gap:16px;position:relative;padding:0 0 23px}.clo-steps li:not(:last-child):before{content:'';position:absolute;left:16px;top:32px;bottom:0;width:1px;background:#d7dfd5}.clo-dot{display:grid;place-items:center;flex-shrink:0;width:33px;height:33px;border-radius:50%;background:#e6ebe3;color:#7c887b;font-size:12px}.clo-steps .active .clo-dot{background:#ed8c43;color:#fff;box-shadow:0 0 0 5px #f9e8d8}.clo-steps .done .clo-dot{background:#244f3d;color:#fff}.clo-steps strong{font-size:14px;line-height:1.5}.clo-steps p{font-size:12px;color:#849080;margin:4px 0 0}.clo-steps .waiting{opacity:.6}.clo-summary,.clo-runner{background:white;border:1px solid #e0e6dc;border-radius:18px;padding:22px;margin:22px 0}.clo-summary h2,.clo-runner h2{font-size:17px;margin:0 0 12px}.clo-summary p{font-size:13px;color:#677562;line-height:1.6}.clo-total{display:flex;justify-content:space-between;gap:16px;border-top:1px solid #edf0e8;margin-top:18px;padding-top:16px;font-size:13px}.clo-runner{background:#eaf0e5}.clo-runner small{font-size:10px;letter-spacing:.1em}.clo-runner h2{margin-top:8px}.clo-runner a{display:inline-block;background:#244f3d;color:#fff;border-radius:10px;padding:12px 16px;text-decoration:none;font-size:13px}.clo-runner p,.clo-disclaimer{font-size:12px;line-height:1.7;color:#7b8776}#cloRetry{border:1px solid #dbe2d5;background:#fff;border-radius:10px;padding:12px 16px;font-size:13px}.clo-history{margin-top:24px;display:flex;flex-direction:column;gap:8px;font-size:12px}.clo-history select{padding:12px;border:1px solid #dce3d7;border-radius:10px;background:#fff;font-size:16px}#customerTrackButton{position:fixed;right:16px;bottom:100px;z-index:99999;border:1px solid #dce5d4;background:#244f3d;color:white;border-radius:24px;padding:13px 18px;font:700 13px system-ui;box-shadow:0 5px 24px #23352122}#customerLiveOrder [hidden],#customerTrackButton[hidden]{display:none!important}@media(prefers-reduced-motion:reduce){.clo-progress span.current:after{animation:none}}
 </style></head>
 
 <body>
@@ -7583,6 +7584,38 @@ window.showLoginWelcome=function(){
  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  setTimeout(()=>{overlay.classList.add('leaving');setTimeout(()=>overlay.remove(),reduced?0:240);},reduced?350:1000);
 };
+</script><script id="live-order-bridge">(() => {
+ 'use strict';
+ const stages=[['sent','Order sent','Awaiting SwiftShop confirmation'],['accepted','Order accepted','SwiftShop has confirmed your request'],['preparing','Preparing','Your order is being prepared'],['finding_runner','Finding runner','Your delivery offer is with the runner team'],['runner_assigned','Runner assigned','Your runner is getting ready'],['on_the_way','On the way','Your runner has started the delivery'],['delivered','Delivered','Your delivery is complete']];
+ const root=document.createElement('dialog');root.id='customerLiveOrder';root.setAttribute('aria-labelledby','cloTitle');
+ root.innerHTML='<div class="clo-shell"><header><div class="clo-brand">SWIFTSHOP <span>LIVE ORDER</span></div><button type="button" id="cloClose" aria-label="Back to shopping">✕</button></header><main><p class="clo-eyebrow" id="cloReference"></p><h1 id="cloTitle">Live order updates</h1><p class="clo-subtitle" id="cloSubtitle">We’ll keep you updated here.</p><div class="clo-progress" id="cloProgress" aria-hidden="true"></div><p class="clo-sync" id="cloSync" role="status"></p><section class="clo-runner" id="cloRunner" hidden></section><ol class="clo-steps" id="cloSteps"></ol><section class="clo-summary"><h2>Your order</h2><div id="cloItems"></div><div class="clo-total"><span>Order total</span><b id="cloTotal"></b></div></section><p class="clo-disclaimer">WhatsApp does not confirm message delivery to this app. Your status advances when SwiftShop and your runner update the order.</p><button type="button" id="cloRetry">Refresh updates</button><div class="clo-history"><label for="cloSelect">Recent orders</label><select id="cloSelect"></select></div></main></div>';
+ document.body.append(root);
+ const chip=document.createElement('button');chip.id='customerTrackButton';chip.type='button';chip.textContent='◉ Live order';chip.hidden=true;document.body.append(chip);
+ const node=id=>document.getElementById(id);let records=[],current=null,busy=false,retryAt=0;
+ const scope=()=>String(localStorage.getItem('userPhone')||'guest');const key=()=> 'swiftshop.live-orders.v1:'+scope();let loadedScope='';
+ function restore(){if(loadedScope===scope())return;loadedScope=scope();try{records=JSON.parse(localStorage.getItem(key())||'[]').filter(r=>r.id&&r.token&&r.snapshot);}catch{records=[];}current=records[0]||null;chip.hidden=!current;}
+ function save(){try{localStorage.setItem(key(),JSON.stringify(records.slice(0,20)));}catch{node('cloSync').textContent='Keep this page open: this browser could not save your tracking details.';}}
+ const money=v=>'$'+Number(v||0).toFixed(2)+' BZD';
+ function paint(){if(!current)return;const index=Math.max(0,stages.findIndex(s=>s[0]===(current.remote?.phase||'sent'))),active=stages[index];node('cloReference').textContent='ORDER '+current.id.slice(0,8).toUpperCase();node('cloTitle').textContent=active[1];node('cloSubtitle').textContent=active[2];node('cloProgress').replaceChildren();
+  stages.forEach((_,i)=>{const bar=document.createElement('span');bar.className=i<index?'complete':i===index&&index<6?'current':'';if(index===6)bar.className='complete';node('cloProgress').append(bar);});
+  node('cloSteps').replaceChildren();stages.forEach((stage,i)=>{const li=document.createElement('li');li.className=i<index?'done':i===index?'active':'waiting';if(i===index)li.setAttribute('aria-current','step');const dot=document.createElement('span');dot.className='clo-dot';dot.textContent=i<index?'✓':String(i+1);const text=document.createElement('div'),title=document.createElement('strong'),desc=document.createElement('p');title.textContent=stage[1];desc.textContent=i===index?stage[2]:i<index?'Complete':'Coming next';text.append(title,desc);li.append(dot,text);node('cloSteps').append(li);});
+  const runner=node('cloRunner');runner.replaceChildren();runner.hidden=index<4||!current.remote?.runner_name;
+  if(!runner.hidden){const label=document.createElement('small');label.textContent='YOUR RUNNER';const name=document.createElement('h2');name.textContent=current.remote.runner_name;runner.append(label,name);const phone=String(current.remote.runner_phone||'').replace(/[^\d+]/g,'');if(phone){const a=document.createElement('a');a.href='tel:'+phone;a.textContent='Call '+phone;runner.append(a);}else{const p=document.createElement('p');p.textContent='Runner contact is being confirmed. Contact SwiftShop if you need help.';runner.append(p);}}
+  node('cloItems').replaceChildren();for(const item of current.snapshot.items){const row=document.createElement('p');row.textContent=item.quantity+' × '+item.name;node('cloItems').append(row);}node('cloTotal').textContent=money(current.snapshot.total)+(current.snapshot.taco_note?' + taco food cost':'');
+  const select=node('cloSelect');select.replaceChildren();records.forEach(r=>{const option=document.createElement('option');option.value=r.id;option.textContent=r.id.slice(0,8).toUpperCase()+' · '+new Date(r.created).toLocaleDateString();select.append(option);});select.value=current.id;
+ }
+ function open(){restore();if(!current)return;paint();if(!root.open)root.showModal();root.scrollTop=0;poll(true);}
+ async function poll(force=false){restore();if(!current||busy||(!force&&(!root.open||document.hidden||Date.now()<retryAt)))return;busy=true;const record=current;
+  try{if(!record.registered){const {error}=await supabaseClient.rpc('create_customer_tracking',{p_id:record.id,p_token:record.token,p_snapshot:record.snapshot}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;record.registered=true;save();}
+   const {data,error}=await supabaseClient.rpc('get_customer_tracking',{p_id:record.id,p_token:record.token}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;record.remote=data;save();retryAt=0;if(current?.id===record.id){paint();node('cloSync').textContent='● Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+  }catch(error){retryAt=Date.now()+10000;if(current?.id===record.id)node('cloSync').textContent=record.registered?'Connection interrupted. Showing your last confirmed update; we’ll retry.':'Tracking is waiting to connect. Your WhatsApp checkout still works; we’ll retry automatically.';}
+  finally{busy=false;}
+ }
+ window.SwiftLive={prepare(snapshot){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&Date.now()-Date.parse(last.created)<15000){current=last;open();return last.id;}
+   const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false};records.unshift(record);current=record;save();chip.hidden=false;open();return record.id;},open};
+ chip.onclick=open;node('cloClose').onclick=()=>root.close();node('cloRetry').onclick=()=>poll(true);node('cloSelect').onchange=e=>{current=records.find(r=>r.id===e.target.value);paint();poll(true);};
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden){restore();if(root.open)poll(true);}});window.addEventListener('pageshow',()=>{restore();if(current&&sessionStorage.getItem('swiftshop.pendingLiveReturn')===current.id){sessionStorage.removeItem('swiftshop.pendingLiveReturn');open();}});window.addEventListener('online',()=>poll(true));setInterval(()=>poll(),5000);restore();
+})();
 </script></body>
 
 
@@ -9868,7 +9901,21 @@ async function render() {
         'Please label each person’s items with their name.');
       msg=lines.join('\n');
     }
-    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n'));
+    // Prepare tracking synchronously so WhatsApp still opens inside the original tap.
+    let trackingReference='';
+    try {
+      trackingReference=window.SwiftLive.prepare({
+        customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
+        items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p})),
+        total:grandTotal,payment:paymentMethod,
+        routes:gift?[]:[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storeLocations[biz]||storeLocations.GENERAL}&destination=${encodeURIComponent(customerCoords)}`),
+        arrival_notes:gift?gift.address+(gift.message?' · '+gift.message:''):'Delivery area: '+deliveryZone,
+        taco_note:hasTacos?(tacoPlace+': '+tacoOrder):'',
+        original_order_number:orderNum
+      });
+      sessionStorage.setItem('swiftshop.pendingLiveReturn',trackingReference);
+    } catch(trackingError) { console.warn('Live order tracking could not start. WhatsApp checkout is still available.'); }
+    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n')+(trackingReference?'\n\nLIVE ORDER REFERENCE: '+trackingReference:''));
     window.open(waUrl, "_blank");
   }
 
