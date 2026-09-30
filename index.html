@@ -6496,6 +6496,22 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 #customerLiveOrder{font-family:Poppins,system-ui,sans-serif;background:#f8f9fb;color:#202b36;line-height:1.5}#customerLiveOrder::backdrop{background:#f8f9fb}#customerLiveOrder .clo-shell{max-width:660px;padding:calc(24px + env(safe-area-inset-top)) 22px calc(40px + env(safe-area-inset-bottom))}#customerLiveOrder .clo-shell header{padding-bottom:28px}#customerLiveOrder .clo-brand{color:#ff6a00;letter-spacing:.06em;font-weight:800}#customerLiveOrder .clo-brand span{color:#87909b;letter-spacing:.12em;font-size:9px}#customerLiveOrder .clo-shell header button{display:grid;place-items:center;flex:none;padding:0;margin:0;background:white;border:1px solid #e8ebef;color:#485260;box-shadow:0 3px 12px #14213106}#customerLiveOrder h1{font-family:inherit;font-size:clamp(27px,6vw,36px);font-weight:700;letter-spacing:-.9px;color:#172033;line-height:1.25}#customerLiveOrder .clo-eyebrow{color:#8a93a1;font-size:10px}#customerLiveOrder .clo-subtitle{font-size:13px;color:#788293;margin:10px 0 0}#customerLiveOrder .clo-progress{gap:5px;margin-top:26px}#customerLiveOrder .clo-progress span{background:#e9ecf0;height:5px}#customerLiveOrder .clo-progress span.complete{background:#ff6a00}#customerLiveOrder .clo-progress span.current:after{background:#ff9a4b}#customerLiveOrder .clo-sync{font-size:10px;color:#8a93a1}#customerLiveOrder .clo-steps{padding:22px 20px 0;margin:24px 0;background:#fff;border:1px solid #e8ecf0;border-radius:22px;box-shadow:0 6px 24px #17203304}#customerLiveOrder .clo-steps li{padding-bottom:24px;gap:14px}#customerLiveOrder .clo-steps li:not(:last-child):before{background:#eceff2}#customerLiveOrder .clo-dot{background:#f3f5f7;color:#a1a9b3;font-weight:600}#customerLiveOrder .clo-steps .active .clo-dot{background:#ff6a00;box-shadow:0 0 0 5px #fff0e5;color:white}#customerLiveOrder .clo-steps .done .clo-dot{background:#fff0e5;color:#e45d00}#customerLiveOrder .clo-steps strong{font-size:13px;font-weight:600;color:#293447}#customerLiveOrder .clo-steps p{font-size:11px;color:#8c95a2;margin-top:3px}#customerLiveOrder .clo-steps .waiting{opacity:.7}#customerLiveOrder .clo-summary,#customerLiveOrder .clo-runner{border:1px solid #e8ecf0;border-radius:22px;padding:22px;background:white;box-shadow:0 6px 24px #17203304}#customerLiveOrder .clo-summary h2,#customerLiveOrder .clo-runner h2{font-size:15px;font-weight:600;color:#253247}#customerLiveOrder .clo-summary p{font-size:12px;color:#788293}#customerLiveOrder .clo-total{border-color:#edf0f3;color:#344156;font-size:12px}#customerLiveOrder .clo-runner{background:#fff7f0;border-color:#ffe1c9}#customerLiveOrder .clo-runner small{color:#de640a;font-size:9px;font-weight:700}#customerLiveOrder .clo-runner a{background:#ff6a00;border-radius:12px;color:white;font-size:12px;font-weight:600}#customerLiveOrder .clo-disclaimer{font-size:10px;line-height:1.8;color:#8b95a3}#customerLiveOrder #cloRetry{font-family:inherit;border-color:#e5e9ef;border-radius:12px;color:#586476;font-size:12px;padding:11px 15px}#customerLiveOrder .clo-history{font-size:11px;color:#7e8897}#customerLiveOrder .clo-history select{font-family:inherit;background:white;color:#344156;border:1px solid #e5e9ef;border-radius:12px;min-width:0;width:100%;margin:0;box-shadow:none}#customerTrackButton{font-family:Poppins,system-ui,sans-serif;font-size:12px;font-weight:600;background:#ff6a00;color:#fff;border:1px solid #ff6a00;border-radius:18px;box-shadow:0 5px 18px #ff6a002b;bottom:calc(100px + env(safe-area-inset-bottom));padding:13px 18px;line-height:1.4}
 
 #customerLiveOrder .clo-runner-photo{display:block;width:64px;height:64px;object-fit:cover;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 10px #20302012;margin:0 0 14px}
+</style>
+
+<style id="store-ads-style">#storePaidAd{position:relative;margin:14px 0;border-radius:16px;overflow:hidden;border:1px solid #e7e7e7;background:#f4f4f4}
+#storePaidAd[hidden],#adminTabAds [hidden]{display:none!important}
+.store-ad-art{position:relative;height:132px;overflow:hidden;isolation:isolate;background:#f3f3f3}
+.store-ad-back{position:absolute!important;inset:-20%!important;width:140%!important;height:140%!important;max-width:none!important;object-fit:cover;filter:blur(22px);opacity:.38;z-index:-1}
+.store-ad-front{display:block;width:100%;height:100%;object-fit:contain;position:relative}
+.store-ad-label{position:absolute;top:7px;left:9px;font:600 9px/1.4 Arial,sans-serif;color:#333;background:#ffffffdf;border-radius:5px;padding:3px 6px;pointer-events:none}
+#adminTabAds{background:white;padding:22px;border-radius:18px;color:#243b32}
+#adminTabAds label{display:block;font-size:13px;margin:14px 0 6px}
+#adminTabAds input:not([type=checkbox]),#adminTabAds select{display:block;width:100%;padding:11px;border:1px solid #d5ddd8;box-sizing:border-box}
+#adminTabAds button{border:0;background:#185a43;color:white;border-radius:9px;padding:11px 15px;margin:12px 8px 0 0;cursor:pointer}
+#adminTabAds button:disabled{opacity:.5;cursor:wait}
+#adminTabAds p{font-size:12px;line-height:1.6}
+#adPreview{margin-top:14px;border-radius:12px;overflow:hidden}
+@media(max-width:540px){.store-ad-art{height:110px}}
 </style></head>
 
 <body>
@@ -7622,7 +7638,28 @@ window.showLoginWelcome=function(){
  chip.onclick=open;node('cloClose').onclick=()=>root.close();node('cloRetry').onclick=()=>poll(true);node('cloSelect').onchange=e=>{current=records.find(r=>r.id===e.target.value);paint();poll(true);};
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){restore();poll(true);}});window.addEventListener('pageshow',()=>{restore();if(current&&sessionStorage.getItem('swiftshop.pendingLiveReturn')===current.id){sessionStorage.removeItem('swiftshop.pendingLiveReturn');open();}});window.addEventListener('online',()=>poll(true));setInterval(()=>poll(),5000);restore();
 })();
-</script></body>
+</script><script>document.addEventListener("DOMContentLoaded",()=>{
+(()=>{
+const owner=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:false,autoRefreshToken:true,detectSessionInUrl:false}});
+const panel=document.getElementById('adminTabAds'),$=id=>document.getElementById(id);
+let image='',loadVersion=0;
+const message=text=>{$('adStatus').textContent=text;};
+function art(src,alt){const box=document.createElement('div');box.className='store-ad-art';const back=new Image();back.src=src;back.alt='';back.className='store-ad-back';back.setAttribute('aria-hidden','true');const front=new Image();front.src=src;front.alt=alt;front.className='store-ad-front';box.append(back,front);return box;}
+function preview(){const host=$('adPreview');host.replaceChildren();if(image)host.append(art(image,$('adAlt').value||'Banner preview'));}
+const choices=new Map();document.querySelectorAll('.cat-btn[onclick]').forEach(n=>{const k=n.getAttribute('onclick').match(/setCategory\('([^']+)'/)?.[1];if(k&&!['Snack','Drink','Household','Hygiene','Vegetables','Treats','Pickup','Taco','Tacos','RequestRide'].includes(k))choices.set(k,n.querySelector('img')?.alt||k);});
+for(const [value,label] of choices){const option=new Option(label,value);$('adStore').add(option);}
+async function load(){const version=++loadVersion;image='';$('adAlt').value='';$('adPublished').checked=false;preview();$('adSave').disabled=true;message('Loading banner…');try{const {data,error}=await owner.from('store_paid_ads').select('*').eq('category',$('adStore').value).maybeSingle();if(version!==loadVersion)return;if(error)throw error;if(data){image=data.image_data;$('adAlt').value=data.alt_text;$('adPublished').checked=data.published;}preview();message(data?'Banner loaded.':'No banner assigned. This store shows no ad.');$('adSave').disabled=false;}catch(e){message(e.message);}}
+$('adLogin').onsubmit=async e=>{e.preventDefault();message('Signing in…');try{const {error}=await owner.auth.signInWithPassword({email:$('adEmail').value.trim(),password:$('adPassword').value});$('adPassword').value='';if(error)throw error;const r=await owner.from('store_ad_owners').select('user_id');if(r.error||!r.data?.length){await owner.auth.signOut();throw Error('This account is not the ads owner.');}$('adLogin').hidden=true;$('adEditor').hidden=false;await load();}catch(e){message(e.message);}};
+$('adLogout').onclick=async()=>{++loadVersion;await owner.auth.signOut();$('adLogin').hidden=false;$('adEditor').hidden=true;image='';preview();message('Signed out.');};
+$('adStore').onchange=load;$('adAlt').oninput=preview;
+$('adFile').onchange=async e=>{const file=e.target.files[0];if(!file)return;if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>2*1024*1024){message('Choose a PNG, JPG or WebP up to 2 MB.');e.target.value='';return;}const version=loadVersion;try{const value=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(Error('Could not read image.'));r.readAsDataURL(file);});const check=new Image();check.src=value;await check.decode();if(version!==loadVersion)return;image=value;preview();message('Preview ready. Save to apply.');}catch(e){message(e.message);}finally{e.target.value='';}};
+$('adForm').onsubmit=async e=>{e.preventDefault();if(!image){message('Upload a banner first.');return;}const button=$('adSave');button.disabled=true;try{const r=await owner.from('store_paid_ads').upsert({category:$('adStore').value,image_data:image,alt_text:$('adAlt').value.trim()||'Store advertisement',published:$('adPublished').checked},{onConflict:'category'});if(r.error)throw r.error;message($('adPublished').checked?'Published. Visible when customers open this store.':'Saved privately. No ad will appear in this store.');}catch(e){message(e.message);}finally{button.disabled=false;}};
+$('adRemove').onclick=async()=>{const category=$('adStore').value;$('adRemove').disabled=true;try{const r=await owner.from('store_paid_ads').delete().eq('category',category);if(r.error)throw r.error;if(category===$('adStore').value)await load();}catch(e){message(e.message);}finally{$('adRemove').disabled=false;}};
+let request=0;const open=window.openMerchantStore;
+window.openMerchantStore=async function(category){const version=++request;document.getElementById('storePaidAd')?.remove();const opening=open.apply(this,arguments);const slot=document.createElement('aside');slot.id='storePaidAd';slot.hidden=true;slot.setAttribute('aria-label','Sponsored store banner');document.querySelector('#merchantStorePage input[type="search"]').before(slot);try{const {data,error}=await supabaseClient.from('store_paid_ads').select('image_data,alt_text').eq('category',category).eq('published',true).maybeSingle();if(version!==request||!slot.isConnected||error||!data)return await opening;const box=art(data.image_data,data.alt_text);box.querySelector('.store-ad-front').onerror=()=>{slot.hidden=true;};const label=document.createElement('span');label.className='store-ad-label';label.textContent='Sponsored';slot.append(box,label);slot.hidden=false;}catch{}return await opening;};
+})();
+
+});</script></body>
 
 
 
@@ -12682,6 +12719,7 @@ function selectTip(amount, element) {
     
     <!-- Modern Tabs Header -->
     <div style="display:flex; gap:8px; margin-bottom:24px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none;">
+      <button onclick="switchAdminTab('ads')" class="admin-tab-btn" style="min-width:100px;padding:12px;border:0;border-radius:14px">Store ads</button>
       <button onclick="switchAdminTab('products')" class="admin-tab-btn active" style="flex:1; min-width:90px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#ff6a00; color:#fff; box-shadow:0 4px 12px rgba(255,106,0,0.25); transition:all 0.2s;">📦 Products</button>
       <button onclick="switchAdminTab('manage')" class="admin-tab-btn" style="flex:1; min-width:95px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#555; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:all 0.2s;">📋 Inventory</button>
       <button onclick="switchAdminTab('orders')" class="admin-tab-btn" style="flex:1; min-width:80px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#555; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:all 0.2s;">🛒 Orders</button>
@@ -12689,6 +12727,12 @@ function selectTip(amount, element) {
       <button onclick="switchAdminTab('promos')" class="admin-tab-btn" style="flex:1; min-width:80px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#555; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:all 0.2s;">🔥 Promos</button>
       <button onclick="switchAdminTab('suggestions')" class="admin-tab-btn" style="flex:1; min-width:100px; padding:12px 10px; border-radius:14px; border:none; font-weight:700; font-size:13px; cursor:pointer; background:#fff; color:#555; box-shadow:0 2px 6px rgba(0,0,0,0.04); transition:all 0.2s;">💡 Feedback</button>
     </div>
+
+<div id="adminTabAds" class="admin-tab-content" style="display:none">
+<h3>Store ads</h3><p>Choose where your paid banner appears. Stores without a published banner show no ad. One banner per store.</p>
+<form id="adLogin"><p>Sign in with your ads owner account.</p><label for="adEmail">Email</label><input id="adEmail" type="email" autocomplete="username" required><label for="adPassword">Password</label><input id="adPassword" type="password" autocomplete="current-password" required><button>Sign in</button></form>
+<div id="adEditor" hidden><button id="adLogout" type="button">Sign out of ads</button>
+<form id="adForm"><label for="adStore">Store</label><select id="adStore" required></select><label for="adFile">Banner artwork</label><input id="adFile" type="file" accept="image/png,image/jpeg,image/webp"><p>PNG, JPG or WebP, up to 2 MB. A wide design around 1200 × 220 works best. Your whole image stays visible; the backdrop matches its colors.</p><label for="adAlt">Image description</label><input id="adAlt" maxlength="240" placeholder="Describe the offer for screen readers"><div id="adPreview"></div><label><input id="adPublished" type="checkbox"> Published — show this banner in the store</label><button id="adSave" type="submit">Save banner</button><button id="adRemove" type="button">Remove banner</button></form></div><p id="adStatus" role="status" aria-live="polite"></p></div>
 
     <!-- TAB 1: PRODUCTS MANAGEMENT -->
     <div id="adminTabProducts" class="admin-tab-content">
