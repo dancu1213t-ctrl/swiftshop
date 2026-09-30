@@ -13738,7 +13738,7 @@ async function adminAd(action,extra={}){
 }
 const panel=document.getElementById('adminTabAds'),$=id=>document.getElementById(id);
 let image='',loadVersion=0;
-function busy(on){for(const id of ['adFile','adSave','adStore','adPicker','adNew','adRemove']){const el=document.getElementById(id);if(el)el.disabled=on;}if(!on)$('adRemove').disabled=!editing;}
+function busy(on){for(const id of ['adFile','adSave','adStore','adPicker','adNew','adRemove','adAll']){const el=document.getElementById(id);if(el)el.disabled=on;}if(!on)$('adRemove').disabled=!editing;}
 const message=text=>{$('adStatus').textContent=text;};
 function art(src,alt){const box=document.createElement('div');box.className='store-ad-art';const front=new Image();front.src=src;front.alt=alt;front.className='store-ad-front';box.append(front);return box;}
 function preview(){const host=$('adPreview');host.replaceChildren();if(image)host.append(art(image,$('adAlt').value||'Banner preview'));}
@@ -13747,7 +13747,7 @@ for(const [value,label] of choices){const option=new Option(label,value);$('adSt
 const adPicker=document.createElement('select');adPicker.id='adPicker';adPicker.setAttribute('aria-label','Choose a banner to edit');$('adStore').after(adPicker);
 let banners=[],editing=null;
 const addButton=document.createElement('button');addButton.id='adNew';addButton.type='button';addButton.textContent='+ Add another banner';adPicker.after(addButton);addButton.onclick=()=>{choose('');message('Choose the next image, then save this new banner.');$('adFile').click();};
-function choose(id){++loadVersion;editing=id||null;const row=banners.find(b=>b.id===editing);image=row?.image_data||'';$('adAlt').value=row?.alt_text||'';$('adPublished').checked=row?.published||false;$('adRemove').disabled=!row;adPicker.value=id||'';preview();}
+function choose(id){allBatch=null;++loadVersion;editing=id||null;const row=banners.find(b=>b.id===editing);image=row?.image_data||'';$('adAlt').value=row?.alt_text||'';$('adPublished').checked=row?.published||false;$('adRemove').disabled=!row;adPicker.value=id||'';preview();}
 adPicker.onchange=()=>choose(adPicker.value);
 async function load(){const version=++loadVersion;const category=$('adStore').value;busy(true);message('Loading banners…');try{const {data,error}=await adminAd('list',{p_category:category});if(version!==loadVersion)return;if(error)throw error;banners=data||[];adPicker.replaceChildren(new Option('+ Add a new banner',''));banners.forEach((b,i)=>adPicker.add(new Option(`${i+1}. ${b.alt_text} — ${b.published?'Published':'Draft'}`,b.id)));choose('');message(`${banners.length} banner(s). Choose one to edit, or upload a new banner.`);}catch(e){message(e.message);}finally{busy(false);}}
 
@@ -13765,7 +13765,7 @@ window.submitAdminLogin=async function(){const button=$('adminLoginBox').querySe
 window.openAdminPortal=async function(){try{if(!await authorized()){adminNotice.textContent='Sign in once to open your Admin Portal.';openAdminLogin();return;}legacyAdminIdentity();document.getElementById('sidePanel')?.classList.remove('open','active');document.getElementById('overlay')?.classList.remove('show');document.getElementById('menuOverlay')?.classList.remove('active');closeAdminLogin();$('adminScreen').style.display='block';window.switchAdminTab('ads');}catch(e){adminNotice.textContent=e.message;openAdminLogin();}};
 window.switchAdminTab=function(name){originalTab.apply(this,arguments);if(name==='ads'){message('Loading banner…');authorized().then(ok=>{if(ok)return load();message('Open the Admin Portal with your admin account.');}).catch(e=>message(e.message));}};
 window.handleLogout=async function(){++loadVersion;image='';preview();$('adminScreen').style.display='none';return originalLogout.apply(this,arguments);};
-$('adStore').onchange=load;$('adAlt').oninput=preview;
+$('adStore').onchange=load;$('adAlt').oninput=()=>{allBatch=null;preview();};$('adPublished').onchange=()=>{allBatch=null;};
 $('adFile').onchange=async e=>{
  const file=e.target.files[0];if(!file)return;
  if(!/\.(png|jpe?g|webp)$/i.test(file.name)&&!['image/png','image/jpeg','image/webp'].includes(file.type)){message('Choose a PNG, JPG or WebP image.');e.target.value='';return;}
@@ -13778,8 +13778,25 @@ $('adFile').onchange=async e=>{
    const canvas=document.createElement('canvas');const scale=Math.min(1,1600/Math.max(check.naturalWidth,check.naturalHeight));canvas.width=Math.max(1,Math.round(check.naturalWidth*scale));canvas.height=Math.max(1,Math.round(check.naturalHeight*scale));const ctx=canvas.getContext('2d');ctx.drawImage(check,0,0,canvas.width,canvas.height);value=canvas.toDataURL('image/webp',.86);
    if(value.length>2800000)throw Error('Image is still too large. Export a smaller banner and try again.');
   }
-  if(version!==loadVersion)return;image=value;preview();message(editing?'Replacement image ready. Save to update this banner.':'New banner ready. Select Published to show it, then Save banner.');
+  if(version!==loadVersion)return;allBatch=null;image=value;preview();message(editing?'Replacement image ready. Save to update this banner.':'New banner ready. Select Published to show it, then Save banner.');
  }catch(e){message('Image could not load: '+e.message);}finally{e.target.value='';busy(false);}
+};
+let allBatch=null;
+const allButton=document.createElement('button');allButton.id='adAll';allButton.type='button';allButton.textContent='Upload to all stores';$('adSave').after(allButton);
+const allHint=document.createElement('p');allHint.textContent='Upload to all stores adds this banner to every current store without replacing existing ads. Turn on Published to display it everywhere.';allButton.after(allHint);
+allButton.onclick=async()=>{
+ if(!image){message('Choose a banner image first.');$('adFile').click();return;}
+ const published=$('adPublished').checked;
+ if(!allBatch)allBatch=crypto.randomUUID();
+ busy(true);message('Adding banner to all stores…');
+ try{
+  const {data,error}=await supabaseClient.rpc('save_banner_all_stores',{
+   p_username:localStorage.getItem('userName')||'',p_password:localStorage.getItem('userPhone')||'',
+   p_categories:[...choices.keys()],p_image:image,p_alt:$('adAlt').value.trim()||'Store advertisement',p_published:published,p_batch_id:allBatch
+  });
+  if(error)throw error;
+  allBatch=null;await load();message(`Banner ${published?'published':'saved as a draft'} in ${data.stores} stores. Existing banners kept.`);
+ }catch(e){message('Could not finish the all-stores upload: '+e.message+' You can retry safely.');}finally{busy(false);}
 };
 $('adForm').onsubmit=async e=>{e.preventDefault();if(!image){message('Upload a banner first.');return;}const button=$('adSave');busy(true);try{const r=await adminAd('save',{p_category:$('adStore').value,p_image:image,p_alt:$('adAlt').value.trim()||'Store advertisement',p_published:$('adPublished').checked,p_id:editing});if(r.error)throw r.error;await load();message('Banner saved. Click + Add another banner for the next image.');}catch(e){message(e.message);}finally{busy(false);}};
 $('adRemove').onclick=async()=>{const category=$('adStore').value;$('adRemove').disabled=true;try{const r=await adminAd('delete',{p_category:category,p_id:editing});if(r.error)throw r.error;if(category===$('adStore').value)await load();}catch(e){message(e.message);}finally{$('adRemove').disabled=false;}};
