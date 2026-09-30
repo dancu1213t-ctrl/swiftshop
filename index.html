@@ -6524,7 +6524,37 @@ body #merchantStorePage.shop-active-page{background:#fff!important;padding:20px 
 .store-ad-controls>button{font:inherit;font-size:10px;color:#52655a;background:none;border:0;padding:6px;cursor:pointer}
 @media(max-width:540px){.store-ad-slide{height:110px}}
 @media(prefers-reduced-motion:reduce){.store-ad-track{transition:none}}
-</style></head>
+</style><style id="store-header-redesign">#merchantStorePage .store-profile-cover{height:clamp(130px,15vw,210px);border-radius:18px 18px 0 0;background:linear-gradient(120deg,#e7f0eb,#f4f6f3);margin:0}
+#merchantStorePage .store-profile-cover img{width:100%;height:100%;object-fit:cover;object-position:center}
+#merchantStorePage .store-hero{padding:0 14px 18px;background:#fff;border:0}
+#merchantStorePage .store-identity{display:flex;align-items:center;gap:20px;padding-top:16px;flex-wrap:nowrap}
+#merchantStorePage .store-avatar{width:94px;height:94px;flex:0 0 94px;margin-top:-34px;border:5px solid #fff;box-shadow:0 3px 12px #173d2510}
+#merchantStorePage .store-identity-copy{flex:1;min-width:0}
+#merchantStorePage .store-identity h1{font-size:clamp(21px,2.5vw,30px);line-height:1.2;margin:0 0 9px;letter-spacing:-.7px;font-weight:800}
+#merchantStorePage .store-header-meta{display:flex;align-items:center;flex-wrap:wrap;gap:7px 14px;font-size:12px;color:#6d7d77}
+#merchantStorePage .store-header-meta p{margin:0!important;font-size:12px!important}
+#merchantStorePage .store-header-meta .store-open,#merchantStorePage .store-header-meta .store-closed,#merchantStorePage .store-header-meta .store-pending{font-weight:650;font-size:12px}
+#merchantStorePage .store-header-meta .store-open:before{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:7px}
+#merchantStorePage .store-header-prep{border-left:1px solid #dce3df;padding-left:14px}
+#merchantStorePage .store-header-actions{display:flex;gap:10px;align-items:center;flex-shrink:0}
+#merchantStorePage .store-header-actions button,#merchantStorePage .store-header-actions a{display:inline-flex;align-items:center;justify-content:center;gap:9px;width:auto;height:44px;margin:0;padding:0 15px;border:1px solid #e5eae7;border-radius:14px;background:#fff;box-shadow:0 3px 10px #142d2010;color:#263b32;text-decoration:none;font-family:inherit;font-size:12px;font-weight:600;white-space:nowrap}
+#merchantStorePage .store-header-save>span{font-size:26px;color:#e66c87;line-height:1}
+#merchantStorePage .store-header-actions svg{width:20px;height:20px}
+#merchantStorePage .store-header-whatsapp:before{content:'◉';font-size:23px;color:#069a6d}
+#merchantStorePage .store-header-whatsapp[aria-disabled=true]{opacity:.45;cursor:default}
+#merchantStorePage .store-details{display:none}
+#merchantStorePage #storePublicDetails{display:flex;flex-direction:row;align-items:flex-start;gap:0;border:1px solid #e2e9e5;border-radius:14px;background:#f8faf9;margin:0 0 20px;padding:0;overflow:hidden}
+#merchantStorePage #storePublicDetails .store-about-accordion{flex:1;min-width:0;margin:0;border:0;border-radius:0;background:transparent}
+#merchantStorePage #storePublicDetails .store-about-accordion h2{margin:0}
+#merchantStorePage .store-about-toggle{display:flex;align-items:center;justify-content:flex-start;gap:18px;min-height:56px;padding:16px 20px;font-size:14px;background:none}
+#merchantStorePage .store-about-chevron{width:18px;height:18px;margin:0}
+#merchantStorePage #storePublicDetails .store-profile-call{flex-shrink:0;align-self:flex-start;display:flex;align-items:center;gap:8px;min-height:32px;margin:12px 0;padding:2px 20px;border:0;border-left:1px solid #dce4de;border-radius:0;background:none;color:#07865c;box-shadow:none;white-space:nowrap}
+#merchantStorePage #storePublicDetails .store-profile-call strong,#merchantStorePage #storePublicDetails .store-profile-call span{color:inherit;font-size:13px;padding:0;border:0;font-weight:600}
+#merchantStorePage #storePublicDetails .store-profile-call span:before{content:'· ';}
+#merchantStorePage .store-about-inner{padding:0 20px 16px}
+@media(max-width:850px){#merchantStorePage .store-identity{flex-wrap:wrap;gap:12px 16px}#merchantStorePage .store-header-actions{width:100%;padding-left:110px}#merchantStorePage .store-header-actions button,#merchantStorePage .store-header-actions a{height:40px}}
+@media(max-width:540px){#merchantStorePage .store-profile-cover{height:125px;border-radius:14px 14px 0 0}#merchantStorePage .store-hero{padding:0 8px 14px}#merchantStorePage .store-avatar{width:72px;height:72px;flex-basis:72px;margin-top:-32px;border-width:4px}#merchantStorePage .store-identity{gap:12px;padding-top:12px}#merchantStorePage .store-identity h1{font-size:21px;letter-spacing:-.5px;margin-bottom:7px}#merchantStorePage .store-header-meta{gap:5px 8px;font-size:11px}#merchantStorePage .store-header-meta p{font-size:11px!important}#merchantStorePage .store-header-meta .store-open,#merchantStorePage .store-header-meta .store-closed,#merchantStorePage .store-header-meta .store-pending{font-size:11px}#merchantStorePage .store-header-prep{padding-left:8px}#merchantStorePage .store-header-actions{padding-left:0;gap:8px}#merchantStorePage .store-header-actions button,#merchantStorePage .store-header-actions a{flex:1;padding:0 8px;font-size:11px;border-radius:12px}#merchantStorePage #storePublicDetails{flex-direction:column}#merchantStorePage #storePublicDetails .store-about-accordion{width:100%}#merchantStorePage .store-about-toggle{min-height:48px;padding:12px 15px;font-size:13px}#merchantStorePage #storePublicDetails .store-profile-call{width:100%;margin:0;padding:12px 15px;border-left:0;border-top:1px solid #e2e9e5;min-height:44px}#merchantStorePage .store-about-inner{padding:0 15px 14px}}
+</style><style>#merchantStorePage .store-header-whatsapp:before{content:none}#merchantStorePage .store-header-whatsapp svg{color:#069a6d}#merchantStorePage .store-header-actions svg{flex-shrink:0;display:block!important}#merchantStorePage .store-header-actions .store-profile-share{min-width:90px}#merchantStorePage #storePublicDetails .store-profile-call{justify-content:flex-start}</style></head>
 
 <body>
 
@@ -13577,15 +13607,17 @@ document.addEventListener('DOMContentLoaded',()=>{
    try{if(navigator.share)await navigator.share({title:m.name,url:url.href});else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url.href);share.title='Link copied';share.setAttribute('aria-label','Store link copied');setTimeout(()=>{share.title='Share store';share.setAttribute('aria-label','Share '+m.name);},1800);}else window.prompt('Copy store link',url.href);}catch(e){if(e.name!=='AbortError')window.prompt('Copy store link',url.href);}
   },'store-profile-share');share.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.7 10.5 6.6-4m-6.6 7 6.6 4"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="5" r="3"/><circle cx="18" cy="19" r="3"/></svg>';share.setAttribute('aria-label','Share '+m.name);share.title='Share store';identity.append(avatar,copy,share);hero.append(identity);
   details.replaceChildren();
-  const benefitIcons={
-   'Prep':'<path d="M3 6h11v11H3zM14 10h4l3 4v3h-7"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/>',
-   Browse:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
-   Save:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z"/>',
-   Updates:'<path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.9-5.5a9 9 0 0 1-.9-4A8.5 8.5 0 0 1 12.5 3h.5a8.5 8.5 0 0 1 8 8v.5Z"/><path d="M8 11.5h.01M12 11.5h.01M16 11.5h.01"/>'
-  };
-  for(const [symbol,label,value] of [['','Prep',estimate(active)],['','Browse','Shop & offers'],['','Save','Favourites'],['','Updates','WhatsApp']]){
-   const tile=el('div',undefined,'store-benefit'),icon=el('span',symbol,'store-benefit-icon'),text=el('div');icon.setAttribute('aria-hidden','true');icon.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+benefitIcons[label]+'</svg>';text.append(el('strong',label),el('small',value));tile.append(icon,text);details.append(tile);
-  }
+  const metaLine=el('div',undefined,'store-header-meta');
+  const subtitle=copy.querySelector('p'),status=copy.querySelector(':scope > span');metaLine.append(subtitle,status,el('span',estimate(active),'store-header-prep'));copy.append(metaLine);
+  const actions=el('div',undefined,'store-header-actions');
+  const save=btn('',()=>{
+   try{const key='swiftshop.savedStores.'+(localStorage.getItem('userPhone')||'guest');const entries=JSON.parse(localStorage.getItem(key)||'[]');const exists=entries.includes(active);localStorage.setItem(key,JSON.stringify(exists?entries.filter(x=>x!==active):[...entries,active]));setSave(!exists);}catch{notice.textContent='This browser could not save the store.';}
+  },'store-header-save');
+  function setSave(on){save.setAttribute('aria-pressed',String(on));save.innerHTML='<span aria-hidden="true">'+(on?'♥':'♡')+'</span> '+(on?'Saved':'Save');}
+  try{setSave(JSON.parse(localStorage.getItem('swiftshop.savedStores.'+(localStorage.getItem('userPhone')||'guest'))||'[]').includes(active));}catch{setSave(false);}
+  share.append(el('span','Share'));const whatsapp=el('a','WhatsApp','store-header-whatsapp');whatsapp.insertAdjacentHTML('afterbegin','<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.5 7.5L3 21l1.8-5.5A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8 7c0 5 4 9 8 9l1-3-3-1-1 1-2-2 1-1-1-3Z"/></svg>');whatsapp.setAttribute('aria-disabled','true');whatsapp.title='Store contact unavailable';
+  actions.append(save,share,whatsapp);identity.append(actions);
+
  }
 
  function close(){request++;storePage.style.display='none';active=null;document.querySelectorAll('.shop-bottom-nav button').forEach(n=>{if(n.dataset.destination==='home')n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});}
@@ -13673,12 +13705,16 @@ function storeHoursLabel(data){
    if(data.description)inner.append(el('p',data.description));
    const facts=el('div',undefined,'store-profile-facts');
    for(const [label,value] of [['Location',data.address],['Hours · store local time',storeHoursLabel(data)]]){if(typeof value==='string'&&value.trim()){const item=el('div');item.append(el('small',label),el('p',value));facts.append(item);}}
-   if(facts.children.length)inner.append(facts);if(inner.children.length)info.append(about);
+   if(facts.children.length)inner.append(facts);if(!inner.children.length)inner.append(el('p','More store information will be available soon.'));info.append(about);
    const phone=String(data.phone||'').trim(),digits=phone.replace(/\D/g,'');
    if(/^\+?[\d\s().-]+$/.test(phone)&&digits.length>=7&&digits.length<=15){const link=el('a',undefined,'store-profile-call');link.href='tel:'+(phone.startsWith('+')?'+':'')+digits;link.append(el('strong','Call store'),el('span',phone));info.append(link);}
    const url=merchantFeed.imageURL(data.cover_image);if(url){const image=new Image();image.alt='';image.onload=()=>{if(token===request)cover.replaceChildren(image);};image.src=url;}
   }catch{/* The store remains usable when public details are unavailable. */}
-  return await opening;
+  await opening;
+  if(token===request){
+   const contact=info.querySelector('.store-profile-call'),whatsapp=hero.querySelector('.store-header-whatsapp');
+   if(contact&&whatsapp){let digits=contact.getAttribute('href').replace(/\D/g,'');if(digits.length===7)digits='501'+digits;whatsapp.href='https://wa.me/'+digits;whatsapp.target='_blank';whatsapp.rel='noopener noreferrer';whatsapp.removeAttribute('aria-disabled');whatsapp.title='Message this store on WhatsApp';}
+  }
  };
 });
 </script><script>/* Product URLs contain identifiers only; prices and availability stay live. */
