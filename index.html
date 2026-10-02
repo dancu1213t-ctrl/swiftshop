@@ -6591,7 +6591,7 @@ body #cartMapSection.map-expanded{position:fixed!important;inset:12px!important;
 .cr-has-ride .cr-contact,.cr-has-ride .cr-price-note{display:none}#crTracking{padding:20px;background:white;border:1px solid #e2e7de;border-radius:18px;margin-top:16px}.cr-status-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.cr-status-top h2{font-size:18px;font-weight:700}.cr-status-top span{font-size:10px;color:#8b9584}#crSteps{list-style:none;display:flex;gap:8px;padding:0;margin:20px 0}#crSteps li{flex:1;font-size:10px;line-height:1.5;border-top:3px solid #e7ebe3;padding-top:8px;color:#939b8d}#crSteps .cr-step-done{border-color:#eb7a2a;color:#8f511f}#crDriver{font-size:13px}.cr-track-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}#crCancel{color:#ad4f3f!important}#customerRideChip{display:block;margin:8px auto 0;padding:10px 15px;border:1px solid #efd5bc;border-radius:12px;background:#fff8f0;color:#96501e;font:600 11px 'Poppins',sans-serif;cursor:pointer}
 body .pac-container{z-index:50001!important}
 @media(max-width:600px){#customerRidePanel{padding-top:max(18px,env(safe-area-inset-top))}.cr-header h1{font-size:23px}#crForm,#crTracking{padding:15px}.cr-locations,.cr-contact{grid-template-columns:1fr;gap:12px}#crMap{height:320px}.cr-tools button{flex:1;padding:10px 7px!important;font-size:10px!important}.cr-status-top{align-items:start}.cr-status-top h2{font-size:16px}}
-</style></head>
+</style><style>.cr-driver-card{display:flex;gap:12px;align-items:center;margin:16px 0}.cr-driver-card img,.cr-driver-card>span{width:54px;height:54px;border-radius:50%;object-fit:cover;background:#edf2e8;display:grid;place-items:center;font-weight:700;color:#45633e;flex-shrink:0}.cr-driver-card p{margin:0}</style></head>
 
 <body>
 
@@ -7726,13 +7726,13 @@ window.showLoginWelcome=function(){
  const panel=document.createElement('section');panel.id='customerRidePanel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-labelledby','crTitle');
  panel.innerHTML=`<div class="cr-shell"><header class="cr-header"><div><span>SWIFTRIDE</span><h1 id="crTitle" tabindex="-1">Where are you going?</h1></div><button type="button" id="crClose" aria-label="Close SwiftRide">✕</button></header>
  <p id="crNotice" role="status" aria-live="polite">Choose your pickup and destination.</p>
- <form id="crForm"><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Search a street or drop a pin" autocomplete="off" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Where to?" autocomplete="off" required></label></div>
+ <form id="crForm"><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Search a street or drop a pin" autocomplete="off" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Where to? Business, street or map pin" autocomplete="off" required></label></div>
  <div class="cr-tools"><button type="button" id="crGPS">◎ Use my location</button><button type="button" id="crPin" aria-pressed="false">Pin destination on map</button><button type="button" id="crCenter">Center map</button><button type="button" id="crReconnect">Refresh connection</button></div>
  <div id="crMap" aria-label="Pickup, destination and live ride map"></div><p id="crMapNotice" role="status">Tap the map to set your pickup. Choose destination mode to set your destination.</p>
  <div id="crNearby" aria-live="polite">Choose a pickup to see nearby available drivers.</div>
  <div class="cr-contact"><label>Your name<input id="crName" maxlength="100" autocomplete="name" required></label><label>Phone number<input id="crPhone" maxlength="30" autocomplete="tel" inputmode="tel" required minlength="7"></label></div>
  <p class="cr-price-note">Fare is confirmed with your driver. No payment is taken here.</p><button type="submit" id="crRequest">Request ride</button></form>
- <section id="crTracking" hidden aria-label="Live ride progress"><div class="cr-status-top"><h2 id="crStatus"></h2><span id="crRideId"></span></div><ol id="crSteps"></ol><p id="crDriver"></p><div class="cr-track-actions"><a id="crCall" hidden>Call driver</a><button type="button" id="crRefresh">Refresh</button><button type="button" id="crCancel">Cancel ride</button><button type="button" id="crNew" hidden>Request another ride</button></div><p id="crUpdated" role="status"></p></section></div>`;
+ <section id="crTracking" hidden aria-label="Live ride progress"><div class="cr-status-top"><h2 id="crStatus"></h2><span id="crRideId"></span></div><ol id="crSteps"></ol><div class="cr-driver-card"><img id="crDriverPhoto" alt="Your driver" hidden><span id="crDriverAvatar" aria-hidden="true">D</span><p id="crDriver"></p></div><div class="cr-track-actions"><a id="crCall" hidden>Call driver</a><button type="button" id="crRefresh">Refresh</button><button type="button" id="crCancel">Cancel ride</button><button type="button" id="crNew" hidden>Request another ride</button></div><p id="crUpdated" role="status"></p></section></div>`;
  document.body.append(panel);
  const chip=document.createElement('button');chip.type='button';chip.id='customerRideChip';chip.hidden=true;chip.textContent='View your ride';button.closest('.hero-toggle-row').after(chip);
  const $=id=>document.getElementById(id),terminal=s=>['completed','cancelled'].includes(s);
@@ -7766,9 +7766,10 @@ window.showLoginWelcome=function(){
   if(!map)return;const signature=pickup&&dropoff?[pickup.lat,pickup.lng,dropoff.lat,dropoff.lng].join(','):'';
   if(signature===routeSignature)return;routeSignature=signature;const token=++routeVersion;routeLines.forEach(l=>l.setMap(null));routeLines=[];
   if(!signature)return;
+  const guide=new google.maps.Polyline({path:[pickup,dropoff],strokeOpacity:0,icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:1,strokeColor:'#ed7a2b',scale:3},offset:'0',repeat:'14px'}],map});routeLines=[guide];$('crMapNotice').textContent='Dotted line connects A to B; loading road route…';
   try{const {Route}=await google.maps.importLibrary('routes');const {routes}=await Route.computeRoutes({origin:pickup,destination:dropoff,travelMode:'DRIVING',fields:['path']});
-   if(token!==routeVersion)return;if(!routes?.length)throw Error('No route');routeLines=routes[0].createPolylines({strokeColor:'#f07a29',strokeWeight:5});routeLines.forEach(l=>l.setMap(map));$('crMapNotice').textContent='A: Pickup · B: Destination · Blue: Driver. Route shown follows roads.';
-  }catch{if(token===routeVersion)$('crMapNotice').textContent='Pickup and destination pins are shown. Road route could not load; your ride can still be requested.';}
+   if(token!==routeVersion)return;if(!routes?.length)throw Error('No route');routeLines.forEach(l=>l.setMap(null));routeLines=routes[0].createPolylines({strokeColor:'#f07a29',strokeWeight:5});routeLines.forEach(l=>l.setMap(map));$('crMapNotice').textContent='A: Pickup · B: Destination · Blue: Driver. Route shown follows roads.';
+  }catch{if(token===routeVersion)$('crMapNotice').textContent='Dotted line is a pickup-to-destination guide, not a road route. Road routing is unavailable; you can still request a ride.';}
  }
  async function mapReady(){
   if(map){google.maps.event.trigger(map,'resize');return;}
@@ -7776,14 +7777,17 @@ window.showLoginWelcome=function(){
   map=new google.maps.Map($('crMap'),{center:{lat:18.0777,lng:-88.5667},zoom:14,streetViewControl:false,mapTypeControl:false,fullscreenControl:true,gestureHandling:'greedy'});
   map.addListener('click',e=>{if(!ride&&e.latLng)setPoint(pinMode,{lat:e.latLng.lat(),lng:e.latLng.lng()});});
   for(const [id,type] of [['crPickup','pickup'],['crDropoff','dropoff']]){
-   if(google.maps.places?.Autocomplete){const ac=new google.maps.places.Autocomplete($(id),{componentRestrictions:{country:'bz'},types:['geocode'],fields:['geometry','formatted_address','name']});ac.bindTo('bounds',map);ac.addListener('place_changed',()=>{if(ride)return;const p=ac.getPlace();if(!p.geometry?.location){notice('Select a street from the suggestions or pin it on the map.');return;}setPoint(type,{lat:p.geometry.location.lat(),lng:p.geometry.location.lng()},p.formatted_address||p.name);});}
+   if(google.maps.places?.Autocomplete){const ac=new google.maps.places.Autocomplete($(id),{componentRestrictions:{country:'bz'},fields:['geometry','formatted_address','name']});ac.bindTo('bounds',map);ac.addListener('place_changed',()=>{if(ride)return;const p=ac.getPlace();if(!p.geometry?.location){notice('Select a street from the suggestions or pin it on the map.');return;}setPoint(type,{lat:p.geometry.location.lat(),lng:p.geometry.location.lng()},[p.name,p.formatted_address].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' · '));});}
    $(id).addEventListener('input',()=>{if(ride)return;if(type==='pickup'){pickup=null;clearNearby();}else dropoff=null;pin(type,null);route();});
   }
  }
+ let geocoder=null,pointVersions={pickup:0,dropoff:0};
  function setPoint(type,point,label){
   ++geoVersion;if(type==='pickup')pickup=point;else dropoff=point;
   $(type==='pickup'?'crPickup':'crDropoff').value=label||'Map pin · '+point.lat.toFixed(5)+', '+point.lng.toFixed(5);
   pin(type,point,type==='pickup'?'#ee792b':'#3c5345',type==='pickup'?'A':'B');route();
+  const pointToken=++pointVersions[type];
+  if(!label&&google.maps.Geocoder){geocoder=geocoder||new google.maps.Geocoder();geocoder.geocode({location:point}).then(({results})=>{if(pointVersions[type]!==pointToken||ride)return;const current=type==='pickup'?pickup:dropoff;if(!current||current.lat!==point.lat||current.lng!==point.lng)return;const result=results?.find(r=>r.types?.includes('street_address'))||results?.[0];if(result)$(type==='pickup'?'crPickup':'crDropoff').value=result.formatted_address;}).catch(()=>{});}
   if(type==='pickup')refresh();
  }
  async function gps(){
@@ -7799,6 +7803,8 @@ window.showLoginWelcome=function(){
   if(!tracking){$('crTitle').textContent='Where are you going?';pin('driver',null);return;}
   clearNearby();$('crTitle').textContent='Your ride';$('crStatus').textContent=labels[ride.status]||ride.status;$('crRideId').textContent='#'+ride.id.slice(0,8).toUpperCase();
   $('crSteps').replaceChildren();for(const [i,s] of stages.entries()){const li=document.createElement('li');li.textContent=['Requested','Driver assigned','Arrived','On ride','Complete'][i];if(i<=stages.indexOf(ride.status))li.className='cr-step-done';$('crSteps').append(li);}
+  const driverPhoto=ride.driver_photo;const safePhoto=typeof driverPhoto==='string'&&driverPhoto.length<400000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(driverPhoto);
+  $('crDriverPhoto').hidden=!safePhoto;$('crDriverAvatar').hidden=safePhoto;if(safePhoto)$('crDriverPhoto').src=driverPhoto;else $('crDriverPhoto').removeAttribute('src');$('crDriverAvatar').textContent=(ride.driver_name||'D').slice(0,1).toUpperCase();
   $('crDriver').textContent=ride.driver_name?'Driver: '+ride.driver_name:'Your request is visible to available drivers.';
   $('crCancel').hidden=!['requested','accepted','arrived'].includes(ride.status);$('crNew').hidden=!terminal(ride.status);
   const phone=String(ride.driver_phone||'').replace(/[^\d+]/g,'');$('crCall').hidden=!phone;$('crCall').href='tel:'+phone;
