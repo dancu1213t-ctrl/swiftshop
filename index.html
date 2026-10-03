@@ -6591,7 +6591,7 @@ body #cartMapSection.map-expanded{position:fixed!important;inset:12px!important;
 .cr-has-ride .cr-contact,.cr-has-ride .cr-price-note{display:none}#crTracking{padding:20px;background:white;border:1px solid #e2e7de;border-radius:18px;margin-top:16px}.cr-status-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.cr-status-top h2{font-size:18px;font-weight:700}.cr-status-top span{font-size:10px;color:#8b9584}#crSteps{list-style:none;display:flex;gap:8px;padding:0;margin:20px 0}#crSteps li{flex:1;font-size:10px;line-height:1.5;border-top:3px solid #e7ebe3;padding-top:8px;color:#939b8d}#crSteps .cr-step-done{border-color:#eb7a2a;color:#8f511f}#crDriver{font-size:13px}.cr-track-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}#crCancel{color:#ad4f3f!important}#customerRideChip{display:block;margin:8px auto 0;padding:10px 15px;border:1px solid #efd5bc;border-radius:12px;background:#fff8f0;color:#96501e;font:600 11px 'Poppins',sans-serif;cursor:pointer}
 body .pac-container{z-index:50001!important}
 @media(max-width:600px){#customerRidePanel{padding-top:max(18px,env(safe-area-inset-top))}.cr-header h1{font-size:23px}#crForm,#crTracking{padding:15px}.cr-locations,.cr-contact{grid-template-columns:1fr;gap:12px}#crMap{height:320px}.cr-tools button{flex:1;padding:10px 7px!important;font-size:10px!important}.cr-status-top{align-items:start}.cr-status-top h2{font-size:16px}}
-</style><style>.cr-driver-card{display:flex;gap:12px;align-items:center;margin:16px 0}.cr-driver-card img,.cr-driver-card>span{width:54px;height:54px;border-radius:50%;object-fit:cover;background:#edf2e8;display:grid;place-items:center;font-weight:700;color:#45633e;flex-shrink:0}.cr-driver-card p{margin:0}</style></head>
+</style><style>.cr-driver-card{display:flex;gap:12px;align-items:center;margin:16px 0}.cr-driver-card img,.cr-driver-card>span{width:54px;height:54px;border-radius:50%;object-fit:cover;background:#edf2e8;display:grid;place-items:center;font-weight:700;color:#45633e;flex-shrink:0}.cr-driver-card p{margin:0}</style><style id="fleet-upgrade-style">.fleet-heading{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.fleet-heading strong{margin-right:auto}.fleet-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px;margin-top:14px;max-height:350px;overflow:auto}.fleet-card{display:flex;gap:14px;padding:18px;border:1px solid #dce5db;border-radius:18px;background:white}.fleet-card img,.fleet-avatar{width:60px;height:60px;object-fit:cover;border-radius:50%;flex-shrink:0}.fleet-avatar{display:grid;place-items:center;background:#eaf3e9;font-size:24px}.fleet-card p{margin:6px 0}.fleet-card small{color:#68736a}.fleet-available{color:#217747;font-size:14px}.fleet-available span{display:block;color:#344339;margin-top:5px}.driver-welcome{padding:24px;background:linear-gradient(110deg,#e7f2e7,#fff3e6);border-radius:22px;margin-bottom:24px}.driver-welcome span{font-size:12px;letter-spacing:2px;color:#44724a}.driver-welcome h2{margin:10px 0}.driver-welcome p{margin:0}.ride-toolbar{align-items:center;flex-wrap:wrap}#workerVehicle{border:1px solid #dce5db;border-radius:16px;padding:18px;margin:20px 0;display:grid;gap:14px}#workerVehicle[hidden]{display:none}</style><style>.driver-overview{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:22px 0}.driver-overview>div{background:white;border:1px solid #dce5db;border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:10px}.driver-overview small{font-size:11px;letter-spacing:1.5px;color:#6f7b70}.driver-overview strong{font-size:20px;color:#244c31}.driver-overview span{font-size:13px;color:#717b73}.driver-overview button{font-size:13px;padding:8px}.driver-overview[hidden]{display:none}</style></head>
 
 <body>
 
@@ -7720,16 +7720,17 @@ window.showLoginWelcome=function(){
  chip.onclick=open;node('cloClose').onclick=()=>root.close();node('cloRetry').onclick=()=>poll(true);node('cloSelect').onchange=e=>{current=records.find(r=>r.id===e.target.value);paint();poll(true);};
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){restore();poll(true);}});window.addEventListener('pageshow',()=>{restore();if(current&&sessionStorage.getItem('swiftshop.pendingLiveReturn')===current.id){sessionStorage.removeItem('swiftshop.pendingLiveReturn');open();}});window.addEventListener('online',()=>poll(true));setInterval(()=>poll(),5000);restore();
 })();
-</script><script id="customer-swiftride-controller">(() => {
+</script><script id="customer-swiftride-controller">
+(() => {
  'use strict';
  const button=document.getElementById('swiftRideButton');if(!button)return;
  const panel=document.createElement('section');panel.id='customerRidePanel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-labelledby','crTitle');
  panel.innerHTML=`<div class="cr-shell"><header class="cr-header"><div><span>SWIFTRIDE</span><h1 id="crTitle" tabindex="-1">Where are you going?</h1></div><button type="button" id="crClose" aria-label="Close SwiftRide">✕</button></header>
  <p id="crNotice" role="status" aria-live="polite">Choose your pickup and destination.</p>
- <form id="crForm"><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Search a street or drop a pin" autocomplete="off" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Where to? Business, street or map pin" autocomplete="off" required></label></div>
+ <form id="crForm"><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Search a street or drop a pin" autocomplete="off" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Where to?" autocomplete="off" required></label></div>
  <div class="cr-tools"><button type="button" id="crGPS">◎ Use my location</button><button type="button" id="crPin" aria-pressed="false">Pin destination on map</button><button type="button" id="crCenter">Center map</button><button type="button" id="crReconnect">Refresh connection</button></div>
  <div id="crMap" aria-label="Pickup, destination and live ride map"></div><p id="crMapNotice" role="status">Tap the map to set your pickup. Choose destination mode to set your destination.</p>
- <div id="crNearby" aria-live="polite">Choose a pickup to see nearby available drivers.</div>
+ <div id="crNearby"><div class="fleet-heading"><strong id="fleetCount">Available drivers</strong><select id="fleetRange" aria-label="Driver map area"><option value="nearby">Within 15 km</option><option value="all">All available drivers</option></select><button type="button" id="fleetFit">Show drivers on map</button></div><p id="fleetNote">Choose a pickup to see drivers.</p><div id="fleetCards" class="fleet-cards"></div></div>
  <div class="cr-contact"><label>Your name<input id="crName" maxlength="100" autocomplete="name" required></label><label>Phone number<input id="crPhone" maxlength="30" autocomplete="tel" inputmode="tel" required minlength="7"></label></div>
  <p class="cr-price-note">Fare is confirmed with your driver. No payment is taken here.</p><button type="submit" id="crRequest">Request ride</button></form>
  <section id="crTracking" hidden aria-label="Live ride progress"><div class="cr-status-top"><h2 id="crStatus"></h2><span id="crRideId"></span></div><ol id="crSteps"></ol><div class="cr-driver-card"><img id="crDriverPhoto" alt="Your driver" hidden><span id="crDriverAvatar" aria-hidden="true">D</span><p id="crDriver"></p></div><div class="cr-track-actions"><a id="crCall" hidden>Call driver</a><button type="button" id="crRefresh">Refresh</button><button type="button" id="crCancel">Cancel ride</button><button type="button" id="crNew" hidden>Request another ride</button></div><p id="crUpdated" role="status"></p></section></div>`;
@@ -7753,11 +7754,11 @@ window.showLoginWelcome=function(){
   })();try{return await authTask;}finally{authTask=null;}
  }
  async function rpc(name,args={}){const {data,error}=await client.rpc(name,args).abortSignal(AbortSignal.timeout(12000));if(error)throw error;return data;}
- function clearNearby(){nearbyPins.forEach(p=>p.setMap(null));nearbyPins=[];}
+ function vehicleIcon(type){const shape=type==='motorcycle'?'<circle cx="13" cy="29" r="6"/><circle cx="32" cy="29" r="6"/><path d="M13 29l8-14 11 14H13l7-8h8m-7-6h-5m11 0h5l3 7"/>':'<path d="M12 17l3-7h14l3 7v17H12z"/><path d="M15 18h14M15 28h14"/><path d="M10 21v8m24-8v8"/>';return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44"><circle cx="22" cy="22" r="21" fill="#217747" stroke="white" stroke-width="2"/><g fill="none" stroke="white" stroke-width="2.5" stroke-linejoin="round">'+shape+'</g></svg>')};} function clearNearby(){nearbyPins.forEach(p=>p.setMap(null));nearbyPins=[];fleetMarkers?.clear();}
  function pin(name,point,color,label){
   if(!map)return;
   if(!point){if(pins[name])pins[name].setMap(null);delete pins[name];return;}
-  if(!pins[name])pins[name]=new google.maps.Marker({map,position:point,title:label,label:{text:label,color:'#fff',fontSize:'11px'},draggable:name!=='driver',icon:{path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:color,fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
+  if(!pins[name])pins[name]=new google.maps.Marker({map,position:point,title:label,label:name==='driver'?null:{text:label,color:'#fff',fontSize:'11px'},draggable:name!=='driver',icon:name==='driver'?vehicleIcon(ride?.vehicle_type):{path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:color,fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
   pins[name].setPosition(point);pins[name].setMap(map);pins[name].setDraggable(!ride&&name!=='driver');
   if(!pins[name]._wired&&name!=='driver'){pins[name]._wired=true;pins[name].addListener('dragend',e=>{if(!ride)setPoint(name,{lat:e.latLng.lat(),lng:e.latLng.lng()});});}
  }
@@ -7805,7 +7806,7 @@ window.showLoginWelcome=function(){
   $('crSteps').replaceChildren();for(const [i,s] of stages.entries()){const li=document.createElement('li');li.textContent=['Requested','Driver assigned','Arrived','On ride','Complete'][i];if(i<=stages.indexOf(ride.status))li.className='cr-step-done';$('crSteps').append(li);}
   const driverPhoto=ride.driver_photo;const safePhoto=typeof driverPhoto==='string'&&driverPhoto.length<400000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(driverPhoto);
   $('crDriverPhoto').hidden=!safePhoto;$('crDriverAvatar').hidden=safePhoto;if(safePhoto)$('crDriverPhoto').src=driverPhoto;else $('crDriverPhoto').removeAttribute('src');$('crDriverAvatar').textContent=(ride.driver_name||'D').slice(0,1).toUpperCase();
-  $('crDriver').textContent=ride.driver_name?'Driver: '+ride.driver_name:'Your request is visible to available drivers.';
+  $('crDriver').textContent=ride.driver_name?ride.driver_name+' · '+[ride.vehicle_model,ride.vehicle_color,ride.vehicle_type==='motorcycle'?'1 passenger':null].filter(Boolean).join(' · '):'Your request is visible to available drivers.';
   $('crCancel').hidden=!['requested','accepted','arrived'].includes(ride.status);$('crNew').hidden=!terminal(ride.status);
   const phone=String(ride.driver_phone||'').replace(/[^\d+]/g,'');$('crCall').hidden=!phone;$('crCall').href='tel:'+phone;
   pickup={lat:ride.pickup_lat,lng:ride.pickup_lng};dropoff={lat:ride.dropoff_lat,lng:ride.dropoff_lng};$('crPickup').value=ride.pickup_label;$('crDropoff').value=ride.dropoff_label;
@@ -7815,16 +7816,27 @@ window.showLoginWelcome=function(){
   $('crUpdated').textContent=terminal(ride.status)?'Tracking ended.':ride.status==='requested'?'Waiting for a driver to accept.':fresh?'Live GPS · '+new Date(ride.location_updated_at).toLocaleTimeString():'Driver GPS is unavailable or stale. Waiting for the next update.';
   if(fitNext&&!panel.hidden){frame();fitNext=false;}
  }
+
+ let fleetMarkers=new Map();let fleet=[],etaCache=new Map(),etaBusy=false,etaAttempt=0;
+ const escapeFleet=s=>String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+ function photoOK(s){return typeof s==='string'&&s.length<400000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(s);}
+ function etaKey(d,point){return [d.driver_id,d.lat,d.lng,point.lat.toFixed(3),point.lng.toFixed(3)].join(':');}
+ function renderFleet(list,point){fleet=list.filter(x=>x.location_updated_at&&Date.now()-new Date(x.location_updated_at).getTime()<90000);const ids=new Set(fleet.map(x=>x.driver_id));for(const [id,marker] of fleetMarkers){if(!ids.has(id)){marker.setMap(null);fleetMarkers.delete(id);}}
+  for(const driver of fleet){if(map){let marker=fleetMarkers.get(driver.driver_id);if(marker){marker.setPosition({lat:Number(driver.lat),lng:Number(driver.lng)});marker.setIcon(vehicleIcon(driver.vehicle_type));continue;}marker=new google.maps.Marker({map,position:{lat:Number(driver.lat),lng:Number(driver.lng)},title:driver.display_name,icon:vehicleIcon(driver.vehicle_type)});marker.addListener('click',()=>document.getElementById('fleet-'+driver.driver_id)?.scrollIntoView({behavior:'smooth',block:'nearest'}));fleetMarkers.set(driver.driver_id,marker);}}nearbyPins=[...fleetMarkers.values()];
+  $('fleetCount').textContent=fleet.length+' available driver'+(fleet.length===1?'':'s');
+  $('fleetNote').textContent=fleet.length?'Live availability · Map locations are approximate. Pickup times are road estimates.':'No available drivers in this area. You can still request a ride.';
+  $('fleetCards').innerHTML=fleet.map(driver=>{const eta=etaCache.get(etaKey(driver,point));return '<article class="fleet-card" id="fleet-'+escapeFleet(driver.driver_id)+'">'+(photoOK(driver.photo)?'<img alt="Driver photo" src="'+driver.photo+'">':'<span class="fleet-avatar">'+escapeFleet((driver.display_name||'D').slice(0,1))+'</span>')+'<div><strong>'+escapeFleet(driver.display_name||'Driver')+'</strong><p>'+escapeFleet([driver.vehicle_model|| (driver.vehicle_type==='motorcycle'?'Motorcycle':'Car'),driver.vehicle_color].filter(Boolean).join(' · '))+'</p><small>'+escapeFleet(driver.vehicle_type==='motorcycle'?'1 passenger':(driver.passenger_seats||4)+' passengers')+'</small><p class="fleet-available">● Available <span>'+ (eta&&Date.now()-eta.at<90000?eta.minutes+' min from pickup':'ETA unavailable')+'</span></p></div></article>';}).join('');
+  if(!etaBusy&&fleet.length&&Date.now()-etaAttempt>60000){etaBusy=true;etaAttempt=Date.now();const batch=fleet.slice(0,20);google.maps.importLibrary('routes').then(async({RouteMatrix})=>{const {matrix}=await RouteMatrix.computeRouteMatrix({origins:batch.map(x=>({lat:Number(x.lat),lng:Number(x.lng)})),destinations:[point],travelMode:'DRIVING',fields:['durationMillis','condition']});batch.forEach((x,i)=>{const item=matrix.rows[i]?.items[0];if(item?.condition==='ROUTE_EXISTS'&&Number.isFinite(item.durationMillis))etaCache.set(etaKey(x,point),{minutes:Math.max(1,Math.ceil(item.durationMillis/60000)),at:Date.now()});});if(pickup&&pickup.lat===point.lat&&pickup.lng===point.lng&&!ride&&!panel.hidden&&fleet.length)renderFleet(fleet,point);}).catch(()=>{}).finally(()=>etaBusy=false);}
+ }
+ $('fleetRange').onchange=()=>refresh();$('fleetFit').onclick=()=>{if(!map||!fleet.length)return;const bounds=new google.maps.LatLngBounds();fleet.forEach(x=>bounds.extend({lat:Number(x.lat),lng:Number(x.lng)}));if(pickup)bounds.extend(pickup);map.fitBounds(bounds,45);};
+
  async function refresh(){
   if(refreshing||document.hidden||!session)return;refreshing=true;const token=version;
   try{const r=await rpc('swiftride_current',ride?{p_id:ride.id}:{});if(token!==version)return;
    if(r&&!(r.id===dismissed&&terminal(r.status))){if(!ride||ride.id!==r.id)fitNext=true;ride=r;pending=null;localStorage.removeItem(key());paint();}
-   else if(!ride&&pickup&&!panel.hidden){const point={...pickup};const list=await rpc('swiftride_nearby',{p_lat:point.lat,p_lng:point.lng});if(token!==version||ride||!pickup||point.lat!==pickup.lat||point.lng!==pickup.lng)return;clearNearby();
-    if(map)for(const d of list||[])nearbyPins.push(new google.maps.Marker({map,position:{lat:Number(d.lat),lng:Number(d.lng)},title:(d.display_name||'Driver')+' · '+d.distance_km+' km away',icon:{path:google.maps.SymbolPath.CIRCLE,scale:9,fillColor:'#287bd0',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}}));
-    $('crNearby').textContent=list?.length?list.length+' available nearby · Closest '+list[0].distance_km+' km (straight-line distance).':'No available drivers nearby right now. You can request a ride and wait for a driver.';
-   }
-   lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString()+' · Checks every 5 seconds');
-  }catch(e){if(token===version){clearNearby();pin('driver',null);notice('Updates paused: '+e.message+' · Tap Refresh to retry.');$('crUpdated').textContent='Connection interrupted. Driver marker hidden until updates recover.';}}
+       else if(!ride&&pickup&&!panel.hidden){const point={...pickup};const list=await rpc('swiftride_fleet',{p_lat:point.lat,p_lng:point.lng,p_radius_km:$('fleetRange').value==='all'?null:15});if(token!==version||ride||!pickup||point.lat!==pickup.lat||point.lng!==pickup.lng)return;renderFleet(list||[],point);}
+lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString()+' · Checks every 5 seconds');
+  }catch(e){if(token===version){fleet=[];clearNearby();pin('driver',null);notice('Updates paused: '+e.message+' · Tap Refresh to retry.');$('crUpdated').textContent='Connection interrupted. Driver marker hidden until updates recover.';}}
   finally{refreshing=false;}
  }
  async function open(){
@@ -7860,6 +7872,7 @@ window.showLoginWelcome=function(){
  // Restore only an existing ride session at startup. Opening Rides creates a guest session if needed.
  auth(false).then(s=>{if(s)refresh();}).catch(()=>{});
 })();
+
 </script></body>
 
 
