@@ -7817,7 +7817,7 @@ window.showLoginWelcome=function(){
  function hasVehicleArt(vehicle){return typeof vehicle.vehicle_photo==='string'&&vehicle.vehicle_photo.length<=900000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(vehicle.vehicle_photo);}
  function invalidateFare(){++fareVersion;fareQuote=null;$('crFareBreakdown').hidden=true;$('crRequest').textContent='Request ride';$('crLongPickupConfirm').checked=false;$('crLongPickupLabel').hidden=true;$('crFareDetails').textContent=pickup&&dropoff?'Calculating fare…':'Choose pickup and destination to see your fare.';clearTimeout(fareTimer);fareTimer=setTimeout(calculateFare,650);}
  const stages=['requested','accepted','arrived','in_progress','completed'],labels={requested:'Finding your driver',accepted:'Your driver is on the way',arrived:'Your driver has arrived',in_progress:'You’re on your way',completed:'Ride completed',cancelled:'Ride cancelled'};
- let client=null,session=null,account='',authTask=null,ride=null,dismissed=null,pickup=null,dropoff=null,map=null,pins={},nearbyPins=[],pinMode='pickup',busy=false,refreshing=false,version=0,lastSync=0,pending=null,routeLines=[],routeSignature='',routeVersion=0,fitNext=true,geoVersion=0,previousToggle=null;
+ let client=null,session=null,account='',authTask=null,ride=null,dismissed=null,pickup=null,dropoff=null,map=null,pins={},nearbyPins=[],pinMode='pickup',busy=false,refreshing=false,version=0,lastSync=0,pending=null,routeLines=[],routeSignature='',routeVersion=0,routePath=[],routeProgress=0,fitNext=true,geoVersion=0,previousToggle=null;
  function scope(){return localStorage.getItem('userPhone')||'guest';}
  function key(){return 'swiftride.customer.pending:'+encodeURIComponent(account);}
  function bookingNotice(text){$('crBookingNotice').textContent=text;notice(text);}
@@ -7843,14 +7843,27 @@ window.showLoginWelcome=function(){
   if(!pins[name]._wired&&name!=='driver'){pins[name]._wired=true;pins[name].addListener('dragend',e=>{if(!ride)setPoint(name,{lat:e.latLng.lat(),lng:e.latLng.lng()});});}
  }
  function frame(){if(!map)return;const b=new google.maps.LatLngBounds();[pickup,dropoff,ride&&ride.location_fresh&&ride.lat!=null?{lat:ride.lat,lng:ride.lng}:null].filter(Boolean).forEach(p=>b.extend(p));if(!b.isEmpty()){map.fitBounds(b,55);if(!dropoff)map.setZoom(16);}}
+ function routeRemainder(path,point,minProgress=0){
+  if(path.length<2)return null;const scale=111195,cos=Math.cos(point.lat*Math.PI/180);let along=0,best=null;
+  for(let i=0;i<path.length-1;i++){const a=path[i],b=path[i+1],dx=(b.lng-a.lng)*scale*cos,dy=(b.lat-a.lat)*scale,len=Math.hypot(dx,dy);if(!len)continue;
+   const px=(point.lng-a.lng)*scale*cos,py=(point.lat-a.lat)*scale;const t=Math.max(0,Math.min(1,(px*dx+py*dy)/(len*len)));const progress=along+t*len,error=Math.hypot(px-t*dx,py-t*dy);
+   if(progress>=minProgress-3&&(!best||error<best.error))best={progress,error,index:i,point:{lat:a.lat+(b.lat-a.lat)*t,lng:a.lng+(b.lng-a.lng)*t}};along+=len;
+  }
+  if(!best||best.error>80||best.progress<minProgress)return null;
+  return {progress:best.progress,error:best.error,remaining:[best.point,...path.slice(best.index+1)]};
+ }
+ function trimCurrentRoute(){
+  if(ride?.status!=='in_progress'||!ride.location_fresh||ride.lat==null||ride.lng==null||Date.now()-Date.parse(ride.location_updated_at)>=90000||!routePath.length)return;
+  const result=routeRemainder(routePath,{lat:Number(ride.lat),lng:Number(ride.lng)},routeProgress);if(!result)return;routeProgress=result.progress;routeLines[0]?.setPath(result.remaining);
+ }
  async function route(){
   if(!ride)invalidateFare();
-  if(!map)return;const signature=pickup&&dropoff?[pickup.lat,pickup.lng,dropoff.lat,dropoff.lng].join(','):'';
-  if(signature===routeSignature)return;routeSignature=signature;const token=++routeVersion;routeLines.forEach(l=>l.setMap(null));routeLines=[];
+  if(!map)return;const signature=pickup&&dropoff?[pickup.lat,pickup.lng,dropoff.lat,dropoff.lng,ride?.id||'',ride?.status==='in_progress'?'driving':'preview'].join(','):'';
+  if(signature===routeSignature){trimCurrentRoute();return;}routeSignature=signature;routePath=[];routeProgress=0;const token=++routeVersion;routeLines.forEach(l=>l.setMap(null));routeLines=[];
   if(!signature)return;
   const guide=new google.maps.Polyline({path:[pickup,dropoff],strokeOpacity:0,icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:1,strokeColor:'#ed7a2b',scale:3},offset:'0',repeat:'14px'}],map});routeLines=[guide];$('crMapNotice').textContent='Dotted line connects A to B; loading road route…';
   try{const {Route}=await google.maps.importLibrary('routes');const {routes}=await Route.computeRoutes({origin:pickup,destination:dropoff,travelMode:'DRIVING',fields:['path']});
-   if(token!==routeVersion)return;if(!routes?.length)throw Error('No route');routeLines.forEach(l=>l.setMap(null));routeLines=routes[0].createPolylines({strokeColor:'#f07a29',strokeWeight:5});routeLines.forEach(l=>l.setMap(map));$('crMapNotice').textContent='A: Pickup · B: Destination · Blue: Driver. Route shown follows roads.';
+   if(token!==routeVersion)return;if(!routes?.length)throw Error('No route');routeLines.forEach(l=>l.setMap(null));const roadLines=routes[0].createPolylines({strokeColor:'#4285f4',strokeWeight:5});routePath=roadLines.flatMap(line=>line.getPath().getArray().map(p=>({lat:p.lat(),lng:p.lng()})));routeLines=[new google.maps.Polyline({path:routePath,strokeColor:'#4285f4',strokeWeight:5,map})];trimCurrentRoute();$('crMapNotice').textContent=ride?.status==='in_progress'?'Blue line: road ahead. Completed sections disappear as fresh driver GPS arrives.':'A: Pickup · B: Destination · Driver location updates live. Blue route follows roads.';
   }catch{if(token===routeVersion)$('crMapNotice').textContent='Dotted line is a pickup-to-destination guide, not a road route. Road routing is unavailable; fare quoting requires road routing to be available.';}
  }
  async function mapReady(){
