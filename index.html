@@ -7727,12 +7727,12 @@ window.showLoginWelcome=function(){
  const panel=document.createElement('section');panel.id='customerRidePanel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-labelledby','crTitle');
  panel.innerHTML=`<div class="cr-shell"><header class="cr-header"><div><span>SWIFTRIDE</span><h1 id="crTitle" tabindex="-1">Where are you going?</h1></div><button type="button" id="crClose" aria-label="Close SwiftRide">✕</button></header>
  <p id="crNotice" role="status" aria-live="polite">Choose your pickup and destination.</p>
- <form id="crForm"><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Search a street or drop a pin" autocomplete="off" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Where to?" autocomplete="off" required></label></div>
+ <form id="crForm" novalidate><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Search a street or drop a pin" autocomplete="off" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Where to?" autocomplete="off" required></label></div>
  <div class="cr-tools"><button type="button" id="crGPS">◎ Use my location</button><button type="button" id="crPin" aria-pressed="false">Pin destination on map</button><button type="button" id="crCenter">Center map</button><button type="button" id="crReconnect">Refresh connection</button></div>
  <div id="crMap" aria-label="Pickup, destination and live ride map"></div><p id="crMapNotice" role="status">Tap the map to set your pickup. Choose destination mode to set your destination.</p>
  <div id="crNearby"><div class="fleet-heading"><strong id="fleetCount">Available drivers</strong><select id="fleetRange" aria-label="Driver map area"><option value="nearby">Within 15 km</option><option value="all">All available drivers</option></select><button type="button" id="fleetFit">Show drivers on map</button></div><p id="fleetNote">Choose a pickup to see drivers.</p><div id="fleetCards" class="fleet-cards"></div></div>
  <div class="cr-contact"><label>Your name<input id="crName" maxlength="100" autocomplete="name" required></label><label>Phone number<input id="crPhone" maxlength="30" autocomplete="tel" inputmode="tel" required minlength="7"></label></div>
- <p class="cr-price-note">Fare is confirmed with your driver. No payment is taken here.</p><button type="submit" id="crRequest">Request ride</button></form>
+ <p class="cr-price-note">Fare is confirmed with your driver. No payment is taken here.</p><button type="submit" id="crRequest">Request ride</button><p id="crBookingNotice" role="alert" aria-live="assertive"></p></form>
  <section id="crTracking" hidden aria-label="Live ride progress"><div class="cr-status-top"><h2 id="crStatus"></h2><span id="crRideId"></span></div><ol id="crSteps"></ol><div class="cr-driver-card"><img id="crDriverPhoto" alt="Your driver" hidden><span id="crDriverAvatar" aria-hidden="true">D</span><p id="crDriver"></p></div><div class="cr-track-actions"><a id="crCall" hidden>Call driver</a><button type="button" id="crRefresh">Refresh</button><button type="button" id="crCancel">Cancel ride</button><button type="button" id="crNew" hidden>Request another ride</button></div><p id="crUpdated" role="status"></p></section></div>`;
  document.body.append(panel);
  const chip=document.createElement('button');chip.type='button';chip.id='customerRideChip';chip.hidden=true;chip.textContent='View your ride';button.closest('.hero-toggle-row').after(chip);
@@ -7741,6 +7741,7 @@ window.showLoginWelcome=function(){
  let client=null,session=null,account='',authTask=null,ride=null,dismissed=null,pickup=null,dropoff=null,map=null,pins={},nearbyPins=[],pinMode='pickup',busy=false,refreshing=false,version=0,lastSync=0,pending=null,routeLines=[],routeSignature='',routeVersion=0,fitNext=true,geoVersion=0,previousToggle=null;
  function scope(){return localStorage.getItem('userPhone')||'guest';}
  function key(){return 'swiftride.customer.pending:'+encodeURIComponent(account);}
+ function bookingNotice(text){$('crBookingNotice').textContent=text;notice(text);}
  function notice(text){$('crNotice').textContent=text;}
  function newClient(){account=scope();client=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:'swiftride.customer.auth:'+encodeURIComponent(account),persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});}
  async function auth(create=true){
@@ -7831,7 +7832,7 @@ window.showLoginWelcome=function(){
  $('fleetRange').onchange=()=>refresh();$('fleetFit').onclick=()=>{if(!map||!fleet.length)return;const bounds=new google.maps.LatLngBounds();fleet.forEach(x=>bounds.extend({lat:Number(x.lat),lng:Number(x.lng)}));if(pickup)bounds.extend(pickup);map.fitBounds(bounds,45);};
 
  async function refresh(){
-  if(refreshing||document.hidden||!session)return;refreshing=true;const token=version;
+  if(refreshing||busy||document.hidden||!session)return;refreshing=true;const token=version;
   try{const r=await rpc('swiftride_current',ride?{p_id:ride.id}:{});if(token!==version)return;
    if(r&&!(r.id===dismissed&&terminal(r.status))){if(!ride||ride.id!==r.id)fitNext=true;ride=r;pending=null;localStorage.removeItem(key());paint();}
        else if(!ride&&pickup&&!panel.hidden){const point={...pickup};const list=await rpc('swiftride_fleet',{p_lat:point.lat,p_lng:point.lng,p_radius_km:$('fleetRange').value==='all'?null:15});if(token!==version||ride||!pickup||point.lat!==pickup.lat||point.lng!==pickup.lng)return;renderFleet(list||[],point);}
@@ -7855,17 +7856,17 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
  $('crClose').onclick=close;$('crGPS').onclick=gps;$('crCenter').onclick=frame;$('crRefresh').onclick=refresh;$('crReconnect').onclick=async()=>{try{await mapReady();await auth();await refresh();paint();}catch(e){notice(e.message);}};
  $('crPin').onclick=()=>{pinMode=pinMode==='pickup'?'dropoff':'pickup';$('crPin').setAttribute('aria-pressed',String(pinMode==='dropoff'));$('crPin').textContent=pinMode==='dropoff'?'Pin pickup on map':'Pin destination on map';$('crMapNotice').textContent='Tap the map to set your '+(pinMode==='pickup'?'pickup':'destination')+'.';};
  $('crForm').onsubmit=async event=>{
-  event.preventDefault();if(busy||ride)return;
-  if(!pickup||!dropoff){notice('Choose both pickup and destination from suggestions or map pins.');return;}
-  if(!$('crForm').reportValidity())return;
+  event.preventDefault();if(busy)return;if(ride){bookingNotice(terminal(ride.status)?'Tap Request another ride to start a new trip.':'You already have a ride. Open your tracking to see it.');return;}
+  if(!pickup||!dropoff){bookingNotice('Choose both pickup and destination from the dropdown suggestions or map pins. Typing a name alone does not set its location.');return;}
+  if(!$('crName').value.trim()||$('crPhone').value.trim().length<7){bookingNotice('Enter your name and a phone number of at least 7 characters.');$('crForm').reportValidity();return;}if(!$('crForm').reportValidity()){bookingNotice('Please complete the highlighted fields.');return;}
   busy=true;$('crRequest').disabled=true;
   try{await auth();if(!pending){pending={p_request_id:crypto.randomUUID(),p_name:$('crName').value.trim(),p_phone:$('crPhone').value.trim(),p_pickup:$('crPickup').value.trim(),p_dropoff:$('crDropoff').value.trim(),p_pickup_lat:pickup.lat,p_pickup_lng:pickup.lng,p_dropoff_lat:dropoff.lat,p_dropoff_lng:dropoff.lng};localStorage.setItem(key(),JSON.stringify(pending));}
-   notice('Sending your request…');const id=await rpc('swiftride_book',pending);ride=await rpc('swiftride_current',{p_id:id});if(!ride)throw Error('Request sent. Tap Refresh connection to restore your tracking.');pending=null;localStorage.removeItem(key());fitNext=true;paint();await refresh();
-  }catch(e){notice('Could not confirm your ride: '+e.message+' · Refresh or retry; the same request will not be sent twice.');}
+   bookingNotice('Sending your request…');const id=await rpc('swiftride_book',pending);ride=await rpc('swiftride_current',{p_id:id});if(!ride)throw Error('Request sent. Tap Refresh connection to restore your tracking.');pending=null;localStorage.removeItem(key());fitNext=true;paint();bookingNotice('Ride request received · #'+ride.id.slice(0,8).toUpperCase()+'. Waiting for an online driver to accept.');
+  }catch(e){const message=e.message||String(e);if(/Enter your name, phone, pickup|Invalid .*location|violates check constraint/i.test(message)){pending=null;localStorage.removeItem(key());}bookingNotice('Could not confirm your ride: '+message+(e.code?' ['+e.code+']':'')+' · Refresh or retry; the same request will not be sent twice.');}
   finally{busy=false;$('crRequest').disabled=false;}
  };
  $('crCancel').onclick=async()=>{if(!ride||busy||!confirm('Cancel this ride?'))return;busy=true;$('crCancel').disabled=true;try{await rpc('swiftride_cancel',{p_id:ride.id});await refresh();}catch(e){notice(e.message);}finally{busy=false;$('crCancel').disabled=false;}};
- $('crNew').onclick=()=>{if(!ride||!terminal(ride.status))return;dismissed=ride.id;ride=null;pending=null;pickup=null;dropoff=null;pin('pickup',null);pin('dropoff',null);$('crPickup').value='';$('crDropoff').value='';route();paint();notice('Choose pickup and destination for your next ride.');};
+ $('crNew').onclick=()=>{if(!ride||!terminal(ride.status))return;dismissed=ride.id;ride=null;pending=null;$('crBookingNotice').textContent='';pickup=null;dropoff=null;pin('pickup',null);pin('dropoff',null);$('crPickup').value='';$('crDropoff').value='';route();paint();notice('Choose pickup and destination for your next ride.');};
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)close();});
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
  setInterval(()=>{if(account!==scope()){++version;session=null;ride=null;pending=null;dismissed=null;clearNearby();pin('driver',null);chip.hidden=true;close();if(client)client.auth.stopAutoRefresh();client=null;auth(false).then(s=>{if(s)refresh();}).catch(()=>{});return;}if(!panel.hidden||ride&&!terminal(ride.status))refresh();if(ride&&ride.location_updated_at&&Date.now()-new Date(ride.location_updated_at).getTime()>=90000){pin('driver',null);if(!terminal(ride.status)&&ride.status!=='requested')$('crUpdated').textContent='Driver GPS is stale. Waiting for an update.';}},5000);
