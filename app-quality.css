@@ -90,3 +90,23 @@ html.swift-design #appScreen .header .sd-header-group:hover{background:#292929!i
 .cr-ride-option-eta{font-size:13px;font-weight:500;color:#66716a}
 .cr-ride-closest{padding:4px 8px;border-radius:999px;background:#e8f1e9;color:#294b34;font-size:11px;line-height:1.2;white-space:nowrap}
 .cr-ride-option>strong{flex-shrink:0;white-space:nowrap}
+
+/* Desktop composition; phone and tablet layouts retain their existing sizing. */
+@media (min-width:1024px){
+ html.swift-design body #appScreen{width:calc(100% - 64px)!important;max-width:1760px!important;margin:0 auto!important;padding:0 28px 120px!important;box-sizing:border-box!important}
+ html.swift-design body #appScreen .header{margin-bottom:24px!important;padding-top:28px!important;padding-bottom:28px!important}
+ html.swift-design body #appScreen .header .sd-home-greeting{font-size:34px!important;line-height:1.18!important}
+ html.swift-design body #appScreen .header .sd-home-subtitle{font-size:14px!important;line-height:1.6!important}
+ html.swift-design body #appScreen .header .sd-brand{font-size:17px!important}
+ html.swift-design body #appScreen .hero-search-box{min-height:52px!important}
+ html.swift-design body #appScreen #searchInput{font-size:16px!important;min-height:52px!important}
+ html.swift-design body #appScreen .store-directory{margin:30px 0!important}
+ html.swift-design body #appScreen .store-directory h2{font-size:24px!important}
+ html.swift-design body #appScreen .store-directory>p{font-size:14px!important}
+ html.swift-design body #appScreen .store-directory-row{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(112px,1fr))!important;gap:18px!important;overflow:visible!important;padding-bottom:8px!important}
+ html.swift-design body #appScreen .store-directory-card{width:100%!important;min-width:0!important;max-width:none!important;flex-basis:auto!important}
+ html.swift-design body #appScreen .store-directory-card .store-directory-cover{width:104px!important;height:104px!important;margin-left:auto!important;margin-right:auto!important}
+ html.swift-design body #appScreen #products{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:22px!important}
+ html.swift-design body #appScreen .subcategory-title{font-size:25px!important;line-height:1.4!important}
+ html.swift-design body .shop-bottom-nav{width:min(900px,calc(100% - 64px))!important;bottom:16px!important;border:1px solid #e7e9e4!important;border-radius:20px!important;box-shadow:0 8px 32px #203b3014!important;padding:12px 24px!important}
+}
