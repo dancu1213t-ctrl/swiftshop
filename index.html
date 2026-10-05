@@ -7796,12 +7796,12 @@ window.showLoginWelcome=function(){
  document.body.append(panel);
  const chip=document.createElement('button');chip.type='button';chip.id='customerRideChip';chip.hidden=true;chip.textContent='View your ride';button.closest('.hero-toggle-row').after(chip);
  const $=id=>document.getElementById(id),terminal=s=>['completed','cancelled'].includes(s);
- let fareQuote=null, fareVersion=0, fareTimer=null, fareBusy=false, fareRetryAt=0;
+ let rideOptions=[], fareQuote=null, fareVersion=0, fareTimer=null, fareBusy=false, fareRetryAt=0;
  const money=n=>'BZD $'+Number(n).toFixed(2);
  function pickupFeeDisplay(amount){return Number(amount)===0?'<span class="cr-pickup-promo"><span><s>BZD $1.50</s> <strong>BZD $0.00</strong></span><small>Nearby pickup</small></span>':money(amount);}
  function feeReceipt(f){const rows=[['Ride fare',Number(f.standardFare)-0.50],['Booking fee',0.50],['Pickup fee',Number(f.pickupSupplement)||0],['EDF (Extended Distance Fee)',Number(f.returnAllowance)||0],['Rounding',Number(f.roundingAdjustment)||0],['Driver Protection Fee (Night Time Only)',Number(f.driverProtectionFee)||0]].filter(([label,value])=>label==='Ride fare'||label==='Booking fee'||label==='Pickup fee'||Number(value)>0);return '<div class="cr-receipt-total"><span>Total fare</span><strong>'+money(f.customerTotal)+'</strong></div><dl>'+rows.map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+(label==='Pickup fee'?pickupFeeDisplay(value):money(value))+'</dd></div>').join('')+'</dl>'; }
  function hasVehicleArt(vehicle){return typeof vehicle.vehicle_photo==='string'&&vehicle.vehicle_photo.length<=900000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(vehicle.vehicle_photo);}
- function invalidateFare(){++fareVersion;fareQuote=null;rideOptionSelected=false;$('crFareBox').hidden=true;$('crRequest').hidden=!pending;$('fleetNote').textContent=pickup&&dropoff?'Calculating available ride prices…':'Choose pickup and destination to see rides.';$('fleetCards').replaceChildren();$('crRequest').disabled=true;$('crFareBreakdown').hidden=true;$('crRequest').textContent='Request ride';$('crLongPickupConfirm').checked=false;$('crLongPickupLabel').hidden=true;$('crFareDetails').textContent=pickup&&dropoff?'Calculating fare…':'Choose your route to see the fare.';clearTimeout(fareTimer);fareTimer=setTimeout(calculateFare,650);}
+ function invalidateFare(){++fareVersion;rideOptions=[];fareQuote=null;rideOptionSelected=false;$('crFareBox').hidden=true;$('crRequest').hidden=!pending;$('fleetNote').textContent=pickup&&dropoff?'Calculating available ride prices…':'Choose pickup and destination to see rides.';$('fleetCards').replaceChildren();$('crRequest').disabled=true;$('crFareBreakdown').hidden=true;$('crRequest').textContent='Request ride';$('crLongPickupConfirm').checked=false;$('crLongPickupLabel').hidden=true;$('crFareDetails').textContent=pickup&&dropoff?'Calculating fare…':'Choose your route to see the fare.';clearTimeout(fareTimer);fareTimer=setTimeout(calculateFare,650);}
  const stages=['requested','accepted','arrived','in_progress','completed'],labels={requested:'Finding your driver',accepted:'Your driver is on the way',arrived:'Your driver has arrived',in_progress:'You’re on your way',completed:'Ride completed',cancelled:'Ride cancelled'};
  let rideOptionSelected=false;
  let client=null,session=null,account='',authTask=null,ride=null,dismissed=null,pickup=null,dropoff=null,map=null,pins={},nearbyPins=[],pinMode='pickup',busy=false,refreshing=false,version=0,lastSync=0,pending=null,routeLines=[],routeSignature='',routeVersion=0,routePath=[],routeProgress=0,fitNext=true,geoVersion=0,previousToggle=null;
@@ -7942,14 +7942,34 @@ window.showLoginWelcome=function(){
  function etaKey(d,point){return [d.driver_id,d.lat,d.lng,point.lat.toFixed(3),point.lng.toFixed(3)].join(':');}
  function fleetLocationFresh(driver){const at=Date.parse(driver.location_updated_at);return driver.location_fresh!==false&&driver.lat!=null&&driver.lng!=null&&Number.isFinite(Number(driver.lat))&&Number.isFinite(Number(driver.lng))&&Number.isFinite(at)&&Date.now()-at>=0&&Date.now()-at<90000;}
  function renderRideOption(){
-  if(!syncFleetVisibility()||!fareQuote)return;
-  $('fleetCount').textContent='Available rides';$('fleetNote').textContent='Total includes the trip and pickup-distance charge.';
-  const option=document.createElement('button');option.type='button';option.className='cr-ride-option';
-  option.setAttribute('aria-pressed',String(rideOptionSelected));
-  const label=document.createElement('span');label.textContent=fareQuote.vehicleType==='motorcycle'?'Motorcycle ride':'Available ride';
-  const total=document.createElement('strong');total.textContent=money(fareQuote.customerTotal);
-  option.append(label,total);option.onclick=()=>{rideOptionSelected=true;$('crFareBox').hidden=false;$('crFareBreakdown').hidden=false;$('crRequest').hidden=false;$('crRequest').disabled=false;renderRideOption();};
-  $('fleetCards').replaceChildren(option);
+  if(!syncFleetVisibility()||!rideOptions.length)return;
+  $('fleetCount').textContent=rideOptions.length+' available '+(rideOptions.length===1?'ride':'rides');
+  $('fleetNote').textContent='Closest first · Estimated pickup time · Totals include pickup.';
+  const cards=rideOptions.map((quote,index)=>{
+   const option=document.createElement('button');option.type='button';option.className='cr-ride-option';
+   option.setAttribute('aria-pressed',String(rideOptionSelected&&fareQuote?.quoteId===quote.quoteId));
+   const info=document.createElement('span');info.className='cr-ride-option-info';
+   const label=document.createElement('span');label.className='cr-ride-option-name';label.textContent=quote.vehicleType==='motorcycle'?'Motorcycle ride':'Car ride';
+   if(index===0){const badge=document.createElement('span');badge.className='cr-ride-closest';badge.textContent='Closest';label.append(badge);}
+   const eta=document.createElement('span');eta.className='cr-ride-option-eta';
+   const minutes=Number(quote.pickupMinutes);
+   eta.textContent=Number.isFinite(minutes)?(minutes===0?'At pickup':minutes+' min away'):'Pickup time pending';
+   info.append(label,eta);
+   const total=document.createElement('strong');total.textContent=money(quote.customerTotal);
+   option.append(info,total);option.onclick=()=>{
+    if(fareQuote?.quoteId!==quote.quoteId)$('crLongPickupConfirm').checked=false;
+    fareQuote=quote;rideOptionSelected=true;renderSelectedFare();renderRideOption();
+   };return option;
+  });
+  $('fleetCards').replaceChildren(...cards);
+ }
+ function renderSelectedFare(){
+  const data=fareQuote;if(!data||!rideOptionSelected)return;
+  $('crFareBox').hidden=false;$('crFareBreakdown').hidden=false;$('crRequest').hidden=false;$('crRequest').disabled=false;
+  $('crFareDetails').textContent=Number(data.driverProtectionFee)>0?'Includes pickup and the BZD $3 Driver Protection Fee (8:45 PM–midnight).':'Total includes pickup.';
+  $('crFareMiles').textContent=Number(data.roadMiles).toFixed(2)+' road miles';$('crFarePickupMiles').textContent=Number(data.pickupMiles).toFixed(2)+' road miles';$('crFareStandard').textContent=money(Number(data.standardFare)-0.50);$('crFareSupplement').innerHTML=pickupFeeDisplay(data.pickupSupplement||0);$('crFareTotal').textContent=money(data.customerTotal);$('crRequest').textContent='Request ride · '+money(data.customerTotal);
+  $('crProtectionRow').hidden=!(Number(data.driverProtectionFee)>0);$('crProtectionAmount').textContent=money(Number(data.driverProtectionFee)||0);
+  $('crReturnRow').hidden=!data.returnAllowance;$('crReturnMiles').textContent=Number(data.returnMiles||0).toFixed(2)+' road miles back to the service zone';$('crReturnAmount').textContent=money(data.returnAllowance||0);$('crRoundingRow').hidden=!data.roundingAdjustment;$('crRoundingAmount').textContent=money(data.roundingAdjustment||0);$('crLongPickupText').textContent='I agree to the '+money(data.pickupSupplement)+' supplement for a pickup beyond 3.5 miles.';$('crLongPickupLabel').hidden=!data.requiresConfirmation;
  }
  $('fleetRange').onchange=()=>refresh();$('fleetFit').onclick=()=>{if(!map||!fleet.length)return;const bounds=new google.maps.LatLngBounds();fleet.filter(fleetLocationFresh).forEach(x=>bounds.extend({lat:Number(x.lat),lng:Number(x.lng)}));if(pickup)bounds.extend(pickup);if(!bounds.isEmpty())map.fitBounds(bounds,45);};
 
@@ -7988,11 +8008,11 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   try{await auth();const {data,error}=await client.functions.invoke('swiftride-quote',{body:{booking:bookingFields()}});
    if(error){let message=error.message;try{message=(await error.context.json()).error||message;}catch{}throw Error(message);}if(data?.error)throw Error(data.error);
    if(token!==fareVersion||signature!==quoteSignature())return;
-   if(data.noDriver){$('fleetCards').replaceChildren();$('fleetNote').textContent='No rides available right now. We’ll check again shortly.';$('crFareDetails').textContent='Trip fare '+money(data.standardFare)+' · No drivers available. We’ll check again shortly.';return;}
-   fareQuote={...data,signature};renderRideOption();$('crFareDetails').textContent=Number(data.driverProtectionFee)>0?'Includes pickup and the BZD $3 Driver Protection Fee (8:45 PM–midnight).':'Total includes pickup.';
-   $('crFareMiles').textContent=data.roadMiles.toFixed(2)+' road miles';$('crFarePickupMiles').textContent=data.pickupMiles.toFixed(2)+' road miles';$('crFareStandard').textContent=money(Number(data.standardFare)-0.50);$('crFareSupplement').innerHTML=pickupFeeDisplay(data.pickupSupplement||0);$('crFareTotal').textContent=money(data.customerTotal);$('crFareBreakdown').hidden=!rideOptionSelected;$('crRequest').disabled=!rideOptionSelected;$('crRequest').textContent='Request ride · '+money(data.customerTotal);
-   $('crProtectionRow').hidden=!(Number(data.driverProtectionFee)>0);$('crProtectionAmount').textContent=money(Number(data.driverProtectionFee)||0);
-   $('crReturnRow').hidden=!data.returnAllowance;$('crReturnMiles').textContent=Number(data.returnMiles||0).toFixed(2)+' road miles back to the service zone';$('crReturnAmount').textContent=money(data.returnAllowance||0);$('crRoundingRow').hidden=!data.roundingAdjustment;$('crRoundingAmount').textContent=money(data.roundingAdjustment||0);$('crLongPickupText').textContent='I agree to the '+money(data.pickupSupplement)+' supplement for a pickup beyond 3.5 miles.';$('crLongPickupLabel').hidden=!data.requiresConfirmation;
+   rideOptions=[];fareQuote=null;rideOptionSelected=false;$('crFareBox').hidden=true;$('crFareBreakdown').hidden=true;$('crRequest').hidden=!pending;$('crRequest').disabled=true;$('crLongPickupConfirm').checked=false;
+   if(data.noDriver){$('fleetCards').replaceChildren();$('fleetNote').textContent='No rides available right now. We’ll check again shortly.';return;}
+   rideOptions=(Array.isArray(data.options)?data.options:[data]).map(quote=>({...quote,signature}));
+   if(!rideOptions.length)throw Error('No rides available right now.');
+   fareQuote=rideOptions[0];renderRideOption();
   }catch(e){if(token===fareVersion){$('crFareDetails').textContent=e.message;$('fleetNote').textContent=e.message;}}finally{fareBusy=false;}
  };
  $('crForm').onsubmit=async event=>{

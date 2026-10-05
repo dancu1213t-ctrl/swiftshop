@@ -84,3 +84,9 @@ html.swift-design #appScreen .header .sd-header-group{background:#171717!importa
 html.swift-design #appScreen .header .sd-header-group svg{color:inherit!important}
 html.swift-design #appScreen .header .sd-header-group[aria-pressed=true]{background:#303030!important;border-color:#303030!important;color:#fff!important;box-shadow:0 0 0 2px #ffffffaa!important}
 html.swift-design #appScreen .header .sd-header-group:hover{background:#292929!important}
+/* Driver-specific ride choices, with pickup estimates. */
+.cr-ride-option-info{display:flex;flex-direction:column;gap:7px;min-width:0;text-align:left}
+.cr-ride-option-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:700}
+.cr-ride-option-eta{font-size:13px;font-weight:500;color:#66716a}
+.cr-ride-closest{padding:4px 8px;border-radius:999px;background:#e8f1e9;color:#294b34;font-size:11px;line-height:1.2;white-space:nowrap}
+.cr-ride-option>strong{flex-shrink:0;white-space:nowrap}
