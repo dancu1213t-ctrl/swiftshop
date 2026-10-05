@@ -7954,7 +7954,8 @@ window.showLoginWelcome=function(){
    if(index===0){const badge=document.createElement('span');badge.className='cr-ride-closest';badge.textContent='Closest';label.append(badge);}
    const eta=document.createElement('span');eta.className='cr-ride-option-eta';
    const minutes=Number(quote.pickupMinutes);
-   eta.textContent=Number.isFinite(minutes)?(minutes===0?'At pickup':minutes+' min away'):'Pickup time pending';
+   eta.textContent=Number.isFinite(minutes)?(minutes===0?'Near pickup':minutes+' min away'):'Pickup time pending';
+   if(quote.locationFresh===false)eta.textContent+=' · Estimate from last reported location';
    info.append(label,eta);
    const total=document.createElement('strong');total.textContent=money(quote.customerTotal);
    option.append(info,total);option.onclick=()=>{
@@ -8003,10 +8004,25 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
  function bookingFields(){return {p_name:$('crName').value.trim(),p_phone:$('crPhone').value.trim(),p_pickup:$('crPickup').value.trim(),p_dropoff:$('crDropoff').value.trim(),p_pickup_lat:pickup.lat,p_pickup_lng:pickup.lng,p_dropoff_lat:dropoff.lat,p_dropoff_lng:dropoff.lng};}
  function quoteSignature(){return pickup&&dropoff?JSON.stringify(bookingFields()):'';}
  for(const id of ['crName','crPhone'])$(id).addEventListener('input',invalidateFare);
+ async function requestRideQuotes(booking){
+  await auth();
+  async function currentToken(refresh=false){
+   const {data,error}=refresh?await client.auth.refreshSession():await client.auth.getSession();
+   if(error)throw error;
+   const current=data.session;
+   if(!current?.access_token||!current.user?.email_confirmed_at)throw Error('Sign in with your verified email before requesting a ride.');
+   if(!refresh&&current.expires_at&&current.expires_at*1000<=Date.now()+60000)return currentToken(true);
+   session=current;return current.access_token;
+  }
+  const invoke=token=>client.functions.invoke('swiftride-quote',{headers:{Authorization:'Bearer '+token},body:{booking}});
+  let result=await invoke(await currentToken());
+  if(result.error?.context?.status===401)result=await invoke(await currentToken(true));
+  return result;
+ }
  async function calculateFare(){
   if(busy||ride||!pickup||!dropoff||panel.hidden)return;
   const token=fareVersion,signature=quoteSignature();fareBusy=true;fareRetryAt=Date.now()+30000;$('crFareDetails').textContent='Calculating fare…';
-  try{await auth();const {data,error}=await client.functions.invoke('swiftride-quote',{body:{booking:bookingFields()}});
+  try{const {data,error}=await requestRideQuotes(bookingFields());
    if(error){let message=error.message;try{message=(await error.context.json()).error||message;}catch{}throw Error(message);}if(data?.error)throw Error(data.error);
    if(token!==fareVersion||signature!==quoteSignature())return;
    rideOptions=[];fareQuote=null;rideOptionSelected=false;$('crFareBox').hidden=true;$('crFareBreakdown').hidden=true;$('crRequest').hidden=!pending;$('crRequest').disabled=true;$('crLongPickupConfirm').checked=false;
