@@ -1,0 +1,86 @@
+/* Final readability, touch, keyboard and feedback refinement. */
+.sq-sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+html.swift-design :is(button,a,input,select,textarea):focus-visible{outline:3px solid #b34a08!important;outline-offset:3px}
+.sq-dialog{width:min(94vw,580px);max-height:90dvh;box-sizing:border-box;border:1px solid #eee4db;border-radius:22px;padding:0;color:#253127;background:#fff;font-family:inherit;overflow:hidden}
+.sq-dialog::backdrop{background:#17251b80}
+.sq-dialog>header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid #eee8e2}
+.sq-dialog h2{font-size:20px;line-height:1.3;margin:0}.sq-dialog h3{font-size:16px}.sq-dialog p,.sq-dialog li{font-size:14px;line-height:1.65;overflow-wrap:anywhere}
+.sq-dialog .sq-content{padding:8px 20px 24px;overflow:auto;max-height:calc(90dvh - 100px)}
+.sq-dialog :is(button,.sq-action){display:inline-flex;align-items:center;justify-content:center;min-height:44px;box-sizing:border-box;gap:6px;margin:4px 8px 4px 0;padding:10px 14px;border:1px solid #ebd7c7;border-radius:12px;background:#fff5eb;color:#9f4308;font-family:inherit;font-size:13px;font-weight:600;text-decoration:none}
+.sq-dialog input{display:block;box-sizing:border-box;width:100%;min-height:48px;margin:8px 0 14px;padding:10px;border:1px solid #d7dfd5;border-radius:12px;font:inherit}
+.sq-note{color:#5b655b!important;font-size:12px!important;line-height:1.6!important}.sq-email{font-weight:650}
+.sq-account{margin:24px 0}.sq-account h3{font-size:14px;color:#586557}.sq-account button{width:100%;min-height:48px;text-align:left;padding:12px 14px!important;border:1px solid #e6e9e2!important;border-radius:12px!important;background:#fff!important;color:#263b2c!important;font-size:14px!important;margin:4px 0!important}
+.sq-login-privacy{display:block!important;margin:16px auto!important;padding:8px 12px!important;min-height:44px!important;border:0!important;background:transparent!important;color:#914108!important;font-size:13px!important}
+.sq-connection,.sq-catalogue{padding:12px 14px;margin:12px 0;border:1px solid #e7dccf;border-radius:14px;background:#fff8f0;color:#69462d;font-size:13px;line-height:1.5}.sq-catalogue p{margin:0 0 8px}.sq-catalogue button{min-height:44px;border:0;border-radius:10px;padding:10px 14px;background:#a74408;color:white}
+.sq-review{padding:16px;margin:18px 0;border:1px solid #e7e9e3;border-radius:16px;background:#fff}.sq-review h3{margin:0 0 12px;font-size:16px}.sq-review-row{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:1.5;margin:8px 0}.sq-review-row:last-of-type{border-top:1px solid #e6e9e1;padding-top:12px;font-weight:700}
+.sq-empty-cart{text-align:center;padding:24px 12px}.sq-empty-cart p{font-size:14px;color:#5b655b}.sq-empty-cart button{min-height:44px;padding:10px 16px;border-radius:12px;background:#a74408;color:white;border:0}
+html.swift-design #deliveryNotificationInbox .dn-unread{border-left:4px solid #b64b09!important;background:#fff7ee!important}
+html.swift-design #deliveryNotificationInbox [data-read-all]{min-height:44px;padding:10px 12px;background:#fff;color:#914108;border:1px solid #e8dacb;border-radius:12px}
+html.swift-design :is(#deliveryNotificationInbox,#customerLiveOrder,.shop-active-page){scroll-padding-bottom:calc(20px + env(safe-area-inset-bottom));overscroll-behavior:contain}
+html.swift-design :is(#profileOverlay,#orderBox,#cartPanel,#customerRidePanel,.sq-dialog) :is(input,textarea,select){font-size:16px!important;scroll-margin-block:90px}
+html.swift-design #appScreen .hero-promo-slider :is(.hero-promo-sub,.hero-promo-tag){font-size:11px!important;line-height:1.4!important;color:#fff!important}
+html.swift-design #appScreen .hero-promo-slider .hero-promo-btn{font-size:12px!important;min-height:44px!important;color:#833400!important}
+html.swift-design #appScreen #merchantBannerSlider :is(.banner-editorial-label,.merchant-banner p){font-size:11px!important;line-height:1.4!important;color:#566551!important}
+html.swift-design #appScreen #merchantBannerSlider .banner-copy>button{font-size:12px!important;min-height:44px!important}
+html.swift-design #appScreen .store-directory-card strong{font-size:12px!important}
+html.swift-design #appScreen .store-directory-card :is(small,.sd-store-open){font-size:11px!important}
+html.swift-design #appScreen .header :is(.sd-header-group,.sd-header-balance){font-size:12px!important;min-height:44px;box-sizing:border-box}
+html.swift-design :is(.store-product,.product) button,html.swift-design :is(#customerRidePanel,#profileOverlay,#orderBox,#cartPanel,#customerLiveOrder,#deliveryNotificationInbox) button{min-height:44px!important}
+html.swift-design :is(.store-product,.product) :is(.heart-btn,.minus-btn){min-width:44px!important}
+html.swift-design #merchantBannerSlider .merchant-banner-controls{position:static!important;padding:0 10px 4px!important;min-height:44px;flex-wrap:wrap!important}
+html.swift-design #merchantBannerSlider .merchant-banner-controls button{min-width:44px!important;min-height:44px!important;height:44px!important}
+html.swift-design #merchantBannerSlider .merchant-banner-controls button[data-dot]::after{top:20px!important;left:15px!important}
+html.swift-design #merchantBannerSlider .merchant-banner-controls button[data-dot][aria-current=true]::after{left:11px!important}
+html.swift-design #merchantBannerSlider .merchant-banner{padding-bottom:12px!important}
+html.swift-design #appScreen .hero-promo-dots button{min-width:44px;min-height:44px}
+@media(prefers-reduced-motion:reduce){html.swift-design *,html.swift-design *::before,html.swift-design *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html.swift-design [hidden]{display:none!important}
+
+/* Open artwork: categories and products sit directly on the app surface. */
+html.swift-design #appScreen .categories .cat-btn img,
+html.swift-design #appScreen .categories .cat-btn.active img,
+html.swift-design #appScreen .categories .cat-btn>.sd-image-fallback{background:transparent!important;border:0!important;box-shadow:none!important}
+html.swift-design #appScreen .categories .cat-btn.active>span:not(.status-dot):not(.sd-image-fallback){color:#b84700!important;text-decoration:underline;text-underline-offset:4px}
+html.swift-design :is(#appScreen,#promoPage) .product,
+html.swift-design #merchantStorePage .store-product{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:0!important;overflow:visible!important}
+html.swift-design :is(#appScreen,#promoPage) .product .product-img-wrap,
+html.swift-design :is(#appScreen,#promoPage) .product>img,
+html.swift-design #merchantStorePage .store-product>img{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important}
+html.swift-design :is(#appScreen,#promoPage) .product .product-img-wrap img,
+html.swift-design :is(#appScreen,#promoPage) .product>img,
+html.swift-design #merchantStorePage .store-product>img{mix-blend-mode:multiply;filter:none!important}
+/* Keep the existing banner size/copy/logo; uploaded campaign artwork fills it. */
+html.swift-design #appScreen #merchantBannerSlider .merchant-banner.image-blended{grid-template-columns:minmax(0,1fr)!important;isolation:isolate}
+html.swift-design #appScreen #merchantBannerSlider .merchant-banner.image-blended>.banner-art-panel{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;z-index:0!important;overflow:hidden!important;border-radius:0!important;background:transparent!important}
+html.swift-design #appScreen #merchantBannerSlider .merchant-banner.image-blended .banner-art-panel>img{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-height:none!important;max-width:none!important;object-fit:cover!important;object-position:center!important;mix-blend-mode:normal!important;transform:none!important}
+html.swift-design #appScreen #merchantBannerSlider .merchant-banner.image-blended .banner-art-panel::before{display:none!important}
+html.swift-design #appScreen #merchantBannerSlider .merchant-banner.image-blended .banner-art-panel::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(255,255,255,.97),rgba(255,255,255,.91) 40%,rgba(255,255,255,.68) 70%,rgba(255,255,255,.48));pointer-events:none}
+html.swift-design #appScreen #merchantBannerSlider .merchant-banner.image-blended>.banner-copy{position:relative!important;z-index:2!important;max-width:76%}
+html.swift-design #appScreen .product .store-item-share{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;margin:2px 0 0 auto;padding:0;border:0;background:transparent;color:#52615a}
+html.swift-design #appScreen #merchantBannerSlider .merchant-banner.image-blended .banner-art-panel>img{filter:none!important;opacity:1!important}
+
+html.swift-design #appScreen #merchantBannerSlider .merchant-banner.image-blended .banner-art-panel>img{filter:saturate(.82)!important}
+/* A quiet card outline, with no separate tile behind the product artwork. */
+html.swift-design :is(#appScreen,#promoPage) .product,
+html.swift-design #merchantStorePage .store-product{border:1px solid #eef0e9!important;border-radius:16px!important;padding:9px!important;background:transparent!important;box-shadow:none!important}
+html.swift-design :is(#appScreen,#promoPage) .product .product-img-wrap,
+html.swift-design :is(#appScreen,#promoPage) .product>img,
+html.swift-design #merchantStorePage .store-product>img{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+
+#crNearby[hidden]{display:none!important}
+#crNearby #fleetRange,#crNearby #fleetFit{display:none!important}
+#crNearby .cr-ride-option{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;min-height:70px;padding:16px;border:1px solid #e6e9e2;border-radius:16px;background:#fff;color:#25342b;text-align:left;cursor:pointer;font-size:15px}
+#crNearby .cr-ride-option[aria-pressed=true]{border-color:#ee792b;background:#fff6ed;box-shadow:0 0 0 1px #ee792b}
+#crNearby .cr-ride-option strong{white-space:nowrap;font-size:17px}
+
+#customerRidePanel #crFareBox[hidden],#customerRidePanel #crRequest[hidden]{display:none!important}
+
+/* Soft orange home wave, kept behind the existing header content. */
+html.swift-design #appScreen .header{position:relative;isolation:isolate}
+html.swift-design #appScreen .header::before{content:'';position:absolute;z-index:-1;pointer-events:none;left:calc(-1 * var(--sd-gutter,18px));right:calc(-1 * var(--sd-gutter,18px));top:calc(-1 * env(safe-area-inset-top,0px));bottom:-24px;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20600%20300%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23ffd0a6%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ffeddd%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath%20fill%3D%22url%28%23g%29%22%20d%3D%22M0%200H600V266C450%20220%20180%20320%200%20272Z%22%2F%3E%3C%2Fsvg%3E");background-size:100% 100%;background-repeat:no-repeat}
+html.swift-design #appScreen .header .sd-home-subtitle{color:#786354!important}
+
+html.swift-design #appScreen .header .sd-header-group{background:#171717!important;color:#fff!important;border-color:#171717!important;box-shadow:0 3px 8px #00000010!important}
+html.swift-design #appScreen .header .sd-header-group svg{color:inherit!important}
+html.swift-design #appScreen .header .sd-header-group[aria-pressed=true]{background:#303030!important;border-color:#303030!important;color:#fff!important;box-shadow:0 0 0 2px #ffffffaa!important}
+html.swift-design #appScreen .header .sd-header-group:hover{background:#292929!important}

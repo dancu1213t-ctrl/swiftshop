@@ -7,7 +7,7 @@
   try{client||=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:'swiftshop.secure.admin',persistSession:false,autoRefreshToken:true,detectSessionInUrl:false}});
    const {error}=await client.auth.signInWithPassword({email,password});document.getElementById('adminPhone').value='';if(error)throw error;
    const result=await client.rpc('swift_admin_session').abortSignal(AbortSignal.timeout(10000));if(result.error)throw result.error;if(result.data!==true)throw Error('Administrator access required.');
-   verified=true;closeAdminLogin();enterApp();document.getElementById('adminScreen').style.display='block';window.switchAdminTab('products');notice.textContent='';
+   verified=true;document.documentElement?.classList.remove('swift-awaiting-auth');closeAdminLogin();enterApp();document.getElementById('adminScreen').style.display='block';window.switchAdminTab('products');notice.textContent='';
   }catch(e){verified=false;await client?.auth.signOut();notice.textContent=e.message;}
  },async signout(){verified=false;await client?.auth.signOut();}};
  window.SwiftAdmin=state;
@@ -17,4 +17,3 @@
  const logout=window.handleLogout;window.handleLogout=async function(...args){await state.signout();return logout.apply(this,args);};
  });
 })();
-

@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8"><meta name="swiftshop-build" content="customer-orders-verified-20261004">
+<script src="app-config.js?v=orders20261004"></script><script src="native.js?v=orders20261004"></script><link rel="stylesheet" href="mobile.css?v=orders20261004">
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpkP-1hNTsxKVNmPhPP_J-SawsNZi3TIQ&libraries=places"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/imgly-background-removal.min.js"></script>
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpkP-1hNTsxKVNmPhPP_J-SawsNZi3TIQ&libraries=places"></script>
 
 
   <title>SwiftShop OW</title>
@@ -19,9 +19,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" href="favicon.png">
+  
+  
+    
 
   <style>
     html {
@@ -1268,45 +1268,6 @@ body {
   }
 }
 
-/* ================= WELCOME SPLASH ================= */
-#welcomeScreen {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: linear-gradient(135deg, #ff9a00, #ff5a1f);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 900;
-  text-align: center;
-  animation: welcomeFadeOut 0.6s ease forwards;
-  animation-delay: 2s;
-}
-
-#welcomeScreen h1 {
-  font-size: 36px;
-  font-weight: 900;
-  letter-spacing: 1px;
-  line-height: 1.2;
-  text-shadow:
-    0 4px 14px rgba(0,0,0,.35),
-    0 0 34px rgba(255,255,255,.45);
-  animation: welcomePop 1.2s ease-in-out infinite;
-}
-
-
-@keyframes welcomePop {
-  0%,100% { transform: scale(1); }
-  50% { transform: scale(1.06); }
-}
-
-@keyframes welcomeFadeOut {
-  to {
-    opacity: 0;
-    visibility: hidden;
-  }
-}
 /* ================= HEADER ================= */
 .header {
   background: linear-gradient(135deg, #ff9a00, #ff5a1f);
@@ -6027,7 +5988,7 @@ button,a,[onclick],input,select,textarea{touch-action:manipulation}
 #appScreen .hero-live-promos:hover{background:#383a3d}
 #appScreen .hero-live-promos:focus-visible{outline:2px solid #737a80!important;outline-offset:3px}
 
-/* Live Promos: a dedicated editorial storefront. */
+/* Live Deals: a dedicated editorial storefront. */
 body #promoPage.shop-active-page{background:#fff!important;padding:28px max(18px,calc((100vw - 1000px)/2)) 70px!important}
 #promoPage .service-page-header{position:relative;border:0!important;margin-bottom:22px;padding-bottom:0}
 #promoPage .service-page-header h1{font-size:30px;letter-spacing:-1.2px;margin:16px 0 4px}
@@ -6608,7 +6569,10 @@ body .pac-container{z-index:50001!important}
 html.clo-page-locked{overflow:hidden!important;overscroll-behavior:none!important}
 #customerLiveOrder{height:100vh!important;height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;overscroll-behavior:none;touch-action:auto}
 #customerLiveOrder .clo-shell{width:100%;height:100%;max-height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable}
-</style><style id="admin-plan-payments-style">#adminTabPlans{padding:24px;background:white;border:1px solid #e1e6df;border-radius:18px;color:#2c3b31}#adminTabPlans h2{font-size:21px;font-weight:700;margin:0 0 8px}.ap-controls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap}#adminTabPlans button{border:1px solid #dce4dc;background:white;padding:11px 15px;border-radius:9px;font:600 12px inherit;cursor:pointer}#adminTabPlans button:disabled{opacity:.5;cursor:wait}#adminTabPlans select{padding:10px;border:1px solid #dde4db;background:white;border-radius:9px}.ap-order{padding:20px 0;border-top:1px solid #edf0e9;display:grid;grid-template-columns:1fr auto;gap:16px}.ap-order strong{font-size:14px}.ap-order p{font-size:12px;color:#74836d;line-height:1.7;margin:6px 0;overflow-wrap:anywhere}.ap-order small{font-size:10px;color:#899580}.ap-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ap-actions button:first-child{background:#234b35!important;color:white}#apNotice{font-size:12px;margin:14px 0;line-height:1.6}@media(max-width:600px){#adminTabPlans{padding:18px}.ap-order{grid-template-columns:1fr}.ap-actions{justify-content:start}}</style></head>
+</style><style id="admin-plan-payments-style">#adminTabPlans{padding:24px;background:white;border:1px solid #e1e6df;border-radius:18px;color:#2c3b31}#adminTabPlans h2{font-size:21px;font-weight:700;margin:0 0 8px}.ap-controls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap}#adminTabPlans button{border:1px solid #dce4dc;background:white;padding:11px 15px;border-radius:9px;font:600 12px inherit;cursor:pointer}#adminTabPlans button:disabled{opacity:.5;cursor:wait}#adminTabPlans select{padding:10px;border:1px solid #dde4db;background:white;border-radius:9px}.ap-order{padding:20px 0;border-top:1px solid #edf0e9;display:grid;grid-template-columns:1fr auto;gap:16px}.ap-order strong{font-size:14px}.ap-order p{font-size:12px;color:#74836d;line-height:1.7;margin:6px 0;overflow-wrap:anywhere}.ap-order small{font-size:10px;color:#899580}.ap-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ap-actions button:first-child{background:#234b35!important;color:white}#apNotice{font-size:12px;margin:14px 0;line-height:1.6}@media(max-width:600px){#adminTabPlans{padding:18px}.ap-order{grid-template-columns:1fr}.ap-actions{justify-content:start}}</style><link rel="stylesheet" href="welcome-theme.css?v=orders20261004"><link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="stylesheet" href="delivery-notifications.css?v=orders20261004"><link rel="stylesheet" href="app-polish.css?v=orders20261004"><link rel="stylesheet" href="premium-theme.css?v=orders20261004"><link rel="stylesheet" href="app-design.css?v=orders20261004"><link rel="stylesheet" href="app-quality.css?v=orders20261004"><link rel="stylesheet" href="app-promotions.css?v=orders20261004"><link rel="stylesheet" href="live-deals.css?v=orders20261004">
+<style>#customerAuthCode[hidden]{display:none!important}#customerAuthEmail,#customerAuthCode{box-sizing:border-box;width:100%;margin-top:10px;padding:13px;border:1px solid #d9ddd8;border-radius:12px;font-size:16px;background:#fff;color:#18231c}#customerAuthCode{letter-spacing:3px}#profilePhone[readonly]{color:#5b625c}</style>
+<script>document.documentElement.classList.add("swift-awaiting-auth","swift-restoring-auth");</script><style>html.swift-awaiting-auth #appScreen{display:none!important}html.swift-restoring-auth #authScreen{visibility:hidden}</style>
+</head>
 
 <body>
 
@@ -6641,7 +6605,7 @@ html.clo-page-locked{overflow:hidden!important;overscroll-behavior:none!importan
       <span class="menu-icon">
         <svg viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.229 1-3 1 1 1.5 2 1.5 2z"></path></svg>
       </span>
-      <span>Live Promos</span>
+      <span>Live Deals</span>
     </button>
 
     <button class="panel-item" onclick="openLeaderBoard()">
@@ -7092,23 +7056,8 @@ html.clo-page-locked{overflow:hidden!important;overscroll-behavior:none!importan
 <div id="overlay" onclick="toggleMenu()"></div>
 
   <!-- 🔐 AUTH SCREEN -->
+<section id="customerSessionRestore" hidden aria-label="Restoring your session"><h1>SwiftShop</h1><p id="customerSessionRestoreStatus" role="status">Welcome back</p><button id="customerSessionRetry" hidden>Try again</button><button id="customerSessionLogout" hidden>Sign out</button></section>
 <div id="authScreen" class="auth-screen">
-    <!-- ⛔ CLOSED MESSAGE -->
-  <div id="closedBox" style="display:none; text-align:center; color:white; padding:20px;">
-
-  <h2>⏰ We Are Currently Closed</h2>
-  <p style="font-weight:600;">Opening Hours</p>
-  <p style="font-size:18px; font-weight:800;">7:30 AM – 9:00 PM</p>
-
-  <!-- 👑 ADMIN LOGIN BUTTON -->
-  <button onclick="openAdminLogin()"
-    style="margin-top:15px; padding:10px 16px; border:none; border-radius:10px;
-           background:#ff9800; color:#000; font-weight:700; cursor:pointer;">
-    ⚙️ Admin Login
-  </button>
-
-</div>
-
 <!-- 👑 ADMIN LOGIN POPUP -->
 <div id="adminLoginBox" style="
   display:none;
@@ -7158,18 +7107,17 @@ html.clo-page-locked{overflow:hidden!important;overscroll-behavior:none!importan
     <h2>Welcome to SwiftShop</h2>
     <p class="login-slogan">Shop smart. Earn Points. Get it delivered.</p>
 
-    <input id="userName" placeholder="Full Name" />
-    <input id="userPhone" placeholder="Phone Number" inputmode="numeric" />
+    <fieldset id="customerContactSetup" hidden>
+      <legend>Delivery contact</legend>
+      <input id="userName" placeholder="Full Name" autocomplete="name" />
+      <input id="userPhone" placeholder="Phone Number" type="tel" autocomplete="tel" />
+    </fieldset>
 
     <button onclick="handleLogin()">Continue</button>
     <p class="login-steps">Personal Shopping & Delivery Service</p>
 
   </div>
 
-</div>
-
-  <div id="welcomeScreen">
-  <h1>Welcome to<br>SwiftShop OW</h1>
 </div>
 
 
@@ -7518,7 +7466,7 @@ html.clo-page-locked{overflow:hidden!important;overscroll-behavior:none!importan
 </div>
 
  
-<body>
+<!-- duplicate body tag removed -->
   <!-- Keep this: Needed to draw the background fireworks -->
 <canvas id="fireworksCanvas"></canvas>
 
@@ -7663,7 +7611,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  const done=window.doneOrder;window.doneOrder=function(){const result=done.apply(this,arguments);sync();return result;};sync();
 });
 </script><script id="account-photo-js">document.addEventListener('DOMContentLoaded',()=>{
- const client=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+ const client=customerDataClient;
  const bucket=client.storage.from('profile-pictures');
  const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
  const button=(text,fn)=>{const n=el('button',text);n.type='button';n.onclick=fn;return n;};
@@ -7684,7 +7632,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  function check(r){if(r.error)throw r.error;return r.data;}
  function clearDraft(){blob=null;blobPhone='';input.value='';if(previewURL)URL.revokeObjectURL(previewURL);previewURL='';save.disabled=true;}
  function paint(url){for(const id of ['profileInitial','profileInitials']){const n=document.getElementById(id);if(n){n.classList.toggle('has-account-photo',!!url);n.style.setProperty('--account-photo',url?'url('+JSON.stringify(url)+')':'none');}}}
- async function refresh(){const stamp=++version,identity=phone();paint('');if(!identity)return;try{const path=await pathFor(identity);const url=bucket.getPublicUrl(path).data.publicUrl+'?v='+Date.now();const image=new Image();image.onload=()=>{if(stamp!==version||phone()!==identity)return;paint(url);if(!blob){preview.src=url;preview.hidden=false;}};image.onerror=()=>{if(stamp===version&&!blob)preview.hidden=true;};image.src=url;}catch(e){if(dialog.open)status.textContent=e.message;}}
+ async function refresh(){const stamp=++version,identity=phone();paint('');if(!identity)return;try{const path=await pathFor(identity);const signed=await bucket.createSignedUrl(path,3600);if(signed.error)throw signed.error;const url=signed.data.signedUrl;const image=new Image();image.onload=()=>{if(stamp!==version||phone()!==identity)return;paint(url);if(!blob){preview.src=url;preview.hidden=false;}};image.onerror=()=>{if(stamp===version&&!blob)preview.hidden=true;};image.src=url;}catch(e){if(dialog.open)status.textContent=e.message;}}
  async function run(fn){if(busy)return;busy=true;dialog.querySelectorAll('button,input').forEach(n=>n.disabled=true);status.textContent='Please wait…';try{await fn();}catch(e){status.textContent=e.message||'Could not save your photo. Please try again.';}finally{busy=false;dialog.querySelectorAll('button,input').forEach(n=>n.disabled=false);save.disabled=!blob;}}
  async function open(){status.textContent='';dialog.inert=false;if(!dialog.open)dialog.showModal();close.focus();await refresh();}
  input.onchange=()=>run(async()=>{const file=input.files[0],identity=phone();if(!file)return;clearDraft();if(!identity)throw Error('Sign in to your profile first.');if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>10485760)throw Error('Choose a JPG, PNG or WebP smaller than 10 MB.');const image=await createImageBitmap(file);try{const side=Math.min(image.width,image.height),canvas=document.createElement('canvas');canvas.width=canvas.height=512;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,512,512);ctx.drawImage(image,(image.width-side)/2,(image.height-side)/2,side,side,0,0,512,512);const prepared=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.85));if(!prepared||prepared.size>1048576)throw Error('Could not prepare this photo. Choose another image.');if(phone()!==identity)throw Error('Your profile changed. Choose the photo again.');blob=prepared;blobPhone=identity;previewURL=URL.createObjectURL(blob);preview.src=previewURL;preview.hidden=false;status.textContent='Preview ready. Tap Save photo.';}finally{image.close();}});
@@ -7708,23 +7656,19 @@ window.showLoginWelcome=function(){
  'use strict';
  const stages=[['sent','Order sent','Awaiting SwiftShop confirmation'],['accepted','Order accepted','SwiftShop has confirmed your request'],['preparing','Preparing','Your order is being prepared'],['finding_runner','Finding runner','Your delivery offer is with the runner team'],['runner_assigned','Runner assigned','Your runner is getting ready'],['on_the_way','On the way','Your runner has started the delivery'],['delivered','Delivered','Your delivery is complete']];
  const root=document.createElement('dialog');root.id='customerLiveOrder';root.setAttribute('aria-labelledby','cloTitle');
- root.innerHTML='<div class="clo-shell"><header><div class="clo-brand">SWIFTSHOP <span>LIVE ORDER</span></div><button type="button" id="cloClose" aria-label="Back to shopping">✕</button></header><main><p class="clo-eyebrow" id="cloReference"></p><h1 id="cloTitle">Live order updates</h1><p class="clo-subtitle" id="cloSubtitle">We’ll keep you updated here.</p><div class="clo-progress" id="cloProgress" aria-hidden="true"></div><p class="clo-sync" id="cloSync" role="status"></p><section class="clo-runner" id="cloRunner" hidden></section><ol class="clo-steps" id="cloSteps"></ol><section class="clo-summary"><h2>Your order</h2><div id="cloItems"></div><div class="clo-total"><span>Order total</span><b id="cloTotal"></b></div></section><p class="clo-disclaimer">WhatsApp does not confirm message delivery to this app. Your status advances when SwiftShop and your runner update the order.</p><button type="button" id="cloRetry">Refresh updates</button><div class="clo-history"><label for="cloSelect">Recent orders</label><select id="cloSelect"></select></div></main></div>';
+ root.innerHTML='<div class="clo-shell"><header><div class="clo-brand">SWIFTSHOP <span>LIVE ORDER</span></div><button type="button" id="cloClose" aria-label="Back to shopping">✕</button></header><main><p class="clo-eyebrow" id="cloReference"></p><h1 id="cloTitle">Live order updates</h1><p class="clo-subtitle" id="cloSubtitle">We’ll keep you updated here.</p><div class="clo-progress" id="cloProgress" aria-hidden="true"></div><p class="clo-sync" id="cloSync" role="status"></p><section class="clo-runner" id="cloRunner" hidden></section><ol class="clo-steps" id="cloSteps"></ol><section class="clo-summary"><h2>Your order</h2><div id="cloItems"></div><div class="clo-total"><span>Order total</span><b id="cloTotal"></b></div></section><p class="clo-disclaimer">Your status advances when SwiftShop and your runner update the order.</p><button type="button" id="cloRetry">Refresh updates</button><div class="clo-history"><label for="cloSelect">Recent orders</label><select id="cloSelect"></select></div></main></div>';
  document.body.append(root);
- const chip=document.createElement('button');chip.id='customerTrackButton';chip.type='button';chip.textContent='◉ Live order';chip.hidden=true;document.body.append(chip);
+ const chip=document.createElement('button');chip.id='customerTrackButton';chip.type='button';chip.textContent='◉ Live order';chip.hidden=true;(document.querySelector('#appScreen .hero-toggle-row')||document.body).append(chip);
  const node=id=>document.getElementById(id);let records=[],current=null,busy=false,retryAt=0;
- const scrollArea=root.querySelector('.clo-shell');let paintedKey='',pageLock=null;
- function lockPage(){if(pageLock)return;const body=document.body;pageLock={x:window.scrollX,y:window.scrollY,styles:['position','top','left','width','overflow'].map(name=>[name,body.style.getPropertyValue(name),body.style.getPropertyPriority(name)]),hadClass:document.documentElement.classList.contains('clo-page-locked')};document.documentElement.classList.add('clo-page-locked');body.style.setProperty('position','fixed','important');body.style.setProperty('top',(-pageLock.y)+'px','important');body.style.setProperty('left',(-pageLock.x)+'px','important');body.style.setProperty('width','100%','important');body.style.setProperty('overflow','hidden','important');}
- function unlockPage(){if(!pageLock)return;const saved=pageLock;pageLock=null;for(const [name,value,priority] of saved.styles){if(value)document.body.style.setProperty(name,value,priority);else document.body.style.removeProperty(name);}if(!saved.hadClass)document.documentElement.classList.remove('clo-page-locked');window.scrollTo(saved.x,saved.y);}
- root.addEventListener('close',unlockPage);
- new MutationObserver(()=>{if(root.open)lockPage();else unlockPage();}).observe(root,{attributes:true,attributeFilter:['open']});
+ const scrollArea=root.querySelector('.clo-shell');let paintedKey='';
 
  const scope=()=>String(localStorage.getItem('userPhone')||'guest');const key=()=> 'swiftshop.live-orders.v1:'+scope();let loadedScope='';
- function updateChip(){chip.hidden=!records.some(r=>r.remote?.phase!=='delivered');}
+ function updateChip(){chip.hidden=!records.some(r=>r.remote?.phase!=='delivered');chip.textContent=records.some(r=>r.registered&&r.remote?.phase!=='delivered')?'◉ Live order':'Order not sent';}
  function restore(){if(loadedScope===scope())return;loadedScope=scope();try{records=JSON.parse(localStorage.getItem(key())||'[]').filter(r=>r.id&&r.token&&r.snapshot);}catch{records=[];}current=records.find(r=>r.remote?.phase!=='delivered')||records[0]||null;updateChip();}
  function save(){try{localStorage.setItem(key(),JSON.stringify(records.slice(0,20)));}catch{node('cloSync').textContent='Keep this page open: this browser could not save your tracking details.';}}
  const money=v=>'$'+Number(v||0).toFixed(2)+' BZD';
 
- function paint(){updateChip();if(!current)return;const displayKey=JSON.stringify([current.id,current.snapshot,current.remote?.phase,current.remote?.runner_name,current.remote?.runner_phone,current.remote?.runner_photo,records.map(r=>[r.id,r.created])]);if(displayKey===paintedKey)return;paintedKey=displayKey;const previousScroll=scrollArea.scrollTop;const index=Math.max(0,stages.findIndex(s=>s[0]===(current.remote?.phase||'sent'))),active=stages[index];node('cloReference').textContent='ORDER '+current.id.slice(0,8).toUpperCase();node('cloTitle').textContent=active[1];node('cloSubtitle').textContent=active[2];node('cloProgress').replaceChildren();
+ function paint(){updateChip();if(!current)return;const displayKey=JSON.stringify([current.id,current.registered,current.snapshot,current.remote?.phase,current.remote?.runner_name,current.remote?.runner_phone,current.remote?.runner_photo,records.map(r=>[r.id,r.created])]);if(displayKey===paintedKey)return;paintedKey=displayKey;const previousScroll=scrollArea.scrollTop;const index=Math.max(0,stages.findIndex(s=>s[0]===(current.remote?.phase||'sent'))),active=stages[index];node('cloReference').textContent='ORDER '+current.id.slice(0,8).toUpperCase();node('cloTitle').textContent=current.registered?active[1]:'Order not sent yet';node('cloSubtitle').textContent=current.registered?active[2]:'SwiftShop has not received this order. Retry sending when connected.';node('cloProgress').replaceChildren();
   stages.forEach((_,i)=>{const bar=document.createElement('span');bar.className=i<index?'complete':i===index&&index<6?'current':'';if(index===6)bar.className='complete';node('cloProgress').append(bar);});
   node('cloSteps').replaceChildren();stages.forEach((stage,i)=>{const li=document.createElement('li');li.className=i<index?'done':i===index?'active':'waiting';if(i===index)li.setAttribute('aria-current','step');const dot=document.createElement('span');dot.className='clo-dot';dot.textContent=i<index?'✓':String(i+1);const text=document.createElement('div'),title=document.createElement('strong'),desc=document.createElement('p');title.textContent=stage[1];desc.textContent=i===index?stage[2]:i<index?'Complete':'Coming next';text.append(title,desc);li.append(dot,text);node('cloSteps').append(li);});
   const runner=node('cloRunner');runner.replaceChildren();runner.hidden=index<4||!current.remote?.runner_name;
@@ -7732,15 +7676,30 @@ window.showLoginWelcome=function(){
   node('cloItems').replaceChildren();for(const item of current.snapshot.items){const row=document.createElement('p');row.textContent=item.quantity+' × '+item.name;node('cloItems').append(row);}node('cloTotal').textContent=money(current.snapshot.total)+(current.snapshot.taco_note?' + taco food cost':'');
   const select=node('cloSelect');select.replaceChildren();records.forEach(r=>{const option=document.createElement('option');option.value=r.id;option.textContent=r.id.slice(0,8).toUpperCase()+' · '+new Date(r.created).toLocaleDateString();select.append(option);});select.value=current.id;scrollArea.scrollTop=previousScroll;
  }
- function open(){restore();if(current?.remote?.phase==='delivered')current=records.find(r=>r.remote?.phase!=='delivered')||current;if(!current)return;paint();if(!root.open){root.showModal();lockPage();scrollArea.scrollTop=0;}poll(true);}
+ function open(){restore();if(current?.remote?.phase==='delivered')current=records.find(r=>r.remote?.phase!=='delivered')||current;if(!current)return;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);}
+ const registrations=new Map();
+ async function register(record){
+  if(record.registered)return;
+  if(registrations.has(record.id))return registrations.get(record.id);
+  const account=scope();
+  const promise=(async()=>{
+   if(new TextEncoder().encode(JSON.stringify(record.snapshot)).length>40000)throw Error('Order details are too long. Please shorten your notes.');
+   const {data,error}=await customerDataClient.rpc('create_customer_tracking',{p_id:record.id,p_token:record.token,p_snapshot:record.snapshot}).abortSignal(AbortSignal.timeout(10000));
+   if(error)throw error;
+   if(!data||data.id!==record.id)throw Error('SwiftShop did not confirm receipt. Please retry.');
+   record.remote=data;record.registered=true;
+   if(scope()===account){save();window.SwiftDeliveryNotifications?.record(record.id,'sent');window.SwiftDeliveryNotifications?.sync();}
+  })();registrations.set(record.id,promise);
+  try{await promise;}finally{registrations.delete(record.id);}
+ }
  async function poll(force=false){restore();if(!current||busy||(!force&&(document.hidden||Date.now()<retryAt)))return;const record=root.open?current:records.find(r=>r.remote?.phase!=='delivered');if(!record)return;busy=true;
-  try{if(!record.registered){const {error}=await supabaseClient.rpc('create_customer_tracking',{p_id:record.id,p_token:record.token,p_snapshot:record.snapshot}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;record.registered=true;save();}
-   const {data,error}=await supabaseClient.rpc('get_customer_tracking',{p_id:record.id,p_token:record.token}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;record.remote=data;save();updateChip();retryAt=0;if(current?.id===record.id){paint();node('cloSync').textContent='● Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
-  }catch(error){retryAt=Date.now()+10000;if(current?.id===record.id)node('cloSync').textContent=record.registered?'Connection interrupted. Showing your last confirmed update; we’ll retry.':'Tracking is waiting to connect. Your WhatsApp checkout still works; we’ll retry automatically.';}
+  try{await register(record);
+   const {data,error}=await supabaseClient.rpc('get_customer_tracking',{p_id:record.id,p_token:record.token}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;const previousPhase=record.remote?.phase;record.remote=data;window.SwiftDeliveryNotifications?.record(record.id,data?.phase,!!previousPhase&&previousPhase!==data?.phase);save();updateChip();retryAt=0;if(current?.id===record.id){paint();node('cloSync').textContent='● Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+  }catch(error){retryAt=Date.now()+10000;if(current?.id===record.id)node('cloSync').textContent=record.registered?'Connection interrupted. Showing your last confirmed update; we’ll retry.':'Your order is waiting for a connection. Keep your details here and retry sending when connected.';}
   finally{busy=false;}
  }
- window.SwiftLive={prepare(snapshot){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&Date.now()-Date.parse(last.created)<15000){current=last;open();return last.id;}
-   const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false};records.unshift(record);current=record;save();chip.hidden=false;open();return record.id;},open};
+ window.SwiftLive={async submit(snapshot){const id=this.prepare(snapshot,false);const record=records.find(r=>r.id===id);await register(record);record.checkoutCommitted=true;save();const checkout=document.getElementById('orderBox');if(checkout)checkout.style.display='none';this.openOrder(id);return id;},prepare(snapshot,show=true){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined,dispatch_text:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&(!last.registered||last.checkoutCommitted===false||Date.now()-Date.parse(last.created)<15000)){current=last;if(show)open();return last.id;}
+   const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false,checkoutCommitted:false};records.unshift(record);current=record;save();chip.hidden=false;if(show)open();return record.id;},open,openOrder(id){restore();const record=records.find(r=>r.id===id);if(!record)return;current=record;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);}};
  chip.onclick=open;node('cloClose').onclick=()=>root.close();node('cloRetry').onclick=()=>poll(true);node('cloSelect').onchange=e=>{current=records.find(r=>r.id===e.target.value);paint();poll(true);};
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){restore();poll(true);}});window.addEventListener('pageshow',()=>{restore();if(current&&sessionStorage.getItem('swiftshop.pendingLiveReturn')===current.id){sessionStorage.removeItem('swiftshop.pendingLiveReturn');open();}});window.addEventListener('online',()=>poll(true));setInterval(()=>poll(),5000);restore();
 })();
@@ -7823,16 +7782,16 @@ window.showLoginWelcome=function(){
  <form id="crForm" novalidate><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Search a street or drop a pin" autocomplete="off" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Where to?" autocomplete="off" required></label></div>
  <div class="cr-tools"><button type="button" id="crGPS">◎ Use my location</button><button type="button" id="crPin" aria-pressed="false">Pin destination on map</button><button type="button" id="crCenter">Center map</button><button type="button" id="crReconnect">Refresh connection</button></div>
  <div id="crMap" aria-label="Pickup, destination and live ride map"></div><p id="crMapNotice" role="status">Tap the map to set your pickup. Choose destination mode to set your destination.</p>
- <div id="crNearby"><div class="fleet-heading"><strong id="fleetCount">Available drivers</strong><select id="fleetRange" aria-label="Driver map area"><option value="nearby">Within 15 km</option><option value="all">All available drivers</option></select><button type="button" id="fleetFit">Show drivers on map</button></div><p id="fleetNote">Choose a pickup to see drivers.</p><div id="fleetCards" class="fleet-cards"></div></div>
+ <div id="crNearby" hidden><div class="fleet-heading"><strong id="fleetCount">Available rides</strong><select id="fleetRange" aria-label="Driver map area"><option value="nearby">Within 15 km</option><option value="all">All available drivers</option></select><button type="button" id="fleetFit">Show drivers on map</button></div><p id="fleetNote">Choose pickup and destination to see rides.</p><div id="fleetCards" class="fleet-cards"></div></div>
  <div class="cr-contact"><label>Your name<input id="crName" maxlength="100" autocomplete="name" required></label><label>Phone number<input id="crPhone" maxlength="30" autocomplete="tel" inputmode="tel" required minlength="7"></label></div>
- <section id="crFareBox" aria-label="Ride fare">
+ <section id="crFareBox" hidden aria-label="Ride fare">
  <div class="cr-fare-heading"><h2>Your ride fare</h2><span>BZD</span></div>
  <p id="crFareDetails" role="status" aria-live="polite">Choose pickup and destination to see your fare.</p>
- <div id="crFareBreakdown" hidden><dl><div><dt>Ride fare <span id="crFareMiles"></span></dt><dd id="crFareStandard"></dd></div><div><dt>Booking fee</dt><dd>BZD $0.50</dd></div><div><dt>Pickup fee <span id="crFarePickupMiles"></span></dt><dd id="crFareSupplement"></dd></div><div id="crReturnRow" hidden><dt>EDF (Extended Distance Fee) <span id="crReturnMiles"></span></dt><dd id="crReturnAmount"></dd></div><div id="crRoundingRow" hidden><dt>Rounding</dt><dd id="crRoundingAmount"></dd></div></dl><div class="cr-fare-total"><span>Total fare</span><strong id="crFareTotal"></strong></div></div>
+ <div id="crFareBreakdown" hidden><dl><div><dt>Ride fare <span id="crFareMiles"></span></dt><dd id="crFareStandard"></dd></div><div><dt>Booking fee</dt><dd>BZD $0.50</dd></div><div><dt>Pickup fee <span id="crFarePickupMiles"></span></dt><dd id="crFareSupplement"></dd></div><div id="crReturnRow" hidden><dt>EDF (Extended Distance Fee) <span id="crReturnMiles"></span></dt><dd id="crReturnAmount"></dd></div><div id="crRoundingRow" hidden><dt>Rounding</dt><dd id="crRoundingAmount"></dd></div><div id="crProtectionRow" hidden><dt>Driver Protection Fee</dt><dd id="crProtectionAmount"></dd></div></dl><div class="cr-fare-total"><span>Total fare</span><strong id="crFareTotal"></strong></div></div>
  <label id="crLongPickupLabel" hidden><input id="crLongPickupConfirm" type="checkbox"><span id="crLongPickupText">I agree to the shown distant-pickup supplement.</span></label>
 
  <p class="cr-fare-payment">No payment at booking.</p>
- </section><button type="submit" id="crRequest">Request ride</button><p id="crBookingNotice" role="alert" aria-live="assertive"></p></form>
+ </section><button type="submit" id="crRequest" hidden>Request ride</button><p id="crBookingNotice" role="alert" aria-live="assertive"></p></form>
  <section id="crTracking" hidden aria-label="Live ride progress"><div id="crTrackingFare" class="cr-fee-receipt"></div><div class="cr-status-top"><h2 id="crStatus"></h2><span id="crRideId"></span></div><ol id="crSteps"></ol><div class="cr-driver-card"><div class="cr-driver-person"><img id="crDriverPhoto" alt="Your driver" hidden><span id="crDriverAvatar" aria-hidden="true">D</span><div class="cr-driver-info"><p id="crDriver"></p><span id="crLicensePlate" class="cr-license-plate" hidden></span></div></div><img id="crVehicleArt" class="cr-vehicle-cutout" alt="Driver’s vehicle" hidden onerror="this.hidden=true"></div><div class="cr-track-actions"><a id="crCall" hidden>Call driver</a><button type="button" id="crRefresh">Refresh</button><button type="button" id="crCancel">Cancel ride</button><button type="button" id="crNew" hidden>Request another ride</button></div><p id="crUpdated" role="status"></p></section></div>`;
  document.body.append(panel);
  const chip=document.createElement('button');chip.type='button';chip.id='customerRideChip';chip.hidden=true;chip.textContent='View your ride';button.closest('.hero-toggle-row').after(chip);
@@ -7840,27 +7799,42 @@ window.showLoginWelcome=function(){
  let fareQuote=null, fareVersion=0, fareTimer=null, fareBusy=false, fareRetryAt=0;
  const money=n=>'BZD $'+Number(n).toFixed(2);
  function pickupFeeDisplay(amount){return Number(amount)===0?'<span class="cr-pickup-promo"><span><s>BZD $1.50</s> <strong>BZD $0.00</strong></span><small>Nearby pickup</small></span>':money(amount);}
- function feeReceipt(f){const rows=[['Ride fare',Number(f.standardFare)-0.50],['Booking fee',0.50],['Pickup fee',Number(f.pickupSupplement)||0],['EDF (Extended Distance Fee)',Number(f.returnAllowance)||0],['Rounding',Number(f.roundingAdjustment)||0]].filter(([label,value])=>label==='Ride fare'||label==='Booking fee'||label==='Pickup fee'||Number(value)>0);return '<div class="cr-receipt-total"><span>Total fare</span><strong>'+money(f.customerTotal)+'</strong></div><dl>'+rows.map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+(label==='Pickup fee'?pickupFeeDisplay(value):money(value))+'</dd></div>').join('')+'</dl>'; }
+ function feeReceipt(f){const rows=[['Ride fare',Number(f.standardFare)-0.50],['Booking fee',0.50],['Pickup fee',Number(f.pickupSupplement)||0],['EDF (Extended Distance Fee)',Number(f.returnAllowance)||0],['Rounding',Number(f.roundingAdjustment)||0],['Driver Protection Fee',Number(f.driverProtectionFee)||0]].filter(([label,value])=>label==='Ride fare'||label==='Booking fee'||label==='Pickup fee'||Number(value)>0);return '<div class="cr-receipt-total"><span>Total fare</span><strong>'+money(f.customerTotal)+'</strong></div><dl>'+rows.map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+(label==='Pickup fee'?pickupFeeDisplay(value):money(value))+'</dd></div>').join('')+'</dl>'; }
  function hasVehicleArt(vehicle){return typeof vehicle.vehicle_photo==='string'&&vehicle.vehicle_photo.length<=900000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(vehicle.vehicle_photo);}
- function invalidateFare(){++fareVersion;fareQuote=null;$('crFareBreakdown').hidden=true;$('crRequest').textContent='Request ride';$('crLongPickupConfirm').checked=false;$('crLongPickupLabel').hidden=true;$('crFareDetails').textContent=pickup&&dropoff?'Calculating fare…':'Choose your route to see the fare.';clearTimeout(fareTimer);fareTimer=setTimeout(calculateFare,650);}
+ function invalidateFare(){++fareVersion;fareQuote=null;rideOptionSelected=false;$('crFareBox').hidden=true;$('crRequest').hidden=!pending;$('fleetNote').textContent=pickup&&dropoff?'Calculating available ride prices…':'Choose pickup and destination to see rides.';$('fleetCards').replaceChildren();$('crRequest').disabled=true;$('crFareBreakdown').hidden=true;$('crRequest').textContent='Request ride';$('crLongPickupConfirm').checked=false;$('crLongPickupLabel').hidden=true;$('crFareDetails').textContent=pickup&&dropoff?'Calculating fare…':'Choose your route to see the fare.';clearTimeout(fareTimer);fareTimer=setTimeout(calculateFare,650);}
  const stages=['requested','accepted','arrived','in_progress','completed'],labels={requested:'Finding your driver',accepted:'Your driver is on the way',arrived:'Your driver has arrived',in_progress:'You’re on your way',completed:'Ride completed',cancelled:'Ride cancelled'};
+ let rideOptionSelected=false;
  let client=null,session=null,account='',authTask=null,ride=null,dismissed=null,pickup=null,dropoff=null,map=null,pins={},nearbyPins=[],pinMode='pickup',busy=false,refreshing=false,version=0,lastSync=0,pending=null,routeLines=[],routeSignature='',routeVersion=0,routePath=[],routeProgress=0,fitNext=true,geoVersion=0,previousToggle=null;
  function scope(){return localStorage.getItem('userPhone')||'guest';}
  function key(){return 'swiftride.customer.pending:'+encodeURIComponent(account);}
  function bookingNotice(text){$('crBookingNotice').textContent=text;notice(text);}
  function notice(text){$('crNotice').textContent=text;}
- function newClient(){account=scope();client=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:'swiftride.customer.auth:'+encodeURIComponent(account),persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});}
+ function newClient(){account=scope();client=customerDataClient;}
  async function auth(create=true){
-  if(client&&account!==scope()){client.auth.stopAutoRefresh();client=null;session=null;ride=null;pending=null;++version;}
+  if(client&&account!==scope()){if(client!==customerDataClient)client.auth.stopAutoRefresh();client=null;session=null;ride=null;pending=null;++version;}
   if(!client)newClient();
   if(session)return session;
   if(authTask)return authTask;
   authTask=(async()=>{let {data,error}=await client.auth.getSession();if(error)throw error;
-   if(!data.session&&create){({data,error}=await client.auth.signInAnonymously());if(error)throw Error('Ride connection could not start: '+error.message);}
-   session=data.session||null;return session;
+   if(!data.session?.user?.email_confirmed_at){if(create)throw Error('Sign in with your verified email before requesting a ride.');return null;}
+   // Restore an already active ride from the old device session; new bookings use verified email.
+   const legacyKey='swiftride.customer.auth:'+encodeURIComponent(account);
+   if(localStorage.getItem(legacyKey)){
+    const legacy=supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{storageKey:legacyKey,persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+    const previous=await legacy.auth.getSession();if(previous.error){legacy.auth.stopAutoRefresh();throw Error("The earlier ride session needs to reconnect before a new booking.");}
+    if(previous.data.session){const current=await legacy.rpc('swiftride_current_priced').abortSignal(AbortSignal.timeout(10000));if(current.error){legacy.auth.stopAutoRefresh();throw Error('Your earlier ride could not be restored. Refresh the connection before booking again.');}if(current.data&&!terminal(current.data.status)){client=legacy;session=previous.data.session;return session;}}
+    legacy.auth.stopAutoRefresh();
+   }
+   session=data.session;return session;
   })();try{return await authTask;}finally{authTask=null;}
  }
  async function rpc(name,args={}){const {data,error}=await client.rpc(name,args).abortSignal(AbortSignal.timeout(12000));if(error)throw error;return data;}
+ function syncFleetVisibility(){
+  const visible=!ride&&!!pickup&&!!dropoff;
+  $('crNearby').hidden=!visible;
+  if(!visible){clearNearby();fleet=[];$('fleetCards').replaceChildren();}
+  return visible;
+ }
  function vehicleIcon(type){const shape=type==='motorcycle'?'<circle cx="13" cy="29" r="6"/><circle cx="32" cy="29" r="6"/><path d="M13 29l8-14 11 14H13l7-8h8m-7-6h-5m11 0h5l3 7"/>':'<path d="M12 17l3-7h14l3 7v17H12z"/><path d="M15 18h14M15 28h14"/><path d="M10 21v8m24-8v8"/>';return {url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44"><circle cx="22" cy="22" r="21" fill="#217747" stroke="white" stroke-width="2"/><g fill="none" stroke="white" stroke-width="2.5" stroke-linejoin="round">'+shape+'</g></svg>')};} function clearNearby(){nearbyPins.forEach(p=>p.setMap(null));nearbyPins=[];fleetMarkers?.clear();}
  function pin(name,point,color,label){
   if(!map)return;
@@ -7884,6 +7858,7 @@ window.showLoginWelcome=function(){
   const result=routeRemainder(routePath,{lat:Number(ride.lat),lng:Number(ride.lng)},routeProgress);if(!result)return;routeProgress=result.progress;routeLines[0]?.setPath(result.remaining);
  }
  async function route(){
+  syncFleetVisibility();
   if(!ride)invalidateFare();
   if(!map)return;const signature=pickup&&dropoff?[pickup.lat,pickup.lng,dropoff.lat,dropoff.lng,ride?.id||'',ride?.status==='in_progress'?'driving':'preview'].join(','):'';
   if(signature===routeSignature){trimCurrentRoute();return;}routeSignature=signature;routePath=[];routeProgress=0;const token=++routeVersion;routeLines.forEach(l=>l.setMap(null));routeLines=[];
@@ -7910,7 +7885,7 @@ window.showLoginWelcome=function(){
   pin(type,point,type==='pickup'?'#ee792b':'#3c5345',type==='pickup'?'A':'B');route();
   const pointToken=++pointVersions[type];
   if(!label&&google.maps.Geocoder){geocoder=geocoder||new google.maps.Geocoder();geocoder.geocode({location:point}).then(({results})=>{if(pointVersions[type]!==pointToken||ride)return;const current=type==='pickup'?pickup:dropoff;if(!current||current.lat!==point.lat||current.lng!==point.lng)return;const result=results?.find(r=>r.types?.includes('street_address'))||results?.[0];if(result)$(type==='pickup'?'crPickup':'crDropoff').value=result.formatted_address;}).catch(()=>{});}
-  if(type==='pickup')refresh();
+  if(pickup&&dropoff)refresh();
  }
  async function gps(){
   if(ride)return;if(!navigator.geolocation||!isSecureContext){notice('Use the published HTTPS website for GPS, or choose your pickup on the map.');return;}
@@ -7941,8 +7916,8 @@ window.showLoginWelcome=function(){
 
   const tracking=!!ride; $('crTracking').hidden=!tracking;$('crForm').classList.toggle('cr-has-ride',tracking);
   ['crPickup','crDropoff','crName','crPhone'].forEach(id=>$(id).disabled=tracking);
-  ['crGPS','crPin','crRequest'].forEach(id=>$(id).hidden=tracking);
-  $('crNearby').hidden=tracking;chip.hidden=!tracking;chip.textContent=tracking?labels[ride.status]+' · View ride':'View ride';
+  ['crGPS','crPin'].forEach(id=>$(id).hidden=tracking);$('crRequest').hidden=tracking||(!rideOptionSelected&&!pending);$('crFareBox').hidden=tracking||!rideOptionSelected;
+  syncFleetVisibility();chip.hidden=!tracking;chip.textContent=tracking?labels[ride.status]+' · View ride':'View ride';
   if(!tracking){$('crTitle').textContent='Where are you going?';pin('driver',null);return;}
   clearNearby();$('crTitle').textContent='Your ride';$('crStatus').textContent=labels[ride.status]||ride.status;$('crRideId').textContent='#'+ride.id.slice(0,8).toUpperCase();
   $('crSteps').replaceChildren();for(const [i,s] of stages.entries()){const li=document.createElement('li');li.textContent=['Requested','Driver assigned','Arrived','On ride','Complete'][i];if(i<=stages.indexOf(ride.status))li.className='cr-step-done';$('crSteps').append(li);}
@@ -7966,21 +7941,23 @@ window.showLoginWelcome=function(){
  function photoOK(s){return typeof s==='string'&&s.length<400000&&/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(s);}
  function etaKey(d,point){return [d.driver_id,d.lat,d.lng,point.lat.toFixed(3),point.lng.toFixed(3)].join(':');}
  function fleetLocationFresh(driver){const at=Date.parse(driver.location_updated_at);return driver.location_fresh!==false&&driver.lat!=null&&driver.lng!=null&&Number.isFinite(Number(driver.lat))&&Number.isFinite(Number(driver.lng))&&Number.isFinite(at)&&Date.now()-at>=0&&Date.now()-at<90000;}
- function renderFleet(list,point){
-fleet=list;const mapped=fleet.filter(fleetLocationFresh);const ids=new Set(mapped.map(x=>x.driver_id));for(const [id,marker] of fleetMarkers){if(!ids.has(id)){marker.setMap(null);fleetMarkers.delete(id);}}
-  for(const driver of mapped){if(map){let marker=fleetMarkers.get(driver.driver_id);if(marker){marker.setPosition({lat:Number(driver.lat),lng:Number(driver.lng)});marker.setIcon(vehicleIcon(driver.vehicle_type));continue;}marker=new google.maps.Marker({map,position:{lat:Number(driver.lat),lng:Number(driver.lng)},title:driver.display_name,icon:vehicleIcon(driver.vehicle_type)});marker.addListener('click',()=>document.getElementById('fleet-'+driver.driver_id)?.scrollIntoView({behavior:'smooth',block:'nearest'}));fleetMarkers.set(driver.driver_id,marker);}}nearbyPins=[...fleetMarkers.values()];
-  $('fleetCount').textContent=fleet.length+' online driver'+(fleet.length===1?'':'s');
-  $('fleetNote').textContent=fleet.length?'Online drivers stay listed. Map and pickup estimates need fresh location.':'No drivers available right now. We’ll check again automatically.';
-  $('fleetCards').innerHTML=fleet.map(driver=>{const eta=etaCache.get(etaKey(driver,point));return '<article class="fleet-card" id="fleet-'+escapeFleet(driver.driver_id)+'">'+(photoOK(driver.photo)?'<img alt="Driver photo" src="'+driver.photo+'">':'<span class="fleet-avatar">'+escapeFleet((driver.display_name||'D').slice(0,1))+'</span>')+'<div><strong>'+escapeFleet(driver.display_name||'Driver')+'</strong><p>'+escapeFleet([driver.vehicle_model|| (driver.vehicle_type==='motorcycle'?'Motorcycle':'Car'),driver.vehicle_color].filter(Boolean).join(' · '))+'</p>'+(driver.license_plate?'<span class="cr-license-plate">Plate '+escapeFleet(driver.license_plate)+'</span>':'')+'<small>'+escapeFleet(driver.vehicle_type==='motorcycle'?'1 passenger':(driver.passenger_seats||4)+' passengers')+'</small><p class="cr-driver-rating">'+(Number(driver.rating?.count)>0?'★ '+Number(driver.rating.average).toFixed(1)+' <span>('+Number(driver.rating.count)+' '+(Number(driver.rating.count)===1?'rating':'ratings')+')</span>':'No ratings yet')+'</p><p class="fleet-available">● Available <span>'+ (!fleetLocationFresh(driver)?'Location updating':eta&&Date.now()-eta.at<90000?eta.minutes+' min from pickup':'Estimating pickup…')+'</span></p></div>'+(hasVehicleArt(driver)?'<img class="cr-vehicle-cutout" src="'+driver.vehicle_photo+'" alt="Driver vehicle" loading="lazy" onerror="this.hidden=true">':'')+'</article>';}).join('');
-  if(!etaBusy&&mapped.length&&Date.now()-etaAttempt>60000){etaBusy=true;etaAttempt=Date.now();const batch=mapped.slice(0,20);google.maps.importLibrary('routes').then(async({RouteMatrix})=>{const {matrix}=await RouteMatrix.computeRouteMatrix({origins:batch.map(x=>({lat:Number(x.lat),lng:Number(x.lng)})),destinations:[point],travelMode:'DRIVING',fields:['durationMillis','condition']});batch.forEach((x,i)=>{const item=matrix.rows[i]?.items[0];if(item?.condition==='ROUTE_EXISTS'&&Number.isFinite(item.durationMillis))etaCache.set(etaKey(x,point),{minutes:Math.max(1,Math.ceil(item.durationMillis/60000)),at:Date.now()});});if(pickup&&pickup.lat===point.lat&&pickup.lng===point.lng&&!ride&&!panel.hidden&&fleet.length)renderFleet(fleet,point);}).catch(()=>{}).finally(()=>etaBusy=false);}
+ function renderRideOption(){
+  if(!syncFleetVisibility()||!fareQuote)return;
+  $('fleetCount').textContent='Available rides';$('fleetNote').textContent='Total includes the trip and pickup-distance charge.';
+  const option=document.createElement('button');option.type='button';option.className='cr-ride-option';
+  option.setAttribute('aria-pressed',String(rideOptionSelected));
+  const label=document.createElement('span');label.textContent=fareQuote.vehicleType==='motorcycle'?'Motorcycle ride':'Available ride';
+  const total=document.createElement('strong');total.textContent=money(fareQuote.customerTotal);
+  option.append(label,total);option.onclick=()=>{rideOptionSelected=true;$('crFareBox').hidden=false;$('crFareBreakdown').hidden=false;$('crRequest').hidden=false;$('crRequest').disabled=false;renderRideOption();};
+  $('fleetCards').replaceChildren(option);
  }
  $('fleetRange').onchange=()=>refresh();$('fleetFit').onclick=()=>{if(!map||!fleet.length)return;const bounds=new google.maps.LatLngBounds();fleet.filter(fleetLocationFresh).forEach(x=>bounds.extend({lat:Number(x.lat),lng:Number(x.lng)}));if(pickup)bounds.extend(pickup);if(!bounds.isEmpty())map.fitBounds(bounds,45);};
 
  async function refresh(){
   if(refreshing||busy||document.hidden||!session)return;refreshing=true;const token=version;
   try{const r=await rpc('swiftride_current_priced',ride?{p_id:ride.id}:{});if(token!==version)return;
-   if(r&&!((r.id===dismissed||r.id===localStorage.getItem('swiftride.customer.completed:'+encodeURIComponent(account)))&&terminal(r.status))){if(!ride||ride.id!==r.id)fitNext=true;try{const images=await rpc('swiftride_vehicle_photos_get',{p_ride_id:r.id});r.vehicle_photo=Object.values(images||{})[0]||null;}catch{r.vehicle_photo=null;}try{const plates=await rpc('swiftride_license_plates_get',{p_ride_id:r.id});r.license_plate=Object.values(plates||{})[0]||null;}catch{r.license_plate=null;}if(token!==version)return;ride=r;pending=null;localStorage.removeItem(key());paint();}
-       else if(!ride&&pickup&&!panel.hidden){const point={...pickup};const list=await rpc('swiftride_active_drivers',{p_lat:point.lat,p_lng:point.lng,p_radius_km:$('fleetRange').value==='all'?null:15});if(token!==version||ride||!pickup||point.lat!==pickup.lat||point.lng!==pickup.lng)return;try{const images=await rpc('swiftride_vehicle_photos_get',{p_driver_ids:(list||[]).slice(0,50).map(d=>d.driver_id)});for(const d of list||[])d.vehicle_photo=images[d.driver_id]||null;}catch{}if(token!==version||ride)return;try{const summaries=await rpc('swiftride_rating_summary',{p_driver_ids:(list||[]).slice(0,50).map(d=>d.driver_id)});for(const d of list||[])d.rating=summaries[d.driver_id]||null;}catch{}if(token!==version||ride)return;try{const plates=await rpc('swiftride_license_plates_get',{p_driver_ids:(list||[]).slice(0,50).map(d=>d.driver_id)});for(const d of list||[])d.license_plate=plates[d.driver_id]||null;}catch{}if(token!==version||ride)return;renderFleet(list||[],point);}
+   if(r&&!((r.id===dismissed||r.id===localStorage.getItem('swiftride.customer.completed:'+encodeURIComponent(account)))&&terminal(r.status))){if(!ride||ride.id!==r.id)fitNext=true;try{const images=await rpc('swiftride_vehicle_photos_get',{p_ride_id:r.id});r.vehicle_photo=Object.values(images||{})[0]||null;}catch{r.vehicle_photo=null;}try{const plates=await rpc('swiftride_license_plates_get',{p_ride_id:r.id});r.license_plate=Object.values(plates||{})[0]||null;}catch{r.license_plate=null;}if(token!==version)return;ride=r;window.SwiftRideNotifications?.record(r.id,r.status);pending=null;localStorage.removeItem(key());paint();}
+       else if(!ride&&pickup&&dropoff&&!panel.hidden){renderRideOption();}
 lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString()+' · Checks every 5 seconds');
   }catch(e){if(token===version){fleet=[];clearNearby();pin('driver',null);notice('Updates paused: '+e.message+' · Tap Refresh to retry.');$('crUpdated').textContent='Connection interrupted. Driver marker hidden until updates recover.';}}
   finally{refreshing=false;}
@@ -8011,29 +7988,35 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   try{await auth();const {data,error}=await client.functions.invoke('swiftride-quote',{body:{booking:bookingFields()}});
    if(error){let message=error.message;try{message=(await error.context.json()).error||message;}catch{}throw Error(message);}if(data?.error)throw Error(data.error);
    if(token!==fareVersion||signature!==quoteSignature())return;
-   if(data.noDriver){$('crFareDetails').textContent='Trip fare '+money(data.standardFare)+' · No drivers available. We’ll check again shortly.';return;}
-   fareQuote={...data,signature};$('crFareDetails').textContent='Total includes pickup.';
-   $('crFareMiles').textContent=data.roadMiles.toFixed(2)+' road miles';$('crFarePickupMiles').textContent=data.pickupMiles.toFixed(2)+' road miles';$('crFareStandard').textContent=money(Number(data.standardFare)-0.50);$('crFareSupplement').innerHTML=pickupFeeDisplay(data.pickupSupplement||0);$('crFareTotal').textContent=money(data.customerTotal);$('crFareBreakdown').hidden=false;$('crRequest').textContent='Request ride · '+money(data.customerTotal);
+   if(data.noDriver){$('fleetCards').replaceChildren();$('fleetNote').textContent='No rides available right now. We’ll check again shortly.';$('crFareDetails').textContent='Trip fare '+money(data.standardFare)+' · No drivers available. We’ll check again shortly.';return;}
+   fareQuote={...data,signature};renderRideOption();$('crFareDetails').textContent=Number(data.driverProtectionFee)>0?'Includes pickup and the BZD $3 Driver Protection Fee (8:45 PM–midnight).':'Total includes pickup.';
+   $('crFareMiles').textContent=data.roadMiles.toFixed(2)+' road miles';$('crFarePickupMiles').textContent=data.pickupMiles.toFixed(2)+' road miles';$('crFareStandard').textContent=money(Number(data.standardFare)-0.50);$('crFareSupplement').innerHTML=pickupFeeDisplay(data.pickupSupplement||0);$('crFareTotal').textContent=money(data.customerTotal);$('crFareBreakdown').hidden=!rideOptionSelected;$('crRequest').disabled=!rideOptionSelected;$('crRequest').textContent='Request ride · '+money(data.customerTotal);
+   $('crProtectionRow').hidden=!(Number(data.driverProtectionFee)>0);$('crProtectionAmount').textContent=money(Number(data.driverProtectionFee)||0);
    $('crReturnRow').hidden=!data.returnAllowance;$('crReturnMiles').textContent=Number(data.returnMiles||0).toFixed(2)+' road miles back to the service zone';$('crReturnAmount').textContent=money(data.returnAllowance||0);$('crRoundingRow').hidden=!data.roundingAdjustment;$('crRoundingAmount').textContent=money(data.roundingAdjustment||0);$('crLongPickupText').textContent='I agree to the '+money(data.pickupSupplement)+' supplement for a pickup beyond 3.5 miles.';$('crLongPickupLabel').hidden=!data.requiresConfirmation;
-  }catch(e){if(token===fareVersion)$('crFareDetails').textContent=e.message;}finally{fareBusy=false;}
+  }catch(e){if(token===fareVersion){$('crFareDetails').textContent=e.message;$('fleetNote').textContent=e.message;}}finally{fareBusy=false;}
  };
  $('crForm').onsubmit=async event=>{
   event.preventDefault();if(busy)return;if(ride){bookingNotice(terminal(ride.status)?'Tap Request another ride to start a new trip.':'You already have a ride. Open your tracking to see it.');return;}
   if(!pickup||!dropoff){bookingNotice('Choose both pickup and destination from the dropdown suggestions or map pins. Typing a name alone does not set its location.');return;}
   if(!$('crName').value.trim()||$('crPhone').value.trim().length<7){bookingNotice('Enter your name and a phone number of at least 7 characters.');$('crForm').reportValidity();return;}if(!$('crForm').reportValidity()){bookingNotice('Please complete the highlighted fields.');return;}
+  if(!pending&&!rideOptionSelected){bookingNotice('Select an available ride to review its fare before booking.');return;}
   if(!pending&&(!fareQuote||fareQuote.signature!==quoteSignature()||Date.parse(fareQuote.expiresAt)<=Date.now())){invalidateFare();bookingNotice('Your fare is updating. Please wait for the total before booking.');return;}
   if(!pending&&fareQuote.requiresConfirmation&&!$('crLongPickupConfirm').checked){bookingNotice('Confirm the shown distant-pickup supplement before booking.');return;}
   busy=true;$('crRequest').disabled=true;
   try{await auth();if(!pending){pending={...bookingFields(),p_request_id:crypto.randomUUID(),p_quote_id:fareQuote.quoteId,p_confirm_pickup:$('crLongPickupConfirm').checked};localStorage.setItem(key(),JSON.stringify(pending));}
-   bookingNotice('Sending your request…');const id=await rpc('swiftride_book_priced',{p_quote_id:pending.p_quote_id,p_request_id:pending.p_request_id,p_confirm_pickup:pending.p_confirm_pickup});ride=await rpc('swiftride_current_priced',{p_id:id});if(!ride)throw Error('Request sent. Tap Refresh connection to restore your tracking.');pending=null;localStorage.removeItem(key());fitNext=true;paint();bookingNotice('Ride requested. Finding your driver…');
+   bookingNotice('Sending your request…');const id=await rpc('swiftride_book_priced',{p_quote_id:pending.p_quote_id,p_request_id:pending.p_request_id,p_confirm_pickup:pending.p_confirm_pickup});ride=await rpc('swiftride_current_priced',{p_id:id});if(ride)window.SwiftRideNotifications?.record(ride.id,ride.status);if(!ride)throw Error('Request sent. Tap Refresh connection to restore your tracking.');pending=null;localStorage.removeItem(key());fitNext=true;paint();bookingNotice('Ride requested. Finding your driver…');
   }catch(e){const message=e.message||String(e);if(/Enter your name, phone, pickup|Invalid .*location|violates check constraint|Fare quote expired|Fare quote not found/i.test(message)){pending=null;localStorage.removeItem(key());}bookingNotice('Could not confirm your ride: '+message+(e.code?' ['+e.code+']':'')+' · Refresh or retry; the same request will not be sent twice.');}
   finally{busy=false;$('crRequest').disabled=false;}
  };
  $('crCancel').onclick=async()=>{if(!ride||busy||!confirm('Cancel this ride?'))return;busy=true;$('crCancel').disabled=true;try{await rpc('swiftride_cancel',{p_id:ride.id});await refresh();}catch(e){notice(e.message);}finally{busy=false;$('crCancel').disabled=false;}};
- $('crNew').onclick=()=>{if(!ride||!terminal(ride.status))return;dismissed=ride.id;ride=null;pending=null;$('crBookingNotice').textContent='';pickup=null;dropoff=null;pin('pickup',null);pin('dropoff',null);$('crPickup').value='';$('crDropoff').value='';route();paint();notice('Choose pickup and destination for your next ride.');};
+ $('crNew').onclick=()=>{if(!ride||!terminal(ride.status))return;dismissed=ride.id;ride=null;pending=null;if(client&&client!==customerDataClient){client.auth.stopAutoRefresh();client=null;session=null;}$('crBookingNotice').textContent='';pickup=null;dropoff=null;pin('pickup',null);pin('dropoff',null);$('crPickup').value='';$('crDropoff').value='';route();paint();notice('Choose pickup and destination for your next ride.');};
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)close();});
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
  setInterval(()=>{if(!ride&&!panel.hidden&&pickup&&dropoff&&!fareBusy&&Date.now()>fareRetryAt&&(!fareQuote||Date.parse(fareQuote.expiresAt)<=Date.now()))calculateFare();if(account!==scope()){++version;session=null;ride=null;pending=null;dismissed=null;clearNearby();pin('driver',null);chip.hidden=true;close();if(client)client.auth.stopAutoRefresh();client=null;auth(false).then(s=>{if(s)refresh();}).catch(()=>{});return;}if(!panel.hidden||ride&&!terminal(ride.status))refresh();if(ride&&ride.location_updated_at&&Date.now()-new Date(ride.location_updated_at).getTime()>=90000){pin('driver',null);if(!terminal(ride.status)&&ride.status!=='requested')$('crUpdated').textContent='Driver GPS is stale. Waiting for an update.';}},5000);
+ window.SwiftRideNotificationBridge={
+  async request(name,args){if(!await auth(false))throw Error('Open SwiftRide to reconnect your ride session.');return rpc(name,args);},
+  async open(id){try{if(!await auth(false))return false;const r=await rpc('swiftride_current_priced',{p_id:id});if(!r)return false;ride=r;await open();paint();return true;}catch(e){notice(e.message);return false;}}
+ };
  // Restore only an existing ride session at startup. Opening Rides creates a guest session if needed.
  auth(false).then(s=>{if(s)refresh();}).catch(()=>{});
 })();
@@ -8043,8 +8026,7 @@ const $=id=>document.getElementById(id);let rows=[],busy=false;async function re
 function draw(){$('apOrders').replaceChildren();const filter=$('apFilter').value;const list=rows.filter(r=>filter==='all'||r.status===filter);if(!list.length){$('apOrders').textContent='No requests in this view.';return;}for(const r of list){const row=document.createElement('article');row.className='ap-order';const info=document.createElement('div');const title=document.createElement('strong');title.textContent=r.category+' · '+(r.plan==='basic'?'Basic':'Premium')+' · BZD $'+Number(r.amount).toFixed(2);const ref=document.createElement('p');ref.textContent='Transfer reference: '+r.reference;const status=document.createElement('p');const expired=r.status==='active'&&Date.parse(r.ends_at)<=Date.now(),scheduled=r.status==='active'&&Date.parse(r.starts_at)>Date.now();status.textContent=r.status==='pending'?'Awaiting bank verification':expired?'Expired':scheduled?'Scheduled':r.status;const dates=document.createElement('small');dates.textContent=r.starts_at?'Runs '+new Date(r.starts_at).toLocaleDateString()+' – '+new Date(r.ends_at).toLocaleDateString():'Submitted '+new Date(r.created_at).toLocaleString();info.append(title,ref,status,dates);row.append(info);if(r.status==='pending'){const actions=document.createElement('div');actions.className='ap-actions';for(const [action,label] of [['approve','Confirm paid & activate'],['reject','Reject']]){const button=document.createElement('button');button.type='button';button.textContent=label;button.onclick=async()=>{if(busy)return;const question=action==='approve'?'Confirm you received BZD $'+Number(r.amount).toFixed(2)+' from '+r.category+' with reference '+r.reference+'?':'Reject this payment request?';if(!confirm(question))return;busy=true;actions.querySelectorAll('button').forEach(b=>b.disabled=true);try{await request(action,r.id);$('apNotice').textContent=action==='approve'?'Payment recorded. Plan approved.':'Request rejected.';rows=await request('list');draw();}catch(e){$('apNotice').textContent='Could not update: '+e.message;}finally{busy=false;actions.querySelectorAll('button').forEach(b=>b.disabled=false);}};actions.append(button);}row.append(actions);}$('apOrders').append(row);}}
 async function load(){if(busy)return;busy=true;$('apRefresh').disabled=true;$('apNotice').textContent='Loading…';try{rows=await request('list');draw();$('apNotice').textContent='Updated '+new Date().toLocaleTimeString();}catch(e){rows=[];$('apOrders').replaceChildren();$('apNotice').textContent='Could not load: '+e.message;}finally{busy=false;$('apRefresh').disabled=false;}}
 $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.switchAdminTab;window.switchAdminTab=function(name){original.apply(this,arguments);if(name==='plans')load();};
-});</script>
-</body>
+});</script></body>
 
 
 
@@ -8055,142 +8037,6 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
 <div class="light-beam">
   <span class="beam-dot"></span>
 </div>
-
-
-
-<div class="media-section">
-
-  <h3 class="media-title">🔥 SWIFT CHOICE</h3>
-
-  <div class="media-slider">
-    <div class="media-track">
-
-      <!-- ITEM 1 -->
-      <div class="media-card">
-        <img src="https://i.imgur.com/0Fi3uJy.png">
-
-        <div class="media-info">
-          <h4>Vegetarian Roll</h4>
-          <p>⭐ 5 • 25-30 min</p>
-          <span>$22</span>
-        </div>
-
-        <button class="add-btn" onclick="quickAdd('Vegetarian Roll', 22)">+</button>
-      </div>
-<!-- ITEM  -->
-       <div class="media-card">
-        <img src="https://i.imgur.com/BnbUdK9.png">
-
-        <div class="media-info">
-          <h4>PB Crumble Latte</h4>
-          <p>⭐ 5 • 25 min</p>
-          <span>$14</span>
-        </div>
-
-        <button class="add-btn" onclick="quickAdd('PB Crumble Latte', 14)">+</button>
-      </div>
-
-      <!-- ITEM  -->
-       <div class="media-card">
-        <img src="https://i.imgur.com/OZMFbqv.png">
-
-        <div class="media-info">
-          <h4>Biscoff Cake</h4>
-          <p>⭐ 5 • 5-15 min</p>
-          <span>$10</span>
-        </div>
-
-        <button class="add-btn" onclick="quickAdd('Biscoff Cake Slice', 10)">+</button>
-      </div>
-
-      <!-- ITEM 2 -->
-      <div class="media-card">
-        <img src="https://i.imgur.com/z2B1a2l.png">
-
-        <div class="media-info">
-          <h4>Snack Combo</h4>
-          <p>⭐ 5 • 15 min</p>
-          <span>$15</span>
-        </div>
-
-        <button class="add-btn" onclick="quickAdd('Snack Combo', 13)">+</button>
-      </div>
-
-         <!-- ITEM 3 -->
-      <div class="media-card">
-        <img src="https://i.imgur.com/yiK5163.png">
-
-        <div class="media-info">
-          <h4>Dumpling 10 Piece</h4>
-          <p>⭐ 4.5 • 20-30 min</p>
-          <span>$15</span>
-        </div>
-
-        <button class="add-btn" onclick="quickAdd('Dumplings ', 15)">+</button>
-      </div>
-
-         <!-- ITEM 4-->
-      <div class="media-card">
-        <img src="https://i.imgur.com/8PVXx7B.png">
-
-        <div class="media-info">
-          <h4>Crispy 3 Cheese Burger</h4>
-          <p>⭐ 5 • 20-30 min</p>
-          <span>$26</span>
-        </div>
-
-        <button class="add-btn" onclick="quickAdd('3 Cheese Burger', 26)">+</button>
-      </div>
-
-          <!-- ITEM 5-->
-      <div class="media-card">
-        <img src="https://i.imgur.com/rQikgPN.png">
-
-        <div class="media-info">
-          <h4>Raspberry Matcha</h4>
-          <p>⭐ 5 • 20-25 min</p>
-          <span>$14</span>
-        </div>
-
-        <button class="add-btn" onclick="quickAdd('R.Matcha',14)">+</button>
-      </div>
-
-            <!-- ITEM 6-->
-      <div class="media-card">
-        <img src="https://i.imgur.com/cAp8lqW.png">
-
-        <div class="media-info">
-          <h4>Spring time Esspresso </h4>
-          <p>⭐ 5 • 20-25 min</p>
-          <span>$14</span>
-        </div>
-
-        <button class="add-btn" onclick="quickAdd('Spring Time Ess.',14)">+</button>
-      </div>
-  
-
-                     <!-- ITEM 8-->
-      <div class="media-card">
-        <img src="https://i.imgur.com/gFcb5XF.png">
-
-        <div class="media-info">
-          <h4>Guerreros Ceviche</h4>
-          <p>⭐ 5 • 20-25 min</p>
-          <span>$18</span>
-        </div>
-
-        <button class="add-btn" onclick="quickAdd('Ceviche(S).',18)">+</button>
-      </div>
-
-
-
-
-
-
-  </div>
-
-</div>
-
 
 
 
@@ -8562,9 +8408,9 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
 
 
 <div class="order-btn" id="orderBox">
-  <div id="orderHint" style="font-size:18px; font-weight:900; color:#ff6a00; margin-bottom:15px; text-align:center;">
+  <h1 id="orderHint" style="font-size:18px; font-weight:900; color:#ff6a00; margin-bottom:15px; text-align:center;">
     Finalize Your Order
-  </div>
+  </h1>
 
 <section class="gift-card group-card" aria-label="Group order">
 <label class="gift-toggle"><span class="gift-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="8" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 3 4v3"/></svg></span><span class="gift-toggle-copy"><strong>Group order</strong><small>One checkout. Everyone’s order, clearly labeled.</small></span><input id="groupEnabled" type="checkbox" aria-controls="groupFields" aria-expanded="false"><span class="gift-switch" aria-hidden="true"></span></label>
@@ -8576,7 +8422,7 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
   <label>Recipient’s delivery address<textarea id="giftAddress" rows="2" maxlength="400" placeholder="Street, house details, town and a nearby landmark"></textarea></label>
   <label>Gift message <span class="gift-optional">Optional</span><textarea id="giftMessage" rows="3" maxlength="300" placeholder="Write a little something to brighten their day…"></textarea></label>
   <label class="gift-check"><input id="giftCall" type="checkbox" checked>Call the recipient on arrival</label>
-  <div class="gift-note">You’re the sender and payer. We’ll confirm payment with you on WhatsApp. Your saved profile and address stay unchanged.</div>
+  <div class="gift-note">You’re the sender and payer. SwiftShop will confirm payment with you. Your saved profile and address stay unchanged.</div>
   <label class="gift-check"><input id="giftAreaConfirmed" type="checkbox">I’ve selected the recipient’s delivery area below.</label>
   <div id="giftReview" class="gift-review" aria-live="polite"></div>
   <p id="giftError" role="status"></p>
@@ -8633,10 +8479,11 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
     <input type="hidden" id="selectedTipAmount" value="0">
   </div>
 
-  <div class="submit-track" onclick="order()" style="margin-top:25px;">
-    <button class="submit-inner">Submit Order</button>
+  <div class="submit-track" style="margin-top:25px;">
+    <button type="button" class="submit-inner" onclick="order()">Send order</button>
   </div>
 
+  <p id="orderSubmitStatus" role="status" aria-live="polite"></p>
   <div style="display:flex; gap:10px; margin-top:15px;">
     <button onclick="backToCart()" style="flex:1; padding:12px; border:none; border-radius:14px; background:#f0f0f0; font-weight:700; color:#555;">← Back</button>
     <button onclick="doneOrder()" style="flex:1; padding:12px; border:none; border-radius:14px; background:#f0f0f0; font-weight:700; color:#555;">New Order</button>
@@ -8682,20 +8529,25 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
   const SUPABASE_URL = "https://sbjadbqlmkktljfpqowc.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNiamFkYnFsbWtrdGxqZnBxb3djIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5MTc2NTIsImV4cCI6MjEwMjQ5MzY1Mn0.RCgn8yNmxkQWFPu6sJdyYD3_zJ7n2QmvPQjqZC70F8s";
 
-  const customerDataClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const customerDataClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
   const supabaseClient = new Proxy(customerDataClient,{get(target,key){const admin=window.SwiftAdmin;const useAdmin=admin?.verified&&document.getElementById('adminScreen')?.style.display==='block'&&['from','rpc','storage'].includes(key);const source=useAdmin?admin.client:target;const value=source[key];return typeof value==='function'?value.bind(source):value;}});
 
   // --- SUPABASE DATA BRIDGE FUNCTIONS ---
 
+  // Android digital goods require a supported Play billing implementation.
+  window.swiftMobileItemAllowed = function(p) {
+    if (!document.documentElement.classList.contains('native-app')) return true;
+    const label=[p.name,p.category,p.subcategory,p.title,p.fulfilment_kind].filter(Boolean).join(' ');
+    return !/\b(netflix|spotify|disney\s*\+|subscription|digital|streaming|game\s*credits?|top\s*up|gift\s*cards?)\b/i.test(label);
+  };
   async function getProducts() {
-    const { data, error } = await supabaseClient
-      .from('products')
-      .select('*')
-      .ilike('active', 'yes');
-    
-    if (error) { console.error(error); return []; }
-    
-    return data.map(r => ({
+    window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState='loading'}}));
+    let data,error;
+    try {({data,error}=await supabaseClient.from('products').select('*').ilike('active','yes').abortSignal(AbortSignal.timeout(15000)));}
+    catch(e){error=e;}
+    if(error){window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState='error'}}));return [];}
+    window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState=data?.length?'ready':'empty'}}));
+    return (data||[]).filter(window.swiftMobileItemAllowed).map(r => ({
       id: r.id,
       name: r.name,
       category: r.category,
@@ -8756,11 +8608,11 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
     const { data, error } = await supabaseClient
       .from('promos')
       .select('*')
-      .not('image', 'is', null);
+      .not('image', 'is', null).abortSignal(AbortSignal.timeout(15000));
 
     if (error) return [];
 
-    return data.filter(r=>!r.status || String(r.status).toUpperCase()==='ACTIVE').map(r => ({id:r.id,name:r.name,price:Number(r.price),image:r.image,category:r.category,was:r.was?Number(r.was):null}));
+    return data.filter(window.swiftMobileItemAllowed).filter(r=>!r.status || String(r.status).toUpperCase()==='ACTIVE').map(r => ({id:r.id,name:r.name,price:Number(r.price),image:r.image,category:r.category,was:r.was?Number(r.was):null}));
   }
 
   async function getStoreData(storeName) {
@@ -8781,11 +8633,7 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
   }
 
   async function getLeaderBoard() {
-    const { data, error } = await supabaseClient
-      .from('leaderboard')
-      .select('*')
-      .order('points', { ascending: false });
-
+    const {data,error}=await customerDataClient.rpc('swift_customer_leaderboard');
     if (error) return [];
 
     return data.map((row, index) => ({
@@ -8821,7 +8669,7 @@ function getCartDeliveryFee() {
       searchPlaceholder: "Search for items...",
       cartTitle: "Your Cart",
       orderBtn: "Next",
-      checkoutBtn: "Order on WhatsApp"
+      checkoutBtn: "Send order"
     },
     es: {
       slogan: "Ver Productos • Pedir • Puntos • Entrega a Domicilio",
@@ -8829,7 +8677,7 @@ function getCartDeliveryFee() {
       searchPlaceholder: "Que Busca😊?...",
       cartTitle: "Tu Carrito",
       orderBtn: "Siguiente",
-      checkoutBtn: "Pedir por WhatsApp"
+      checkoutBtn: "Enviar pedido"
     }
   };
   console.log("SCRIPT LOADED");
@@ -8838,44 +8686,10 @@ function getCartDeliveryFee() {
   /************* 👑 ADMIN ACCESS *************/
 
 
-  /************* ⏰ BUSINESS HOURS LOCK *************/
-  function checkBusinessHoursLock(isAdminAttempt = false) {
-    const now = new Date();
-
-    const hour = now.getHours();
-    const minute = now.getMinutes();
-
-    // OPEN: 7:30 AM
-    const openHour = 00;
-    const openMinute = 30;
-
-    // CLOSE: 9:00 PM
-    const closeHour = 23;
-    const closeMinute = 30;
-
-    let isOpen = false;
-
-    if (
-      (hour > openHour || (hour === openHour && minute >= openMinute)) &&
-      (hour < closeHour || (hour === closeHour && minute < closeMinute))
-    ) {
-      isOpen = true;
-    }
-
-    const loginBox = document.getElementById("loginBox");
-    const closedBox = document.getElementById("closedBox");
-
-    // ⛔ closed for normal users
-    if (!isOpen && !isAdminAttempt) {
-      if (loginBox) loginBox.style.display = "none";
-      if (closedBox) closedBox.style.display = "block";
-      return false;
-    }
-
-    // ✅ open or admin
-    if (loginBox) loginBox.style.display = "block";
-    if (closedBox) closedBox.style.display = "none";
-
+  // Customer access is available at all hours. Keep the existing callers compatible.
+  function checkBusinessHoursLock() {
+    const loginBox=document.getElementById('loginBox');
+    if(loginBox)loginBox.style.display='block';
     return true;
   }
 
@@ -9004,7 +8818,7 @@ function getCartDeliveryFee() {
 
   function initCartMap() {
     const mapDiv = document.getElementById("cartDeliveryMap");
-    if (!mapDiv || cartMap) return; 
+    if (!mapDiv || cartMap || !window.google?.maps) return; 
 
     const owCenter = { lat: 18.0777, lng: -88.5667 };
 
@@ -9777,11 +9591,9 @@ function enterApp() {
       wrap.style.display = "flex";
     }
 
-    const welcome = document.getElementById("welcomeScreen");
-    if (welcome) welcome.remove();
 
     // 🔥 Trigger Supabase floating promo banner using loadSupabasePromos()
-    loadSupabasePromos();
+    if(typeof loadSupabasePromos==='function')loadSupabasePromos();
   }
     
   /* AUTO LOGIN */
@@ -9800,7 +9612,7 @@ function enterApp() {
     const isAdminAuto =
       !!window.SwiftAdmin?.verified;
 
-    // 🔥 Auto-login now strictly respects business hours for everyone by passing `false`
+    // Restore saved customer access at any time.
     if (savedPhone && checkBusinessHoursLock(false)) {
       localStorage.setItem("loggedIn", "true");
       enterApp();
@@ -9933,6 +9745,11 @@ async function render() {
       `;
     });
   });
+  for(const card of box.querySelectorAll('.product')){
+    const name=card.querySelector('.product-info strong')?.textContent;
+    const p=filteredItems.find(item=>item.name===name);
+    if(p&&window.attachStoreItemShare)window.attachStoreItemShare(card,p);
+  }
 }
   let searchIdleTimer = null;
   let lastSearchValue = "";
@@ -10013,6 +9830,7 @@ async function render() {
   }
 
   function add(n, p, btn, w) {
+    if(window.swiftMobileItemAllowed&&!window.swiftMobileItemAllowed({name:n,category:cat})){alert("This digital item is unavailable in the mobile app.");return;}
     buzz(30); 
 
     if (btn) showAddCheck(btn);
@@ -10109,7 +9927,9 @@ async function render() {
     "FLOWER": "18.084406,-88.565955"
   };
 
-  function order() {
+  async function order() {
+    if(window.swiftOrderSending)return;
+    if(window.swiftMobileItemAllowed&&Object.entries(cart).some(([name,item])=>!window.swiftMobileItemAllowed({name,category:item.cat}))){alert("Remove unavailable digital items from your cart before ordering.");return;}
     const gift=window.readGiftOrder();if(gift===false)return;
     const group=window.readGroupOrder();if(group===false)return;
     let forcedTotal = 0;
@@ -10297,22 +10117,39 @@ async function render() {
         'Please label each person’s items with their name.');
       msg=lines.join('\n');
     }
-    // Prepare tracking synchronously so WhatsApp still opens inside the original tap.
-    let trackingReference='';
+    // Keep the current Dispatch payload and submit through the existing tracking RPC.
+    const snapshot={
+      customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
+      items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p})),
+      total:grandTotal,payment:paymentMethod,
+      routes:gift?[]:[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storeLocations[biz]||storeLocations.GENERAL}&destination=${encodeURIComponent(customerCoords)}`),
+      arrival_notes:gift?gift.address+(gift.message?' · '+gift.message:''):'Delivery area: '+deliveryZone,
+      taco_note:hasTacos?(tacoPlace+': '+tacoOrder):'',original_order_number:orderNum,
+      delivery_area:deliveryZone,customer_location:customerCoords,
+      sender_name:userName,sender_phone:userPhone,gift:gift||null,group:group||null,
+      delivery_fee:deliveryFee,platform_fee:platformFee,tip:tipAmount,
+      dispatch_text:msg.replace(/%0A/g,'\n')
+    };
+    window.swiftOrderSending=true;
+    const submit=document.querySelector('#orderBox .submit-inner');
+    if(submit){submit.disabled=true;submit.setAttribute('aria-busy','true');submit.textContent='Sending order…';}
+    const orderStatus=document.getElementById('orderSubmitStatus');
+    if(orderStatus)orderStatus.textContent='Sending your order to SwiftShop…';
     try {
-      trackingReference=window.SwiftLive.prepare({
-        customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
-        items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p})),
-        total:grandTotal,payment:paymentMethod,
-        routes:gift?[]:[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storeLocations[biz]||storeLocations.GENERAL}&destination=${encodeURIComponent(customerCoords)}`),
-        arrival_notes:gift?gift.address+(gift.message?' · '+gift.message:''):'Delivery area: '+deliveryZone,
-        taco_note:hasTacos?(tacoPlace+': '+tacoOrder):'',
-        original_order_number:orderNum
-      });
-      sessionStorage.setItem('swiftshop.pendingLiveReturn',trackingReference);
-    } catch(trackingError) { console.warn('Live order tracking could not start. WhatsApp checkout is still available.'); }
-    const waUrl = `https://wa.me/5016080205?text=` + encodeURIComponent(msg.replace(/%0A/g, '\n')+(trackingReference?'\n\nLIVE ORDER REFERENCE: '+trackingReference:''));
-    window.open(waUrl, "_blank");
+      const id=await window.SwiftLive.submit(snapshot);
+      if(orderStatus)orderStatus.textContent='Order sent. Follow its progress in live tracking.';
+      // Clear only after Dispatch confirms registration; failed sends keep the cart.
+      cart={};total=0;update();updateCartBubble();renderCartPanel();
+      window.dispatchEvent(new CustomEvent('swift-order-submitted',{detail:{id,snapshot}}));
+      return id;
+    } catch(error) {
+      if(orderStatus)orderStatus.textContent='Order was not sent. '+(/verified|session|account|profile|sender/i.test(error?.message||'')?'Sign in with your verified email account and check your delivery contact. ':'Check your connection and retry. ')+'Your cart is still saved.';
+      console.warn('Order submission could not be confirmed');
+      return null;
+    } finally {
+      window.swiftOrderSending=false;
+      if(submit){submit.disabled=false;submit.removeAttribute('aria-busy');submit.textContent='Send order';}
+    }
   }
 
   function doneOrder() {
@@ -10422,11 +10259,6 @@ async function render() {
     installWrap.hidden = true;
   }
 
-  // Remove welcome screen after animation finishes
-  setTimeout(() => {
-    const welcome = document.getElementById("welcomeScreen");
-    if (welcome) welcome.remove();
-  }, 2600); // 2s display + fade
 
   function openSuggest() {
     const sOverlay = document.getElementById("suggestOverlay");
@@ -10482,7 +10314,7 @@ async function render() {
 
   // LOGOUT: Clears data and reloads the app to the login screen
   function handleLogout() {
-    if (confirm("Are you sure you want to logout?")) {
+    if (window.swiftLogoutConfirmed || confirm("Are you sure you want to logout?")) {
       localStorage.removeItem("userName");
       localStorage.removeItem("userPhone");
       localStorage.removeItem("loggedIn");
@@ -11481,7 +11313,8 @@ async function handleAdminImageUpload(inputEl, removeBg, targetInputId, previewI
       formData.append("size", "auto");
 
       // 2. Call remove.bg API using your key
-      const response = await fetch(SUPABASE_URL+'/functions/v1/remove-product-background',{method:'POST',headers:{Authorization:'Bearer '+(await window.SwiftAdmin.client.auth.getSession()).data.session.access_token},body:formData});
+      const {data:{session}}=await window.SwiftAdmin.client.auth.getSession();
+      const response=await fetch(SUPABASE_URL+'/functions/v1/remove-product-background',{method:'POST',headers:{Authorization:'Bearer '+session.access_token},body:formData});
 
       if (!response.ok) {
         throw new Error(`API Error: ${response.statusText}`);
@@ -11594,7 +11427,7 @@ function switchAdminTab(tabName) {
   const targetTab = document.getElementById("adminTab" + tabName.charAt(0).toUpperCase() + tabName.slice(1));
   if (targetTab) targetTab.style.display = "block";
 
-  if (event && event.currentTarget) {
+  if (typeof event !== 'undefined' && event && event.currentTarget) {
     event.currentTarget.style.background = "#ff6a00";
     event.currentTarget.style.color = "#fff";
     event.currentTarget.style.boxShadow = "0 4px 12px rgba(255,106,0,0.25)";
@@ -12305,36 +12138,7 @@ function updateGamificationProgress(points) {
   }
 }
 
-async function addGamificationPoints(amount) {
-  amount = Number(amount || 0);
-  if (amount <= 0) return true;
-  const phone = getRewardsUserPhone();
-  if (!phone) return false;
-
-  try {
-    const { data: user } = await supabaseClient
-      .from("swiftshop_users")
-      .select("points")
-      .eq("phone", phone)
-      .maybeSingle();
-
-    const currentPoints = Number(user?.points || 0);
-    const newPoints = currentPoints + amount;
-
-    await supabaseClient
-      .from("swiftshop_users")
-      .upsert({ phone: phone, points: newPoints, name: getRewardsUserName() }, { onConflict: "phone" });
-
-    localStorage.setItem("points", newPoints);
-    const pPoints = document.getElementById("profilePoints");
-    if (pPoints) pPoints.innerText = newPoints;
-    updateGamificationProgress(newPoints);
-    return true;
-  } catch (err) {
-    console.error("Add points error:", err);
-    return false;
-  }
-}
+async function addGamificationPoints(){throw Error('Rewards can only be awarded by the server');}
 
 /* =========================================================
    MILESTONES & REDEMPTIONS
@@ -12585,42 +12389,8 @@ function drawSpinWheelCanvas() {
 }
 
 async function selectWeightedWheelOutcome() {
-  const sectors = getDailyWheelSectors();
-
-  // Check if a major prize was already won today
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-
-  let prizeAlreadyWon = false;
-  try {
-    const { data: winners } = await supabaseClient
-      .from("swiftshop_daily_spins")
-      .select("id")
-      .eq("outcome_type", "reward")
-      .gte("spun_at", todayStart.toISOString())
-      .limit(1);
-
-    if (winners && winners.length > 0) {
-      prizeAlreadyWon = true;
-    }
-  } catch (e) {
-    console.error("Error checking daily prize winner:", e);
-  }
-
-  // If someone already won today, remove major reward from winning calculation
-  let availableSectors = sectors;
-  if (prizeAlreadyWon) {
-    availableSectors = sectors.filter(item => item.type !== "reward");
-  }
-
-  const totalWeight = availableSectors.reduce((sum, item) => sum + item.weight, 0);
-  let random = Math.random() * totalWeight;
-
-  for (const outcome of availableSectors) {
-    random -= outcome.weight;
-    if (random < 0) return outcome;
-  }
-  return availableSectors[0];
+ const {data,error}=await customerDataClient.rpc('swift_customer_daily_spin').abortSignal(AbortSignal.timeout(10000));if(error)throw error;
+ const winner=getDailyWheelSectors().find(p=>p.id===data.id);if(!winner)throw Error('Spin result unavailable');return {...winner,recorded:true};
 }
 
 async function spinDailyWheel() {
@@ -12645,7 +12415,7 @@ async function spinDailyWheel() {
   }
 
   const sectors = getDailyWheelSectors();
-  const winner = await selectWeightedWheelOutcome();
+  let winner;try{winner=await selectWeightedWheelOutcome();}catch(e){rewardsIsSpinning=false;alert(e.message);await updateDailySpinButton();return;}
   const winnerIndex = sectors.findIndex(item => item.id === winner.id);
 
   const numSectors = sectors.length;
@@ -12688,23 +12458,9 @@ async function finishDailySpin(winner) {
   const phone = getRewardsUserPhone();
 
   try {
-    const { error } = await supabaseClient.from("swiftshop_daily_spins").insert({
-      phone: phone,
-      outcome_id: winner.id,
-      outcome_type: winner.type,
-      points_won: Number(winner.points || 0),
-      spun_at: new Date().toISOString()
-    });
-
-    if (error) {
-      alert("Spin failed to record. Please try again.");
-      rewardsIsSpinning = false;
-      updateDailySpinButton();
-      return;
-    }
-
+    if(!winner.recorded)throw Error('Spin was not confirmed by the server');
     if (winner.type === "points" && winner.points > 0) {
-      await addGamificationPoints(winner.points);
+      // Points were already awarded atomically by the server.
       alert(`YOU WON ${winner.label}!`);
     } else if (winner.type === "reward") {
       const name = getRewardsUserName();
@@ -13214,7 +12970,7 @@ function selectTip(amount, element) {
     <!-- TAB 4: PROMOS VIEW -->
     <div id="adminTabPromos" class="admin-tab-content" style="display:none;">
       <div style="background:#fff; padding:24px; border-radius:24px; box-shadow:0 10px 30px rgba(0,0,0,0.06); border:1px solid #eaeaea;">
-        <h3 style="margin-top:0; margin-bottom:18px; font-size:18px; font-weight:800; color:#111;">Add Live Promo</h3>
+        <h3 style="margin-top:0; margin-bottom:18px; font-size:18px; font-weight:800; color:#111;">Add Live Deal</h3>
         
         <label style="display:block; font-size:11px; font-weight:700; color:#888; text-transform:uppercase; margin-bottom:6px;">Promo Name</label>
         <input id="adminPromoName" placeholder="Promo Name" style="width:100%; padding:14px; margin-bottom:14px; border-radius:12px; border:1.5px solid #e5e7eb; font-size:14px; outline:none; box-sizing:border-box;">
@@ -13236,7 +12992,7 @@ function selectTip(amount, element) {
         <label style="display:block; font-size:11px; font-weight:700; color:#888; text-transform:uppercase; margin-bottom:6px;">Image URL</label>
         <input id="adminPromoImage" placeholder="https://i.imgur.com/..." style="width:100%; padding:14px; margin-bottom:20px; border-radius:12px; border:1.5px solid #e5e7eb; font-size:14px; outline:none; box-sizing:border-box;">
         
-        <button onclick="adminAddPromo()" style="width:100%; padding:16px; background:linear-gradient(135deg, #ff9a00, #ff5a1f); color:#fff; border:none; border-radius:14px; font-weight:800; font-size:15px; cursor:pointer; box-shadow:0 6px 20px rgba(255,106,0,0.3);">Publish Live Promo</button>
+        <button onclick="adminAddPromo()" style="width:100%; padding:16px; background:linear-gradient(135deg, #ff9a00, #ff5a1f); color:#fff; border:none; border-radius:14px; font-weight:800; font-size:15px; cursor:pointer; box-shadow:0 6px 20px rgba(255,106,0,0.3);">Publish Live Deal</button>
       </div>
     </div>
 
@@ -13313,7 +13069,7 @@ function selectTip(amount, element) {
   if(toggleRow){
     const promosButton=document.createElement('button');
     promosButton.type='button';promosButton.className='hero-live-promos';
-    promosButton.textContent='Live Promos';
+    promosButton.textContent='Live Deals';
     promosButton.addEventListener('click',()=>window.fetchAndShowPromos());
     toggleRow.appendChild(promosButton);
   }
@@ -13374,7 +13130,7 @@ function selectTip(amount, element) {
     return {page,body};
   };
   const favourites=makePage('favouritesPage','Favourites','Your saved finds. Stored on this browser for your account.');
-  const history=makePage('orderHistoryPage','Order history','WhatsApp requests from this browser. Sending and acceptance are not confirmed here.');
+  const history=makePage('orderHistoryPage','Order history','Your saved orders. Open live tracking for the latest confirmation and delivery status.');
   const addresses=makePage('savedAddressesPage','Saved addresses','Save a pinned location in your cart, then reuse it next time. Stored on this browser.');
   const services=document.querySelector('.profile-services-grid');
   [['♡ Favourites',()=>showFavourites()],['Order history',()=>showHistory()],['Saved addresses',()=>showAddresses()]].forEach(([text,fn])=>{const b=button(text,fn);b.classList.add('panel-item');services?.append(b);});
@@ -13434,9 +13190,9 @@ function selectTip(amount, element) {
   const generalCategories=new Set(['snack','drink','household','hygiene','vegetables','treats']);
   function deliveryEstimate(category){
     const c=String(category||'').toLowerCase();
-    if(generalCategories.has(c))return 'Estimated delivery: 5–10 min · WhatsApp updates provided';
+    if(generalCategories.has(c))return 'Estimated delivery: 5–10 min · Live order updates';
     if(['apparel','cosmetics','electronics','pocket mobile','faye'].includes(c))return 'Delivery estimate confirmed on WhatsApp';
-    return 'Estimated delivery: 15–25 min · WhatsApp updates provided';
+    return 'Estimated delivery: 15–25 min · Live order updates';
   }
   async function updateStoreDots(){
     const paintGeneral=()=>document.querySelectorAll('#panel-general .cat-btn[data-cat]').forEach(btn=>{
@@ -13446,6 +13202,11 @@ function selectTip(amount, element) {
     paintGeneral();
     try{
       const {data,error}=await supabaseClient.from('stores').select('category,is_open');if(error)return;
+      document.querySelectorAll('#shopStoreDirectory .store-directory-card').forEach(card=>{
+        const store=(data||[]).find(s=>s.category===card.dataset.storeCategory);
+        const indicator=card.querySelector('.sd-store-open');
+        if(indicator)indicator.hidden=String(store?.is_open||'').toLowerCase()!=='yes';
+      });
       document.querySelectorAll('.cat-btn').forEach(btn=>{
         const category=(btn.getAttribute('onclick')||'').match(/setCategory\('([^']+)'/)?.[1];if(!category)return;
         const store=(data||[]).find(s=>s.category===category);
@@ -13593,25 +13354,18 @@ function selectTip(amount, element) {
   window.openCart=function(...args){closeLocationPicker();addressOptions();return originalOpenCart.apply(this,args);};
   const originalEnterApp=window.enterApp;
   if(originalEnterApp)window.enterApp=function(...args){const result=originalEnterApp.apply(this,args);addressOptions();return result;};
-  const originalOrder=window.order;
-  window.order=function(...args){
-    const open=window.open;
-    window.open=function(url,...rest){
-      if(typeof url==='string' && url.startsWith('https://wa.me/5016080205?text=')){
-        const items=Object.entries(cart).map(([name,item])=>{const p=allProducts.find(p=>p.name===name&&p.category===item.cat);return {id:p?.id,name,category:item.cat,quantity:item.q,price:item.p};});
-        const tip=Number(document.getElementById('selectedTipAmount')?.value||0);
-        const record={id:String(Date.now()),created:new Date().toISOString(),items,delivery:getCartDeliveryFee(),platform:PLATFORM_FEE,tip,tacos:!!localStorage.getItem('tacoOrder')};
-        write('history',[record,...read('history')].slice(0,50));
-      }
-      return open.call(window,url,...rest);
-    };
-    try{return originalOrder.apply(this,args);}finally{window.open=open;}
-  };
+  window.addEventListener('swift-order-submitted',event=>{
+    const {id,snapshot}=event.detail;
+    if(read('history').some(r=>r.id===id))return;
+    const items=snapshot.items.map(item=>{const p=allProducts.find(p=>p.name===item.name&&p.category===item.category);return {...item,id:p?.id};});
+    const record={id,created:new Date().toISOString(),items,delivery:snapshot.delivery_fee,platform:snapshot.platform_fee,tip:snapshot.tip,tacos:!!snapshot.taco_note,submitted:true};
+    write('history',[record,...read('history')].slice(0,50));
+  });
   function showHistory(){
     history.page.style.display='block';history.body.replaceChildren();const list=read('history');
-    if(!list.length){history.body.textContent='Your future WhatsApp order requests will appear here.';return;}
+    if(!list.length){history.body.textContent='Your orders will appear here after you send them.';return;}
     list.forEach(record=>{
-      const row=el('article','shopping-list-card');row.append(el('h3','',new Date(record.created).toLocaleString()),el('p','shopping-notice','WhatsApp request prepared · acceptance unconfirmed'));
+      const row=el('article','shopping-list-card');row.append(el('h3','',new Date(record.created).toLocaleString()),el('p','shopping-notice',record.submitted?'Sent to SwiftShop · view live tracking for status':'Previous order request'));
       record.items.forEach(item=>row.append(el('p','',item.quantity+' × '+item.name)));
       const subtotal=record.items.reduce((s,i)=>s+i.price*i.quantity,0);row.append(el('strong','','Recorded total: '+money(subtotal+record.delivery+record.platform+record.tip)));
       if(record.tacos)row.append(el('p','','Taco food cost was additional. Taco instructions are not included in reordering.'));
@@ -13644,7 +13398,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const extras=document.createElement('section');extras.className='promo-extra-content';
   const extraHeading=document.createElement('h2');extraHeading.textContent='More from local shops';extras.appendChild(extraHeading);
   document.querySelectorAll('#appScreen .pill-container-v2, #appScreen .feature-slider, #appScreen .logo-slider-container').forEach(node=>extras.appendChild(node));
-  if(extras.children.length>1)promo.appendChild(extras);
+  // The deals page contains only its top banner, filters and product cards.
   const servicePages = {
     creditPurchaseScreen:['Purchase credit','Top up your phone in a few simple steps.'],
     creditConfirmScreen:['Review your top-up','Check your details before continuing.'],
@@ -13669,13 +13423,13 @@ document.addEventListener('DOMContentLoaded', () => {
   let productAnchor=null;
   const promoHeader=promo.querySelector('.service-page-header');
   if(promoHeader){
-    promoHeader.querySelector('h1').textContent='Live Promos';
-    promoHeader.querySelector('p').textContent='Good finds. Better prices.';
+    promoHeader.querySelector('h1').textContent='Live Deals';
+    promoHeader.querySelector('p').textContent='Local favourites, better prices.';
     const hero=document.createElement('section');hero.className='promo-spotlight';
     hero.innerHTML='<div class="promo-eyebrow"><span></span> THE SWIFTSHOP EDIT</div><h2>A little less.<br>A lot to love.</h2><p>Explore current offers from local shops.<br>Your next favourite could be right here.</p><div class="promo-spotlight-foot"><span>Local finds, delivered.</span><span class="promo-art" aria-hidden="true">%</span></div>';
     promoHeader.after(hero);
     const collection=document.createElement('div');collection.className='promo-collection-heading';
-    collection.innerHTML='<div><span class="promo-eyebrow">CURATED FOR YOU</span><h2>Offers to explore</h2></div><span id="promoOfferCount" role="status">Loading offers…</span>';
+    collection.innerHTML='<div><span class="promo-eyebrow">SHOP CURRENT OFFERS</span><h2>Deals from local stores</h2></div><span id="promoOfferCount" role="status">Loading offers…</span>';
     hero.after(collection);
     const cartButton=document.createElement('button');cartButton.type='button';cartButton.className='promo-cart-action';cartButton.textContent='View cart →';
     cartButton.addEventListener('click',()=>openCart());promoHeader.appendChild(cartButton);
@@ -13686,7 +13440,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if(!promo.contains(promoProducts))return;
       const cards=promoProducts.querySelectorAll('.product');
       const count=document.getElementById('promoOfferCount');
-      if(count)count.textContent=promoProducts.querySelector('#loadingDeals')?'Loading offers…':cards.length+' '+(cards.length===1?'offer':'offers');
+      if(count&&promoProducts.querySelector('#loadingDeals')&&count.textContent!=='Loading offers…')count.textContent='Loading offers…';
       // The original empty-state action renders the home catalogue. Use the page's exit instead.
       const back=promoProducts.querySelector('button[onclick="render()"]');
       if(back && !back.dataset.promoBack){back.dataset.promoBack='true';back.removeAttribute('onclick');back.addEventListener('click',()=>window.closePromoPage());}
@@ -13722,15 +13476,17 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
   let muted = [], priorFocus = null;
   const isOpen = el => {
+    if(!el.isConnected)return false;
+    if (el.tagName === 'DIALOG') return el.open;
     if (el.id === 'profileOverlay') return el.classList.contains('active');
     if (el.id === 'cartPanel') return el.style.bottom === '0px' || el.style.bottom === '0';
-    for (let node = el; node && node !== document.body; node = node.parentElement) {
+    for (let node = el; node && node !== document.body && node.parentElement; node = node.parentElement) {
       if (getComputedStyle(node).display === 'none' || node.hidden) return false;
     }
     return getComputedStyle(el).visibility !== 'hidden';
@@ -13747,13 +13503,17 @@ document.addEventListener('DOMContentLoaded', () => {
     page.prepend(back);
   });
   function sync() {
+    // Store screens are created by later DOMContentLoaded handlers.
+    for(const id of ids){const page=document.getElementById(id);if(page&&!pages.includes(page)){pages.push(page);observer.observe(page,{attributes:true,attributeOldValue:true,attributeFilter:['style','class','hidden','open']});}}
     const open = new Set(pages.filter(isOpen));
     const newlyOpened=[...open].filter(el=>!previous.has(el));
     const destination=newlyOpened[newlyOpened.length-1];
     if(destination){
       for(const other of open){
-        if(other===destination || other.contains(destination))continue;
-        if(other.id==='profileOverlay')other.classList.remove('active');
+        if(other===destination || other.contains(destination) || ['swiftQualityDialog','swiftPromotionDialog'].includes(destination.id))continue;
+        if(other.tagName==='DIALOG')other.close();
+        else if(other.id==='customerRidePanel')other.hidden=true;
+        else if(other.id==='profileOverlay')other.classList.remove('active');
         else if(other.id==='cartPanel')other.style.bottom='-100%';
         else other.style.display='none';
         if(other.id==='promoPage')restoreProducts();
@@ -13782,6 +13542,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const [el, inert] of muted) el.inert = inert;
     muted = [];
     if (top) {
+      top.inert=false;
       if (!locked) {
         scrollY = window.scrollY; priorFocus = document.activeElement;
         bodyStyle = ['position','top','width','overflow'].map(key => document.body.style[key]);
@@ -13789,7 +13550,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.documentElement.classList.add('shop-page-open'); locked = true;
       }
       // Only the active page and its ancestor path remain interactive.
-      for (let node = top; node && node !== document.body; node = node.parentElement) {
+      for (let node = top; node && node !== document.body && node.parentElement; node = node.parentElement) {
         for (const sibling of node.parentElement.children) {
           if (sibling !== node && !sibling.classList.contains('pac-container') && !['SCRIPT','STYLE','LINK'].includes(sibling.tagName)) {
             muted.push([sibling, sibling.inert]); sibling.inert = true;
@@ -13806,15 +13567,30 @@ document.addEventListener('DOMContentLoaded', () => {
       if (priorFocus?.isConnected) priorFocus.focus({preventScroll:true});
     }
   }
+  window.SwiftNavigation={back(){
+    const top=stack.filter(isOpen).at(-1);if(!top)return false;
+    if(window.swiftOrderSending&&top.id==='orderBox')return true;
+    if(top.tagName==='DIALOG')top.close();
+    else if(top.id==='merchantStorePage')window.closeMerchantStore?.();
+    else if(top.id==='customerRidePanel')document.getElementById('crClose')?.click();
+    else if(top.id==='profileOverlay')window.closeProfile();
+    else if(top.id==='cartPanel')window.closeCart();
+    else if(top.id==='promoPage')window.closePromoPage();
+    else if(top.id==='savedLocationPopover')top.querySelector('button')?.click();
+    else {const back=top.querySelector('.shop-page-back,.service-page-header button,.btn-back-panel,[data-close]');if(back)back.click();else top.style.display='none';}
+    sync();return true;
+  }};
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!event.defaultPrevented&&window.SwiftNavigation.back())event.preventDefault();});
   // Observe only app-owned visibility signals, not mutations made by this coordinator.
   let queued = false;
   const observer = new MutationObserver(records => {
-    if (!records.some(r => r.attributeName === 'style' || r.attributeName === 'hidden' ||
+    if (!records.some(r => r.attributeName === 'style' || r.attributeName === 'hidden' || r.attributeName === 'open' ||
       (r.attributeName === 'class' && (r.oldValue || '').replace(/shop-active-page/g,'').trim() !== r.target.className.replace(/shop-active-page/g,'').trim()))) return;
     if (!queued) { queued = true; queueMicrotask(() => { queued = false; sync(); }); }
   });
-  pages.forEach(el => observer.observe(el,{attributes:true,attributeOldValue:true,attributeFilter:['style','class','hidden']}));
+  pages.forEach(el => observer.observe(el,{attributes:true,attributeOldValue:true,attributeFilter:['style','class','hidden','open']}));
   sync();
+  queueMicrotask(sync);
 });
 </script>
 <script>/* Additive merchant feed. Existing checkout, maps and page navigation remain in place. */
@@ -13822,15 +13598,18 @@ const merchantFeed=(()=>{
  const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
  const live=(r,now=Date.now())=>r.status==='published'&&Date.parse(r.starts_at)<=now&&(!r.ends_at||Date.parse(r.ends_at)>now);
  const imageURL=value=>/^(https?:\/\/|data:image\/(png|jpeg|jpg|webp|gif);base64,)/i.test(value||'')?value:'';
- async function campaigns(kind){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('kind',kind).eq('status','published').order('created_at',{ascending:false});if(error)throw error;return (data||[]).filter(r=>live(r));}
+ async function campaigns(kind){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('kind',kind).eq('status','published').order('created_at',{ascending:false}).abortSignal(AbortSignal.timeout(15000));if(error)throw error;return (data||[]).filter(r=>live(r));}
  const legacyPromos=window.getPromos;
  window.getPromos=async function(){
-  const results=await Promise.allSettled([legacyPromos(),campaigns('promo'),supabaseClient.from('products').select('*').ilike('active','yes')]);
+  const results=await Promise.allSettled([legacyPromos(),campaigns('promo'),supabaseClient.from('products').select('*').ilike('active','yes').abortSignal(AbortSignal.timeout(15000))]);
   const legacy=results[0].status==='fulfilled'?results[0].value:[];
-  if(results[1].status==='rejected'){console.warn('Merchant promo feed unavailable; showing existing promos.');return legacy;}
+  if(results[1].status==='rejected')console.warn('Merchant promo feed unavailable; showing catalogue and existing promos.');
   const products=results[2].status==='fulfilled'&&!results[2].value.error?results[2].value.data||[]:[];
-  const offers=results[1].value.flatMap(r=>{const p=products.find(p=>String(p.id)===r.product_id&&p.category===r.category);return p?[{id:p.id,name:p.name,title:r.title,subtitle:r.subtitle,price:Number(r.price),was:r.was?Number(r.was):null,image:r.image,category:r.category,campaignId:r.id,ends_at:r.ends_at}]:[];});
-  return [...offers,...legacy];
+  const offers=(results[1].status==='fulfilled'?results[1].value:[]).flatMap(r=>{const p=products.find(p=>String(p.id)===r.product_id&&p.category===r.category);return p?[{id:p.id,name:p.name,title:r.title,subtitle:r.subtitle,price:Number(r.price),was:r.was?Number(r.was):null,image:r.image,category:r.category,campaignId:r.id,ends_at:r.ends_at}]:[];});
+  const existing=[...offers,...legacy];
+  const groups=new Map();for(const p of products){if(!p.name||!p.category||!Number.isFinite(Number(p.price))||Number(p.price)<0)continue;const list=groups.get(p.category)||[];list.push({...p,price:Number(p.price),was:p.was?Number(p.was):null});groups.set(p.category,list);}
+  const mixed=[];for(let i=0;mixed.length<48;i++){let added=false;for(const list of groups.values()){if(list[i]){mixed.push(list[i]);added=true;}if(mixed.length>=48)break;}if(!added)break;}
+  const keys=new Set(existing.map(p=>p.category+'::'+p.name));return [...existing,...mixed.filter(p=>!keys.has(p.category+'::'+p.name))].filter(window.swiftMobileItemAllowed);
  };
  // Replaces only the legacy promo renderer, before the existing page coordinator wraps it.
  window.fetchAndShowPromos=async function(){
@@ -13841,29 +13620,29 @@ const merchantFeed=(()=>{
    const items=await getPromos();
    if(box.dataset.promoRequest!==request||document.getElementById('promoPage')?.style.display==='none')return;
    box.replaceChildren();box.style.display='grid';
-   if(!items.length){box.append(el('p','No promos are active right now. Check back soon.'));return;}
+   if(!items.length){box.append(el('p','No items are available right now. Please check back soon.'));return;}
    for(const p of items){
     if(!p.name||!Number.isFinite(p.price)||p.price<0)continue;
     const card=el('div');card.className='product';card.dataset.merchantCategory=p.category||'';
     if(p.was>p.price){const badge=el('span',`SAVE ${Math.round((1-p.price/p.was)*100)}%`);badge.className='sale-badge';card.append(badge);}
     const img=el('img');img.src=imageURL(p.image);img.alt=p.name;img.loading='lazy';card.append(img);
-    const info=el('div');info.className='product-info';info.append(el('strong',p.name));
+    const info=el('div');info.className='product-info';info.append(el('strong',p.name));const source=[...document.querySelectorAll('.cat-btn[onclick]')].find(n=>n.getAttribute('onclick')?.includes("setCategory('"+p.category+"'"));const storeName=source?.querySelector('img')?.alt||source?.querySelector('span')?.textContent||p.category||'Local store';card.dataset.storeName=storeName;const storeLabel=el('small',storeName);storeLabel.className='deal-store';info.append(storeLabel);
     if(p.title&&p.title!==p.name)info.append(el('small',p.title));
     if(p.subtitle)info.append(el('p',p.subtitle));
-    const price=el('div',`$${p.price.toFixed(2)} BZD`);price.className='price';info.append(price);card.append(info);
+    const price=el('div',`$${p.price.toFixed(2)} BZD`);price.className='price';if(p.was>p.price){const was=el('del',`$${p.was.toFixed(2)}`);was.className='price-was';price.append(was);}info.append(price);card.append(info);
     const b=el('button','Add');b.type='button';b.addEventListener('click',async()=>{
      b.disabled=true;
      try{
-      if(p.campaignId){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('id',p.campaignId).maybeSingle();if(error||!data||!live(data)||Number(data.price)!==p.price)throw new Error('This offer has changed or ended. Reopen Live Promos for current offers.');}
+      if(p.campaignId){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('id',p.campaignId).maybeSingle();if(error||!data||!live(data)||Number(data.price)!==p.price)throw new Error('This offer has changed or ended. Reopen Live Deals for current offers.');}
       if(!['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(p.category)){
        const {data,error}=await supabaseClient.from('stores').select('is_open').eq('category',p.category).maybeSingle();if(error||data?.is_open!=='yes')throw new Error('This store is closed or its availability could not be confirmed.');
       }
       if(cart[p.name]&&(cart[p.name].cat!==p.category||Number(cart[p.name].p)!==p.price))throw new Error('This item is already in your cart from another store or at a different price. Remove it first to use this offer.');
       const prev=cat;cat=p.category;try{window.add(p.name,p.price,b,p.was);}finally{cat=prev;}
      }catch(e){alert(e.message);}finally{b.disabled=false;}
-    });card.append(b);box.append(card);
+    });card.append(b);window.attachStoreItemShare?.(card,p);box.append(card);
    }
-  }catch{box.replaceChildren(el('p','Offers could not load. Please try again.'));}
+  }catch{const retry=el('button','Retry loading offers');retry.type='button';retry.onclick=()=>window.fetchAndShowPromos();box.replaceChildren(el('p','Offers could not load. Please try again.'),retry);}
  };
  let holder,signature='',slides=[],index=0,rotationTimer,paused=false,hovered=false;
  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -13913,11 +13692,11 @@ document.addEventListener('DOMContentLoaded',()=>{
  window.setCategory=function(category,node){if(meta.has(category)){window.openMerchantStore(category);return;}return originalCategory.apply(this,arguments);};
  const toolbar=el('header',undefined,'store-toolbar');toolbar.append(btn('← Home',()=>window.closeMerchantStore()),btn('View cart',()=>window.openCart(),'store-cart-link'));
  const hero=el('div',undefined,'store-hero'),details=el('div',undefined,'store-details'),notice=el('p',undefined,'store-notice');notice.setAttribute('role','status');
- const search=el('input');search.type='search';search.placeholder='Search this store';search.setAttribute('aria-label','Search this store');search.oninput=()=>{query=search.value.trim().toLowerCase();drawProducts();};
+ const search=el('input');search.type='search';search.placeholder='Search this store';search.setAttribute('aria-label','Search this store');let searchTimer;search.oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{query=search.value.trim().toLowerCase();drawProducts();},120);};
  const chips=el('nav',undefined,'store-chips');chips.setAttribute('aria-label','Product categories');
  const offerBox=el('section',undefined,'store-offers'),grid=el('div',undefined,'store-product-grid');
  storePage.append(toolbar,hero,details,search,chips,notice,offerBox,grid);
- function estimate(category){if(general.has(category))return '5–10 min';if(['Cosmetics','Faye','Sister','Electronics','AddToCart','Pocket Mobile'].includes(category))return 'Estimate confirmed on WhatsApp';return '15–25 min';}
+ function estimate(category){if(general.has(category))return '5–10 min';if(['Cosmetics','Faye','Sister','Electronics','AddToCart','Pocket Mobile'].includes(category))return 'Estimate confirmed by Dispatch';return '15–25 min';}
  function describe(category){return meta.get(category)||{name:category,logo:'',group:'local'};}
  function setStatus(){
   const m=describe(active);hero.replaceChildren();
@@ -13930,8 +13709,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   copy.append(title,el('p','Local storefront'));
   copy.append(el('span',state==='yes'?'Open now':state==='no'?'Currently closed':'Checking availability',state==='yes'?'store-open':state==='no'?'store-closed':'store-pending'));
   const share=btn('',async()=>{
-   if(!/^https?:$/.test(location.protocol)){notice.textContent='Open the published app to share this store.';return;}
-   const url=new URL(location.href);url.hash=new URLSearchParams({store:active}).toString();
+   if(!window.SWIFTSHOP_PUBLIC_URL&&!/^https?:$/.test(location.protocol)){notice.textContent='A public website is required to share this store.';return;}
+   const url=new URL(window.SWIFTSHOP_PUBLIC_URL||location.href);url.hash=new URLSearchParams({store:active}).toString();
    try{if(navigator.share)await navigator.share({title:m.name,url:url.href});else if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(url.href);share.title='Link copied';share.setAttribute('aria-label','Store link copied');setTimeout(()=>{share.title='Share store';share.setAttribute('aria-label','Share '+m.name);},1800);}else window.prompt('Copy store link',url.href);}catch(e){if(e.name!=='AbortError')window.prompt('Copy store link',url.href);}
   },'store-profile-share');share.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.7 10.5 6.6-4m-6.6 7 6.6 4"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="5" r="3"/><circle cx="18" cy="19" r="3"/></svg>';share.setAttribute('aria-label','Share '+m.name);share.title='Share store';identity.append(avatar,copy,share);hero.append(identity);
   details.replaceChildren();
@@ -13948,29 +13727,31 @@ document.addEventListener('DOMContentLoaded',()=>{
 
  }
 
- function close(){request++;storePage.style.display='none';active=null;document.querySelectorAll('.shop-bottom-nav button').forEach(n=>{if(n.dataset.destination==='home')n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});}
+ function close(){clearTimeout(searchTimer);request++;storePage.style.display='none';active=null;document.querySelectorAll('.shop-bottom-nav button').forEach(n=>{if(n.dataset.destination==='home')n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});}
  window.closeMerchantStore=close;
  window.openMerchantStore=async function(category){
-  const token=++request;active=category;items=[];offers=[];state='unknown';filter='All';query='';search.value='';
+  clearTimeout(searchTimer);const token=++request;active=category;items=[];offers=[];state='unknown';filter='All';query='';search.value='';
   // Restore any promo-owned grid before opening another destination.
   if(document.getElementById('promoPage')?.style.display!=='none')window.closePromoPage?.();
-  storePage.style.display='block';storePage.scrollTop=0;setStatus();grid.replaceChildren();chips.replaceChildren();offerBox.replaceChildren();notice.textContent='Loading this store…';
+  storePage.style.display='block';storePage.setAttribute('aria-busy','true');storePage.scrollTop=0;setStatus();grid.replaceChildren();chips.replaceChildren();offerBox.replaceChildren();notice.textContent='Loading this store…';
   try{
    const [inventory,status,promos]=await Promise.all([
-    supabaseClient.from('products').select('*').eq('category',category).ilike('active','yes'),
-    supabaseClient.from('stores').select('is_open').eq('category',category).maybeSingle(),
+    supabaseClient.from('products').select('*').eq('category',category).ilike('active','yes').abortSignal(AbortSignal.timeout(15000)),
+    supabaseClient.from('stores').select('is_open').eq('category',category).maybeSingle().abortSignal(AbortSignal.timeout(15000)),
     getPromos().catch(()=>[])
    ]);
    if(token!==request||active!==category)return;
    if(inventory.error)throw Error('This store could not load. Please try again.');
-   items=(inventory.data||[]).map(p=>({...p,price:Number(p.price)}));
+   items=(inventory.data||[]).filter(window.swiftMobileItemAllowed).map(p=>({...p,price:Number(p.price)}));
    // Reuse existing favourites matching with the freshest inventory snapshot.
-   for(const p of items){const i=allProducts.findIndex(x=>String(x.id)===String(p.id));if(i>=0)allProducts[i]=p;else allProducts.push(p);}
+   const productIndex=new Map(allProducts.map((p,i)=>[String(p.id),i]));
+   for(const p of items){const id=String(p.id),i=productIndex.get(id);if(i!==undefined)allProducts[i]=p;else {productIndex.set(id,allProducts.length);allProducts.push(p);}}
    state=general.has(category)?'yes':status.error?'unknown':status.data?.is_open||'unknown';
    offers=promos.filter(p=>p.category===category);setStatus();
-   notice.textContent=state==='no'?'This store is closed. Browse now and order when it reopens.':state==='unknown'?'Availability could not be confirmed. Please reopen this store to retry.':'';
+   notice.textContent=state==='no'?'This store is closed. Browse now and order when it reopens.':state==='unknown'?'Availability could not be confirmed.':'';
+   if(state==='unknown')notice.append(btn('Retry',()=>window.openMerchantStore(category)));
    drawChips();drawProducts();drawOffers();
-  }catch(e){if(token!==request)return;notice.replaceChildren(el('span',e.message),btn('Retry',()=>window.openMerchantStore(category)));}
+  }catch(e){if(token!==request)return;notice.replaceChildren(el('span',navigator.onLine===false?'You’re offline. Connect to load this store.':e.message),btn('Retry',()=>window.openMerchantStore(category)));}finally{if(token===request)storePage.removeAttribute('aria-busy');}
  };
  function drawChips(){chips.replaceChildren();for(const label of ['All',...new Set(items.map(p=>p.subcategory||'Items'))]){const b=btn(label,()=>{filter=label;drawChips();drawProducts();});b.setAttribute('aria-pressed',String(label===filter));chips.append(b);}}
  function favouriteKey(){return 'swiftshop.v1.'+(localStorage.getItem('userPhone')||'guest')+'.favourites';}
@@ -14003,7 +13784,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  for(const name of ['add','remove','doneOrder']){const fn=window[name];if(typeof fn==='function')window[name]=function(...args){const result=fn.apply(this,args);updateCounts();return result;};}
  const directory=el('section',undefined,'store-directory');directory.id='shopStoreDirectory';directory.append(el('h2','Visit a store'),el('p','Browse menus, discover offers, and shop your local favourites.'));
  const row=el('div',undefined,'store-directory-row');directory.append(row);
- for(const [category,m] of meta){const b=btn('',()=>window.openMerchantStore(category),'store-directory-card');const img=el('img');img.src=m.logo;img.alt='';const name=el('strong',m.name);const check=el('span','✓','store-blue-check');check.setAttribute('aria-hidden','true');name.append(check);b.append(img,name,el('small','Visit store →'));row.append(b);}
+ for(const [category,m] of meta){const b=btn('',()=>window.openMerchantStore(category),'store-directory-card');const img=el('img');img.src=m.logo;img.alt='';const name=el('strong',m.name);b.dataset.storeCategory=category;const availability=el('span','Open','sd-store-open');availability.hidden=true;b.append(img,name,availability,el('small','Visit store →'));row.append(b);}
  document.querySelector('.store-navigation-wrapper')?.before(directory);
 });
 </script><script>document.addEventListener('DOMContentLoaded',()=>{
@@ -14054,10 +13835,10 @@ window.attachStoreItemShare=function(card,product){
  button.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8.7 10.5 6.6-4m-6.6 7 6.6 4"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="5" r="3"/><circle cx="18" cy="19" r="3"/></svg>';button.title='Share item';button.setAttribute('aria-label','Share '+product.name);
  button.onclick=async function(event){
   event.stopPropagation();
-  if(!/^https?:$/.test(location.protocol)){
+  if(!window.SWIFTSHOP_PUBLIC_URL&&!/^https?:$/.test(location.protocol)){
    window.alert('Item sharing works from your published customer app. Open the published website to share a link customers can visit.');return;
   }
-  const url=new URL(location.href);url.hash=new URLSearchParams({store:product.category,[kind]:key}).toString();
+  const url=new URL(window.SWIFTSHOP_PUBLIC_URL||location.href);url.hash=new URLSearchParams({store:product.category,[kind]:key}).toString();
   const data={title:product.name,text:'See '+product.name+' on SwiftShop OW',url:url.href};
   try{
    if(navigator.share){await navigator.share(data);return;}
@@ -14181,7 +13962,9 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script></body>
+});</script><script src="delivery-notifications.js?v=orders20261004"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=orders20261004"></script><script src="app-promotions.js?v=orders20261004"></script>
+<script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=orders20261004"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
+<script src="login-transition.js?v=orders20261004"></script>
+<script src="customer-auth.js?v=orders20261004"></script><script src="account-requests.js?v=orders20261004"></script>
+</body>
 </html>
-
-<script src="secure-access.js"></script>

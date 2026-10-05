@@ -1,0 +1,30 @@
+body #promoPage.shop-active-page{background:#fffdf9!important;padding:20px max(16px,calc((100vw - 760px)/2)) 100px!important}
+#promoPage .promo-spotlight{display:flex;align-items:center;gap:14px;background:#ffead6;color:#232820;min-height:0;padding:24px;border-radius:22px;margin-bottom:18px}
+#promoPage .promo-spotlight::after{display:none}#promoPage .deal-copy{flex:1;min-width:0}#promoPage .deal-copy small{font-size:9px;letter-spacing:1px;font-weight:750;color:#985020}
+#promoPage .promo-spotlight h2{color:#20271f;font-size:28px;line-height:1.1;letter-spacing:-1px;margin:12px 0 8px}#promoPage .promo-spotlight p{color:#68584b;font-size:12px;max-width:none;line-height:1.5}#promoPage .promo-spotlight>img{width:30%;max-width:140px;aspect-ratio:1;object-fit:contain;mix-blend-mode:multiply}
+#promoPage .deal-filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 20px;scrollbar-width:none}#promoPage .deal-filters button{flex:none;border:1px solid #e6e3dc;border-radius:24px;padding:10px 16px;min-height:44px;background:white;color:#354032;font-weight:650}#promoPage .deal-filters button[aria-pressed=true]{background:#20251f;color:white;border-color:#20251f}
+#promoPage #products{grid-template-columns:1fr!important;gap:0!important}#promoPage #products .product{display:grid!important;grid-template-columns:80px minmax(0,1fr) 58px;align-items:center;gap:12px;border:0!important;border-bottom:1px solid #edece5!important;border-radius:0!important;padding:18px 0!important;background:transparent!important;box-shadow:none!important;overflow:visible!important}#promoPage #products .product[hidden]{display:none!important}#promoPage #products .product>img{width:80px!important;height:96px!important;padding:0!important;background:transparent!important;border-radius:0!important;mix-blend-mode:multiply}#promoPage #products .product-info{gap:5px;padding:0!important}#promoPage .deal-store{color:#83766a;font-size:11px}#promoPage #products .price{font-size:14px!important;color:#20271f!important}#promoPage #products .price-was{margin-left:7px;font-size:11px!important;color:#8f9086!important}#promoPage #products .product>button{width:auto;min-height:44px;margin:0;border-radius:24px!important;padding:9px!important}#promoPage #products .sale-badge{top:6px!important;left:0!important;background:#fff0df!important;color:#a64c08!important;font-size:8px!important;padding:3px 5px!important}#promoPage #products .product>button:not(:first-of-type){grid-column:3}#promoPage .promo-extra-content{margin-top:24px}
+/* Product cards across stores, with uncluttered artwork. */
+#promoPage .promo-extra-content{display:none!important}
+#promoPage .promo-spotlight{background:linear-gradient(120deg,#ffe0bc,#fff2df)!important;min-height:160px!important;padding:22px!important;border:1px solid #f5d5b3!important}
+#promoPage .promo-spotlight h2{color:#252920!important;font-size:27px!important}
+#promoPage .promo-spotlight p{color:#75634e!important}
+#promoPage .promo-spotlight>img{border-radius:0!important;background:transparent!important;max-height:130px;object-fit:contain}
+#promoPage #products{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}
+#promoPage #products .product{display:flex!important;flex-direction:column;align-items:stretch;gap:8px;border:1px solid rgba(25,29,24,.19)!important;border-radius:18px!important;padding:12px!important;background:transparent!important;min-width:0}
+#promoPage #products .product>img{width:100%!important;height:auto!important;aspect-ratio:1;object-fit:contain!important;min-height:0;background:transparent!important;padding:4px!important}
+#promoPage #products .product-info{flex:1;gap:6px}
+#promoPage #products .product-info>strong{font-size:13px!important;line-height:1.4}
+#promoPage #products .deal-store{font-size:11px;color:#6c7467;line-height:1.4}
+#promoPage #products .price{display:flex;flex-wrap:wrap;gap:4px;font-size:15px!important}
+#promoPage #products .product>button{width:100%;min-height:44px;margin-top:0!important;background:#20251f!important;color:white!important;border:0!important;border-radius:24px!important}
+#promoPage #products .product>button:not(:first-of-type){background:transparent!important;color:#20251f!important;border:1px solid #deded5!important}
+#promoPage #products .sale-badge{top:10px!important;left:10px!important}
+@media(min-width:720px){#promoPage #products{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+/* Match the design theme specificity so the soft banner survives its orange override. */
+html.swift-design #promoPage .promo-spotlight{background:linear-gradient(115deg,#fff2e5 0%,#ffe0bd 100%)!important;border:1px solid #f4d7ba!important;border-radius:24px!important;min-height:0!important;padding:24px 22px!important;gap:20px!important;box-shadow:none!important}
+html.swift-design #promoPage .promo-spotlight .deal-copy small{display:block;color:#9b5c27!important;font-size:9px;letter-spacing:1.5px;line-height:1.5}
+html.swift-design #promoPage .promo-spotlight h2{font-size:clamp(22px,5.6vw,30px)!important;line-height:1.14!important;letter-spacing:-.8px!important;color:#252a22!important;margin:10px 0!important}
+html.swift-design #promoPage .promo-spotlight .deal-copy p{color:#776452!important;font-size:12px!important;line-height:1.6!important;max-width:260px!important;margin:0!important}
+html.swift-design #promoPage .promo-spotlight>img{width:29%!important;max-width:135px!important;max-height:135px!important;object-fit:contain!important;mix-blend-mode:normal!important;background:transparent!important;filter:none!important;opacity:1!important;border-radius:12px!important}
+@media(max-width:360px){html.swift-design #promoPage .promo-spotlight{gap:12px!important;padding:20px 16px!important}html.swift-design #promoPage .promo-spotlight>img{width:25%!important}}

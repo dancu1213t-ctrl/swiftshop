@@ -1,0 +1,143 @@
+/* SwiftShop premium UI. Existing orange identity, features and DOM stay intact. */
+:root{--swift-brand:#ff6a00;--swift-ink:#262b27;--swift-muted:#737a73;--swift-line:#e9ece7;--swift-surface:#f7f8f5;--swift-radius:20px;--swift-shadow:0 8px 28px #26382b08;--swift-ease:cubic-bezier(.22,1,.36,1)}
+body{font-family:Poppins,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,input,select,textarea{font:inherit}
+button,a,[role=button],[onclick]{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button{cursor:pointer}
+button:disabled{cursor:default;opacity:.6}
+:where(#appScreen,#merchantStorePage,#profileOverlay,.shopping-page,#cartPanel,#orderBox,#customerRidePanel) h1{letter-spacing:-.8px;line-height:1.2}
+:where(#appScreen,#merchantStorePage,#profileOverlay,.shopping-page,#cartPanel,#orderBox,#customerRidePanel) h2{letter-spacing:-.45px;line-height:1.3}
+:where(#appScreen,#merchantStorePage,#profileOverlay,.shopping-page,#cartPanel,#orderBox,#customerRidePanel) p{line-height:1.65}
+#appScreen{max-width:1120px!important;padding:0 24px calc(104px + env(safe-area-inset-bottom))!important;background:#fff!important}
+#appScreen .header{padding:28px 0 22px!important;min-height:128px!important;border-bottom:0!important;gap:12px!important}
+#appScreen .header h1{font-size:25px!important;font-weight:750!important;letter-spacing:-1px!important}
+#appScreen .header p{font-size:12px!important;color:var(--swift-muted)!important;line-height:1.65!important}
+#appScreen .header #title{max-width:calc(100% - 58px)!important}
+#appScreen .header .header-saved-location{background:var(--swift-surface)!important;border:1px solid var(--swift-line)!important;padding:12px 16px!important;border-radius:16px!important;min-height:56px;box-sizing:border-box}
+#deliveryNotificationBell{right:0!important;top:25px!important;border:1px solid var(--swift-line)!important;background:#fff!important;color:#b94300!important;box-shadow:0 3px 12px #26382b05!important}
+#appScreen .hero-section{padding:4px 0 20px!important}
+#appScreen .hero-toggle-row{gap:10px!important;flex-wrap:wrap!important}
+#appScreen .toggle-box{border:1px solid var(--swift-line)!important;background:var(--swift-surface)!important;border-radius:15px!important;padding:4px!important}
+#appScreen .toggle-btn{min-height:42px!important;border-radius:12px!important;font-size:12px!important;padding:9px 16px!important;font-weight:600!important;line-height:1.3!important}
+#appScreen .toggle-btn.active{background:#fff!important;color:#b94300!important;box-shadow:0 2px 8px #26382b0c!important}
+#appScreen .hero-group-order,#appScreen #liveOrderChip,#appScreen #customerRideChip{min-height:42px!important;border-radius:13px!important;font-size:12px!important;line-height:1.4!important}
+#appScreen .hero-search-box{min-height:54px!important;border-radius:17px!important;background:var(--swift-surface)!important;border:1px solid var(--swift-line)!important;box-shadow:none!important}
+#appScreen .hero-search-box:focus-within{border-color:#ffb679!important;box-shadow:0 0 0 3px #ff6a0010!important}
+#appScreen #searchInput{font-size:15px!important;line-height:1.4!important;min-width:0!important}
+#appScreen .filter-btn{width:54px!important;height:54px!important;flex-shrink:0;border-radius:17px!important;background:#fff3e7!important;color:#b94300!important;border:1px solid #ffe1c9!important}
+#appScreen .hero-promo-slider{border-radius:24px!important;margin-bottom:28px!important}
+#appScreen .hero-promo-card{border-radius:24px!important;padding:24px!important;min-height:218px!important}
+#appScreen .hero-promo-title{font-weight:750!important;letter-spacing:-1px!important;font-size:clamp(25px,4vw,36px)!important}
+#appScreen .hero-promo-sub{font-size:12px!important;line-height:1.65!important}
+#appScreen .hero-promo-btn{min-height:42px!important;border-radius:13px!important;font-size:12px!important;font-weight:650!important}
+#appScreen .store-directory{margin:26px 0!important}
+#appScreen .store-directory h2,#appScreen .store-navigation-wrapper::before{font-size:20px!important;font-weight:700!important;letter-spacing:-.55px!important}
+#appScreen .store-directory>p{font-size:12px!important;color:var(--swift-muted)!important;margin:8px 0 18px!important}
+#appScreen .store-directory-row{gap:12px!important;scroll-snap-type:x proximity;padding-bottom:10px!important;scroll-padding-inline:2px}
+#appScreen .store-directory-card{border:1px solid var(--swift-line)!important;border-radius:20px!important;background:#fff!important;padding:17px 14px!important;box-shadow:0 3px 16px #26382b04!important;scroll-snap-align:start;min-height:145px!important}
+#appScreen .store-directory-card strong{font-size:12px!important;font-weight:650!important;line-height:1.45!important}
+#appScreen .store-directory-card small{font-size:10px!important;color:var(--swift-muted)!important}
+#appScreen .store-directory-card img{width:62px!important;height:62px!important;object-fit:contain;border-radius:16px!important;margin-bottom:12px!important}
+#appScreen .store-tabs{gap:8px!important;scroll-snap-type:x proximity}
+#appScreen .store-tab{border-radius:14px!important;min-height:42px!important;padding:11px 15px!important;font-size:12px!important;white-space:nowrap;scroll-snap-align:start}
+#appScreen .categories{gap:12px!important}
+#appScreen .cat-btn{border:1px solid var(--swift-line)!important;border-radius:18px!important;background:var(--swift-surface)!important;padding:14px 8px 10px!important;box-shadow:none!important}
+#appScreen .cat-btn span:not(.status-dot){font-size:11px!important;font-weight:600!important;line-height:1.5!important}
+#appScreen .product,#merchantStorePage .store-product{border:1px solid var(--swift-line)!important;border-radius:22px!important;background:#fff!important;box-shadow:0 3px 18px #26382b04!important;overflow:hidden;isolation:isolate}
+#appScreen .product h3,#merchantStorePage .store-product h3{font-size:14px!important;font-weight:650!important;line-height:1.5!important;letter-spacing:-.2px!important}
+#appScreen .product .price,#merchantStorePage .store-product .price{font-weight:700!important;font-variant-numeric:tabular-nums}
+#appScreen .product button,#merchantStorePage .store-product button{min-height:40px;border-radius:12px!important;font-weight:600!important}
+#appScreen .product-img-wrap,#merchantStorePage .store-product .product-img-wrap{padding:8px!important;box-sizing:border-box;border-radius:16px!important;background:#fafbf8!important;overflow:hidden!important}
+.shop-bottom-nav{border-top:1px solid #edf0eb!important;background:#fffffff5!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 -5px 25px #26382b06!important;padding:8px 12px calc(8px + env(safe-area-inset-bottom))!important;box-sizing:border-box}
+.shop-bottom-nav button{min-height:52px!important;gap:5px!important;border-radius:15px!important;font-size:10px!important;font-weight:550!important;padding:8px 12px!important;line-height:1.3!important}
+.shop-bottom-nav button[aria-current=page]{background:#fff1e6!important;color:#b94300!important}
+.shop-bottom-nav svg{width:22px!important;height:22px!important;stroke-width:1.7!important}
+#cartPanel{border:1px solid var(--swift-line)!important;border-radius:28px 28px 0 0!important;box-shadow:0 -10px 45px #24352b12!important;background:#fff!important}
+#cartPanel #cartTitle{font-size:25px!important;font-weight:700!important;letter-spacing:-.8px!important;margin:12px 0 24px!important}
+#cartPanel .checkout-row{padding:9px 0;font-size:13px!important}
+#cartPanel .cart-item{border-radius:17px!important;border:1px solid var(--swift-line)!important;padding:14px!important;background:#fff!important}
+#cartPanel input:not([type=hidden]),#cartPanel select,#cartPanel textarea{border:1px solid #e2e7df!important;background:var(--swift-surface)!important;border-radius:14px!important;padding:14px!important;box-sizing:border-box;line-height:1.45!important}
+#cartPanel #cartGrandTotal{border-top:1px solid var(--swift-line)!important;padding-top:18px!important;font-variant-numeric:tabular-nums}
+#cartPanel button{min-height:44px;font-weight:600!important}
+#cartPanel .next-btn,#cartPanel button[onclick="confirmCart()"]{background:var(--swift-brand)!important;border-radius:16px!important;box-shadow:0 5px 16px #ff6a001b!important}
+#orderBox,#tacoOrderBox,#pickupOrderBox,#requestRideBox{background:#fff!important;color:var(--swift-ink)!important;padding:24px!important}
+#orderBox input:not([type=hidden]),#orderBox select,#orderBox textarea,#tacoOrderBox select,#tacoOrderBox textarea,#pickupOrderBox input,#pickupOrderBox select,#pickupOrderBox textarea,#requestRideBox input,#requestRideBox select{background:var(--swift-surface)!important;border:1px solid #e2e7df!important;border-radius:15px!important;padding:14px 16px!important;min-height:50px;box-sizing:border-box;box-shadow:none!important;font-size:16px!important;line-height:1.5!important}
+#orderBox label,#tacoOrderBox label,#pickupOrderBox label{font-size:13px!important;font-weight:600!important;line-height:1.6!important}
+#orderBox .submit-track{height:auto!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;border-radius:17px!important;overflow:hidden!important;cursor:pointer}
+#orderBox .submit-track::before,#orderBox .submit-track::after{animation:none!important;pointer-events:none}
+#orderBox .submit-inner{position:relative!important;inset:auto!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;width:100%!important;min-height:56px!important;border:0!important;border-radius:17px!important;background:var(--swift-brand)!important;color:#fff!important;font-size:16px!important;font-weight:650!important;box-shadow:0 5px 18px #ff6a001c!important;transform:none!important;animation:none!important}
+#orderBox .submit-inner[aria-busy=true]::before{content:'';width:16px;height:16px;border:2px solid #ffffff60;border-top-color:white;border-radius:50%;animation:swift-spin .8s linear infinite}
+#orderSubmitStatus{font-size:12px!important;color:var(--swift-muted)!important;line-height:1.65;margin:12px 0 0}
+#orderSubmitStatus:empty{margin:0}
+#orderBox .tip-btn{min-height:44px!important;border-radius:13px!important;box-shadow:none!important}
+#orderBox .tip-btn.active{background:var(--swift-brand)!important;color:white!important;border-color:var(--swift-brand)!important}
+.shop-page-back,.service-page-header button{min-height:44px!important;border-radius:14px!important;font-size:13px!important}
+#profileOverlay .profile-card{background:#fff!important;border:1px solid var(--swift-line)!important;border-radius:26px!important;box-shadow:var(--swift-shadow)!important}
+#profileOverlay .profile-top{gap:14px!important;padding-bottom:20px!important}
+#profileOverlay .profile-top h2{font-size:23px!important;letter-spacing:-.65px!important}
+#profileOverlay .stat-card,#profileOverlay .profile-service-item,#profileOverlay .profile-account-action{border:1px solid var(--swift-line)!important;border-radius:18px!important;min-height:52px;background:#fff!important;box-shadow:none!important}
+#profileOverlay .profile-field label{font-size:12px!important;font-weight:600!important}
+#profileOverlay .profile-field input{border-radius:14px!important;background:var(--swift-surface)!important;min-height:48px;box-sizing:border-box}
+.shopping-page{background:#fff!important}
+.shopping-page .service-page-header{padding:24px!important;border-bottom:1px solid var(--swift-line)!important}
+.shopping-page .service-page-header h1{font-size:26px!important;margin:16px 0 8px!important}
+.shopping-page .service-page-header p{font-size:13px!important;color:var(--swift-muted)!important}
+.shopping-page-content{padding:24px!important}
+.shopping-list-card{border:1px solid var(--swift-line)!important;border-radius:20px!important;padding:20px!important;box-shadow:0 3px 18px #26382b04!important}
+.shopping-button{min-height:44px!important;border-radius:13px!important;font-size:13px!important;line-height:1.5!important}
+#merchantStorePage .store-hero,#merchantStorePage .store-header{border-radius:24px!important;box-shadow:var(--swift-shadow)!important}
+#merchantStorePage .store-identity h1{font-size:27px!important;font-weight:700!important;letter-spacing:-.8px!important}
+#merchantStorePage .store-header-actions button,#merchantStorePage .store-header-actions a{border-radius:13px!important;min-height:44px!important}
+#merchantStorePage input[type=search]{min-height:52px!important;border:1px solid var(--swift-line)!important;background:var(--swift-surface)!important;border-radius:16px!important;padding:14px 16px!important}
+#merchantStorePage .store-toolbar{gap:8px!important}
+#merchantStorePage .store-toolbar button{border-radius:13px!important;min-height:42px!important}
+#customerRidePanel{background:#fff!important;color:var(--swift-ink)!important}
+#customerRidePanel .cr-shell{max-width:960px!important;padding:24px!important}
+#customerRidePanel #crTitle{font-size:28px!important;font-weight:700!important;letter-spacing:-1px!important}
+#customerRidePanel .cr-header{margin-bottom:22px!important}
+#customerRidePanel #crMap{border:1px solid var(--swift-line)!important;border-radius:23px!important;box-shadow:var(--swift-shadow)!important}
+#customerRidePanel #crForm,#customerRidePanel #crTracking{padding:22px!important;background:#fff!important;border:1px solid var(--swift-line)!important;border-radius:23px!important;box-shadow:var(--swift-shadow)!important}
+#customerRidePanel input:not([type=checkbox]),#customerRidePanel select{background:var(--swift-surface)!important;border:1px solid #e2e7df!important;border-radius:14px!important;min-height:50px!important;padding:14px!important;box-sizing:border-box}
+#customerRidePanel #crRequest{background:var(--swift-brand)!important;border:0!important;color:#fff!important;border-radius:16px!important;min-height:54px!important;font-size:15px!important;font-weight:650!important;box-shadow:0 5px 16px #ff6a001b!important}
+#customerRidePanel .cr-tools button{border-radius:13px!important;font-size:12px!important;min-height:44px!important}
+#customerLiveOrder{border:1px solid var(--swift-line)!important;border-radius:26px!important;box-shadow:0 18px 65px #14291c22!important}
+#customerLiveOrder .clo-shell header{border-bottom:1px solid var(--swift-line)!important;padding:20px 24px!important}
+#customerLiveOrder h1{font-size:28px!important;letter-spacing:-.9px!important;line-height:1.25!important}
+#customerLiveOrder .clo-subtitle{font-size:14px!important;line-height:1.65!important;color:var(--swift-muted)!important}
+#customerLiveOrder .clo-steps{border:1px solid var(--swift-line)!important;border-radius:20px!important;padding:18px!important;background:#fff!important;box-shadow:none!important}
+#customerLiveOrder .clo-steps li{padding:14px 0!important}
+#customerLiveOrder .clo-steps strong{font-size:14px!important;font-weight:600!important}
+#customerLiveOrder .clo-dot{width:32px!important;height:32px!important;border-radius:11px!important;font-size:13px!important}
+#customerLiveOrder .clo-summary,#customerLiveOrder .clo-runner{border:1px solid var(--swift-line)!important;border-radius:20px!important;padding:20px!important;background:var(--swift-surface)!important;box-shadow:none!important}
+#deliveryNotificationInbox{background:#fff!important;border:1px solid var(--swift-line)!important;border-radius:26px!important;box-shadow:0 18px 65px #14291c22!important;padding:24px!important}
+#deliveryNotificationInbox h2{font-size:22px!important;letter-spacing:-.6px!important}
+#deliveryNotificationInbox .dn-item{padding:18px!important;border:1px solid var(--swift-line)!important;border-radius:19px!important;box-shadow:0 3px 12px #26382b04!important}
+#deliveryNotificationInbox .dn-item strong{font-size:14px!important;font-weight:600!important}
+#deliveryNotificationInbox .dn-item span{font-size:13px!important;line-height:1.6!important}
+#deliveryNotificationInbox .dn-item small{font-size:10px!important;color:var(--swift-muted)!important}
+#deliveryNotificationInbox::backdrop,#customerLiveOrder::backdrop{background:#18251ccc!important;backdrop-filter:blur(4px)}
+.swift-touch-feedback{transition:box-shadow 160ms ease!important}
+@keyframes swift-spin{to{transform:rotate(360deg)}}
+@media(hover:hover) and (pointer:fine){.store-directory-card:hover,.shopping-list-card:hover,#appScreen .product:hover{box-shadow:0 10px 30px #26382b0d!important;border-color:#d7dfd3!important}button:not(:disabled):hover{filter:brightness(.985)}}
+@media(max-width:600px){#appScreen{padding:0 20px calc(100px + env(safe-area-inset-bottom))!important}#appScreen .header{padding:24px 0 18px!important}#appScreen .header h1{font-size:24px!important}#appScreen .header p{font-size:11px!important}#deliveryNotificationBell{top:22px!important}#appScreen .hero-toggle-row{gap:8px!important}#appScreen .toggle-btn{padding:8px 13px!important;font-size:11px!important}#appScreen .hero-promo-card{padding:22px!important;min-height:205px!important}#appScreen .hero-promo-title{font-size:26px!important}#appScreen .store-directory-card{min-width:116px!important;width:116px!important;min-height:150px!important}#appScreen .categories{gap:10px!important}#appScreen .cat-btn{padding:12px 6px 8px!important}#appScreen .cat-btn span:not(.status-dot){font-size:10px!important}#customerRidePanel .cr-shell{padding:20px!important}#customerRidePanel #crForm,#customerRidePanel #crTracking{padding:18px!important}#orderBox,#tacoOrderBox,#pickupOrderBox,#requestRideBox{padding:20px!important}.shopping-page-content{padding:20px!important}#customerLiveOrder h1{font-size:25px!important}}
+@media(max-width:360px){#appScreen{padding-inline:16px!important}#appScreen .hero-promo-title{font-size:23px!important}.shop-bottom-nav button{padding-inline:8px!important}#appScreen .toggle-btn{padding-inline:10px!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+#orderBox .submit-inner{pointer-events:auto!important}
+#appScreen .product-info>strong,#merchantStorePage .store-product-info>strong{font-size:14px!important;font-weight:650!important;line-height:1.5!important;letter-spacing:-.2px!important}
+#appScreen .product .heart-btn,#merchantStorePage .store-product .heart-btn{min-height:36px!important;min-width:36px!important;border-radius:50%!important}
+
+/* Checkout finishing details and compact-screen card rhythm. */
+#appScreen .filter-btn svg{stroke:currentColor!important}
+#orderBox .submit-inner{height:auto!important}
+#orderBox .submit-track::before,#orderBox .submit-track::after,#orderBox .select-area-outer::before,#orderBox .select-area-outer::after{content:none!important}
+#orderBox h2,#orderBox h3{font-size:25px!important;font-weight:700!important;color:var(--swift-ink)!important;letter-spacing:-.8px!important;margin:22px 0!important;text-align:left!important}
+#orderBox .gift-toggle,#orderBox .group-toggle{border-radius:18px!important;border:1px solid var(--swift-line)!important;padding:18px!important;box-shadow:none!important}
+@media(max-width:600px){#products{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}#appScreen .categories{grid-template-columns:repeat(4,minmax(0,1fr))!important}#appScreen .cat-btn img{width:48px!important;height:48px!important}#appScreen .product{padding:12px!important}#appScreen .product .product-info{padding:10px 0 0!important}#appScreen .product .price{font-size:14px!important}#appScreen .subcategory-title{font-size:19px!important;line-height:1.4!important;margin-top:14px!important}#orderBox h2,#orderBox h3{font-size:24px!important}}
+
+#customerTrackButton{position:static!important;inset:auto!important;min-height:42px!important;padding:10px 14px!important;margin:0!important;border-radius:13px!important;box-shadow:none!important;font-size:12px!important}
+#orderHint{font-size:25px!important;font-weight:700!important;text-align:left!important;letter-spacing:-.8px!important;line-height:1.3!important;color:var(--swift-ink)!important;margin:22px 0!important}
+#orderBox .gift-card{border:1px solid var(--swift-line)!important;border-radius:20px!important;box-shadow:none!important;overflow:hidden}
+#orderBox .gift-card .gift-toggle{border:0!important;border-radius:0!important}
+#orderBox .select-area-outer{height:auto!important;overflow:visible!important;border:0!important;background:none!important;min-height:0!important}
+#orderBox .select-area-inner{position:static!important;inset:auto!important;width:100%!important;height:auto!important}

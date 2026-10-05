@@ -1,0 +1,17 @@
+#appScreen .header { position:relative !important; }
+#appScreen .header #title { max-width:calc(100% - 112px) !important; }
+#deliveryNotificationBell { position:absolute; top:16px; right:16px; width:44px; height:44px; padding:0; margin:0; display:inline-flex; align-items:center; justify-content:center; border:1px solid #f0d8c6; border-radius:50%; background:#fff; color:#b94300; cursor:pointer; box-shadow:none; }
+#deliveryNotificationBell svg { display:block; flex-shrink:0; }
+#deliveryNotificationBell:focus-visible { outline:3px solid #b94300; outline-offset:3px; }
+#deliveryNotificationBell .dn-badge { position:absolute; top:-3px; right:-4px; min-width:18px; height:18px; padding:0 4px; display:flex; align-items:center; justify-content:center; border:2px solid #fff; border-radius:10px; background:#b94300; color:#fff; font:700 10px system-ui,sans-serif; }
+#deliveryNotificationInbox { box-sizing:border-box; width:min(92vw,480px); max-height:85dvh; padding:24px; border:1px solid #ffe1c9; border-radius:24px; color:#2b211b; background:#fffaf6; font:14px Poppins,system-ui,sans-serif; overflow:auto; }
+#deliveryNotificationInbox::backdrop { background:#20160c80; }
+#deliveryNotificationInbox header { display:flex; justify-content:space-between; align-items:center; gap:14px; }
+#deliveryNotificationInbox h2 { margin:0; font-size:20px; }
+#deliveryNotificationInbox button { cursor:pointer; font:inherit; }
+#deliveryNotificationInbox [data-close] { background:white; border:1px solid #edd8c6; border-radius:50%; width:36px; height:36px; flex-shrink:0; }
+#deliveryNotificationInbox .dn-settings { border-bottom:1px solid #edd8c6; padding:10px 0; margin-bottom:16px; }
+#deliveryNotificationInbox .dn-settings button { background:#b94300; color:#fff; border:0; border-radius:12px; padding:10px 12px; margin:4px 0; }
+#deliveryNotificationInbox .dn-item { display:flex; flex-direction:column; gap:5px; text-align:left; width:100%; background:#fff; color:#2b211b; border:1px solid #edd8c6; border-radius:14px; padding:16px; margin:10px 0; }
+#deliveryNotificationInbox .dn-item span,#deliveryNotificationInbox .dn-item small { color:#6b5040; font-size:12px; }
+#deliveryNotificationBell[hidden],#deliveryNotificationBell .dn-badge[hidden],#deliveryNotificationInbox [hidden] { display:none!important; }

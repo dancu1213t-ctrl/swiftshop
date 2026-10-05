@@ -1,0 +1,26 @@
+/* SwiftShop welcome palette. Loaded after the original app styles. */
+#authScreen.auth-screen {
+  background: radial-gradient(ellipse at 50% 20%, #fff3e6 0%, #fff8f2 48%, #fffdfb 100%) !important;
+}
+#authScreen #loginBox h2 { color: #2b211b !important; }
+#authScreen .login-slogan,
+#authScreen .login-steps { color: #6b5040 !important; opacity: 1; }
+#authScreen #loginBox input {
+  background: #ffffff !important;
+  color: #2b211b !important;
+  border-color: #e7c8ae !important;
+  box-shadow: 0 3px 12px rgba(125, 67, 25, .04) !important;
+}
+#authScreen #loginBox input::placeholder { color: #7b6657 !important; opacity: 1; }
+#authScreen #loginBox input:focus {
+  border-color: #d95500 !important;
+  outline: 3px solid rgba(255, 106, 0, .2) !important;
+  outline-offset: 2px;
+}
+#authScreen #loginBox button {
+  background: linear-gradient(135deg, #c94e00, #b94300) !important;
+  color: #ffffff !important;
+  box-shadow: 0 8px 22px rgba(201, 78, 0, .2) !important;
+}
+#authScreen #loginBox button:hover { background: #b94300 !important; }
+#authScreen #loginBox button:focus-visible { outline: 3px solid #9c3b00 !important; outline-offset: 3px; }

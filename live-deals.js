@@ -1,0 +1,10 @@
+document.addEventListener('DOMContentLoaded',()=>{
+const page=document.getElementById('promoPage'),products=document.getElementById('products');if(!page||!products)return;
+const hero=page.querySelector('.promo-spotlight');hero.innerHTML='<div class="deal-copy"><small>LOCAL STORES · CURRENT OFFERS</small><h2>Your local favourites.<br>One easy stop.</h2><p>Explore good food and everyday finds from stores near you.</p></div>';
+const image=document.createElement('img');image.alt='';image.hidden=true;hero.append(image);
+const filters=document.createElement('nav');filters.className='deal-filters';filters.setAttribute('aria-label','Filter deals by store');hero.after(filters);
+let selected='',signature='';
+function apply(){const cards=[...products.querySelectorAll('.product')];cards.forEach(c=>c.hidden=!!selected&&c.dataset.merchantCategory!==selected);const count=page.querySelector('#promoOfferCount');if(count&&!products.querySelector('#loadingDeals')){const text=cards.filter(c=>!c.hidden).length+' items';if(count.textContent!==text)count.textContent=text;}}
+function refresh(){if(!page.contains(products))return;const cards=[...products.querySelectorAll('.product')],cats=[...new Set(cards.map(c=>c.dataset.merchantCategory).filter(Boolean))];const next=JSON.stringify(cats);if(next!==signature){signature=next;if(!cats.includes(selected))selected='';filters.replaceChildren();['',...cats].forEach(cat=>{const b=document.createElement('button');b.type='button';b.textContent=cat?(cards.find(c=>c.dataset.merchantCategory===cat)?.dataset.storeName||cat):'All stores';b.setAttribute('aria-pressed',String(selected===cat));b.onclick=()=>{selected=cat;filters.querySelectorAll('button').forEach(n=>n.setAttribute('aria-pressed',String(n===b)));apply();};filters.append(b);});}const src=cards[0]?.querySelector('img')?.getAttribute('src');image.hidden=!src;if(src&&image.getAttribute('src')!==src)image.src=src;apply();}
+new MutationObserver(refresh).observe(products,{childList:true,subtree:true});refresh();
+});

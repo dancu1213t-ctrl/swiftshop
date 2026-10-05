@@ -1,0 +1,5 @@
+html.native-app { overscroll-behavior-y: none; }
+.native-app body { padding-top: env(safe-area-inset-top); }
+.native-app .auth-screen { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+.native-app input, .native-app textarea, .native-app select { font-size: max(16px, 1em); }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; } }

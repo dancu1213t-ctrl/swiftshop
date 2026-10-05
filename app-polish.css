@@ -1,0 +1,95 @@
+/* Shared mobile finish: preserve SwiftShop's existing palette and layouts. */
+:root {
+  --swift-ease: cubic-bezier(.22, 1, .36, 1);
+  --swift-motion: 220ms;
+  --swift-control-radius: 14px;
+}
+body { text-rendering:optimizeLegibility; }
+button, input, select, textarea { font-family:inherit; }
+button, a, [role="button"] { -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
+button { transition:background-color 160ms ease,color 160ms ease,border-color 160ms ease,box-shadow 160ms ease,transform 160ms var(--swift-ease); }
+button:not(:disabled):active { transform:scale(.97); }
+button:disabled { cursor:default; }
+button:focus-visible, a:focus-visible { outline:3px solid #ffb77e; outline-offset:3px; }
+input, select, textarea { transition:border-color 160ms ease,box-shadow 160ms ease; }
+input:focus, select:focus, textarea:focus { box-shadow:0 0 0 3px #ff6a0014; }
+input[type="checkbox"], input[type="radio"] { accent-color:#ff6a00; }
+input[type="number"] { font-variant-numeric:tabular-nums; }
+textarea { line-height:1.65; }
+
+/* Keep the dense catalogue, but give each touch surface a cleaner finish. */
+#appScreen .product, #merchantStorePage .store-product {
+  border-radius:18px !important;
+  box-shadow:0 3px 16px #1b263b06 !important;
+  transition:box-shadow var(--swift-motion) ease,border-color var(--swift-motion) ease,transform 160ms var(--swift-ease);
+}
+#appScreen .product-img-wrap { border-radius:12px !important; }
+#appScreen .product img, #merchantStorePage .store-product img { transition:transform 280ms var(--swift-ease); }
+#appScreen .cat-btn { transition:background-color 180ms ease,border-color 180ms ease,box-shadow 180ms ease,transform 160ms var(--swift-ease); }
+#appScreen .search-container { box-shadow:0 3px 16px #1b263b06; }
+.shop-bottom-nav { box-shadow:0 -4px 24px #19253404; }
+.shop-bottom-nav button { min-width:52px; min-height:44px; border-radius:14px; transition:background-color 180ms ease,color 180ms ease; }
+.shop-bottom-nav button:active { background:#ff6a000c; transform:none; }
+.shop-bottom-nav button svg { transition:transform 180ms var(--swift-ease); }
+.shop-bottom-nav button:active svg { transform:scale(.9); }
+#deliveryNotificationBell { transition:background-color 160ms ease,transform 160ms var(--swift-ease); }
+#deliveryNotificationBell:active { background:#fff3e9; }
+
+/* Forms and service panels share spacing, typography and control shapes. */
+#cartPanel, #orderBox, #tacoOrderBox, #pickupOrderBox, #requestRideBox,
+#profileOverlay, #customerRidePanel, #customerLiveOrder, #merchantStorePage,
+#deliveryNotificationInbox { -webkit-font-smoothing:antialiased; }
+#cartPanel button:not(.close-btn), #orderBox button:not(.close-btn),
+#tacoOrderBox button:not(.close-btn), #pickupOrderBox button:not(.close-btn),
+#requestRideBox button:not(.close-btn), #customerRidePanel button {
+  border-radius:var(--swift-control-radius);
+}
+#customerRidePanel input:not([type="checkbox"]):not([type="radio"]),
+#customerRidePanel select, #orderBox select, #orderBox textarea,
+#pickupOrderBox input, #pickupOrderBox select, #pickupOrderBox textarea {
+  border-radius:var(--swift-control-radius) !important;
+  min-height:48px;
+  line-height:1.5;
+}
+#customerRidePanel #crForm, #customerRidePanel #crTracking,
+#customerRidePanel #crNearby, #customerRidePanel #crFareBox,
+#profileOverlay .profile-card, #profileOverlay .profile-points,
+#deliveryNotificationInbox .dn-item {
+  border-radius:20px !important;
+  box-shadow:0 3px 18px #17203304;
+}
+#customerRidePanel .cr-header { margin-bottom:24px; }
+#customerRidePanel .cr-header h1 { letter-spacing:-.7px; }
+#customerRidePanel .cr-header button { min-width:44px; min-height:44px; }
+#customerRidePanel .cr-tools { gap:8px; }
+#customerRidePanel .cr-tools button { min-height:44px; }
+#customerRidePanel #crMap { border-radius:18px; overflow:hidden; }
+#customerRidePanel .cr-status-top { gap:14px; }
+#customerRidePanel .fleet-card { border-radius:16px; }
+#customerLiveOrder .clo-steps { box-shadow:0 4px 20px #17203304; }
+#customerLiveOrder .clo-steps li { transition:opacity 220ms ease; }
+#customerLiveOrder .clo-dot { transition:background-color 220ms ease,color 220ms ease,box-shadow 220ms ease; }
+#customerLiveOrder .clo-progress span { transition:background-color 220ms ease; }
+#customerLiveOrder .clo-summary, #customerLiveOrder .clo-runner { box-shadow:0 4px 20px #17203304; }
+#profileOverlay button, #profileOverlay .profile-service-item { transition:background-color 160ms ease,transform 160ms var(--swift-ease); }
+#merchantStorePage .store-toolbar button, #merchantStorePage .store-header-actions button,
+#merchantStorePage .store-header-actions a { min-height:44px; }
+#deliveryNotificationInbox .dn-item { transition:background-color 160ms ease,border-color 160ms ease; }
+#deliveryNotificationInbox .dn-item:active { background:#fff3e9; transform:none; }
+#deliveryNotificationInbox .dn-settings { display:flex; flex-wrap:wrap; gap:8px; }
+#deliveryNotificationInbox [data-status] { flex-basis:100%; margin:4px 0; font-size:12px; line-height:1.6; }
+#deliveryNotificationInbox [data-status]:empty { display:none; }
+
+@media (hover:hover) and (pointer:fine) {
+  #appScreen .product:hover, #merchantStorePage .store-product:hover { box-shadow:0 7px 24px #1b263b0d !important; }
+  #appScreen .product:hover .product-img-wrap img { transform:scale(1.035); }
+}
+@media (max-width:380px) {
+  .shop-bottom-nav button { padding-inline:8px !important; }
+  #deliveryNotificationInbox { padding:20px; }
+  #customerRidePanel .cr-tools { flex-wrap:wrap; }
+}
+@media (prefers-reduced-motion:reduce) {
+  button, input, select, textarea, .product, .store-product, .clo-dot { transition:none !important; }
+  html { scroll-behavior:auto; }
+}
