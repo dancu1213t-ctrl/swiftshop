@@ -7661,7 +7661,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  const bucket=client.storage.from('profile-pictures');
  const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
  const button=(text,fn)=>{const n=el('button',text);n.type='button';n.onclick=fn;return n;};
- const phone=()=>{const digits=String(localStorage.getItem('userPhone')||'').normalize('NFKC').replace(/\D/g,'');return digits.length===7?'501'+digits:digits;};
+ const phone=()=>{const identity=String(localStorage.getItem('userPhone')||'');if(identity.startsWith('account:'))return identity;const digits=identity.normalize('NFKC').replace(/\D/g,'');return digits.length===7?'501'+digits:digits;};
  async function pathFor(value){if(!value)throw Error('Sign in to your profile first.');const hash=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('swiftshop-profile:'+value));return [...new Uint8Array(hash)].map(n=>n.toString(16).padStart(2,'0')).join('')+'/avatar.jpg';}
  let busy=false,blob=null,blobPhone='',previewURL='',version=0,lastPhone=phone();
  const avatar=document.getElementById('profileInitial');if(!avatar)return;
@@ -8033,7 +8033,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
  async function open(){
   if(panel.hidden){previousToggle=document.querySelector('.hero-toggle-row .toggle-btn.active');if(previousToggle)previousToggle.classList.remove('active');button.classList.add('active');}
   panel.hidden=false;button.setAttribute('aria-expanded','true');$('crTitle').focus();
-  $('crName').value=localStorage.getItem('userName')||'';$('crPhone').value=localStorage.getItem('userPhone')||'';
+  $('crName').value=localStorage.getItem('userName')||'';$('crPhone').value=localStorage.getItem('contactPhone')||(String(localStorage.getItem('userPhone')||'').startsWith('account:')?'':localStorage.getItem('userPhone'))||'';
   notice('Connecting to SwiftRide…');
   try{await mapReady();await auth();try{pending=JSON.parse(localStorage.getItem(key())||'null');}catch{pending=null;}await refresh();
    if(pending&&!pending.p_quote_id){pending=null;localStorage.removeItem(key());}
@@ -10024,7 +10024,7 @@ async function render() {
     total = forcedTotal;
 
     const userName = localStorage.getItem("userName") || "";
-    const userPhone = localStorage.getItem("userPhone") || "";
+    const userPhone = localStorage.getItem("contactPhone") || (String(localStorage.getItem("userPhone")||"").startsWith("account:")?"":localStorage.getItem("userPhone")) || "";
     const tacoPlace = localStorage.getItem("tacoPlace");
     const tacoOrder = localStorage.getItem("tacoOrder");
     const hasTacos = !!tacoOrder;
@@ -10399,7 +10399,7 @@ async function render() {
   function handleLogout() {
     if (window.swiftLogoutConfirmed || confirm("Are you sure you want to logout?")) {
       localStorage.removeItem("userName");
-      localStorage.removeItem("userPhone");
+      localStorage.removeItem("userPhone");localStorage.removeItem("contactPhone");
       localStorage.removeItem("loggedIn");
       location.reload(); // Re-runs the login check
     }
@@ -10960,7 +10960,7 @@ function setDeliveryZone(val) {
     
     // Load saved data from LocalStorage
     const name = localStorage.getItem("userName") || "Customer";
-    const phone = localStorage.getItem("userPhone") || "—";
+    const phone = localStorage.getItem("contactPhone") || (String(localStorage.getItem("userPhone")||"").startsWith("account:")?"—":localStorage.getItem("userPhone")) || "—";
     const points = localStorage.getItem("points") || "0";
     
     const pName = document.getElementById("profileName");
@@ -14045,9 +14045,9 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="delivery-notifications.js?v=orders20261004"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=orders20261004"></script><script src="app-promotions.js?v=orders20261004"></script>
+});</script><script src="delivery-notifications.js?v=orders20261004"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=email-identity20261007"></script><script src="app-promotions.js?v=orders20261004"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=orders20261004"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=orders20261004"></script>
-<script src="customer-auth.js?v=20261007-device-login"></script><script src="account-requests.js?v=orders20261004"></script>
+<script src="customer-auth.js?v=email-identity20261007"></script><script src="account-requests.js?v=orders20261004"></script>
 </body>
 </html><link rel="stylesheet" href="completion-codes.css?v=qr1"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=qr1"></script>

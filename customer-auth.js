@@ -1,4 +1,4 @@
-/* Verified email customers; existing balances require an independently approved claim. */
+/* Verified email identity restores the same private customer profile on every device. */
 (()=>{
  document.addEventListener('DOMContentLoaded',()=>{
  const login=document.getElementById('loginBox');if(!login)return;
@@ -57,7 +57,7 @@
   password.autocomplete=state==='signin'?'current-password':'new-password';
   signIn.setAttribute('aria-pressed',String(state==='signin'));signUp.setAttribute('aria-pressed',String(state==='signup'));
   for(const button of [send,signIn,signUp,recover,resend,change])button.disabled=busy;
-  const labels={signin:['Welcome back','Sign in with your email and password.','Sign in'],signup:['Create your account','Your contact details are saved once, during signup.','Create account'],recover:['Reset your password','Enter your account email. We’ll send a code to verify it.','Send code'],'verify-signup':['Verify your email',`Enter the code sent to ${pendingEmail}. Then you’re ready to shop.`,'Verify & continue'],'verify-recover':['Verify your email',`Enter the code sent to ${pendingEmail} to reset your password.`,'Verify code'],'new-password':['Choose a new password','Use at least 8 characters. You’ll use this password on other devices.','Save password & continue'],contact:['Finish your account','This email has no saved delivery contact yet. Complete it once.','Save & continue'],claim:['Account link pending','This login requested an existing customer account. Its ownership must be confirmed before access.','Check link status']};
+  const labels={signin:['Welcome back','Sign in with your email and password.','Sign in'],signup:['Create your account','Your contact details are saved once, during signup.','Create account'],recover:['Reset your password','Enter your account email. We’ll send a code to verify it.','Send code'],'verify-signup':['Verify your email',`Enter the code sent to ${pendingEmail}. Then you’re ready to shop.`,'Verify & continue'],'verify-recover':['Verify your email',`Enter the code sent to ${pendingEmail} to reset your password.`,'Verify code'],'new-password':['Choose a new password','Use at least 8 characters. You’ll use this password on other devices.','Save password & continue'],contact:['Finish your account','This email has no saved delivery contact yet. Complete it once.','Save & continue']};
   const copy=labels[state];if(heading)heading.textContent=copy[0];help.textContent=copy[1];send.textContent=busy?'Please wait…':copy[2];
  }
  function clearDraft(){pendingEmail=pendingName=pendingPhone='';password.value=confirm.value=code.value='';name.value=phone.value='';}
@@ -73,16 +73,14 @@
   let p=await loadProfile();
   if(!p){
    const r=await customerDataClient.rpc('swift_customer_registration_state').abortSignal(AbortSignal.timeout(10000));if(r.error)throw r.error;
-   if(r.data?.claim_required)p=r.data;
-   else{
+   {
     const session=await getSession();const draft=session?.user?.user_metadata?.swift_customer_registration;
     if(!pendingName&&draft){pendingName=String(draft.name||'');pendingPhone=String(draft.phone||'');}
     if(pendingName&&pendingPhone)p=await loadProfile({p_name:pendingName,p_phone:pendingPhone});
    }
   }
   if(!p){state='contact';status.textContent='';render();authScreen();return false;}
-  if(p.claim_required){state='claim';status.textContent=p.message||'Contact dancu1213t@gmail.com to resolve your existing account link. You can also sign in with the email already linked to it.';render();authScreen();return false;}
-  localStorage.setItem('userName',p.name||'Customer');localStorage.setItem('userPhone',p.phone);localStorage.setItem('points',p.points||0);localStorage.setItem('loggedIn','true');customerName=p.name;customerPhone=p.phone;customerEmail=p.email;window.userPhone=p.phone;
+  localStorage.setItem('userName',p.name||'Customer');localStorage.setItem('userPhone',p.phone);localStorage.setItem('contactPhone',p.contact_phone||(!String(p.phone).startsWith('account:')?p.phone:''));localStorage.setItem('points',p.points||0);localStorage.setItem('loggedIn','true');customerName=p.name;customerPhone=p.phone;customerEmail=p.email;window.userPhone=p.phone;
   password.value=confirm.value=code.value='';document.documentElement?.classList.remove('swift-awaiting-auth');
   document.getElementById('authScreen').style.display='none';document.getElementById('appScreen').style.display='none';
   if(animate&&window.showSwiftShopWelcome)window.showSwiftShopWelcome(enterApp);else enterApp();return true;
@@ -117,7 +115,6 @@
   }else if(state==='new-password'){
    validatePassword(true);const {error}=await customerDataClient.auth.updateUser({password:password.value});if(error)throw error;password.value=confirm.value='';await finish(true);
   }else if(state==='contact'){readContact();await finish(true);}
-  else if(state==='claim'){pendingName=pendingPhone='';await finish(true);}
  }catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
  resend.onclick=async()=>{if(busy)return;if(Date.now()<resendAfter){status.textContent='Please wait a minute before requesting another code.';return;}busy=true;render();try{const r=state==='verify-signup'?await customerDataClient.auth.resend({type:'signup',email:pendingEmail}):await customerDataClient.auth.signInWithOtp({email:pendingEmail,options:{shouldCreateUser:false}});if(r.error)throw r.error;resendAfter=Date.now()+60000;status.textContent='A new code has been sent. Check your inbox and spam folder.';}catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
  change.onclick=async()=>{if(busy)return;busy=true;render();try{const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error)throw r.error;clearDraft();state='signin';status.textContent='';}catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
@@ -125,7 +122,7 @@
  const logout=window.handleLogout;window.handleLogout=async function(...args){if(!window.swiftLogoutConfirmed&&!confirmLogout())return;const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error){alert(r.error.message);return;}document.documentElement?.classList.add('swift-awaiting-auth');clearDraft();state='signin';render();window.swiftLogoutConfirmed=true;return logout.apply(this,args);};
  function confirmLogout(){return window.confirm('Sign out of SwiftShop on this device?');}
  render();
- window.saveProfile=async()=>{try{const result=await customerDataClient.rpc('swift_customer_profile',{p_name:document.getElementById('profileName').value.trim()});if(result.error)throw result.error;localStorage.setItem('userName',result.data.name);localStorage.setItem('userPhone',result.data.phone);document.getElementById('profileDisplayName').textContent=result.data.name;document.getElementById('profilePhone').value=result.data.phone;}catch(e){alert(e.message);}};
+ window.saveProfile=async()=>{try{const result=await customerDataClient.rpc('swift_customer_profile',{p_name:document.getElementById('profileName').value.trim()});if(result.error)throw result.error;localStorage.setItem('userName',result.data.name);localStorage.setItem('userPhone',result.data.phone);document.getElementById('profileDisplayName').textContent=result.data.name;localStorage.setItem('contactPhone',result.data.contact_phone||(!String(result.data.phone).startsWith('account:')?result.data.phone:''));document.getElementById('profilePhone').value=localStorage.getItem('contactPhone');}catch(e){alert(e.message);}};
  const phoneField=document.getElementById('profilePhone');if(phoneField){phoneField.readOnly=true;phoneField.title='Contact support to change the account phone safely.';}
  const restorePanel=document.getElementById('customerSessionRestore');
  async function restoreSession(){
