@@ -122,7 +122,27 @@
   const rideKey=()=> 'swiftshop.notification-rides:'+scope();
   const rides=()=>{try{return JSON.parse(localStorage.getItem(rideKey())||'[]');}catch{return [];}};
   window.SwiftRideNotifications={record(id,phase){const ids=rides();if(!ids.includes(id))localStorage.setItem(rideKey(),JSON.stringify([id,...ids].slice(0,20)));record(id,phase,true,null,null,'ride');sync();}};
-  async function openResource(data){try{if(data.kind==='promotion'){if(!window.SwiftPromotions||await window.SwiftPromotions.open(data.promotion_id)===false)throw Error('This promotion is no longer available.');}else if(data.kind==='ride'){if(!window.SwiftRideNotificationBridge||await window.SwiftRideNotificationBridge.open(data.ride_id)===false)throw Error('Open SwiftRide to reconnect, or contact support with the ride reference.');}else {if(!orders().some(order=>order.id===data.order_id)||!window.SwiftLive)throw Error('This order is no longer saved on this device. Contact support with the order reference.');window.SwiftLive.openOrder(data.order_id);}panel.close();}catch(error){openInbox();status(error.message);}}
+  let openingResource = false;
+  async function openResource(data){
+    if(openingResource)return;
+    openingResource=true;
+    try{
+      // Close the existing modal before opening another: avoid overlapping modal inertness.
+      if(panel.open)panel.close();
+      window.SwiftNavigation?.refresh?.();
+      await new Promise(resolve=>requestAnimationFrame(resolve));
+      if(data.kind==='promotion'){
+        if(!window.SwiftPromotions||await window.SwiftPromotions.open(data.promotion_id)===false)throw Error('This promotion is no longer available.');
+      }else if(data.kind==='ride'){
+        if(!window.SwiftRideNotificationBridge||await window.SwiftRideNotificationBridge.open(data.ride_id)===false)throw Error('Open SwiftRide to reconnect, or contact support with the ride reference.');
+      }else{
+        if(!orders().some(order=>order.id===data.order_id)||!window.SwiftLive)throw Error('This order is no longer saved on this device. Contact support with the order reference.');
+        window.SwiftLive.openOrder(data.order_id);
+      }
+      window.SwiftNavigation?.refresh?.();
+    }catch(error){openInbox();status(error.message);}
+    finally{openingResource=false;}
+  }
   window.SwiftDeliveryNotifications = { record, sync, promotions(promos){const liveIds=new Set(promos.map(p=>'promotion:'+p.id));const rows=read().filter(row=>row.kind!=='promotion'||liveIds.has(row.id));for(const p of promos){const id='promotion:'+p.id;if(!rows.some(row=>row.id===id))rows.push({id,kind:'promotion',orderId:p.id,title:p.title,body:p.body,time:p.published_at,read:false});}rows.sort((a,b)=>Date.parse(b.time)-Date.parse(a.time));write(rows);render();} };
   function openInbox(){render();if(!panel.open)panel.showModal();sync();}
   bell.onclick=openInbox;
@@ -153,3 +173,4 @@
   resume();
   render();
 })();
+

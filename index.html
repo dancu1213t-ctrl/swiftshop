@@ -13726,7 +13726,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (priorFocus?.isConnected) priorFocus.focus({preventScroll:true});
     }
   }
-  window.SwiftNavigation={back(){
+  window.SwiftNavigation={refresh:sync,back(){
     const top=stack.filter(isOpen).at(-1);if(!top)return false;
     if(window.swiftOrderSending&&top.id==='orderBox')return true;
     if(top.tagName==='DIALOG')top.close();
@@ -13748,6 +13748,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!queued) { queued = true; queueMicrotask(() => { queued = false; sync(); }); }
   });
   pages.forEach(el => observer.observe(el,{attributes:true,attributeOldValue:true,attributeFilter:['style','class','hidden','open']}));
+  document.addEventListener('close',()=>sync(),true);
+  window.addEventListener('pageshow',()=>sync());
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync();});
   sync();
   queueMicrotask(sync);
 });
