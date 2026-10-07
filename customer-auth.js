@@ -63,7 +63,7 @@
  function clearDraft(){pendingEmail=pendingName=pendingPhone='';password.value=confirm.value=code.value='';name.value=phone.value='';}
  function chooseMode(next){if(busy)return;clearDraft();state=next;status.textContent='';render();}
  signIn.onclick=()=>chooseMode('signin');signUp.onclick=()=>chooseMode('signup');recover.onclick=()=>chooseMode('recover');
- function validateEmail(){const value=email.value.trim();if(!email.checkValidity()||!value)throw Error('Enter a valid email address.');return value;}
+ function validateEmail(){const value=email.value.trim().toLowerCase();email.value=value;if(!email.checkValidity()||!value)throw Error('Enter a valid email address.');return value;}
  function validatePassword(isNew=false){if(!password.value)throw Error('Enter your password.');if(isNew&&password.value.length<8)throw Error('Use at least 8 characters for your password.');if(isNew&&password.value!==confirm.value)throw Error('Passwords do not match.');}
  function readContact(){const n=name.value.trim(),p=phone.value.trim(),digits=p.replace(/\D/g,'');if(!n)throw Error('Enter your full name.');if(!(digits.length===7||/^[1-9]\d{7,14}$/.test(digits)))throw Error('Enter a valid contact number, including country code if outside Belize.');pendingName=n;pendingPhone=p;}
  async function getSession(){const r=await customerDataClient.auth.getSession();if(r.error)throw r.error;return r.data.session;}
@@ -95,7 +95,16 @@
    if(error){if(error.code==='email_not_confirmed'||/email not confirmed/i.test(error.message)){pendingEmail=address;const r=await customerDataClient.auth.resend({type:'signup',email:address});if(r.error)throw r.error;state='verify-signup';resendAfter=Date.now()+60000;password.value='';return;}throw error;}
    pendingName=pendingPhone='';password.value='';await finish(true);
   }else if(state==='signup'){
-   const address=validateEmail();validatePassword(true);readContact();
+   const address=validateEmail();validatePassword(true);
+   // A valid existing password always opens that account, even from the signup tab.
+   // Authentication, rather than an entered phone number, decides which profile is restored.
+   const existing=await customerDataClient.auth.signInWithPassword({email:address,password:password.value});
+   if(!existing.error){pendingName=pendingPhone='';password.value=confirm.value='';await finish(true);return;}
+   if(existing.error.code==='email_not_confirmed'||/email not confirmed/i.test(existing.error.message)){
+    pendingEmail=address;const r=await customerDataClient.auth.resend({type:'signup',email:address});if(r.error)throw r.error;state='verify-signup';resendAfter=Date.now()+60000;password.value=confirm.value='';return;
+   }
+   if(existing.error.code!=='invalid_credentials'&&!/invalid login credentials/i.test(existing.error.message))throw existing.error;
+   readContact();
    const {data,error}=await customerDataClient.auth.signUp({email:address,password:password.value,options:{data:{swift_customer_registration:{name:pendingName,phone:pendingPhone}}}});
    if(error)throw error;if(data?.user?.identities?.length===0)throw Error('This email already has an account. Choose Sign in, or reset your password.');
    pendingEmail=address;password.value=confirm.value='';resendAfter=Date.now()+60000;
@@ -111,9 +120,9 @@
   else if(state==='claim'){pendingName=pendingPhone='';await finish(true);}
  }catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
  resend.onclick=async()=>{if(busy)return;if(Date.now()<resendAfter){status.textContent='Please wait a minute before requesting another code.';return;}busy=true;render();try{const r=state==='verify-signup'?await customerDataClient.auth.resend({type:'signup',email:pendingEmail}):await customerDataClient.auth.signInWithOtp({email:pendingEmail,options:{shouldCreateUser:false}});if(r.error)throw r.error;resendAfter=Date.now()+60000;status.textContent='A new code has been sent. Check your inbox and spam folder.';}catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
- change.onclick=async()=>{if(busy)return;busy=true;render();try{const r=await customerDataClient.auth.signOut();if(r.error)throw r.error;clearDraft();state='signin';status.textContent='';}catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
+ change.onclick=async()=>{if(busy)return;busy=true;render();try{const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error)throw r.error;clearDraft();state='signin';status.textContent='';}catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
  for(const input of [email,password,confirm,code,name,phone])input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();window.handleLogin();}});
- const logout=window.handleLogout;window.handleLogout=async function(...args){if(!window.swiftLogoutConfirmed&&!confirmLogout())return;const r=await customerDataClient.auth.signOut();if(r.error){alert(r.error.message);return;}document.documentElement?.classList.add('swift-awaiting-auth');clearDraft();state='signin';render();window.swiftLogoutConfirmed=true;return logout.apply(this,args);};
+ const logout=window.handleLogout;window.handleLogout=async function(...args){if(!window.swiftLogoutConfirmed&&!confirmLogout())return;const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error){alert(r.error.message);return;}document.documentElement?.classList.add('swift-awaiting-auth');clearDraft();state='signin';render();window.swiftLogoutConfirmed=true;return logout.apply(this,args);};
  function confirmLogout(){return window.confirm('Sign out of SwiftShop on this device?');}
  render();
  window.saveProfile=async()=>{try{const result=await customerDataClient.rpc('swift_customer_profile',{p_name:document.getElementById('profileName').value.trim()});if(result.error)throw result.error;localStorage.setItem('userName',result.data.name);localStorage.setItem('userPhone',result.data.phone);document.getElementById('profileDisplayName').textContent=result.data.name;document.getElementById('profilePhone').value=result.data.phone;}catch(e){alert(e.message);}};
@@ -134,3 +143,4 @@
  restoreSession();
  });
 })();
+
