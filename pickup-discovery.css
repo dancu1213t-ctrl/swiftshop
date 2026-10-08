@@ -9,3 +9,5 @@
 .pd-expanded{position:fixed!important;inset:0!important;margin:0!important;border-radius:0!important;z-index:100000!important;padding-top:env(safe-area-inset-top);background:#fff}
 #pickupOrderBox.pd-page .pd-expanded #pickupMap{height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 45px)!important}.pd-expanded .pd-expand{top:calc(env(safe-area-inset-top) + 12px)}.pd-expanded .pd-store-card{bottom:calc(env(safe-area-inset-bottom) + 60px)}
 @media(max-width:600px){#pickupOrderBox.pd-page #pickupMap{height:620px!important}.pd-store-card{left:12px;right:12px;bottom:64px;padding:18px;max-height:320px}.pd-card-top{top:-18px}.pd-card-top h3{font-size:21px}.pd-map-pill{font-size:12px}.pd-map-area{margin:14px 0}.pd-expanded .pd-store-card{max-height:40dvh}}
+
+.pd-hours-status{font-size:13px!important;font-weight:650;color:#17623b;margin:9px 0!important}
