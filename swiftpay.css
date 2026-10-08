@@ -54,3 +54,10 @@ body.swiftpay-open{overflow:hidden!important}.swiftpay-method-label{display:bloc
 @media(max-width:380px){.swiftpay-card-pay>div{min-width:140px}.swiftpay-card-pay{padding:12px}.swiftpay-counter-actions{grid-template-columns:1fr}.swiftpay-page{padding-left:14px;padding-right:14px}}
 
 .swiftpay-card-pay{margin-top:12px}.swiftpay-shell>[data-notice]:empty{display:none}.swiftpay-shell>[data-notice]{font-size:12px;line-height:1.5;margin:12px 0}.swiftpay-recharge{padding:20px 0}.swiftpay-section{margin-top:22px}@media(min-width:800px){.swiftpay-card-pay{margin-top:0}.swiftpay-section{margin-top:0}.swiftpay-recharge{padding:0}}
+/* Keep wallet navigation clear of iPhone status bars, including standalone Safari. */
+@supports (-webkit-touch-callout:none){
+  @media(max-width:799px){
+    .swiftpay-page{padding-top:calc(16px + max(59px,env(safe-area-inset-top,0px)));padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+  }
+}
+
