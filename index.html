@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="districts.js?v=belize1"></script><link rel="stylesheet" href="districts.css?v=belize1">
 <script src="product-filters.js"></script>
   <meta charset="UTF-8"><meta name="swiftshop-build" content="customer-orders-verified-20261004">
 <script src="app-config.js?v=orders20261004"></script><script src="native.js?v=orders20261004"></script><link rel="stylesheet" href="mobile.css?v=orders20261004">
@@ -10,7 +11,7 @@
 <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpkP-1hNTsxKVNmPhPP_J-SawsNZi3TIQ&libraries=places"></script>
 
 
-  <title>SwiftShop OW</title>
+  <title>SwiftShop Belize</title>
 
   <!-- PWA / iOS -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -7693,8 +7694,8 @@ html.swift-design #appScreen #merchantBannerSlider button:focus-visible{outline:
 window.readGiftOrder=function(){
  if(!document.getElementById('giftEnabled').checked)return null;
  const get=id=>document.getElementById(id).value.trim();
- const gift={name:get('giftName'),phone:get('giftPhone'),address:get('giftAddress'),message:get('giftMessage'),call:document.getElementById('giftCall').checked};
- let error='';if(!gift.name)error='Please enter the recipient’s name.';else if(gift.phone.replace(/\D/g,'').length<7||gift.phone.replace(/\D/g,'').length>15)error='Please enter a valid recipient phone number.';else if(gift.address.length<8)error='Please enter a complete recipient delivery address.';else if(!document.getElementById('giftAreaConfirmed').checked)error='Please confirm the delivery area is the recipient’s area.';else if(document.getElementById('paymentMethod').value==='Cash on Delivery')error='Choose a sender-paid payment method for this gift.';
+ const gift={name:get('giftName'),phone:get('giftPhone'),address:get('giftAddress'),coords:get('giftCoords'),message:get('giftMessage'),call:document.getElementById('giftCall').checked};
+ let error='';if(!gift.name)error='Please enter the recipient’s name.';else if(gift.phone.replace(/\D/g,'').length<7||gift.phone.replace(/\D/g,'').length>15)error='Please enter a valid recipient phone number.';else if(!/^\s*-?\d+(?:\.\d+)?\s*,\s*-?\d+(?:\.\d+)?\s*$/.test(gift.coords))error='Enter the recipient’s exact latitude,longitude pin.';else if(gift.address.length<8)error='Please enter a complete recipient delivery address.';else if(!document.getElementById('giftAreaConfirmed').checked)error='Please confirm the delivery area is the recipient’s area.';else if(document.getElementById('paymentMethod').value==='Cash on Delivery')error='Choose a sender-paid payment method for this gift.';
  document.getElementById('giftError').textContent=error;if(error){document.getElementById('giftFields').scrollIntoView({block:'center'});return false;}return gift;
 };
 document.addEventListener('DOMContentLoaded',()=>{
@@ -8583,7 +8584,7 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
  <label class="gift-toggle"><span class="gift-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 8h18v4H3zM5 12v9h14v-9M12 8v13"/><path d="M12 8H8a3 3 0 1 1 3-3l1 3Zm0 0h4a3 3 0 1 0-3-3l-1 3Z"/></svg></span><span class="gift-toggle-copy"><strong>Send as a gift</strong><small>A thoughtful surprise, delivered to their door.</small></span><input id="giftEnabled" type="checkbox" aria-controls="giftFields" aria-expanded="false"><span class="gift-switch" aria-hidden="true"></span></label>
  <div id="giftFields" hidden>
   <div class="gift-pair"><label>Recipient’s name<input id="giftName" maxlength="100" autocomplete="off" placeholder="Who is this for?"></label><label>Recipient’s phone<input id="giftPhone" type="tel" maxlength="30" autocomplete="off" placeholder="e.g. 6000 1234"></label></div>
-  <label>Recipient’s delivery address<textarea id="giftAddress" rows="2" maxlength="400" placeholder="Street, house details, town and a nearby landmark"></textarea></label>
+  <label>Recipient’s map pin<input id="giftCoords" placeholder="Latitude,longitude — from the recipient’s map pin"></label><label>Recipient’s delivery address<textarea id="giftAddress" rows="2" maxlength="400" placeholder="Street, house details, town and a nearby landmark"></textarea></label>
   <label>Gift message <span class="gift-optional">Optional</span><textarea id="giftMessage" rows="3" maxlength="300" placeholder="Write a little something to brighten their day…"></textarea></label>
   <label class="gift-check"><input id="giftCall" type="checkbox" checked>Call the recipient on arrival</label>
   <div class="gift-note">You’re the sender and payer. SwiftShop will confirm payment with you. Your saved profile and address stay unchanged.</div>
@@ -8705,13 +8706,14 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
     return !/\b(netflix|spotify|disney\s*\+|subscription|digital|streaming|game\s*credits?|top\s*up|gift\s*cards?)\b/i.test(label);
   };
   async function getProducts() {
+    await window.SwiftDistrict.ensure();
     window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState='loading'}}));
     let data,error;
     try {({data,error}=await supabaseClient.from('products').select('*').ilike('active','yes').abortSignal(AbortSignal.timeout(15000)));}
     catch(e){error=e;}
     if(error){window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState='error'}}));return [];}
     window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState=data?.length?'ready':'empty'}}));
-    return (data||[]).filter(window.swiftMobileItemAllowed).map(r => ({
+    return (data||[]).filter(window.swiftMobileItemAllowed).filter(r=>window.SwiftDistrict.allowed(r.category)).map(r => ({
       id: r.id,
       name: r.name,
       category: r.category,
@@ -9985,6 +9987,7 @@ async function render() {
   }
 
   function add(n, p, btn, w) {
+    if(!window.SwiftDistrict.allowed(cat)){alert("Choose a store in your delivery district.");return;}
     if(window.swiftMobileItemAllowed&&!window.swiftMobileItemAllowed({name:n,category:cat})){alert("This digital item is unavailable in the mobile app.");return;}
     buzz(30); 
 
@@ -10135,7 +10138,7 @@ async function render() {
     const platformFee = PLATFORM_FEE;
     const itemsTotal = total;
     const grandTotal = itemsTotal + deliveryFee + platformFee + tipAmount;
-    const customerCoords = gift ? gift.address : window.lastCartCoords || "18.0777,-88.5667";
+    const customerCoords = gift ? gift.coords : window.lastCartCoords || "";
 
     if (paymentMethod === "SwiftPay" && grandTotal > walletBalance) {
       alert(`Insufficient Wallet Balance\n\nOrder Total: $${grandTotal.toFixed(2)} BZD`);
@@ -10215,6 +10218,7 @@ async function render() {
       msg += `%0A`;
     }
 
+    for(const store of window.SwiftDistrict.state.stores){if(store.latitude!=null&&store.longitude!=null)storeLocations[store.category.toUpperCase()]=store.latitude+","+store.longitude;}
     // 📍 DYNAMIC MULTI-STORE MAP LINKS WITH "RUNNER ROUTE" LABEL & BLACK LINE SEPARATOR
     if (itemsTotal > 0) {
       msg += `----------------------------%0A`;
@@ -10273,6 +10277,7 @@ async function render() {
       msg=lines.join('\n');
     }
     // Keep the current Dispatch payload and submit through the existing tracking RPC.
+    
     const snapshot={
       customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
       items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p})),
@@ -10291,7 +10296,7 @@ async function render() {
     const orderStatus=document.getElementById('orderSubmitStatus');
     if(orderStatus)orderStatus.textContent='Sending your order to SwiftShop…';
     try {
-      const id=await window.SwiftLive.submit(snapshot);
+      const id=await window.SwiftLive.submit(await window.SwiftDistrict.validate(snapshot));
       if(orderStatus)orderStatus.textContent='Order sent. Follow its progress in live tracking.';
       // Clear only after Dispatch confirms registration; failed sends keep the cart.
       cart={};total=0;update();updateCartBubble();renderCartPanel();
@@ -13757,7 +13762,7 @@ const merchantFeed=(()=>{
  const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
  const live=(r,now=Date.now())=>r.status==='published'&&Date.parse(r.starts_at)<=now&&(!r.ends_at||Date.parse(r.ends_at)>now);
  const imageURL=value=>/^(https?:\/\/|data:image\/(png|jpeg|jpg|webp|gif);base64,)/i.test(value||'')?value:'';
- async function campaigns(kind){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('kind',kind).eq('status','published').order('created_at',{ascending:false}).abortSignal(AbortSignal.timeout(15000));if(error)throw error;return (data||[]).filter(r=>live(r));}
+ async function campaigns(kind){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('kind',kind).eq('status','published').order('created_at',{ascending:false}).abortSignal(AbortSignal.timeout(15000));if(error)throw error;await window.SwiftDistrict.ensure();return (data||[]).filter(r=>live(r)&&window.SwiftDistrict.allowed(r.category));}
  const legacyPromos=window.getPromos;
  window.getPromos=async function(){
   const results=await Promise.allSettled([legacyPromos(),campaigns('promo'),supabaseClient.from('products').select('*').ilike('active','yes').abortSignal(AbortSignal.timeout(15000))]);
@@ -13768,7 +13773,7 @@ const merchantFeed=(()=>{
   const existing=[...offers,...legacy];
   const groups=new Map();for(const p of products){if(!p.name||!p.category||!Number.isFinite(Number(p.price))||Number(p.price)<0)continue;const list=groups.get(p.category)||[];list.push({...p,price:Number(p.price),was:p.was?Number(p.was):null});groups.set(p.category,list);}
   const mixed=[];for(let i=0;mixed.length<48;i++){let added=false;for(const list of groups.values()){if(list[i]){mixed.push(list[i]);added=true;}if(mixed.length>=48)break;}if(!added)break;}
-  const keys=new Set(existing.map(p=>p.category+'::'+p.name));return [...existing,...mixed.filter(p=>!keys.has(p.category+'::'+p.name))].filter(window.swiftMobileItemAllowed);
+  const keys=new Set(existing.map(p=>p.category+'::'+p.name));return [...existing,...mixed.filter(p=>!keys.has(p.category+'::'+p.name))].filter(window.swiftMobileItemAllowed).filter(r=>window.SwiftDistrict.allowed(r.category));
  };
  // Replaces only the legacy promo renderer, before the existing page coordinator wraps it.
  window.fetchAndShowPromos=async function(){
@@ -13858,7 +13863,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  const searchRow=el('div',undefined,'store-search-row');searchRow.append(search,filterButton);
  storePage.append(toolbar,hero,details,searchRow,chips,notice,offerBox,grid);
  function estimate(category){if(general.has(category))return '5–10 min';if(['Cosmetics','Faye','Sister','Electronics','AddToCart','Pocket Mobile'].includes(category))return 'Estimate confirmed by Dispatch';return '15–25 min';}
- function describe(category){return meta.get(category)||{name:category,logo:'',group:'local'};}
+ function describe(category){return meta.get(category)||{name:window.SwiftDistrict.state.stores.find(s=>s.category===category)?.store_name||category,logo:'',group:'local'};}
  function setStatus(){
   const m=describe(active);hero.replaceChildren();
   const identity=el('div',undefined,'store-identity');
@@ -13891,6 +13896,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  function close(){clearTimeout(searchTimer);request++;storePage.style.display='none';active=null;document.querySelectorAll('.shop-bottom-nav button').forEach(n=>{if(n.dataset.destination==='home')n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});}
  window.closeMerchantStore=close;
  window.openMerchantStore=async function(category){
+  await window.SwiftDistrict.ensure();if(!window.SwiftDistrict.allowed(category)){alert("This store does not serve your selected district.");return;}
   clearTimeout(searchTimer);const token=++request;active=category;items=[];offers=[];state='unknown';filter='All';query='';search.value='';
   // Restore any promo-owned grid before opening another destination.
   if(document.getElementById('promoPage')?.style.display!=='none')window.closePromoPage?.();
@@ -13961,6 +13967,7 @@ function storeHoursLabel(data){
  const original=window.openMerchantStore;let request=0;
  const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
  window.openMerchantStore=async function(category){
+  await window.SwiftDistrict.ensure();if(!window.SwiftDistrict.allowed(category)){alert("This store does not serve your selected district.");return;}
   const token=++request,hero=document.querySelector('#merchantStorePage .store-hero');
   document.getElementById('storePublicDetails')?.remove();document.getElementById('storeProfileCover')?.remove();
   const opening=original.apply(this,arguments);
@@ -14109,7 +14116,8 @@ allButton.onclick=async()=>{
 $('adForm').onsubmit=async e=>{e.preventDefault();if(!image){message('Upload a banner first.');return;}const button=$('adSave');busy(true);try{const r=await adminAd('save',{p_category:$('adStore').value,p_image:image,p_alt:$('adAlt').value.trim()||'Store advertisement',p_published:$('adPublished').checked,p_id:editing});if(r.error)throw r.error;await load();message('Banner saved. Click + Add another banner for the next image.');}catch(e){message(e.message);}finally{busy(false);}};
 $('adRemove').onclick=async()=>{const category=$('adStore').value;$('adRemove').disabled=true;try{const r=await adminAd('delete',{p_category:category,p_id:editing});if(r.error)throw r.error;if(category===$('adStore').value)await load();}catch(e){message(e.message);}finally{$('adRemove').disabled=false;}};
 let request=0,stopSlider=()=>{};const open=window.openMerchantStore;
-window.openMerchantStore=async function(category){const version=++request;stopSlider();document.getElementById('storePaidAd')?.remove();const opening=open.apply(this,arguments);const slot=document.createElement('aside');slot.id='storePaidAd';slot.hidden=true;slot.setAttribute('aria-label','Sponsored store banners');slot.setAttribute('aria-roledescription','carousel');document.querySelector('#merchantStorePage .store-search-row').before(slot);
+window.openMerchantStore=async function(category){
+  await window.SwiftDistrict.ensure();if(!window.SwiftDistrict.allowed(category)){alert("This store does not serve your selected district.");return;}const version=++request;stopSlider();document.getElementById('storePaidAd')?.remove();const opening=open.apply(this,arguments);const slot=document.createElement('aside');slot.id='storePaidAd';slot.hidden=true;slot.setAttribute('aria-label','Sponsored store banners');slot.setAttribute('aria-roledescription','carousel');document.querySelector('#merchantStorePage .store-search-row').before(slot);
 try{const {data,error}=await supabaseClient.from('store_paid_banners').select('id,image_data,alt_text').eq('category',category).eq('published',true).order('id');if(version!==request||!slot.isConnected||error||!data?.length)return await opening;
 const viewport=document.createElement('div');viewport.className='store-ad-viewport';const track=document.createElement('div');track.className='store-ad-track';viewport.append(track);
 const label=document.createElement('span');label.className='store-ad-label';label.textContent='Sponsored';
