@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="product-filters.js"></script>
   <meta charset="UTF-8"><meta name="swiftshop-build" content="customer-orders-verified-20261004">
 <script src="app-config.js?v=orders20261004"></script><script src="native.js?v=orders20261004"></script><link rel="stylesheet" href="mobile.css?v=orders20261004">
 
@@ -6569,7 +6570,7 @@ body .pac-container{z-index:50001!important}
 html.clo-page-locked{overflow:hidden!important;overscroll-behavior:none!important}
 #customerLiveOrder{height:100vh!important;height:100dvh!important;max-height:100dvh!important;overflow:hidden!important;overscroll-behavior:none;touch-action:auto}
 #customerLiveOrder .clo-shell{width:100%;height:100%;max-height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable}
-</style><style id="admin-plan-payments-style">#adminTabPlans{padding:24px;background:white;border:1px solid #e1e6df;border-radius:18px;color:#2c3b31}#adminTabPlans h2{font-size:21px;font-weight:700;margin:0 0 8px}.ap-controls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap}#adminTabPlans button{border:1px solid #dce4dc;background:white;padding:11px 15px;border-radius:9px;font:600 12px inherit;cursor:pointer}#adminTabPlans button:disabled{opacity:.5;cursor:wait}#adminTabPlans select{padding:10px;border:1px solid #dde4db;background:white;border-radius:9px}.ap-order{padding:20px 0;border-top:1px solid #edf0e9;display:grid;grid-template-columns:1fr auto;gap:16px}.ap-order strong{font-size:14px}.ap-order p{font-size:12px;color:#74836d;line-height:1.7;margin:6px 0;overflow-wrap:anywhere}.ap-order small{font-size:10px;color:#899580}.ap-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ap-actions button:first-child{background:#234b35!important;color:white}#apNotice{font-size:12px;margin:14px 0;line-height:1.6}@media(max-width:600px){#adminTabPlans{padding:18px}.ap-order{grid-template-columns:1fr}.ap-actions{justify-content:start}}</style><link rel="stylesheet" href="welcome-theme.css?v=orders20261004"><link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="stylesheet" href="delivery-notifications.css?v=orders20261004"><link rel="stylesheet" href="app-polish.css?v=orders20261004"><link rel="stylesheet" href="premium-theme.css?v=orders20261004"><link rel="stylesheet" href="app-design.css?v=orders20261004"><link rel="stylesheet" href="app-quality.css?v=orders20261004"><link rel="stylesheet" href="app-promotions.css?v=orders20261004"><link rel="stylesheet" href="live-deals.css?v=orders20261004">
+</style><style id="admin-plan-payments-style">#adminTabPlans{padding:24px;background:white;border:1px solid #e1e6df;border-radius:18px;color:#2c3b31}#adminTabPlans h2{font-size:21px;font-weight:700;margin:0 0 8px}.ap-controls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap}#adminTabPlans button{border:1px solid #dce4dc;background:white;padding:11px 15px;border-radius:9px;font:600 12px inherit;cursor:pointer}#adminTabPlans button:disabled{opacity:.5;cursor:wait}#adminTabPlans select{padding:10px;border:1px solid #dde4db;background:white;border-radius:9px}.ap-order{padding:20px 0;border-top:1px solid #edf0e9;display:grid;grid-template-columns:1fr auto;gap:16px}.ap-order strong{font-size:14px}.ap-order p{font-size:12px;color:#74836d;line-height:1.7;margin:6px 0;overflow-wrap:anywhere}.ap-order small{font-size:10px;color:#899580}.ap-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ap-actions button:first-child{background:#234b35!important;color:white}#apNotice{font-size:12px;margin:14px 0;line-height:1.6}@media(max-width:600px){#adminTabPlans{padding:18px}.ap-order{grid-template-columns:1fr}.ap-actions{justify-content:start}}</style><link rel="stylesheet" href="welcome-theme.css?v=orders20261004"><link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="stylesheet" href="delivery-notifications.css?v=orders20261004"><link rel="stylesheet" href="app-polish.css?v=orders20261004"><link rel="stylesheet" href="premium-theme.css?v=orders20261004"><link rel="stylesheet" href="app-design.css?v=orders20261004"><link rel="stylesheet" href="app-quality.css?v=customer-refinement20261007"><link rel="stylesheet" href="app-promotions.css?v=orders20261004"><link rel="stylesheet" href="live-deals.css?v=orders20261004">
 <style>#customerAuthCode[hidden]{display:none!important}#customerAuthEmail,#customerAuthCode{box-sizing:border-box;width:100%;margin-top:10px;padding:13px;border:1px solid #d9ddd8;border-radius:12px;font-size:16px;background:#fff;color:#18231c}#customerAuthCode{letter-spacing:3px}#profilePhone[readonly]{color:#5b625c}</style>
 <script>document.documentElement.classList.add("swift-awaiting-auth","swift-restoring-auth");</script><style>html.swift-awaiting-auth #appScreen{display:none!important}html.swift-restoring-auth #authScreen{visibility:hidden}</style>
 <style id="merchant-slider-polish">
@@ -6842,7 +6843,7 @@ html.swift-design #appScreen #merchantBannerSlider button:focus-visible{outline:
       <div class="stats-grid">
         <div class="stat-card">
           <span class="stat-icon">🔥</span>
-          <span class="stat-value" id="streakDays">1</span>
+          <span class="stat-value" id="streakDays">…</span>
           <span class="stat-label">Day Streak</span>
         </div>
         <div class="stat-card">
@@ -7759,13 +7760,13 @@ document.addEventListener('DOMContentLoaded',()=>{
  const preview=el('img');preview.className='photo-preview';preview.alt='Profile photo preview';preview.hidden=true;
  const label=el('label','Choose a photo'),input=el('input');input.type='file';input.accept='image/jpeg,image/png,image/webp';label.append(input);
  const status=el('p');status.setAttribute('role','status');
- const save=button('Save photo',()=>run(async()=>{const identity=phone();if(!blob||blobPhone!==identity)throw Error('Choose a photo for the current profile first.');const path=await pathFor(identity);check(await bucket.upload(path,blob,{contentType:'image/jpeg',upsert:true,cacheControl:'0'}));clearDraft();if(phone()===identity){await refresh();status.textContent='Photo saved. It will appear when you use this phone number on another device.';}}));
+ const save=button('Save photo',()=>run(async()=>{const identity=phone();if(!blob||blobPhone!==identity)throw Error('Choose a photo for the current profile first.');const path=await pathFor(identity);check(await bucket.upload(path,blob,{contentType:'image/jpeg',upsert:true,cacheControl:'0'}));clearDraft();if(phone()===identity){await refresh(true);status.textContent='Photo saved to your account.';}}));
  const remove=button('Remove photo',()=>run(async()=>{const identity=phone();check(await bucket.remove([await pathFor(identity)]));clearDraft();if(phone()===identity){paint('');preview.hidden=true;status.textContent='Photo removed.';}}));
  dialog.append(close,title,el('p','Choose a photo and check the cropped preview before saving.'),preview,label,save,remove,status);document.getElementById('profileOverlay').append(dialog);save.disabled=true;
  function check(r){if(r.error)throw r.error;return r.data;}
  function clearDraft(){blob=null;blobPhone='';input.value='';if(previewURL)URL.revokeObjectURL(previewURL);previewURL='';save.disabled=true;}
- function paint(url){for(const id of ['profileInitial','profileInitials']){const n=document.getElementById(id);if(n){n.classList.toggle('has-account-photo',!!url);n.style.setProperty('--account-photo',url?'url('+JSON.stringify(url)+')':'none');}}}
- async function refresh(){const stamp=++version,identity=phone();paint('');if(!identity)return;try{const path=await pathFor(identity);const signed=await bucket.createSignedUrl(path,3600);if(signed.error)throw signed.error;const url=signed.data.signedUrl;const image=new Image();image.onload=()=>{if(stamp!==version||phone()!==identity)return;paint(url);if(!blob){preview.src=url;preview.hidden=false;}};image.onerror=()=>{if(stamp===version&&!blob)preview.hidden=true;};image.src=url;}catch(e){if(dialog.open)status.textContent=e.message;}}
+ function paint(url){for(const id of ['profileInitial','profileInitials']){const n=document.getElementById(id);if(n){n.classList.toggle('has-account-photo',!!url);n.style.setProperty('--account-photo',url?'url('+JSON.stringify(url)+')':'none');n.style.setProperty('background-image',url?'url('+JSON.stringify(url)+')':'none','important');n.style.setProperty('font-size',url?'0':'','important');n.style.setProperty('color',url?'transparent':'','important');}}}
+ async function refresh(strict=false){const stamp=++version,identity=phone();if(!identity){paint('');return;}try{const path=await pathFor(identity);const signed=await bucket.createSignedUrl(path,3600);if(signed.error)throw signed.error;const url=signed.data.signedUrl+'&v='+Date.now();const image=new Image();image.onload=()=>{if(stamp!==version||phone()!==identity)return;paint(url);if(!blob){preview.src=url;preview.hidden=false;}};image.onerror=()=>{if(stamp===version&&!blob)preview.hidden=true;};image.src=url;await image.decode();}catch(e){if(dialog.open)status.textContent=e.message;if(strict)throw Error('Photo uploaded, but the preview could not load. Reopen your profile to retry.');}}
  async function run(fn){if(busy)return;busy=true;dialog.querySelectorAll('button,input').forEach(n=>n.disabled=true);status.textContent='Please wait…';try{await fn();}catch(e){status.textContent=e.message||'Could not save your photo. Please try again.';}finally{busy=false;dialog.querySelectorAll('button,input').forEach(n=>n.disabled=false);save.disabled=!blob;}}
  async function open(){status.textContent='';dialog.inert=false;if(!dialog.open)dialog.showModal();close.focus();await refresh();}
  input.onchange=()=>run(async()=>{const file=input.files[0],identity=phone();if(!file)return;clearDraft();if(!identity)throw Error('Sign in to your profile first.');if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>10485760)throw Error('Choose a JPG, PNG or WebP smaller than 10 MB.');const image=await createImageBitmap(file);try{const side=Math.min(image.width,image.height),canvas=document.createElement('canvas');canvas.width=canvas.height=512;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,512,512);ctx.drawImage(image,(image.width-side)/2,(image.height-side)/2,side,side,0,0,512,512);const prepared=await new Promise(resolve=>canvas.toBlob(resolve,'image/jpeg',.85));if(!prepared||prepared.size>1048576)throw Error('Could not prepare this photo. Choose another image.');if(phone()!==identity)throw Error('Your profile changed. Choose the photo again.');blob=prepared;blobPhone=identity;previewURL=URL.createObjectURL(blob);preview.src=previewURL;preview.hidden=false;status.textContent='Preview ready. Tap Save photo.';}finally{image.close();}});
@@ -8520,8 +8521,9 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
 
 <div class="section" id="pickupOrderBox" style="display:none; padding:25px; background:#ffffff; border-radius:24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 
-  <h2 style="text-align:center; margin-bottom: 25px; color: #1a1a1a; font-weight: 800; letter-spacing: -0.5px;">Pickup / Order Request</h2>
+  <header class="pickup-heading"><small>SWIFTSHOP PICKUP</small><h2>What are we picking up?</h2><p>Choose your pickup and drop-off, then tell us what you need.</p></header>
 
+<section class="pickup-route" aria-label="Pickup and drop-off"><div class="pickup-stop"><span class="pickup-letter">A</span><label for="pickupSearch">Pickup<input id="pickupSearch" placeholder="Store, business or street" autocomplete="off"></label></div><div class="pickup-stop"><span class="pickup-letter">B</span><label for="pickupDropoff">Drop-off<input id="pickupDropoff" placeholder="Search a delivery address" autocomplete="off"></label></div><button type="button" id="deliverCurrentLocation" onclick="deliverToCurrentLocation()">◎ Use my current location for drop-off</button><p id="pickupLocationStatus" role="status">Select both points to preview your route.</p></section><div id="pickupMap" aria-label="Pickup route map"></div><h3 class="pickup-section-title">Request details</h3>
   <label style="display:block; margin-bottom:8px; color: #666; font-size: 13px; font-weight: 600; text-transform: uppercase;">Service Type</label>
   <select id="requestType" onchange="toggleExpressNotice()" style="width:100%; padding:14px; border-radius:12px; border: 1.5px solid #eee; background:#fff; margin-bottom:10px; box-sizing:border-box; appearance: none; font-size: 15px; color: #333;">
     <option value="Pickup">🚚 Pickup an Order</option>
@@ -8563,16 +8565,8 @@ $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.sw
   <label style="display:block; margin-bottom:8px; color: #666; font-size: 13px; font-weight: 600; text-transform: uppercase;">Items & Details</label>
   <textarea id="pickupDescription" placeholder="Describe what you need..." style="width:100%; height:110px; padding:14px; border-radius:12px; border: 1.5px solid #eee; background:#fff; margin-bottom:18px; display:block; font-family:inherit; resize:none; box-sizing:border-box; font-size: 15px; outline-color: #ff9000;"></textarea>
 
-  <label style="display:block; margin-bottom:8px; color: #666; font-size: 13px; font-weight: 600; text-transform: uppercase;">Pickup Point/Order Point</label>
-  <input id="pickupSearch" placeholder="Street, Business, or Store name" style="width:100%; padding:14px; border-radius:12px; border: 1.5px solid #eee; background:#fff; margin-bottom:18px; box-sizing:border-box; font-size: 15px;" />
-
-  <label style="display:block; margin-bottom:8px; color: #666; font-size: 13px; font-weight: 600; text-transform: uppercase;">Drop-off Point</label>
-  <div id="deliverCurrentLocation" onclick="deliverToCurrentLocation()" style="width:100%; padding:14px; border-radius:12px; background: linear-gradient(135deg, #fdfdfd 0%, #f5f5f5 100%); border: 1.5px dashed #ccc; margin-bottom:18px; cursor:pointer; font-weight:600; color: #444; text-align: center; box-sizing:border-box; font-size: 14px;">📍 Tap to use Current Location</div>
-
-  <div id="pickupMap" style="width:100%; height:200px; border-radius:16px; border: 1px solid #eee; background: #f9f9f9; margin-bottom:20px; overflow: hidden;"></div>
-
   <button onclick="sendPickupWhatsApp()" style="width:100%; padding:18px; background: #000; color: #fff; font-size:16px; font-weight:700; border:none; border-radius:16px; cursor:pointer; transition: transform 0.2s ease; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
-    Send Order
+    Send pickup request
   </button>
 </div>
 
@@ -9092,6 +9086,7 @@ function getCartDeliveryFee() {
     }
   }, true);
 
+  let cartAddressRequest=0;
   function updateCartGPSFee(latLng) {
     const lat = latLng.lat().toFixed(6);
     const lng = latLng.lng().toFixed(6);
@@ -9102,7 +9097,18 @@ function getCartDeliveryFee() {
     // ONLY store coordinates — pricing comes from dropdown
     window.lastCartCoords = `${lat},${lng}`;
 
-    // 4. 🔥 THE LIVE CHANGE: This forces the screen to update right now
+    const request=++cartAddressRequest,coords=window.lastCartCoords;
+    window.lastCartAddress='';
+    new google.maps.Geocoder().geocode({location:latLng},(results,status)=>{
+      if(request!==cartAddressRequest||window.lastCartCoords!==coords)return;
+      const result=results?.find(r=>r.types.some(t=>['street_address','premise','route'].includes(t)))||results?.[0];
+      const label=status==='OK'&&result?result.formatted_address:coords;
+      window.lastCartAddress=label;
+      const search=document.getElementById('cartMapSearch');if(search)search.value=label;
+      locationStatus(status==='OK'?'Deliver to '+label:'Pin selected. Address unavailable; your coordinates are saved.');
+      window.dispatchEvent(new CustomEvent('swift-delivery-location',{detail:{coords,label}}));
+    });
+    // Refresh totals independently of the address lookup.
     refreshCartTotals(); 
   }
 
@@ -9319,6 +9325,7 @@ function refreshCartTotals() {
   let pickupMap, pickupMarker, pickupLatLng;
   let dropoffMap, dropoffMarker, dropoffLatLng;
   let directionsService, directionsRenderer;
+  let pickupRouteRequest=0;
 
   function initPickupMap() {
     if (pickupMap) return;
@@ -9348,27 +9355,23 @@ function refreshCartTotals() {
     pickupMarker = new google.maps.Marker({
       position: STORE_LOCATION,
       map: pickupMap,
-      label: "A"
+      label: "A", draggable: true
     });
 
     dropoffMarker = new google.maps.Marker({
       map: pickupMap,
-      label: "B"
+      label: "B", draggable: true
     });
 
-    // 📍 CURRENT LOCATION = DROPOFF
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(pos => {
-        dropoffLatLng = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude
-        };
-
-        dropoffMarker.setPosition(dropoffLatLng);
-        drawPickupRoute();
-      });
+    pickupLatLng = null;
+    pickupMarker.setVisible(false);
+    for (const [marker,kind] of [[pickupMarker,'pickup'],[dropoffMarker,'dropoff']]) {
+      marker.addListener('dragend',()=>setPickupPoint(kind,marker.getPosition()));
     }
-
+    for(const [id,kind] of [['pickupSearch','pickup'],['pickupDropoff','dropoff']])document.getElementById(id).addEventListener('input',()=>{if(kind==='pickup')pickupLatLng=null;else dropoffLatLng=null;++pickupRouteRequest;++pickupLabelRequest[kind];(kind==='pickup'?pickupMarker:dropoffMarker).setVisible(false);directionsRenderer.setMap(null);document.getElementById('pickupLocationStatus').textContent='Choose an address suggestion to confirm your '+(kind==='pickup'?'pickup.':'drop-off.');});
+    const destination = new google.maps.places.Autocomplete(document.getElementById('pickupDropoff'),{fields:['geometry','formatted_address','name']});
+    destination.bindTo('bounds',pickupMap);
+    destination.addListener('place_changed',()=>{const place=destination.getPlace();if(place.geometry)setPickupPoint('dropoff',place.geometry.location,place.formatted_address||place.name);});
     // 🔍 AUTOCOMPLETE = PICKUP LOCATION
     const input = document.getElementById("pickupSearch");
     if (input) {
@@ -9379,35 +9382,44 @@ function refreshCartTotals() {
         const place = autocomplete.getPlace();
         if (!place.geometry) return;
 
-        // ✅ UPDATE PICKUP LOCATION (A)
-        pickupLatLng = {
-          lat: place.geometry.location.lat(),
-          lng: place.geometry.location.lng()
-        };
-
-        // ✅ MOVE MARKER A
-        pickupMarker.setPosition(pickupLatLng);
-
-        // ✅ CENTER MAP
-        pickupMap.panTo(pickupLatLng);
-
-        // ✅ REDRAW ROUTE
-        drawPickupRoute();
+        setPickupPoint('pickup',place.geometry.location,place.formatted_address||place.name);
       });
     }
   }
 
+  let pickupLabelRequest={pickup:0,dropoff:0};
+  function setPickupPoint(kind,point,label){
+    const coords={lat:typeof point.lat==='function'?point.lat():point.lat,lng:typeof point.lng==='function'?point.lng():point.lng};
+    const marker=kind==='pickup'?pickupMarker:dropoffMarker,input=document.getElementById(kind==='pickup'?'pickupSearch':'pickupDropoff');
+    if(kind==='pickup')pickupLatLng=coords;else dropoffLatLng=coords;
+    marker.setPosition(coords);marker.setVisible(true);pickupMap.panTo(coords);
+    const stamp=++pickupLabelRequest[kind];input.value=label||coords.lat.toFixed(5)+', '+coords.lng.toFixed(5);
+    if(!label)new google.maps.Geocoder().geocode({location:coords},(results,status)=>{if(stamp===pickupLabelRequest[kind]&&status==='OK'&&results[0])input.value=results[0].formatted_address;});
+    document.getElementById('pickupLocationStatus').textContent=pickupLatLng&&dropoffLatLng?'Route selected. Adjust either pin on the map.':'Select the other point to preview your route.';
+    drawPickupRoute();
+  }
+  function deliverToCurrentLocation(){
+    const button=document.getElementById('deliverCurrentLocation'),status=document.getElementById('pickupLocationStatus');
+    if(!navigator.geolocation){status.textContent='Location is unavailable. Search for your drop-off address.';return;}
+    button.disabled=true;status.textContent='Finding your location…';
+    navigator.geolocation.getCurrentPosition(position=>{button.disabled=false;setPickupPoint('dropoff',{lat:position.coords.latitude,lng:position.coords.longitude});},()=>{button.disabled=false;status.textContent='Could not access your location. Search for your drop-off address instead.';},{enableHighAccuracy:true,timeout:15000});
+  }
   function drawPickupRoute() {
     if (!pickupLatLng || !dropoffLatLng) return;
 
+    const request=++pickupRouteRequest;
     directionsService.route({
       origin: pickupLatLng,
       destination: dropoffLatLng,
       travelMode: google.maps.TravelMode.DRIVING
     }, (result, status) => {
+      if(request!==pickupRouteRequest)return;
       if (status === "OK") {
+        directionsRenderer.setMap(pickupMap);
         directionsRenderer.setDirections(result);
-      }
+        const leg=result.routes?.[0]?.legs?.[0];
+        if(leg)document.getElementById('pickupLocationStatus').textContent='A → B · '+leg.distance.text+' · '+leg.duration.text+' driving estimate';
+      }else{directionsRenderer.setMap(null);document.getElementById('pickupLocationStatus').textContent='Both points are selected. A road route could not be found; check the addresses.';}
     });
   }
 
@@ -9443,37 +9455,9 @@ function refreshCartTotals() {
               "*Map:* " + pickupMapURL + "\n\n" +
               "*🏠 DELIVER TO:*";
 
-    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-    if (isIOS) {
-      msg += "\nCustomer location\n📍 _Please tap “Attach → Location” to share live location_";
-      var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-      window.open(waURL, '_blank');
-    } else {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function(position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            var liveMap = "https://www.google.com/maps?q=" + lat + "," + lng;
-            msg += "\nCustomer Live Location\n*Map:* " + liveMap;
-            
-            var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-            window.open(waURL, '_blank');
-          },
-          function(error) {
-            msg += "\nCustomer location (GPS disabled)";
-            var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-            window.open(waURL, '_blank');
-          },
-          { timeout: 5000 }
-        );
-      } else {
-        msg += "\nCustomer location";
-        var waURL = "https://wa.me/" + phoneNumber + "?text=" + encodeURIComponent(msg);
-        window.open(waURL, '_blank');
-      }
-    }
+    if(!pickupLatLng||!dropoffLatLng){alert('Choose a pickup and drop-off from the address suggestions or map first.');return;}
+    msg += '\n'+document.getElementById('pickupDropoff').value+'\n*Map:* https://www.google.com/maps?q='+dropoffLatLng.lat+','+dropoffLatLng.lng;
+    window.open('https://wa.me/'+phoneNumber+'?text='+encodeURIComponent(msg),'_blank');
   }
 
   function handleLogin() {
@@ -9847,7 +9831,7 @@ async function render() {
     return;
   }
 
-  const filteredItems = allProducts.filter(p => p.category === cat);
+  const filteredItems = window.SwiftProductFilters.apply(allProducts.filter(p => p.category === cat));
 
   if (filteredItems.length === 0) {
     box.innerHTML = `
@@ -9863,7 +9847,7 @@ async function render() {
 
   filteredItems.forEach(p => {
     if (!p.subcategory) return;   
-    const sub = p.subcategory;
+    const sub = window.SwiftProductFilters.state.sort==='recommended'?p.subcategory:'Filtered products';
     if (!grouped[sub]) grouped[sub] = [];
     grouped[sub].push(p);
   });
@@ -9964,9 +9948,9 @@ async function render() {
       return;
     }
 
-    const matches = allProducts.filter(p =>
+    const matches = window.SwiftProductFilters.apply(allProducts.filter(p =>
       p.name.toLowerCase().includes(q)
-    );
+    ));
 
     // Auto-select category if a match exists
     if (matches.length > 0) {
@@ -9976,6 +9960,7 @@ async function render() {
       });
     }
 
+    if(!matches.length)box.innerHTML='<p style="grid-column:1/-1;padding:24px">No products match your search and filters.</p>';
     matches.forEach(p => {
       let badgeHTML = "";
       if (p.was && p.was > p.price) {
@@ -12255,12 +12240,10 @@ async function loadGamificationData() {
   const phone = getRewardsUserPhone();
   if (!phone) return;
 
+  const loadingStreak=document.getElementById('streakDays');if(loadingStreak){loadingStreak.textContent='…';loadingStreak.removeAttribute('title');}
   try {
-    const { data: user } = await supabaseClient
-      .from("swiftshop_users")
-      .select("name, phone, points, streak")
-      .eq("phone", phone)
-      .maybeSingle();
+    const { data: user, error } = await customerDataClient.rpc('swift_customer_profile',{p_name:null,p_phone:null}).abortSignal(AbortSignal.timeout(15000));
+    if(error||!user)throw error||Error('Your rewards profile could not load.');
 
     const points = Number(user?.points || 0);
     const streak = Number(user?.streak || 0);
@@ -12278,6 +12261,8 @@ async function loadGamificationData() {
     await updateDailySpinButton();
   } catch (err) {
     console.error("Gamification load error:", err);
+    const streak=document.getElementById('streakDays');if(streak){streak.textContent='—';streak.title='Rewards could not load. Reopen your profile to retry.';}
+    const message=document.getElementById('xpNextLevelText');if(message)message.textContent='Could not load rewards. Reopen your profile to retry.';
   }
 }
 
@@ -13445,6 +13430,7 @@ function selectTip(amount, element) {
   const headerCaption=el('span','','Deliver to');
   const headerSelect=el('strong','','Pin your location');
   headerLocation.append(headerCaption,headerSelect);
+  window.addEventListener('swift-delivery-location',event=>{headerSelect.textContent=event.detail.label+' ▾';headerSelect.title=event.detail.label;});
   document.querySelector('#appScreen .header')?.append(headerLocation);
   const locationPopup=el('section');locationPopup.id='savedLocationPopover';locationPopup.style.display='none';locationPopup.setAttribute('role','dialog');locationPopup.setAttribute('aria-modal','true');locationPopup.setAttribute('aria-label','Choose delivery location');
   const locationCard=el('div','location-picker-card');
@@ -13483,7 +13469,7 @@ function selectTip(amount, element) {
     list.forEach(a=>addressSelect.add(new Option(a.label,a.id)));
     addressSelect.value=selected;
     const active=list.find(a=>a.id===selected);
-    headerSelect.textContent=active?active.label+' · '+active.zone.replace('In-Town','In Town')+' ▾':'Pin your location ▾';
+    headerSelect.textContent=active?active.label+' · '+active.zone.replace('In-Town','In Town')+' ▾':(window.lastCartAddress?window.lastCartAddress+' ▾':'Pin your location ▾');
   }
   addressSelect.addEventListener('change',()=>{
     const a=read('addresses').find(x=>x.id===addressSelect.value);if(!a)return;
@@ -13868,14 +13854,16 @@ document.addEventListener('DOMContentLoaded',()=>{
  const search=el('input');search.type='search';search.placeholder='Search this store';search.setAttribute('aria-label','Search this store');let searchTimer;search.oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{query=search.value.trim().toLowerCase();drawProducts();},120);};
  const chips=el('nav',undefined,'store-chips');chips.setAttribute('aria-label','Product categories');
  const offerBox=el('section',undefined,'store-offers'),grid=el('div',undefined,'store-product-grid');
- storePage.append(toolbar,hero,details,search,chips,notice,offerBox,grid);
+ const filterButton=btn('Filters',()=>window.openFilterModal(),'store-filter-button');
+ const searchRow=el('div',undefined,'store-search-row');searchRow.append(search,filterButton);
+ storePage.append(toolbar,hero,details,searchRow,chips,notice,offerBox,grid);
  function estimate(category){if(general.has(category))return '5–10 min';if(['Cosmetics','Faye','Sister','Electronics','AddToCart','Pocket Mobile'].includes(category))return 'Estimate confirmed by Dispatch';return '15–25 min';}
  function describe(category){return meta.get(category)||{name:category,logo:'',group:'local'};}
  function setStatus(){
   const m=describe(active);hero.replaceChildren();
   const identity=el('div',undefined,'store-identity');
   const avatar=el('div',undefined,'store-avatar');
-  if(m.logo){const logo=el('img');logo.src=m.logo;logo.alt=m.name;avatar.append(logo);}else avatar.append(el('span',m.name.slice(0,1)));
+  if(m.logo){const logo=el('img');logo.src=m.logo;logo.alt='';logo.onerror=()=>{logo.remove();avatar.prepend(el('span',m.name.split(/\s+/).map(x=>x[0]).slice(0,2).join('')));};avatar.setAttribute('aria-label',m.name);avatar.append(logo);}else avatar.append(el('span',m.name.slice(0,1)));
   const dot=el('span',undefined,'store-status-dot');dot.dataset.status=state;dot.title=state==='yes'?'Open':state==='no'?'Closed':'Availability unconfirmed';avatar.append(dot);
   const copy=el('div',undefined,'store-identity-copy'),title=el('h1',m.name);
   title.append(el('span','✓','store-blue-check'));title.lastChild.setAttribute('aria-hidden','true');
@@ -13924,6 +13912,7 @@ document.addEventListener('DOMContentLoaded',()=>{
    notice.textContent=state==='no'?'This store is closed. Browse now and order when it reopens.':state==='unknown'?'Availability could not be confirmed.':'';
    if(state==='unknown')notice.append(btn('Retry',()=>window.openMerchantStore(category)));
    drawChips();drawProducts();drawOffers();
+   const cover=document.getElementById('storeProfileCover');if(cover&&!cover.querySelector('img')){const intro=el('div',undefined,'store-cover-intro');intro.append(el('small','LOCAL FAVOURITES'),el('strong','Explore the menu.'),el('span',describe(active).name));cover.append(intro);for(const product of items.filter(p=>p.image).slice(0,3)){const artwork=new Image();artwork.alt='';artwork.className='store-cover-product';artwork.onload=()=>{if(token===request&&!cover.querySelector('img:not(.store-cover-product)'))cover.append(artwork);};artwork.src=merchantFeed.imageURL(product.image);}}
   }catch(e){if(token!==request)return;notice.replaceChildren(el('span',navigator.onLine===false?'You’re offline. Connect to load this store.':e.message),btn('Retry',()=>window.openMerchantStore(category)));}finally{if(token===request)storePage.removeAttribute('aria-busy');}
  };
  function drawChips(){chips.replaceChildren();for(const label of ['All',...new Set(items.map(p=>p.subcategory||'Items'))]){const b=btn(label,()=>{filter=label;drawChips();drawProducts();});b.setAttribute('aria-pressed',String(label===filter));chips.append(b);}}
@@ -13939,8 +13928,9 @@ document.addEventListener('DOMContentLoaded',()=>{
   const add=btn(state==='yes'?'Add':'Unavailable',()=>addItem(p,add),'store-add');add.disabled=state!=='yes';c.append(add);
   const qty=el('small',undefined,'store-item-quantity');qty.dataset.name=p.name;qty.dataset.category=p.category;qty.dataset.price=p.price;c.append(qty);window.attachStoreItemShare(c,p);return c;
  }
- function drawProducts(){grid.replaceChildren();const list=items.filter(p=>(filter==='All'||(p.subcategory||'Items')===filter)&&p.name.toLowerCase().includes(query));if(!list.length)grid.append(el('p',items.length?'No matching items.':'No items are available yet.'));for(const p of list)grid.append(card(p));updateCounts();}
- function drawOffers(){offerBox.replaceChildren();if(!offers.length)return;offerBox.append(el('h2','Offers from this store'));const row=el('div',undefined,'store-offer-row');for(const p of offers)row.append(card(p,true));offerBox.append(row);updateCounts();}
+ function drawProducts(){grid.replaceChildren();const list=window.SwiftProductFilters.apply(items.filter(p=>(filter==='All'||(p.subcategory||'Items')===filter)&&p.name.toLowerCase().includes(query)));if(!list.length)grid.append(el('p',items.length?'No matching items.':'No items are available yet.'));for(const p of list)grid.append(card(p));updateCounts();}
+ window.addEventListener('swift-filters-changed',()=>{if(active){drawProducts();drawOffers();}});
+ function drawOffers(){offerBox.replaceChildren();if(!offers.length)return;offerBox.append(el('h2','Offers from this store'));const row=el('div',undefined,'store-offer-row');for(const p of window.SwiftProductFilters.apply(offers))row.append(card(p,true));offerBox.append(row);updateCounts();}
  async function addItem(p,b){
   b.disabled=true;const category=p.category;
   try{
@@ -14119,7 +14109,7 @@ allButton.onclick=async()=>{
 $('adForm').onsubmit=async e=>{e.preventDefault();if(!image){message('Upload a banner first.');return;}const button=$('adSave');busy(true);try{const r=await adminAd('save',{p_category:$('adStore').value,p_image:image,p_alt:$('adAlt').value.trim()||'Store advertisement',p_published:$('adPublished').checked,p_id:editing});if(r.error)throw r.error;await load();message('Banner saved. Click + Add another banner for the next image.');}catch(e){message(e.message);}finally{busy(false);}};
 $('adRemove').onclick=async()=>{const category=$('adStore').value;$('adRemove').disabled=true;try{const r=await adminAd('delete',{p_category:category,p_id:editing});if(r.error)throw r.error;if(category===$('adStore').value)await load();}catch(e){message(e.message);}finally{$('adRemove').disabled=false;}};
 let request=0,stopSlider=()=>{};const open=window.openMerchantStore;
-window.openMerchantStore=async function(category){const version=++request;stopSlider();document.getElementById('storePaidAd')?.remove();const opening=open.apply(this,arguments);const slot=document.createElement('aside');slot.id='storePaidAd';slot.hidden=true;slot.setAttribute('aria-label','Sponsored store banners');slot.setAttribute('aria-roledescription','carousel');document.querySelector('#merchantStorePage input[type="search"]').before(slot);
+window.openMerchantStore=async function(category){const version=++request;stopSlider();document.getElementById('storePaidAd')?.remove();const opening=open.apply(this,arguments);const slot=document.createElement('aside');slot.id='storePaidAd';slot.hidden=true;slot.setAttribute('aria-label','Sponsored store banners');slot.setAttribute('aria-roledescription','carousel');document.querySelector('#merchantStorePage .store-search-row').before(slot);
 try{const {data,error}=await supabaseClient.from('store_paid_banners').select('id,image_data,alt_text').eq('category',category).eq('published',true).order('id');if(version!==request||!slot.isConnected||error||!data?.length)return await opening;
 const viewport=document.createElement('div');viewport.className='store-ad-viewport';const track=document.createElement('div');track.className='store-ad-track';viewport.append(track);
 const label=document.createElement('span');label.className='store-ad-label';label.textContent='Sponsored';
@@ -14135,7 +14125,7 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="delivery-notifications.js?v=orders20261004"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=email-identity20261007"></script><script src="app-promotions.js?v=orders20261004"></script>
+});</script><script src="delivery-notifications.js?v=orders20261004"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=email-identity20261007"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=orders20261004"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=orders20261004"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=orders20261004"></script>
 <script src="customer-auth.js?v=email-identity20261007"></script><script src="account-requests.js?v=orders20261004"></script>

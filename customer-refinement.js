@@ -1,0 +1,12 @@
+(()=>{
+ document.addEventListener('DOMContentLoaded',()=>{
+  const dialog=document.createElement('dialog');dialog.className='sq-dialog catalogue-filters';dialog.setAttribute('aria-labelledby','catalogueFilterTitle');
+  dialog.innerHTML='<header><h2 id="catalogueFilterTitle">Filter products</h2><button type="button" data-close aria-label="Close filters">✕</button></header><form class="sq-content"><label>Sort by<select name="sort"><option value="recommended">Store order</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="name">Name: A to Z</option></select></label><div class="filter-price-pair"><label>Minimum price · BZD<input name="min" type="number" min="0" step="0.01" placeholder="Any"></label><label>Maximum price · BZD<input name="max" type="number" min="0" step="0.01" placeholder="Any"></label></div><p data-error role="status"></p><button type="button" data-reset>Reset</button><button type="submit" class="filter-apply">Show products</button></form>';
+  document.body.append(dialog);const form=dialog.querySelector('form'),state=window.SwiftProductFilters.state;
+  window.openFilterModal=()=>{for(const key of ['sort','min','max'])form.elements.namedItem(key).value=state[key]??'';dialog.querySelector('[data-error]').textContent='';dialog.inert=false;dialog.showModal();};
+  dialog.querySelector('[data-close]').onclick=()=>dialog.close();
+  form.querySelector('[data-reset]').onclick=()=>{form.elements.min.value='';form.elements.max.value='';form.elements.sort.value='recommended';};
+  form.onsubmit=event=>{event.preventDefault();if(!form.reportValidity())return;const min=form.elements.min.value===''?null:Number(form.elements.min.value),max=form.elements.max.value===''?null:Number(form.elements.max.value);if(min!==null&&max!==null&&min>max){dialog.querySelector('[data-error]').textContent='Maximum price must be at least the minimum.';return;}Object.assign(state,{min,max,sort:form.elements.sort.value});dialog.close();const enabled=min!==null||max!==null||state.sort!=='recommended';document.querySelectorAll('.filter-btn,.store-filter-button').forEach(button=>{button.setAttribute('aria-pressed',String(enabled));button.title=enabled?'Filters applied':'Filter products';});window.dispatchEvent(new Event('swift-filters-changed'));if(document.getElementById('merchantStorePage')?.style.display==='none'){const search=document.getElementById('searchInput');if(search?.value)search.dispatchEvent(new Event('input',{bubbles:true}));else window.render?.();}};
+
+ });
+})();
