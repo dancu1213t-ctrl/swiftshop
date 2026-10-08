@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font-family:Arial,sans-serif;color:#202820;background:white}input,select,textarea{box-sizing:border-box;width:100%;padding:13px;border:1px solid #e4e8df;border-radius:12px;font-size:16px}.pickup-route{border:1px solid #e5e8e1;border-radius:16px;padding:16px}.pickup-stop{display:flex;gap:12px;margin:8px 0}.pickup-stop label{flex:1;font-size:12px;color:#74806c}.pickup-letter{padding:16px 0;color:#d86214;font-weight:bold}.pickup-route button{background:white;border:1px solid #ddd;border-radius:20px;padding:8px 12px;margin-top:8px}#pickupLocationStatus{font-size:12px;color:#718067}#pickupName{color:#333}.pickup-section-title{margin-top:30px}</style><link rel="stylesheet" href="/pickup-discovery.css"></head><body><p style="margin:0;padding:10px;text-align:center;background:#fff2e5;font-size:12px">Pickup page preview · no orders are submitted here</p><div class="section" id="pickupOrderBox" style="display:block; padding:25px; background:#ffffff; border-radius:24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font-family:Arial,sans-serif;color:#202820;background:white}input,select,textarea{box-sizing:border-box;width:100%;padding:13px;border:1px solid #e4e8df;border-radius:12px;font-size:16px}.pickup-route{border:1px solid #e5e8e1;border-radius:16px;padding:16px}.pickup-stop{display:flex;gap:12px;margin:8px 0}.pickup-stop label{flex:1;font-size:12px;color:#74806c}.pickup-letter{padding:16px 0;color:#d86214;font-weight:bold}.pickup-route button{background:white;border:1px solid #ddd;border-radius:20px;padding:8px 12px;margin-top:8px}#pickupLocationStatus{font-size:12px;color:#718067}#pickupName{color:#333}.pickup-section-title{margin-top:30px}</style><link rel="stylesheet" href="/outputs/swiftshop-mobile/www/pickup-discovery.css"></head><body><div class="section" id="pickupOrderBox" style="display:block; padding:25px; background:#ffffff; border-radius:24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 
   <header class="pickup-heading"><small>SWIFTSHOP PICKUP</small><h2>What are we picking up?</h2><p>Choose your pickup and drop-off, then tell us what you need.</p></header>
 
@@ -18,7 +18,7 @@
   <input
     id="pickupName"
     disabled
-    value="Preview customer"
+    placeholder="Loading profile..."
     style="width:100%; padding:14px; border-radius:12px; border: 1.5px solid #f2f2f2; background:#fafafa; margin-bottom:18px; box-sizing:border-box; color: #888; font-size: 15px;"
   />
 
@@ -151,4 +151,4 @@
     });
   }
 
-function mapReady(){initPickupMap();} function toggleExpressNotice(){} function sendPickupWhatsApp(){document.getElementById("pickupLocationStatus").textContent="Preview only — no order submitted"}</script><script src="/pickup-discovery.js"></script><script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpkP-1hNTsxKVNmPhPP_J-SawsNZi3TIQ&libraries=places&callback=mapReady"></script></body></html>
+function mapReady(){initPickupMap();} function toggleExpressNotice(){} function sendPickupWhatsApp(){document.getElementById("pickupLocationStatus").textContent="Preview only — no order submitted"}</script><script src="/outputs/swiftshop-mobile/www/pickup-discovery.js"></script><script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpkP-1hNTsxKVNmPhPP_J-SawsNZi3TIQ&libraries=places&callback=mapReady"></script></body></html>
