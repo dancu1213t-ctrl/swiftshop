@@ -87,7 +87,7 @@
           const token = deviceToken;
           const {error} = await mutate(() => {
             if(scope()!==account || !active() || localStorage.getItem(preferenceKey())!=='on') return {error:null};
-            return supabaseClient.rpc('register_delivery_device', {p_install_id:install.id,p_install_secret:install.secret,p_order_id:order.id,p_access_token:order.token,p_platform:token.platform,p_device_token:token.token}).abortSignal(AbortSignal.timeout(10000));
+            return supabaseClient.rpc('register_delivery_device', {p_install_id:install.id,p_install_secret:install.secret,p_order_id:order.id,p_access_token:order.token,p_platform:token.platform,p_device_token:token.liveNotifications ? 'swiftshop-live-v1:'+token.token : token.token}).abortSignal(AbortSignal.timeout(10000));
           });
           if (error) throw error;
           subscribed++;
@@ -102,7 +102,7 @@
         if(scope()!==account || !active())break;
         if(deviceToken && localStorage.getItem(preferenceKey())==='on') {
           const token=deviceToken;
-          await mutate(()=>scope()===account && active() && localStorage.getItem(preferenceKey())==='on' ? window.SwiftRideNotificationBridge.request('register_ride_device',{p_install_id:install.id,p_install_secret:install.secret,p_ride_id:id,p_platform:token.platform,p_device_token:token.token}) : Promise.resolve());
+          await mutate(()=>scope()===account && active() && localStorage.getItem(preferenceKey())==='on' ? window.SwiftRideNotificationBridge.request('register_ride_device',{p_install_id:install.id,p_install_secret:install.secret,p_ride_id:id,p_platform:token.platform,p_device_token:token.liveNotifications ? 'swiftshop-live-v1:'+token.token : token.token}) : Promise.resolve());
           subscribed++;
         }
         if(document.hidden)continue;

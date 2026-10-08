@@ -84,13 +84,13 @@ html.swift-design #appScreen .header .sd-header-group{background:#171717!importa
 html.swift-design #appScreen .header .sd-header-group svg{color:inherit!important}
 html.swift-design #appScreen .header .sd-header-group[aria-pressed=true]{background:#303030!important;border-color:#303030!important;color:#fff!important;box-shadow:0 0 0 2px #ffffffaa!important}
 html.swift-design #appScreen .header .sd-header-group:hover{background:#292929!important}
+
 /* Driver-specific ride choices, with pickup estimates. */
 .cr-ride-option-info{display:flex;flex-direction:column;gap:7px;min-width:0;text-align:left}
 .cr-ride-option-name{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:700}
 .cr-ride-option-eta{font-size:13px;font-weight:500;color:#66716a}
 .cr-ride-closest{padding:4px 8px;border-radius:999px;background:#e8f1e9;color:#294b34;font-size:11px;line-height:1.2;white-space:nowrap}
 .cr-ride-option>strong{flex-shrink:0;white-space:nowrap}
-
 /* Desktop composition; phone and tablet layouts retain their existing sizing. */
 @media (min-width:1024px){
  html.swift-design body #appScreen{width:calc(100% - 64px)!important;max-width:1760px!important;margin:0 auto!important;padding:0 28px 120px!important;box-sizing:border-box!important}
@@ -110,3 +110,30 @@ html.swift-design #appScreen .header .sd-header-group:hover{background:#292929!i
  html.swift-design body #appScreen .subcategory-title{font-size:25px!important;line-height:1.4!important}
  html.swift-design body .shop-bottom-nav{width:min(900px,calc(100% - 64px))!important;bottom:16px!important;border:1px solid #e7e9e4!important;border-radius:20px!important;box-shadow:0 8px 32px #203b3014!important;padding:12px 24px!important}
 }
+
+
+/* Phone promotion controls are dots, independent of general action-button sizing. */
+html.swift-design body #appScreen .hero-promo-dots{display:flex!important;gap:7px!important;left:20px!important;bottom:12px!important;align-items:center!important}
+html.swift-design body #appScreen .hero-promo-dot{display:block!important;flex:0 0 6px!important;width:6px!important;min-width:0!important;max-width:none!important;height:6px!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;border-radius:999px!important;line-height:0!important;box-shadow:none!important}
+html.swift-design body #appScreen .hero-promo-dot.is-active{flex-basis:20px!important;width:20px!important;height:6px!important}
+html.swift-design body #appScreen .hero-promo-slider .hero-promo-card{padding-bottom:38px!important}
+/* Fixed storefronts must reserve the cutout on iOS and mobile browsers. */
+html.swift-design body #merchantStorePage.shop-active-page{padding-top:calc(20px + env(safe-area-inset-top,0px))!important;padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))!important}
+.swift-preparing-pill{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;margin:12px 0;border-radius:999px;background:#fff0e4;color:#8b3800;font-size:12px;font-weight:650}
+.swift-preparing-track{display:block;position:relative;width:42px;height:5px;overflow:hidden;border-radius:999px;background:#ffd1ac}
+.swift-preparing-track::after{content:'';position:absolute;inset:0 auto 0 0;width:18px;border-radius:999px;background:#ff6a00;animation:swiftPreparing 1.4s ease-in-out infinite alternate}
+@keyframes swiftPreparing{to{transform:translateX(24px)}}
+@media(prefers-reduced-motion:reduce){.swift-preparing-track::after{animation:none;left:12px}}
+
+html.swift-design body #appScreen .hero-promo-dots{display:flex!important;gap:7px!important;left:20px!important;bottom:12px!important;align-items:center!important}
+html.swift-design body #appScreen .hero-promo-dot{display:block!important;flex:0 0 6px!important;width:6px!important;min-width:0!important;max-width:none!important;height:6px!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;border-radius:999px!important;line-height:0!important;box-shadow:none!important}
+html.swift-design body #appScreen .hero-promo-dot.is-active{flex-basis:20px!important;width:20px!important;height:6px!important}
+html.swift-design body #appScreen .hero-promo-slider .hero-promo-card{padding-bottom:38px!important}
+html.swift-design body #merchantStorePage.shop-active-page{padding-top:calc(20px + env(safe-area-inset-top,0px))!important;padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))!important}
+.swift-preparing-pill{display:inline-flex;align-items:center;gap:10px;padding:9px 14px;margin:12px 0;border-radius:999px;background:#fff0e4;color:#8b3800;font-size:12px;font-weight:650}
+.swift-preparing-pill[hidden]{display:none!important}
+.swift-preparing-track{display:block;position:relative;width:42px;height:5px;overflow:hidden;border-radius:999px;background:#ffd1ac}
+.swift-preparing-track::after{content:'';position:absolute;inset:0 auto 0 0;width:18px;border-radius:999px;background:#ff6a00;animation:swiftPreparing 1.4s ease-in-out infinite alternate}
+@keyframes swiftPreparing{to{transform:translateX(24px)}}
+@media(prefers-reduced-motion:reduce){.swift-preparing-track::after{animation:none;left:12px}}
+
