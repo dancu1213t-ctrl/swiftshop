@@ -1,0 +1,154 @@
+<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;font-family:Arial,sans-serif;color:#202820;background:white}input,select,textarea{box-sizing:border-box;width:100%;padding:13px;border:1px solid #e4e8df;border-radius:12px;font-size:16px}.pickup-route{border:1px solid #e5e8e1;border-radius:16px;padding:16px}.pickup-stop{display:flex;gap:12px;margin:8px 0}.pickup-stop label{flex:1;font-size:12px;color:#74806c}.pickup-letter{padding:16px 0;color:#d86214;font-weight:bold}.pickup-route button{background:white;border:1px solid #ddd;border-radius:20px;padding:8px 12px;margin-top:8px}#pickupLocationStatus{font-size:12px;color:#718067}#pickupName{color:#333}.pickup-section-title{margin-top:30px}</style><link rel="stylesheet" href="/pickup-discovery.css"></head><body><p style="margin:0;padding:10px;text-align:center;background:#fff2e5;font-size:12px">Pickup page preview · no orders are submitted here</p><div class="section" id="pickupOrderBox" style="display:block; padding:25px; background:#ffffff; border-radius:24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+
+  <header class="pickup-heading"><small>SWIFTSHOP PICKUP</small><h2>What are we picking up?</h2><p>Choose your pickup and drop-off, then tell us what you need.</p></header>
+
+<section class="pickup-route" aria-label="Pickup and drop-off"><div class="pickup-stop"><span class="pickup-letter">A</span><label for="pickupSearch">Pickup<input id="pickupSearch" placeholder="Store, business or street" autocomplete="off"></label></div><div class="pickup-stop"><span class="pickup-letter">B</span><label for="pickupDropoff">Drop-off<input id="pickupDropoff" placeholder="Search a delivery address" autocomplete="off"></label></div><button type="button" id="deliverCurrentLocation" onclick="deliverToCurrentLocation()">◎ Use my current location for drop-off</button><p id="pickupLocationStatus" role="status">Select both points to preview your route.</p></section><div id="pickupMap" aria-label="Pickup route map"></div><h3 class="pickup-section-title">Request details</h3>
+  <label style="display:block; margin-bottom:8px; color: #666; font-size: 13px; font-weight: 600; text-transform: uppercase;">Service Type</label>
+  <select id="requestType" onchange="toggleExpressNotice()" style="width:100%; padding:14px; border-radius:12px; border: 1.5px solid #eee; background:#fff; margin-bottom:10px; box-sizing:border-box; appearance: none; font-size: 15px; color: #333;">
+    <option value="Pickup">🚚 Pickup an Order</option>
+    <option value="Order">🛍️ Place an Order</option>
+    <option value="Express">⚡ Express Delivery</option>
+  </select>
+
+  <div id="expressNotice" style="display:none; margin-bottom:18px; padding:12px; border-radius:12px; background: #fff9f0; border: 1px solid #ffe4bc; color: #d48400; font-size: 14px; line-height: 1.4;">
+    <strong>Express Delivery is set to $7</strong> since priority is given to your order over existing orders.
+  </div>
+
+  <label style="display:block; margin-bottom:8px; color: #666; font-size: 13px; font-weight: 600; text-transform: uppercase;">Your Name</label>
+  <input
+    id="pickupName"
+    disabled
+    value="Preview customer"
+    style="width:100%; padding:14px; border-radius:12px; border: 1.5px solid #f2f2f2; background:#fafafa; margin-bottom:18px; box-sizing:border-box; color: #888; font-size: 15px;"
+  />
+
+  <div style="display: flex; gap: 10px; margin-bottom: 18px;">
+    <div style="flex: 1;">
+      <label style="display:block; margin-bottom:8px; color: #666; font-size: 13px; font-weight: 600; text-transform: uppercase;">Order For</label>
+      <select id="pickupOrderFor" style="width:100%; padding:14px; border-radius:12px; border: 1.5px solid #eee; background:#fff; box-sizing:border-box; font-size: 15px;">
+        <option value="Myself">👤 Myself</option>
+        <option value="Friend/Family">👨‍👩‍👧 Family</option>
+        <option value="Client">💼 Client</option>
+      </select>
+    </div>
+    <div style="flex: 1;">
+      <label style="display:block; margin-bottom:8px; color: #666; font-size: 13px; font-weight: 600; text-transform: uppercase;">Category</label>
+      <select id="pickupType" style="width:100%; padding:14px; border-radius:12px; border: 1.5px solid #eee; background:#fff; box-sizing:border-box; font-size: 15px;">
+        <option value="Food">🍔 Food</option>
+        <option value="Item">📦 Item</option>
+        <option value="Documents">📄 Docs</option>
+      </select>
+    </div>
+  </div>
+
+  <label style="display:block; margin-bottom:8px; color: #666; font-size: 13px; font-weight: 600; text-transform: uppercase;">Items & Details</label>
+  <textarea id="pickupDescription" placeholder="Describe what you need..." style="width:100%; height:110px; padding:14px; border-radius:12px; border: 1.5px solid #eee; background:#fff; margin-bottom:18px; display:block; font-family:inherit; resize:none; box-sizing:border-box; font-size: 15px; outline-color: #ff9000;"></textarea>
+
+  <button onclick="sendPickupWhatsApp()" style="width:100%; padding:18px; background: #000; color: #fff; font-size:16px; font-weight:700; border:none; border-radius:16px; cursor:pointer; transition: transform 0.2s ease; box-shadow: 0 10px 20px rgba(0,0,0,0.15);">
+    Send pickup request
+  </button>
+</div>
+
+
+<script>  let pickupMap, pickupMarker, pickupLatLng;
+  let dropoffMap, dropoffMarker, dropoffLatLng;
+  let directionsService, directionsRenderer;
+  let pickupRouteRequest=0;
+
+  function initPickupMap() {
+    if (pickupMap) return;
+
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer({
+      suppressMarkers: true,
+      polylineOptions: {
+        strokeWeight: 5
+      }
+    });
+
+    // 🏪 STORE LOCATION (POINT A)
+    const STORE_LOCATION = { lat: 18.081, lng: -88.563 };
+
+    // DEFAULT (Orange Walk)
+    pickupLatLng = { lat: 18.081, lng: -88.563 };
+
+    pickupMap = new google.maps.Map(document.getElementById("pickupMap"), {
+      center: pickupLatLng,
+      zoom: 14,
+      disableDefaultUI: true
+    });
+
+    directionsRenderer.setMap(pickupMap);
+
+    pickupMarker = new google.maps.Marker({
+      position: STORE_LOCATION,
+      map: pickupMap,
+      label: "A", draggable: true
+    });
+
+    dropoffMarker = new google.maps.Marker({
+      map: pickupMap,
+      label: "B", draggable: true
+    });
+
+    pickupLatLng = null;
+    pickupMarker.setVisible(false);
+    for (const [marker,kind] of [[pickupMarker,'pickup'],[dropoffMarker,'dropoff']]) {
+      marker.addListener('dragend',()=>setPickupPoint(kind,marker.getPosition()));
+    }
+    for(const [id,kind] of [['pickupSearch','pickup'],['pickupDropoff','dropoff']])document.getElementById(id).addEventListener('input',()=>{if(kind==='pickup')pickupLatLng=null;else dropoffLatLng=null;++pickupRouteRequest;++pickupLabelRequest[kind];(kind==='pickup'?pickupMarker:dropoffMarker).setVisible(false);directionsRenderer.setMap(null);document.getElementById('pickupLocationStatus').textContent='Choose an address suggestion to confirm your '+(kind==='pickup'?'pickup.':'drop-off.');});
+    const destination = new google.maps.places.Autocomplete(document.getElementById('pickupDropoff'),{fields:['geometry','formatted_address','name']});
+    destination.bindTo('bounds',pickupMap);
+    destination.addListener('place_changed',()=>{const place=destination.getPlace();if(place.geometry)setPickupPoint('dropoff',place.geometry.location,place.formatted_address||place.name);});
+    // 🔍 AUTOCOMPLETE = PICKUP LOCATION
+    const input = document.getElementById("pickupSearch");
+    if (input) {
+      const autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.bindTo("bounds", pickupMap);
+
+      autocomplete.addListener("place_changed", () => {
+        const place = autocomplete.getPlace();
+        if (!place.geometry) return;
+
+        setPickupPoint('pickup',place.geometry.location,place.formatted_address||place.name);
+      });
+    }
+  }
+
+  let pickupLabelRequest={pickup:0,dropoff:0};
+  function setPickupPoint(kind,point,label){
+    const coords={lat:typeof point.lat==='function'?point.lat():point.lat,lng:typeof point.lng==='function'?point.lng():point.lng};
+    const marker=kind==='pickup'?pickupMarker:dropoffMarker,input=document.getElementById(kind==='pickup'?'pickupSearch':'pickupDropoff');
+    if(kind==='pickup')pickupLatLng=coords;else dropoffLatLng=coords;
+    marker.setPosition(coords);marker.setVisible(true);pickupMap.panTo(coords);
+    const stamp=++pickupLabelRequest[kind];input.value=label||coords.lat.toFixed(5)+', '+coords.lng.toFixed(5);
+    if(!label)new google.maps.Geocoder().geocode({location:coords},(results,status)=>{if(stamp===pickupLabelRequest[kind]&&status==='OK'&&results[0])input.value=results[0].formatted_address;});
+    document.getElementById('pickupLocationStatus').textContent=pickupLatLng&&dropoffLatLng?'Route selected. Adjust either pin on the map.':'Select the other point to preview your route.';
+    drawPickupRoute();
+  }
+  function deliverToCurrentLocation(){
+    const button=document.getElementById('deliverCurrentLocation'),status=document.getElementById('pickupLocationStatus');
+    if(!navigator.geolocation){status.textContent='Location is unavailable. Search for your drop-off address.';return;}
+    button.disabled=true;status.textContent='Finding your location…';
+    navigator.geolocation.getCurrentPosition(position=>{button.disabled=false;setPickupPoint('dropoff',{lat:position.coords.latitude,lng:position.coords.longitude});},()=>{button.disabled=false;status.textContent='Could not access your location. Search for your drop-off address instead.';},{enableHighAccuracy:true,timeout:15000});
+  }
+  function drawPickupRoute() {
+    if (!pickupLatLng || !dropoffLatLng) return;
+
+    const request=++pickupRouteRequest;
+    directionsService.route({
+      origin: pickupLatLng,
+      destination: dropoffLatLng,
+      travelMode: google.maps.TravelMode.DRIVING
+    }, (result, status) => {
+      if(request!==pickupRouteRequest)return;
+      if (status === "OK") {
+        directionsRenderer.setMap(pickupMap);
+        directionsRenderer.setDirections(result);
+        const leg=result.routes?.[0]?.legs?.[0];
+        if(leg)document.getElementById('pickupLocationStatus').textContent='A → B · '+leg.distance.text+' · '+leg.duration.text+' driving estimate';
+      }else{directionsRenderer.setMap(null);document.getElementById('pickupLocationStatus').textContent='Both points are selected. A road route could not be found; check the addresses.';}
+    });
+  }
+
+function mapReady(){initPickupMap();} function toggleExpressNotice(){} function sendPickupWhatsApp(){document.getElementById("pickupLocationStatus").textContent="Preview only — no order submitted"}</script><script src="/pickup-discovery.js"></script><script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpkP-1hNTsxKVNmPhPP_J-SawsNZi3TIQ&libraries=places&callback=mapReady"></script></body></html>
