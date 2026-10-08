@@ -11,6 +11,13 @@
    card.querySelector('button').onclick=()=>{state.expires=0;state.retry=0;window.SwiftCompletionCards.update(host,state.info);};
   }
   state.info=info;
+  let pay=host.querySelector('.swiftpay-live-action');
+  if(info.payment==='SwiftPay'&&info.active){
+   state.card.hidden=true;state.key='';state.pending=false;++state.version;
+   if(!pay){pay=document.createElement('section');pay.className='swiftpay-live-action';pay.innerHTML='<div><strong>Pay with SwiftPay</strong><p>One scan confirms payment and completes your request.</p></div><button type="button">Pay · Show QR</button>';host.append(pay);}
+   pay.hidden=false;pay.querySelector('button').onclick=()=>window.SwiftPay?.pay(info.kind,info.id);return;
+  }
+  if(pay)pay.hidden=true;
   if(!info.active){state.card.hidden=true;if(state.key){state.key='';++state.version;}return;}
   state.card.hidden=false;
   const key=info.kind+':'+info.id;
