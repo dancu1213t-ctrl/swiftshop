@@ -118,8 +118,29 @@
 
  function matches(s){return (category==='All'||s.category===category)&&s.name.toLowerCase().includes(query.toLowerCase());}
 
- function showCard(s,focus=false){if(typeof innerWidth==='number'&&innerWidth<=600){const area=card.parentElement;area.classList.add('pd-expanded');const expand=area.querySelector('.pd-expand');expand.textContent='Close expanded map';expand.setAttribute('aria-expanded','true');google.maps.event.trigger(pickupMap,'resize');}selected=s;card.hidden=false;card.replaceChildren();const top=el('div',undefined,'pd-card-top'),copy=el('div');copy.append(el('small',s.category+' · Orange Walk'),el('h3',s.name));const close=el('button','×','pd-close');close.type='button';close.setAttribute('aria-label','Close store details');close.onclick=()=>{card.hidden=true;selected=null;drawPins();};top.append(copy,close);card.append(top);
+ const openingHours=new Map();
+ function hoursStatus(hours,now=new Date()){
+  const parse=v=>typeof v==='string'&&/^([01]\d|2[0-3]):[0-5]\d(?::[0-5]\d(?:\.\d+)?)?$/.test(v)?Number(v.slice(0,2))*60+Number(v.slice(3,5)):null;
+  const opens=parse(hours?.opens_at),closes=parse(hours?.closes_at);if(opens===null||closes===null||opens===closes)return '';
+  const parts=new Intl.DateTimeFormat('en-GB',{timeZone:'America/Belize',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(now);
+  const minute=Number(parts.find(p=>p.type==='hour').value)*60+Number(parts.find(p=>p.type==='minute').value);
+  const open=opens<closes?minute>=opens&&minute<closes:minute>=opens||minute<closes;if(!open)return 'Closed';
+  const remaining=(closes-minute+1440)%1440;if(remaining<=15)return 'Closes in '+remaining+' minute'+(remaining===1?'':'s');if(remaining<=60)return 'Closes soon';return 'Open';
+ }
+ const normalize=v=>String(v||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+ async function refreshHours(){
+  if(typeof customerDataClient==='undefined')return;
+  try{const r=await customerDataClient.from('merchant_storefronts').select('*');if(r.error)return;openingHours.clear();
+   for(const row of r.data||[]){const names=[row.category,row.store_name,row.name];for(const node of document.querySelectorAll('.cat-btn[onclick]')){if(node.getAttribute('onclick')?.includes("setCategory('"+row.category+"'"))names.push(node.querySelector('img')?.alt,node.querySelector('span')?.textContent);}
+    for(const name of names)if(name)openingHours.set(normalize(name),row);
+   }
+   if(selected)showCard(selected);
+  }catch{/* No hours label is shown if the saved schedule cannot be loaded. */}
+ }
+ function savedHours(store){const aliases={'Aroma Cafe & Lounge':'Aroma','Brew & Browse':'BrewBrowse','The Dinner House':'DinnerHouse'};return openingHours.get(normalize(store.name))||openingHours.get(normalize(aliases[store.name]));}
+ function showCard(s,focus=false){if(focus&&typeof innerWidth==='number'&&innerWidth<=600){const area=card.parentElement;area.classList.add('pd-expanded');const expand=area.querySelector('.pd-expand');expand.textContent='Close expanded map';expand.setAttribute('aria-expanded','true');google.maps.event.trigger(pickupMap,'resize');}selected=s;card.hidden=false;card.replaceChildren();const top=el('div',undefined,'pd-card-top'),copy=el('div');copy.append(el('small',s.category+' · Orange Walk'),el('h3',s.name));const close=el('button','×','pd-close');close.type='button';close.setAttribute('aria-label','Close store details');close.onclick=()=>{card.hidden=true;selected=null;drawPins();};top.append(copy,close);card.append(top);
 
+  const availability=hoursStatus(savedHours(s));if(availability){const badge=el('p',availability,'pd-hours-status');badge.setAttribute('aria-live','polite');card.append(badge);}
   const km=distance(s);card.append(el('p',km===null?'Choose your drop-off to see distance.':km.toFixed(1)+' km from your drop-off · straight-line distance','pd-distance'));
 
   card.append(el('p','Confirm your items with the store, then request your pickup.','pd-help'));
@@ -142,11 +163,12 @@
 
   refresh();
 
-  const init=window.initPickupMap;window.initPickupMap=function(...args){try{const result=init.apply(this,args);attachPins();return result;}catch(e){notice.textContent='The map could not load. Please retry your connection.';console.error('Pickup map',e);}};
+  const init=window.initPickupMap;window.initPickupMap=function(...args){try{const result=init.apply(this,args);attachPins();refreshHours();return result;}catch(e){notice.textContent='The map could not load. Please retry your connection.';console.error('Pickup map',e);}};
 
   const setPoint=window.setPickupPoint;window.setPickupPoint=function(...args){const result=setPoint.apply(this,args);refresh();if(selected)showCard(selected);return result;};
 
   if(pickupMap)attachPins();
+  refreshHours();setInterval(()=>{if(selected&&!card.hidden)showCard(selected);},60000);
 
  }
 
