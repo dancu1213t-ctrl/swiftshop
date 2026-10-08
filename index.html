@@ -12564,7 +12564,18 @@ function drawSpinWheelCanvas() {
 }
 
 async function selectWeightedWheelOutcome() {
- const {data,error}=await customerDataClient.rpc('swift_customer_daily_spin').abortSignal(AbortSignal.timeout(10000));if(error)throw error;
+ const session=await customerDataClient.auth.getSession();
+ if(session.error)throw session.error;
+ if(!session.data.session)throw Error('Please sign in again to use your daily spin.');
+ const request=()=>customerDataClient.rpc('swift_customer_daily_spin').abortSignal(AbortSignal.timeout(10000));
+ let {data,error}=await request();
+ // A denied request has not awarded a prize. Refresh once, then retry only that denial.
+ if(error?.code==='42501'&&/permission denied for function swift_customer_daily_spin/i.test(error.message||'')){
+  const refreshed=await customerDataClient.auth.refreshSession();
+  if(refreshed.error||!refreshed.data.session)throw Error('Please sign in again to use your daily spin.');
+  ({data,error}=await request());
+ }
+ if(error)throw error;
  const winner=getDailyWheelSectors().find(p=>p.id===data.id);if(!winner)throw Error('Spin result unavailable');return {...winner,recorded:true};
 }
 
