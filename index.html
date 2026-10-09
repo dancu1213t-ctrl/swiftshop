@@ -14137,20 +14137,47 @@ $('adFile').onchange=async e=>{
 };
 let allBatch=null;
 const allButton=document.createElement('button');allButton.id='adAll';allButton.type='button';allButton.textContent='Upload to all stores';$('adSave').after(allButton);
-const allHint=document.createElement('p');allHint.textContent='Upload to all stores adds this banner to every current store without replacing existing ads. Turn on Published to display it everywhere.';allButton.after(allHint);
+const allHint=document.createElement('p');allHint.textContent='Adds this banner to every current store without replacing existing ads. Turn on Published to display it everywhere.';allButton.after(allHint);
+async function prepareBulkBanner(source){
+ const artwork=new Image();artwork.src=source;await artwork.decode();
+ const canvas=document.createElement('canvas');let width=Math.min(1600,artwork.naturalWidth),quality=.86,value='';
+ for(let attempt=0;attempt<8;attempt++){
+  canvas.width=Math.max(1,Math.round(width));canvas.height=Math.max(1,Math.round(artwork.naturalHeight*width/artwork.naturalWidth));
+  canvas.getContext('2d').drawImage(artwork,0,0,canvas.width,canvas.height);
+  value=canvas.toDataURL('image/webp',quality);
+  if(value.length<=320000)return value;
+  width*=.85;quality=Math.max(.65,quality-.03);
+ }
+ throw Error('This banner is too large. Please choose a smaller image.');
+}
 allButton.onclick=async()=>{
  if(!image){message('Choose a banner image first.');$('adFile').click();return;}
- const published=$('adPublished').checked;
- if(!allBatch)allBatch=crypto.randomUUID();
- busy(true);message('Adding banner to all stores…');
+ busy(true);let completed=0,total=0;
  try{
-  const {data,error}=await supabaseClient.rpc('save_banner_all_stores',{
-   p_username:'',p_password:'',
-   p_categories:[...choices.keys()],p_image:image,p_alt:$('adAlt').value.trim()||'Store advertisement',p_published:published,p_batch_id:allBatch
-  });
-  if(error)throw error;
-  allBatch=null;await load();message(`Banner ${published?'published':'saved as a draft'} in ${data.stores} stores. Existing banners kept.`);
- }catch(e){message('Could not finish the all-stores upload: '+e.message+' You can retry safely.');}finally{busy(false);}
+  message('Preparing banner for all stores…');
+  const prepared=await prepareBulkBanner(image),categories=[...new Set(choices.keys())].sort();
+  const alt=$('adAlt').value.trim()||'Store advertisement',published=$('adPublished').checked;
+  if(alt.length>240)throw Error('Banner description must be 240 characters or fewer.');
+  if(!categories.length)throw Error('No stores are available.');
+  total=categories.length;
+  const fingerprint=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify([prepared,alt,published,categories])))),b=>b.toString(16).padStart(2,'0')).join('');
+  const retryKey='swiftshop-banner-upload:'+fingerprint;
+  let saved=null;try{saved=localStorage.getItem(retryKey);}catch{}
+  if(!allBatch||allBatch.fingerprint!==fingerprint)allBatch={fingerprint,id:saved||crypto.randomUUID()};
+  try{localStorage.setItem(retryKey,allBatch.id);}catch{}
+  for(const category of categories){
+   message('Uploading banner · '+completed+' of '+total+' stores complete…');
+   const {data,error}=await supabaseClient.rpc('save_banner_all_stores',{
+    p_username:'',p_password:'',p_categories:[category],p_image:prepared,p_alt:alt,p_published:published,p_batch_id:allBatch.id
+   });
+   if(error)throw error;
+   if(data?.stores!==1)throw Error('Save could not be confirmed for '+category+'.');
+   completed++;
+  }
+  try{localStorage.removeItem(retryKey);}catch{}allBatch=null;
+  await load();message('Banner '+(published?'published':'saved as a draft')+' in '+total+' stores. Existing banners kept.');
+ }catch(e){message('Upload paused after '+completed+' of '+total+' stores: '+e.message+' Retry the same banner to finish without duplicates.');}
+ finally{busy(false);}
 };
 $('adForm').onsubmit=async e=>{e.preventDefault();if(!image){message('Upload a banner first.');return;}const button=$('adSave');busy(true);try{const r=await adminAd('save',{p_category:$('adStore').value,p_image:image,p_alt:$('adAlt').value.trim()||'Store advertisement',p_published:$('adPublished').checked,p_id:editing});if(r.error)throw r.error;await load();message('Banner saved. Click + Add another banner for the next image.');}catch(e){message(e.message);}finally{busy(false);}};
 $('adRemove').onclick=async()=>{const category=$('adStore').value;$('adRemove').disabled=true;try{const r=await adminAd('delete',{p_category:category,p_id:editing});if(r.error)throw r.error;if(category===$('adStore').value)await load();}catch(e){message(e.message);}finally{$('adRemove').disabled=false;}};
