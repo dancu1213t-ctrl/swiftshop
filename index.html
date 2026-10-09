@@ -7834,10 +7834,23 @@ window.showLoginWelcome=function(){
   })();registrations.set(record.id,promise);
   try{await promise;}finally{registrations.delete(record.id);}
  }
+ function forgetUnavailable(record){
+  records=records.filter(r=>r.id!==record.id);save();updateChip();retryAt=0;
+  if(current?.id!==record.id)return;
+  current=records.find(r=>!['delivered','cancelled'].includes(r.remote?.phase))||records[0]||null;paintedKey='';
+  if(current){paint();return;}
+  window.SwiftReviews?.update(node('cloConfirmation'),{id:record.id,completed:false});
+  window.SwiftCompletionCards?.update(node('cloConfirmation'),{kind:'delivery',id:record.id,active:false});
+  node('cloConfirmation').replaceChildren();node('cloPreparing').hidden=true;node('cloRunner').hidden=true;
+  node('cloTitle').textContent='Order no longer available';node('cloSubtitle').textContent='This order is no longer in SwiftShop’s records.';
+  node('cloSync').textContent='Saved tracking cleared. You can return to shopping.';
+  for(const id of ['cloProgress','cloSteps','cloItems','cloSelect'])node(id).replaceChildren();
+  node('cloTotal').textContent='—';
+ }
  async function poll(force=false){restore();if(!current||busy||(!force&&(document.hidden||Date.now()<retryAt)))return;const record=root.open?current:records.find(r=>r.remote?.phase!=='delivered');if(!record)return;busy=true;
   try{await register(record);
-   const {data,error}=await supabaseClient.rpc('get_customer_tracking',{p_id:record.id,p_token:record.token}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;const previousPhase=record.remote?.phase;record.remote=data;window.SwiftDeliveryNotifications?.record(record.id,data?.phase,!!previousPhase&&previousPhase!==data?.phase);save();updateChip();retryAt=0;if(current?.id===record.id){paint();node('cloSync').textContent='● Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
-  }catch(error){retryAt=Date.now()+10000;if(current?.id===record.id)node('cloSync').textContent=record.registered?'Connection interrupted. Showing your last confirmed update; we’ll retry.':'Your order is waiting for a connection. Keep your details here and retry sending when connected.';}
+   const {data,error}=await supabaseClient.rpc('get_customer_tracking',{p_id:record.id,p_token:record.token}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;if(scope()!==account)return;const previousPhase=record.remote?.phase;record.remote=data;window.SwiftDeliveryNotifications?.record(record.id,data?.phase,!!previousPhase&&previousPhase!==data?.phase);save();updateChip();retryAt=0;if(current?.id===record.id){paint();node('cloSync').textContent='● Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
+  }catch(error){if(scope()!==account)return;if(record.registered&&error?.code==='P0001'&&error?.message==='Tracking request unavailable'){forgetUnavailable(record);return;}retryAt=Date.now()+10000;if(current?.id===record.id)node('cloSync').textContent=record.registered?'Connection interrupted. Showing your last confirmed update; we’ll retry.':'Your order is waiting for a connection. Keep your details here and retry sending when connected.';}
   finally{busy=false;}
  }
  window.SwiftLive={async submit(snapshot){const id=this.prepare(snapshot,false);const record=records.find(r=>r.id===id);await register(record);record.checkoutCommitted=true;save();const checkout=document.getElementById('orderBox');if(checkout)checkout.style.display='none';this.openOrder(id);return id;},prepare(snapshot,show=true){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined,dispatch_text:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&(!last.registered||last.checkoutCommitted===false||Date.now()-Date.parse(last.created)<15000)){current=last;if(show)open();return last.id;}
