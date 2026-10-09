@@ -3,11 +3,13 @@
 :root{--swift-viewport-height:100dvh;--swift-safe-top:env(safe-area-inset-top,0px);--swift-safe-bottom:env(safe-area-inset-bottom,0px)}
 html.swift-design dialog{max-height:calc(var(--swift-viewport-height) - var(--swift-safe-top) - var(--swift-safe-bottom) - 24px);overflow-y:auto;overscroll-behavior:contain;scroll-padding-block:72px 24px}
 html.swift-design .shop-active-page{overscroll-behavior:contain;scroll-padding-block:88px 32px;box-sizing:border-box}
+html.swift-design .shop-active-page{animation:swift-page-appear .18s ease-out!important}@keyframes swift-page-appear{from{opacity:.7}to{opacity:1}}
+html.swift-design .close-btn{display:inline-flex;align-items:center;justify-content:center}
 html.swift-design :is([data-close],[data-qr-close],#cloClose,#crClose,.shop-page-back,.btn-back-panel,.profile-close,.close-btn,button[aria-label^="Close"],button[aria-label^="Back"]){min-width:44px;min-height:44px;touch-action:manipulation;flex-shrink:0}
 html.swift-design :is(input,textarea,select){scroll-margin-block:90px 36px}
 @media(max-width:749px){
  html.swift-design .shop-active-page{max-height:var(--swift-viewport-height)!important}
- html.swift-design :is(#orderBox,#tacoOrderBox,#pickupOrderBox,#requestRideBox,#orderHistoryPage,#favouritesPage,#savedAddressesPage,#promoPage).shop-active-page{padding-top:calc(20px + var(--swift-safe-top))!important;padding-bottom:calc(32px + var(--swift-safe-bottom))!important;overflow-y:auto!important}
+ html.swift-design :is(#orderBox,#tacoOrderBox,#pickupOrderBox,#requestRideBox,#orderHistoryPage,#favouritesPage,#savedAddressesPage,#promoPage,#creditPurchaseScreen,#creditConfirmScreen,#leaderBoardScreen,#foodMapScreen,#locationModal,#savedLocationPopover,#suggestOverlay,#imageOverlay,#spinWheelModal,#rewardChoiceModal,#swiftReviewDialog).shop-active-page{padding-top:calc(20px + var(--swift-safe-top))!important;padding-bottom:calc(32px + var(--swift-safe-bottom))!important;overflow-y:auto!important}
  html.swift-design #cartPanel{height:var(--swift-viewport-height)!important;max-height:var(--swift-viewport-height)!important;padding-top:calc(72px + var(--swift-safe-top))!important;padding-bottom:calc(24px + var(--swift-safe-bottom))!important;overflow-y:auto!important}
  html.swift-design :is(#customerLiveOrder .clo-shell,#customerRidePanel .cr-shell){max-height:var(--swift-viewport-height);overflow-y:auto;overscroll-behavior:contain}
  html.swift-design .shop-page-back{margin-bottom:16px!important}
