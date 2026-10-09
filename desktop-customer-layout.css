@@ -1,0 +1,27 @@
+@media(min-width:1024px){
+html.swift-design body{--sd-desktop-gutter:32px}
+html.swift-design body #appScreen{width:100%!important;max-width:1504px!important;margin-inline:auto!important;padding:0 32px 120px!important;box-sizing:border-box!important}
+html.swift-design body #appScreen .header{border-radius:0 0 30px 30px!important;padding:30px 32px 32px!important;margin:0 -32px 30px!important}
+html.swift-design body #appScreen .hero-section{width:100%!important;max-width:none!important;margin:0 auto 26px!important;gap:18px 24px!important;align-items:center!important}
+html.swift-design body #appScreen .hero-search-wrapper{width:100%!important;min-width:0!important}
+html.swift-design body #appScreen .hero-search-box{height:58px!important;border-radius:18px!important}
+html.swift-design body #appScreen #searchInput{font-size:16px!important;min-height:56px!important}
+html.swift-design body #appScreen .toggle-btn{height:54px!important;min-height:54px!important;min-width:130px!important;width:130px!important;font-size:15px!important;border-radius:28px!important}
+html.swift-design body #appScreen .sd-quick-actions{justify-content:center!important;gap:12px!important;padding:0!important}
+html.swift-design body #appScreen .sd-quick-actions>button{min-height:46px!important;padding:11px 20px!important;font-size:14px!important;border-radius:24px!important}
+html.swift-design body #appScreen #heroPromoSlider,html.swift-design body #appScreen #merchantBannerSlider{width:100%!important;max-width:1440px!important;margin:0 auto 34px!important;box-sizing:border-box!important}
+html.swift-design body #appScreen #heroPromoSlider .hero-promo-card,html.swift-design body #appScreen #merchantBannerSlider .merchant-banner{width:100%!important;min-height:290px!important;padding:36px 48px 54px!important;box-sizing:border-box!important;grid-template-columns:minmax(0,1.3fr) minmax(240px,.7fr)!important}
+html.swift-design body #appScreen #heroPromoSlider .hero-promo-title,html.swift-design body #appScreen #merchantBannerSlider h2{font-size:38px!important;max-width:26ch!important}
+html.swift-design body #appScreen #heroPromoSlider .hero-promo-image-wrap,html.swift-design body #appScreen #merchantBannerSlider .banner-art-panel{height:210px!important}
+html.swift-design body #appScreen #heroPromoSlider .hero-promo-btn,html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{min-height:52px!important;font-size:15px!important;padding:7px 8px 7px 20px!important}
+html.swift-design body #appScreen .store-directory{margin:0 auto 34px!important}
+html.swift-design body #appScreen .store-directory-row{display:grid!important;grid-template-columns:repeat(8,minmax(0,1fr))!important;gap:20px 12px!important;overflow:visible!important;padding:18px 0!important}
+html.swift-design body #appScreen .store-directory-card{width:100%!important;min-width:0!important;max-width:none!important;min-height:165px!important;border-radius:20px!important;padding:10px 6px!important;box-sizing:border-box!important;transition:background .2s ease}
+html.swift-design body #appScreen .store-directory-card:hover{background:#f5f7f0}
+html.swift-design body #appScreen .store-directory-card .store-directory-cover{margin-inline:auto!important}
+html.swift-design body #appScreen .main-tabs-scroll{justify-content:center!important;padding:10px 0!important}
+html.swift-design body #appScreen #products{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important;gap:24px!important}
+html.swift-design body .shop-bottom-nav{width:calc(100% - 64px)!important;max-width:1440px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;bottom:18px!important;border-radius:24px!important;padding:10px 24px!important}
+html.swift-design body .shop-bottom-nav button{min-height:52px!important;font-size:14px!important}
+}
+@media(min-width:1024px) and (max-width:1199px){html.swift-design body #appScreen .store-directory-row{grid-template-columns:repeat(6,minmax(0,1fr))!important}html.swift-design body #appScreen .toggle-btn{min-width:110px!important;width:110px!important}}
