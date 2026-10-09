@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script src="customer-reviews.js?v=reviews20261008" defer></script>
-<script src="customer-usability.js?v=reviews20261008" defer></script>
+<script src="customer-reviews.js?v=reviewsfinal20261008" defer></script>
+<script src="customer-usability.js?v=reviewsfinal20261008" defer></script>
 <script src="pickup-discovery.js?v=anybusiness20261008" defer></script>
 <link rel="stylesheet" href="swiftpay.css?v=safeiphone20261008">
 <script src="product-filters.js"></script>
@@ -8206,7 +8206,7 @@ function draw(){$('apOrders').replaceChildren();const filter=$('apFilter').value
 async function load(){if(busy)return;busy=true;$('apRefresh').disabled=true;$('apNotice').textContent='Loading…';try{rows=await request('list');draw();$('apNotice').textContent='Updated '+new Date().toLocaleTimeString();}catch(e){rows=[];$('apOrders').replaceChildren();$('apNotice').textContent='Could not load: '+e.message;}finally{busy=false;$('apRefresh').disabled=false;}}
 $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.switchAdminTab;window.switchAdminTab=function(name){original.apply(this,arguments);if(name==='plans')load();};
 });</script><link rel="stylesheet" href="pickup-discovery.css?v=map70v320261008">
-<link rel="stylesheet" href="customer-usability.css?v=reviews20261008">
+<link rel="stylesheet" href="customer-usability.css?v=reviewsfinal20261008">
 </body>
 
 
