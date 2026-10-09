@@ -8207,7 +8207,7 @@ async function load(){if(busy)return;busy=true;$('apRefresh').disabled=true;$('a
 $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.switchAdminTab;window.switchAdminTab=function(name){original.apply(this,arguments);if(name==='plans')load();};
 });</script><link rel="stylesheet" href="pickup-discovery.css?v=map70v320261008">
 <link rel="stylesheet" href="customer-usability.css?v=reviewsfinal20261008">
-</body>
+<script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=20261009"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"></body>
 
 
 
@@ -8833,6 +8833,9 @@ function getCartDeliveryFee() {
   );
   const drinkCount = items.reduce((sum, item) => sum + Number(item.q), 0);
   const hasTacos = !!localStorage.getItem('tacoOrder');
+  const categories=[...new Set(items.map(i=>i.cat))];
+  const custom=categories.length===1&&!hasTacos?window.swiftMerchantDeliveryFees?.[categories[0]]:undefined;
+  if(custom!==undefined&&Number.isFinite(Number(custom)))return Number(custom);
   return onlyBrew && drinkCount >= 3 && !hasTacos ? 0 : FIXED_DELIVERY_FEE;
 }
 
@@ -9141,7 +9144,7 @@ function refreshCartTotals() {
       `<div class="checkout-row"><span>Platform fee</span><strong>$${PLATFORM_FEE.toFixed(2)}</strong></div>` +
       (swiftPayFee ? '<div class="checkout-row"><span>SwiftPay transaction fee</span><strong>$0.15</strong></div>' : '') +
       (tipAmount > 0 ? `<div class="checkout-row"><span>Runner tip (optional)</span><strong>$${tipAmount.toFixed(2)}</strong></div>` : '') +
-      (deliveryFee === 0 ? '<div class="checkout-promo">Brew &amp; Browse · 3+ drinks: free delivery applied</div>' : '');
+      (deliveryFee === 0 ? '<div class="checkout-promo">Free delivery applied</div>' : '');
   }
   if (grandTotalText) {
     grandTotalText.innerHTML = `<span>Total <small>BZD</small></span><strong>$${finalAmount.toFixed(2)}</strong>`;
