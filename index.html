@@ -7847,7 +7847,7 @@ window.showLoginWelcome=function(){
   for(const id of ['cloProgress','cloSteps','cloItems','cloSelect'])node(id).replaceChildren();
   node('cloTotal').textContent='—';
  }
- async function poll(force=false){restore();if(!current||busy||(!force&&(document.hidden||Date.now()<retryAt)))return;const record=root.open?current:records.find(r=>r.remote?.phase!=='delivered');if(!record)return;busy=true;
+ async function poll(force=false){restore();if(!current||busy||(!force&&(document.hidden||Date.now()<retryAt)))return;const record=root.open?current:records.find(r=>r.remote?.phase!=='delivered');if(!record)return;busy=true;const account=scope();
   try{await register(record);
    const {data,error}=await supabaseClient.rpc('get_customer_tracking',{p_id:record.id,p_token:record.token}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;if(scope()!==account)return;const previousPhase=record.remote?.phase;record.remote=data;window.SwiftDeliveryNotifications?.record(record.id,data?.phase,!!previousPhase&&previousPhase!==data?.phase);save();updateChip();retryAt=0;if(current?.id===record.id){paint();node('cloSync').textContent='● Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
   }catch(error){if(scope()!==account)return;if(record.registered&&error?.code==='P0001'&&error?.message==='Tracking request unavailable'){forgetUnavailable(record);return;}retryAt=Date.now()+10000;if(current?.id===record.id)node('cloSync').textContent=record.registered?'Connection interrupted. Showing your last confirmed update; we’ll retry.':'Your order is waiting for a connection. Keep your details here and retry sending when connected.';}
