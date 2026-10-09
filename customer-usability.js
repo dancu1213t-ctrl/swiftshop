@@ -7,7 +7,7 @@
   const navigation=window.SwiftNavigation;if(!navigation)return;const original=navigation.back;
   navigation.back=function(){
    const dialog=[...document.querySelectorAll('dialog[open]')].at(-1);
-   if(dialog){const close=dialog.querySelector('[data-close],[data-qr-close],#cloClose');if(close){if(!close.disabled)close.click();return true;}}
+   if(dialog){const close=dialog.querySelector('[data-close],[data-qr-close],#cloClose');if(close){if(!close.disabled)close.click();}else if(dialog.dispatchEvent(new Event('cancel',{cancelable:true})))dialog.close();return true;}
    return original.apply(this,arguments);
   };
  });
