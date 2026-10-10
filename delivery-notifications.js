@@ -61,6 +61,7 @@
     }
     }
     panel.querySelector('[data-enable]').hidden = !window.SwiftPush;
+    panel.querySelector('[data-enable]').textContent=window.SwiftPush?.web?'Enable phone notifications':'Enable notifications';
     panel.querySelector('[data-disable]').hidden = !window.SwiftPush;
   }
   function record(orderId, phase, announce = true, eventId = null, createdAt = null, kind = 'delivery') {
@@ -150,7 +151,7 @@
   panel.querySelector('[data-read-all]').onclick=()=>{write(read().map(row=>({...row,read:true})));render();};
   panel.querySelector('[data-close]').onclick = () => panel.close();
   const status = text => { panel.querySelector('[data-status]').textContent = text; };
-  panel.querySelector('[data-enable]').onclick = async () => { try { if (!window.SWIFTSHOP_NOTIFICATION_BACKEND_ENABLED) throw Error('Delivery notification setup is not complete yet.'); if(localStorage.getItem('swiftshop.push-revoke-pending')) {await revoke();localStorage.removeItem('swiftshop.push-revoke-pending');} registeredScope=scope(); localStorage.setItem(preferenceKey(), 'on'); status('Requesting notification permission…'); await window.SwiftPush.enable(); status('Registering delivery updates…'); await sync(); } catch (e) { localStorage.setItem(preferenceKey(), 'off'); status(e.message); } };
+  panel.querySelector('[data-enable]').onclick = async () => { try { if (!window.SWIFTSHOP_NOTIFICATION_BACKEND_ENABLED) throw Error('Delivery notification setup is not complete yet.'); const permission=window.SwiftPush?.web?window.SwiftPush.requestPermission():null; if(permission)await permission; if(localStorage.getItem('swiftshop.push-revoke-pending')) {await revoke();localStorage.removeItem('swiftshop.push-revoke-pending');} registeredScope=scope(); localStorage.setItem(preferenceKey(), 'on'); status('Requesting notification permission…'); await window.SwiftPush.enable(); status('Registering delivery updates…'); await sync(); } catch (e) { localStorage.setItem(preferenceKey(), 'off'); status(e.message); } };
   panel.querySelector('[data-disable]').onclick = async () => { localStorage.setItem(preferenceKey(), 'off'); deviceToken=null; try { await window.SwiftPush.disable(); if(window.SWIFTSHOP_NOTIFICATION_BACKEND_ENABLED) await revoke(); status('Phone notifications turned off on this device.'); } catch { status('Phone alerts stopped locally. Open the app with internet access to finish removing its server subscription.'); localStorage.setItem('swiftshop.push-revoke-pending','true'); } };
   window.addEventListener('swift-push-token', async e => { if(scope()!==registeredScope || !active() || localStorage.getItem(preferenceKey())!=='on') { window.SwiftPush.disable().catch(()=>{}); return; } deviceToken=e.detail; await sync(); });
   window.addEventListener('swift-push-error', e => status(e.detail.message));
@@ -164,7 +165,7 @@
   async function resume() {
     if(!active()) return;
     if(window.SWIFTSHOP_NOTIFICATION_BACKEND_ENABLED && localStorage.getItem('swiftshop.push-revoke-pending')) { try { await revoke(); localStorage.removeItem('swiftshop.push-revoke-pending'); } catch { return; } }
-    if(window.SWIFTSHOP_PUSH_ENABLED && window.SwiftPush && localStorage.getItem(preferenceKey())==='on') { registeredScope=scope(); try { await window.SwiftPush.enable(); } catch (e) {status(e.message);} }
+    if(window.SWIFTSHOP_PUSH_ENABLED && window.SwiftPush && localStorage.getItem(preferenceKey())==='on') { registeredScope=scope(); try { if(!window.SwiftPush.web || (typeof Notification!=='undefined'&&Notification.permission==='granted')) await window.SwiftPush.enable(); } catch (e) {status(e.message);} }
     await sync();
   }
   window.addEventListener('online',resume);
