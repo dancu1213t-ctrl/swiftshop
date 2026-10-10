@@ -1,0 +1,31 @@
+/* SwiftShop motion language: short, purposeful, and never blocking input. */
+:root{--swift-ease:cubic-bezier(.22,1,.36,1);--swift-press:cubic-bezier(.2,.8,.2,1)}
+@keyframes swift-page-arrive{from{opacity:.55;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes swift-offer-copy{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes swift-offer-art{from{opacity:.3;transform:translateX(12px) scale(.98)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes swift-save-pop{0%,100%{scale:1}45%{scale:1.14}}
+html.swift-design body :is(#merchantStorePage,#promoPage,#favouritesPage,#orderHistoryPage,#savedAddressesPage,#cartPanel).shop-active-page{animation:swift-page-arrive .26s var(--swift-ease) both}
+html.swift-design body #appScreen #heroPromoSlider .hero-promo-card{transition:opacity .35s var(--swift-ease),visibility .35s!important}
+html.swift-design body #appScreen #heroPromoSlider .hero-promo-card.is-active .hero-promo-content,html.swift-design body #appScreen #merchantBannerSlider .merchant-banner:not([hidden]) .banner-copy{animation:swift-offer-copy .42s var(--swift-ease) both}
+html.swift-design body #appScreen #heroPromoSlider .hero-promo-card.is-active .hero-promo-image-wrap,html.swift-design body #appScreen #merchantBannerSlider .merchant-banner:not([hidden]) .banner-art-panel{animation:swift-offer-art .5s var(--swift-ease) both}
+html.swift-design body :is(.toggle-btn,.hero-promo-btn,.banner-copy button,.store-add,.store-add-btn,.sd-quick-actions>button,.shop-bottom-nav button){transition:scale .16s var(--swift-press),background-color .2s ease,box-shadow .2s ease!important}
+html.swift-design body :is(.toggle-btn,.hero-promo-btn,.banner-copy button,.store-add,.store-add-btn,.sd-quick-actions>button,.shop-bottom-nav button):active:not(:disabled){scale:.97}
+html.swift-design body :is(.hero-promo-dot,.merchant-banner-controls button[data-dot]){transition:width .25s var(--swift-ease),flex-basis .25s var(--swift-ease),background-color .2s ease!important}
+html.swift-design body .store-directory-card{position:relative;transition:translate .22s var(--swift-ease),background-color .22s ease,box-shadow .22s ease!important}
+html.swift-design body .heart-btn.liked{animation:swift-save-pop .3s var(--swift-ease)}
+html.swift-design body :is(.hero-search-box,.store-search-row input){transition:border-color .2s ease,box-shadow .2s ease!important}
+html.swift-design body .hero-search-box:focus-within{box-shadow:0 0 0 2px #f5822028!important}
+html.swift-design body :is(.toggle-btn,.hero-promo-btn,.banner-copy button,.store-add,.store-directory-card,.shop-bottom-nav button):focus-visible{outline:2px solid #df6b0c!important;outline-offset:4px}
+@media(hover:hover) and (pointer:fine){
+html.swift-design body .store-directory-card:hover{translate:0 -3px;box-shadow:0 8px 24px #2637270b}
+html.swift-design body :is(.hero-promo-btn,.banner-copy button,.store-add):hover:not(:disabled){box-shadow:0 6px 18px #24352420!important;translate:0 -1px}
+html.swift-design body :is(.hero-promo-btn,.banner-copy button)::after{transition:transform .2s var(--swift-ease)}
+html.swift-design body :is(.hero-promo-btn,.banner-copy button):hover::after{transform:rotate(8deg)}
+}
+@media(prefers-reduced-motion:reduce){
+html.swift-design body :is(.shop-active-page,.hero-promo-content,.banner-copy,.hero-promo-image-wrap,.banner-art-panel,.heart-btn.liked){animation:none!important}
+html.swift-design body :is(.hero-promo-card,.toggle-btn,.hero-promo-btn,.banner-copy button,.store-add,.store-add-btn,.sd-quick-actions>button,.shop-bottom-nav button,.hero-promo-dot,.merchant-banner-controls button[data-dot],.store-directory-card,.hero-search-box,.store-search-row input){transition:none!important}
+html.swift-design body .store-directory-card:hover,html.swift-design body :is(.hero-promo-btn,.banner-copy button,.store-add):hover{translate:none!important}
+html.swift-design body :is(.toggle-btn,.hero-promo-btn,.banner-copy button,.store-add,.store-add-btn,.sd-quick-actions>button,.shop-bottom-nav button):active{scale:1!important}
+html.swift-design body :is(.hero-promo-btn,.banner-copy button):hover::after{transform:none!important}
+}
