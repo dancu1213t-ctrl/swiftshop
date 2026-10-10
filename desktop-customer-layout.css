@@ -1,16 +1,16 @@
 @media(min-width:1024px){
 html.swift-design body{--sd-desktop-gutter:32px}
-html.swift-design body #appScreen{width:100%!important;max-width:1504px!important;margin-inline:auto!important;padding:0 32px 120px!important;box-sizing:border-box!important}
-html.swift-design body #appScreen .header{border-radius:0 0 30px 30px!important;padding:30px 32px 32px!important;margin:0 -32px 30px!important}
-html.swift-design body #appScreen .hero-section{width:100%!important;max-width:none!important;margin:0 auto 26px!important;gap:18px 24px!important;align-items:center!important}
+html.swift-design body #appScreen{width:100%!important;max-width:none!important;margin-inline:auto!important;padding:0 32px 120px!important;box-sizing:border-box!important}
+html.swift-design body #appScreen .header{border-radius:0 0 30px 30px!important;padding:30px 32px 32px!important;margin:0 -32px 18px!important}
+html.swift-design body #appScreen .hero-section{width:100%!important;max-width:none!important;margin:0 auto 18px!important;gap:18px 24px!important;align-items:center!important}
 html.swift-design body #appScreen .hero-search-wrapper{width:100%!important;min-width:0!important}
 html.swift-design body #appScreen .hero-search-box{height:58px!important;border-radius:18px!important}
 html.swift-design body #appScreen #searchInput{font-size:16px!important;min-height:56px!important}
 html.swift-design body #appScreen .toggle-btn{height:54px!important;min-height:54px!important;min-width:130px!important;width:130px!important;font-size:15px!important;border-radius:28px!important}
 html.swift-design body #appScreen .sd-quick-actions{justify-content:center!important;gap:12px!important;padding:0!important}
 html.swift-design body #appScreen .sd-quick-actions>button{min-height:46px!important;padding:11px 20px!important;font-size:14px!important;border-radius:24px!important}
-html.swift-design body #appScreen #heroPromoSlider,html.swift-design body #appScreen #merchantBannerSlider{width:100%!important;max-width:1440px!important;margin:0 auto 34px!important;box-sizing:border-box!important}
-html.swift-design body #appScreen #heroPromoSlider .hero-promo-card,html.swift-design body #appScreen #merchantBannerSlider .merchant-banner{width:100%!important;min-height:290px!important;padding:36px 48px 54px!important;box-sizing:border-box!important;grid-template-columns:minmax(0,1.3fr) minmax(240px,.7fr)!important}
+html.swift-design body #appScreen #heroPromoSlider,html.swift-design body #appScreen #merchantBannerSlider{width:100%!important;max-width:none!important;margin:0 auto 24px!important;box-sizing:border-box!important}
+html.swift-design body #appScreen #heroPromoSlider .hero-promo-card,html.swift-design body #appScreen #merchantBannerSlider .merchant-banner{width:100%!important;min-height:250px!important;padding:26px 40px 44px!important;box-sizing:border-box!important;grid-template-columns:minmax(0,1.3fr) minmax(240px,.7fr)!important}
 html.swift-design body #appScreen #heroPromoSlider .hero-promo-title,html.swift-design body #appScreen #merchantBannerSlider h2{font-size:38px!important;max-width:26ch!important}
 html.swift-design body #appScreen #heroPromoSlider .hero-promo-image-wrap,html.swift-design body #appScreen #merchantBannerSlider .banner-art-panel{height:210px!important}
 html.swift-design body #appScreen #heroPromoSlider .hero-promo-btn,html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{min-height:52px!important;font-size:15px!important;padding:7px 8px 7px 20px!important}
@@ -21,7 +21,30 @@ html.swift-design body #appScreen .store-directory-card:hover{background:#f5f7f0
 html.swift-design body #appScreen .store-directory-card .store-directory-cover{margin-inline:auto!important}
 html.swift-design body #appScreen .main-tabs-scroll{justify-content:center!important;padding:10px 0!important}
 html.swift-design body #appScreen #products{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))!important;gap:24px!important}
-html.swift-design body .shop-bottom-nav{width:calc(100% - 64px)!important;max-width:1440px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;bottom:18px!important;border-radius:24px!important;padding:10px 24px!important}
+html.swift-design body .shop-bottom-nav{width:calc(100% - 64px)!important;max-width:none!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;bottom:18px!important;border-radius:24px!important;padding:10px 24px!important}
 html.swift-design body .shop-bottom-nav button{min-height:52px!important;font-size:14px!important}
 }
 @media(min-width:1024px) and (max-width:1199px){html.swift-design body #appScreen .store-directory-row{grid-template-columns:repeat(6,minmax(0,1fr))!important}html.swift-design body #appScreen .toggle-btn{min-width:110px!important;width:110px!important}}
+
+/* Desktop canvas: keep mobile safe areas and layouts unchanged. */
+@media(min-width:1024px){
+html.swift-design body #appScreen{padding-inline:32px!important}
+html.swift-design body #appScreen .header{padding-top:24px!important;padding-bottom:24px!important}
+html.swift-design body #appScreen .store-directory-row{grid-template-columns:repeat(auto-fit,minmax(135px,1fr))!important;gap:12px!important;padding:10px 0!important}
+html.swift-design body #appScreen .store-directory-card{min-height:145px!important}
+html.swift-design body #pickupOrderBox.pd-page,
+html.swift-design body :is(#cartPanel,#orderBox,#tacoOrderBox).shop-active-page{width:100%!important;max-width:none!important;margin-inline:0!important;padding:24px 32px 100px!important;box-sizing:border-box!important}
+html.swift-design body #pickupOrderBox.pd-page #pickupMap{height:clamp(480px,65dvh,800px)!important}
+html.swift-design body #pickupOrderBox.pd-page .pd-expanded #pickupMap{height:calc(100dvh - 45px)!important}
+html.swift-design body #customerRidePanel .cr-shell{max-width:none!important;width:100%!important;margin:0!important;padding:24px 32px 40px!important;box-sizing:border-box!important;display:block!important}
+html.swift-design body #customerRidePanel .cr-header{padding:0!important;margin-bottom:18px!important}
+html.swift-design body #customerRidePanel #crForm{display:grid!important;grid-template-columns:minmax(0,1.5fr) minmax(320px,1fr)!important;gap:16px 28px!important;padding:24px!important;align-items:start!important}
+html.swift-design body #customerRidePanel #crForm[hidden]{display:none!important}
+html.swift-design body #customerRidePanel #crForm>*{grid-column:2;min-width:0}
+html.swift-design body #customerRidePanel #crMap{grid-column:1;grid-row:1 / span 14;width:100%!important;height:clamp(500px,72dvh,900px)!important;margin:0!important}
+html.swift-design body #customerRidePanel #crTracking{padding:28px!important}
+html.swift-design body #customerRidePanel #crTitle{font-size:34px!important}
+html.swift-design body #customerRidePanel :is(#crClose,.cr-tools button){min-height:48px!important}
+html.swift-design body #customerRidePanel #crClose{min-width:48px!important}
+html.swift-design body :is(#merchantStorePage,#promoPage,#favouritesPage,#orderHistoryPage,#savedAddressesPage).shop-active-page{max-width:none!important;width:100%!important;padding-inline:32px!important;box-sizing:border-box!important}
+}
