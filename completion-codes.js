@@ -35,6 +35,7 @@
     if(version!==state.version)return;
     canvas.setAttribute('aria-label',swiftpay?'SwiftPay payment QR code':'Delivery or ride completion QR code');canvas.hidden=false;
     state.expires=Date.parse(data.expiresAt)||Date.now()+60000;
+    if(swiftpay)window.SwiftPay?.refresh();
     status.textContent=swiftpay?'Invoice BZ$'+(data.amountCents/100).toFixed(2)+' + BZ$0.15 fee. Confirmed payment deducts your balance and completes this request.':'One-time confirmation · Share only with your assigned '+(ride?'driver':'runner')+'.';
    }catch(e){if(version===state.version){canvas.hidden=true;status.textContent=e.message||'Code could not load. Tap Refresh code to retry.';state.retry=Date.now()+10000;}}
    finally{if(version===state.version){state.pending=false;button.disabled=false;}}
