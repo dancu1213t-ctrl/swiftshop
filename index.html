@@ -7803,10 +7803,32 @@ window.showLoginWelcome=function(){
  const node=id=>document.getElementById(id);let records=[],current=null,busy=false,retryAt=0;
  const scrollArea=root.querySelector('.clo-shell');let paintedKey='';
 
- const scope=()=>String(localStorage.getItem('userPhone')||'guest');const key=()=> 'swiftshop.live-orders.v1:'+scope();let loadedScope='';
- function updateChip(){chip.hidden=!records.some(r=>r.remote?.phase!=='delivered');chip.textContent=records.some(r=>r.registered&&r.remote?.phase!=='delivered')?'◉ Live order':'Order not sent';}
- function restore(){if(loadedScope===scope())return;loadedScope=scope();try{records=JSON.parse(localStorage.getItem(key())||'[]').filter(r=>r.id&&r.token&&r.snapshot);}catch{records=[];}current=records.find(r=>r.remote?.phase!=='delivered')||records[0]||null;updateChip();}
+ const scope=()=>String(localStorage.getItem('userPhone')||'guest');const key=()=> 'swiftshop.live-orders.v1:'+scope();let loadedScope='',accountSyncAt=0,accountSyncTask=null;
+ function updateChip(){chip.hidden=!records.some(r=>!['delivered','cancelled'].includes(r.remote?.phase));chip.textContent=records.some(r=>r.registered&&!['delivered','cancelled'].includes(r.remote?.phase))?'◉ Live order':'Order not sent';}
+ function restore(){if(loadedScope===scope())return;loadedScope=scope();accountSyncAt=0;paintedKey='';root.close();try{records=JSON.parse(localStorage.getItem(key())||'[]').filter(r=>r.id&&r.token&&r.snapshot);}catch{records=[];}current=records.find(r=>!['delivered','cancelled'].includes(r.remote?.phase))||records[0]||null;updateChip();}
  function save(){try{localStorage.setItem(key(),JSON.stringify(records.slice(0,20)));}catch{node('cloSync').textContent='Keep this page open: this browser could not save your tracking details.';}}
+
+ async function syncAccountOrders(force=false){
+  restore();if(accountSyncTask)return accountSyncTask;
+  if(!force&&Date.now()-accountSyncAt<10000)return;
+  const identity=scope();
+  accountSyncTask=(async()=>{
+   const sessionResult=await customerDataClient.auth.getSession();
+   if(sessionResult.error)throw sessionResult.error;
+   if(!sessionResult.data.session||scope()!==identity)return;
+   const {data,error}=await customerDataClient.rpc('swift_customer_tracking_list').abortSignal(AbortSignal.timeout(10000));
+   if(error)throw error;if(scope()!==identity)return;
+   const remote=Array.isArray(data)?data:[],selected=current?.id;
+   const drafts=records.filter(r=>!r.registered&&!remote.some(x=>x.id===r.id));
+   records=[...remote,...drafts].sort((a,b)=>Date.parse(b.created)-Date.parse(a.created));
+   current=records.find(r=>r.id===selected)||records.find(r=>!['delivered','cancelled'].includes(r.remote?.phase))||records[0]||null;
+   accountSyncAt=Date.now();save();updateChip();
+   for(const r of remote)window.SwiftDeliveryNotifications?.record(r.id,r.remote?.phase);
+   window.SwiftDeliveryNotifications?.sync();
+   if(root.open){if(current)paint();else{root.close();node('cloConfirmation').replaceChildren();}}
+  })();try{await accountSyncTask;}finally{accountSyncTask=null;}
+ }
+
  const money=v=>'$'+Number(v||0).toFixed(2)+' BZD';
 
  function paint(){updateChip();if(!current)return;window.SwiftReviews?.update(node('cloConfirmation'),{id:current.id,completed:current.registered&&current.remote?.phase==='delivered'});window.SwiftCompletionCards?.update(node('cloConfirmation'),{kind:'delivery',id:current.id,token:current.token,payment:current.snapshot.payment,active:current.registered&&current.remote?.phase==='on_the_way'});const displayKey=JSON.stringify([current.id,current.registered,current.snapshot,current.remote?.phase,current.remote?.runner_name,current.remote?.runner_phone,current.remote?.runner_photo,window.SwiftPay?.payment('delivery',current.id),records.map(r=>[r.id,r.created])]);if(displayKey===paintedKey)return;paintedKey=displayKey;const previousScroll=scrollArea.scrollTop;const index=Math.max(0,stages.findIndex(s=>s[0]===(current.remote?.phase||'sent'))),active=stages[index];node('cloPreparing').hidden=!(current.registered&&current.remote?.phase==='preparing');node('cloReference').textContent='ORDER '+current.id.slice(0,8).toUpperCase();node('cloTitle').textContent=current.registered?active[1]:'Order not sent yet';node('cloSubtitle').textContent=current.registered?active[2]:'SwiftShop has not received this order. Retry sending when connected.';node('cloProgress').replaceChildren();
@@ -7818,7 +7840,7 @@ window.showLoginWelcome=function(){
   const select=node('cloSelect');select.replaceChildren();records.forEach(r=>{const option=document.createElement('option');option.value=r.id;option.textContent=r.id.slice(0,8).toUpperCase()+' · '+new Date(r.created).toLocaleDateString();select.append(option);});select.value=current.id;scrollArea.scrollTop=previousScroll;
  }
  window.addEventListener('swiftpay-wallet-updated',()=>{if(root.open)paint();});
- function open(){window.SwiftPay?.refresh();restore();if(current?.remote?.phase==='delivered')current=records.find(r=>r.remote?.phase!=='delivered')||current;if(!current)return;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);}
+ async function open(){window.SwiftPay?.refresh();restore();try{await syncAccountOrders(true);}catch{node('cloSync').textContent='Could not restore account orders. Refresh to retry.';}if(current?.remote?.phase==='delivered')current=records.find(r=>!['delivered','cancelled'].includes(r.remote?.phase))||current;if(!current)return;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);}
  const registrations=new Map();
  async function register(record){
   if(record.registered)return;
@@ -7847,14 +7869,14 @@ window.showLoginWelcome=function(){
   for(const id of ['cloProgress','cloSteps','cloItems','cloSelect'])node(id).replaceChildren();
   node('cloTotal').textContent='—';
  }
- async function poll(force=false){restore();if(!current||busy||(!force&&(document.hidden||Date.now()<retryAt)))return;const record=root.open?current:records.find(r=>r.remote?.phase!=='delivered');if(!record)return;busy=true;const account=scope();
+ async function poll(force=false){restore();if(busy||(!force&&(document.hidden||Date.now()<retryAt)))return;try{await syncAccountOrders(force);}catch{retryAt=Date.now()+10000;}if(!current)return;const record=root.open?current:records.find(r=>!['delivered','cancelled'].includes(r.remote?.phase));if(!record)return;busy=true;const account=scope();
   try{await register(record);
    const {data,error}=await supabaseClient.rpc('get_customer_tracking',{p_id:record.id,p_token:record.token}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;if(scope()!==account)return;const previousPhase=record.remote?.phase;record.remote=data;window.SwiftDeliveryNotifications?.record(record.id,data?.phase,!!previousPhase&&previousPhase!==data?.phase);save();updateChip();retryAt=0;if(current?.id===record.id){paint();node('cloSync').textContent='● Updated '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});}
   }catch(error){if(scope()!==account)return;if(record.registered&&error?.code==='P0001'&&error?.message==='Tracking request unavailable'){forgetUnavailable(record);return;}retryAt=Date.now()+10000;if(current?.id===record.id)node('cloSync').textContent=record.registered?'Connection interrupted. Showing your last confirmed update; we’ll retry.':'Your order is waiting for a connection. Keep your details here and retry sending when connected.';}
   finally{busy=false;}
  }
  window.SwiftLive={async submit(snapshot){const id=this.prepare(snapshot,false);const record=records.find(r=>r.id===id);await register(record);record.checkoutCommitted=true;save();const checkout=document.getElementById('orderBox');if(checkout)checkout.style.display='none';this.openOrder(id);return id;},prepare(snapshot,show=true){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined,dispatch_text:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&(!last.registered||last.checkoutCommitted===false||Date.now()-Date.parse(last.created)<15000)){current=last;if(show)open();return last.id;}
-   const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false,checkoutCommitted:false};records.unshift(record);current=record;save();chip.hidden=false;if(show)open();return record.id;},open,openOrder(id){restore();const record=records.find(r=>r.id===id);if(!record)return;current=record;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);}};
+   const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false,checkoutCommitted:false};records.unshift(record);current=record;save();chip.hidden=false;if(show)open();return record.id;},open,async openOrder(id){restore();try{await syncAccountOrders(true);}catch{}const record=records.find(r=>r.id===id);if(!record)return;current=record;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);}};
  chip.onclick=open;node('cloClose').onclick=()=>root.close();node('cloRetry').onclick=()=>poll(true);node('cloSelect').onchange=e=>{current=records.find(r=>r.id===e.target.value);paint();poll(true);};
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){restore();poll(true);}});window.addEventListener('pageshow',()=>{restore();if(current&&sessionStorage.getItem('swiftshop.pendingLiveReturn')===current.id){sessionStorage.removeItem('swiftshop.pendingLiveReturn');open();}});window.addEventListener('online',()=>poll(true));setInterval(()=>poll(),5000);restore();
 })();
