@@ -22,5 +22,5 @@ const token={platform:'web',token:JSON.stringify(subscription.toJSON())};emit('s
 try{return await pending;}finally{pending=null;}
 },async disable(){const reg=await navigator.serviceWorker.getRegistration('/');const sub=await reg?.pushManager.getSubscription();if(sub)await sub.unsubscribe();}};
 navigator.serviceWorker?.addEventListener('message',e=>{if(e.data?.type==='customer-push')emit('swift-delivery-push',{data:e.data.data});if(e.data?.type==='customer-push-open')emit('swift-delivery-push-open',{data:e.data.data});});
-const params=new URLSearchParams(location.hash.slice(1));const open=params.get('push');if(open){try{const data=JSON.parse(open);setTimeout(()=>emit('swift-delivery-push-open',{data}),1000);}catch{}}
+const params=new URLSearchParams(location.hash.slice(1));const open=params.get('push');if(open){try{const data=JSON.parse(open);let attempts=0;const deliver=()=>{const screen=document.getElementById('appScreen');if(screen&&!screen.hidden&&getComputedStyle(screen).display!=='none'){emit('swift-delivery-push-open',{data});return;}if(++attempts<120)setTimeout(deliver,500);};setTimeout(deliver,500);}catch{}}
 })();
