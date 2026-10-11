@@ -10349,7 +10349,7 @@ async function render() {
     // Keep the current Dispatch payload and submit through the existing tracking RPC.
     const snapshot={
       customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
-      items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p})),
+      items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p,...(item.offer_id?{offer_id:item.offer_id,offer_option_id:item.offer_option_id,offer_choices:item.offer_choices}: {})})),
       total:grandTotal,payment:paymentMethod,
       routes:gift?[]:[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storeLocations[biz]||storeLocations.GENERAL}&destination=${encodeURIComponent(customerCoords)}`),
       arrival_notes:gift?gift.address+(gift.message?' · '+gift.message:''):'Delivery area: '+deliveryZone,
@@ -13722,7 +13722,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -14247,7 +14247,8 @@ const close=window.closeMerchantStore;window.closeMerchantStore=function(){++req
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=orders20261004"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=orders20261004"></script>
 <script src="customer-auth.js?v=email-identity20261007"></script><script src="account-requests.js?v=orders20261004"></script>
-<script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=20261009"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="pure-offers.css?v=white20261010"><script src="pure-offers.js?v=categories20261010"></script>
+<script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=20261009"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=20261011"><script src="offer-ordering.js?v=20261011"></script>
+<link rel="stylesheet" href="pure-offers.css?v=white20261010"><script src="pure-offers.js?v=order20261011"></script>
 </body>
 </html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=paymentqr20261010"></script><script src="swiftpay.js?v=message20261010"></script><script src="swiftpay-admin.js?v=search20261010"></script>
 
