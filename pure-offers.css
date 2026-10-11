@@ -64,3 +64,8 @@ body #promoPage.po-page.shop-active-page{border:0!important;border-radius:0!impo
 .po-card{border:1px solid #171717!important;background:#fff!important;box-shadow:none!important}.po-card .po-art{border-radius:16px 16px 0 0}.po-card-copy{padding:16px 16px 0!important}.po-card .po-store-link{padding:14px 16px 18px!important}.po-card .po-manage-actions{margin:14px 16px 16px}.po-feature-tag{max-width:calc(100% - 24px)}
 
 .po-clickable{cursor:pointer}.po-clickable .po-store-link:after{display:none}.po-clickable:hover{border-color:#000!important}.po-clickable:focus-within{outline:2px solid #f47b20;outline-offset:3px}
+
+/* Keep back navigation and the section label in separate layout rows. */
+#promoPage.po-page .po-page-header,.po-admin-page .po-page-header{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:0!important}
+#promoPage.po-page .po-page-header>button,.po-admin-page .po-page-header>button{position:static!important;inset:auto!important;transform:none!important;flex:none;align-self:flex-start;margin:0!important}
+#promoPage.po-page .po-page-header>.po-eyebrow,.po-admin-page .po-page-header>.po-eyebrow{position:static!important;inset:auto!important;transform:none!important;display:flex!important;flex-wrap:wrap;margin:20px 0 0!important;line-height:1.5;max-width:100%}
