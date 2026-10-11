@@ -73,3 +73,6 @@ body #promoPage.po-page.shop-active-page{border:0!important;border-radius:0!impo
 /* Search/keyboard focus must not expose the home carousel behind offers. */
 body:has(#promoPage.po-page[style*="display: block"]) .hero-promo-slider,body:has(#promoPage.po-page.shop-active-page) .hero-promo-slider{display:none!important}
 body #promoPage.po-page[style*="display: block"]{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;max-height:100dvh!important;min-height:0!important;z-index:10040!important;background:#fff!important;overflow-y:auto!important;overscroll-behavior:contain;isolation:isolate}
+
+/* Override the earlier borderless feed rule on the complete card. */
+body #promoPage.po-page .po-grid>.po-card,body .po-store-offers .po-grid>.po-card,body .po-admin-page .po-grid>.po-card{border:1px solid rgba(0,0,0,.55)!important;border-radius:18px!important;background:#fff!important;overflow:hidden!important;padding:0!important;box-shadow:none!important}
