@@ -53,3 +53,5 @@ body #promoPage.po-page.shop-active-page{border:0!important;border-radius:0!impo
 .po-live{background:#fff;color:#21633e;border-radius:5px;font-size:10px;padding:6px 8px;box-shadow:0 1px 4px #00000010}
 .po-editor .po-tag-remove{background:#f1f1ef;color:#343a34;border-radius:6px;border:0}
 @media(max-width:600px){.po-feature-tag{top:10px;left:10px;font-size:12px;padding:6px 9px}.po-tags>span{font-size:11px}}
+
+.po-manage-actions{padding-top:14px;border-top:1px solid #e8ebe6;gap:8px}.po-manage-actions .po-delete{margin-left:auto;color:#b32b27;background:#fff2f1;border-color:#f2d0cc}.po-manage-actions .po-delete:hover{background:#ffe3df}.po-editor{background:#fff;box-shadow:0 8px 32px #182b2010}.po-editor .oo-editor{background:#f8faf6;border:1px solid #e0e6db;border-radius:16px;padding:20px}.oo-edit-group{padding:16px!important;border-radius:14px!important}.po-editor .po-form-actions{padding-top:18px;border-top:1px solid #e8ebe6}.po-manage-actions button{min-height:44px}
