@@ -69,3 +69,7 @@ body #promoPage.po-page.shop-active-page{border:0!important;border-radius:0!impo
 #promoPage.po-page .po-page-header,.po-admin-page .po-page-header{display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:0!important}
 #promoPage.po-page .po-page-header>button,.po-admin-page .po-page-header>button{position:static!important;inset:auto!important;transform:none!important;flex:none;align-self:flex-start;margin:0!important}
 #promoPage.po-page .po-page-header>.po-eyebrow,.po-admin-page .po-page-header>.po-eyebrow{position:static!important;inset:auto!important;transform:none!important;display:flex!important;flex-wrap:wrap;margin:20px 0 0!important;line-height:1.5;max-width:100%}
+
+/* Search/keyboard focus must not expose the home carousel behind offers. */
+body:has(#promoPage.po-page[style*="display: block"]) .hero-promo-slider,body:has(#promoPage.po-page.shop-active-page) .hero-promo-slider{display:none!important}
+body #promoPage.po-page[style*="display: block"]{position:fixed!important;inset:0!important;width:100%!important;height:100dvh!important;max-height:100dvh!important;min-height:0!important;z-index:10040!important;background:#fff!important;overflow-y:auto!important;overscroll-behavior:contain;isolation:isolate}
