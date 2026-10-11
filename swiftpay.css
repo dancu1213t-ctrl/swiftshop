@@ -72,7 +72,7 @@ body.swiftpay-open{overflow:hidden!important}.swiftpay-method-label{display:bloc
 .swiftpay-header{grid-column:1/-1;grid-row:1;margin-bottom:8px}
 .swiftpay-header h1{font-size:40px}.swiftpay-header p{font-size:12px}
 .swiftpay-header>button{width:52px;height:52px}.swiftpay-header>span{font-size:12px;padding:10px 16px}
-.swiftpay-card{grid-column:1;grid-row:2;width:100%;max-width:560px;min-height:0;aspect-ratio:1.65;align-self:start;padding:24px 28px}
+.swiftpay-card{grid-column:1;grid-row:2;width:100%;max-width:560px;min-height:300px;aspect-ratio:auto;align-self:start;padding:24px 28px}
 .swiftpay-card-top{margin-bottom:20px}.swiftpay-card-bottom{margin-top:22px}
 .swiftpay-card-top strong{font-size:26px}.swiftpay-card-top>span{font-size:13px}
 .swiftpay-card>p{font-size:12px}.swiftpay-card-amount{font-size:clamp(40px,3.2vw,48px)}
