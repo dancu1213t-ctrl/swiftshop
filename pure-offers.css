@@ -62,3 +62,5 @@ body #promoPage.po-page.shop-active-page{border:0!important;border-radius:0!impo
 
 /* Fine outline around each offer, with comfortable copy inset. */
 .po-card{border:1px solid #171717!important;background:#fff!important;box-shadow:none!important}.po-card .po-art{border-radius:16px 16px 0 0}.po-card-copy{padding:16px 16px 0!important}.po-card .po-store-link{padding:14px 16px 18px!important}.po-card .po-manage-actions{margin:14px 16px 16px}.po-feature-tag{max-width:calc(100% - 24px)}
+
+.po-clickable{cursor:pointer}.po-clickable .po-store-link:after{display:none}.po-clickable:hover{border-color:#000!important}.po-clickable:focus-within{outline:2px solid #f47b20;outline-offset:3px}
