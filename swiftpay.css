@@ -98,3 +98,25 @@ body.swiftpay-open{overflow:hidden!important}.swiftpay-method-label{display:bloc
 .swiftpay-transaction small,.swiftpay-payment-row small{font-size:13px}
 .swiftpay-footnote{font-size:13px}
 }
+
+/* Balanced desktop typography at normal browser zoom. */
+@media(min-width:1000px){
+.swiftpay-header h1{font-size:30px}.swiftpay-header p{font-size:10px}
+.swiftpay-header>span{font-size:10px}
+.swiftpay-card-top strong{font-size:23px}
+.swiftpay-card-amount{font-size:40px}
+.swiftpay-card>p{font-size:10px}.swiftpay-card>small{font-size:12px}
+.swiftpay-card-bottom small{font-size:9px}.swiftpay-card-bottom strong{font-size:15px}
+.swiftpay-card-pay strong{font-size:15px}.swiftpay-card-pay p{font-size:12px}
+.swiftpay-payment-choice{font-size:11px}.swiftpay-payment-choice select{font-size:14px}
+.swiftpay-pay-switch{font-size:14px}
+.swiftpay-recharge h2,.swiftpay-send-section h2{font-size:21px}
+.swiftpay-recharge p,.swiftpay-send-section p{font-size:14px}
+.swiftpay-recharge a,.swiftpay-primary{font-size:13px}
+.swiftpay-section-heading h2{font-size:21px}
+.swiftpay-section-heading>span,.swiftpay-section-heading button{font-size:12px}
+.swiftpay-empty{font-size:13px}
+.swiftpay-transaction strong,.swiftpay-payment-row strong{font-size:14px}
+.swiftpay-transaction small,.swiftpay-payment-row small{font-size:11px}
+.swiftpay-footnote{font-size:11px}
+}
