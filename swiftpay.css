@@ -120,3 +120,5 @@ body.swiftpay-open{overflow:hidden!important}.swiftpay-method-label{display:bloc
 .swiftpay-transaction small,.swiftpay-payment-row small{font-size:11px}
 .swiftpay-footnote{font-size:11px}
 }
+
+.swiftpay-transfer-message,.swiftpay-transfer-dialog [data-friend-message]{overflow-wrap:anywhere;white-space:pre-wrap;line-height:1.5}.swiftpay-transfer-dialog [data-friend-message]{border-left:3px solid #ff902f;padding:8px 12px;background:#fff7ee;border-radius:0 10px 10px 0;font-size:14px;color:#514b40}
