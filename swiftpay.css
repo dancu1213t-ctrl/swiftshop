@@ -72,10 +72,11 @@ body.swiftpay-open{overflow:hidden!important}.swiftpay-method-label{display:bloc
 .swiftpay-header{grid-column:1/-1;grid-row:1;margin-bottom:8px}
 .swiftpay-header h1{font-size:40px}.swiftpay-header p{font-size:12px}
 .swiftpay-header>button{width:52px;height:52px}.swiftpay-header>span{font-size:12px;padding:10px 16px}
-.swiftpay-card{grid-column:1;grid-row:2;max-width:none;min-height:320px;padding:32px 36px}
-.swiftpay-card-top strong{font-size:30px}.swiftpay-card-top>span{font-size:13px}
-.swiftpay-card>p{font-size:12px}.swiftpay-card-amount{font-size:clamp(48px,4vw,64px)}
-.swiftpay-card>small{font-size:15px}.swiftpay-card-bottom small{font-size:11px}.swiftpay-card-bottom strong{font-size:18px}
+.swiftpay-card{grid-column:1;grid-row:2;width:100%;max-width:560px;min-height:0;aspect-ratio:1.65;align-self:start;padding:24px 28px}
+.swiftpay-card-top{margin-bottom:20px}.swiftpay-card-bottom{margin-top:22px}
+.swiftpay-card-top strong{font-size:26px}.swiftpay-card-top>span{font-size:13px}
+.swiftpay-card>p{font-size:12px}.swiftpay-card-amount{font-size:clamp(40px,3.2vw,48px)}
+.swiftpay-card>small{font-size:13px}.swiftpay-card-bottom small{font-size:11px}.swiftpay-card-bottom strong{font-size:18px}
 .swiftpay-card-pay{grid-column:1;grid-row:3;max-width:none;padding:22px 24px;gap:16px;background:#fff}
 .swiftpay-card-pay strong{font-size:18px}.swiftpay-card-pay p{font-size:14px;max-width:none}
 .swiftpay-payment-choice{font-size:13px}.swiftpay-payment-choice select{font-size:16px;min-height:50px;padding:12px 14px}
