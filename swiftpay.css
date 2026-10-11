@@ -64,3 +64,36 @@ body.swiftpay-open{overflow:hidden!important}.swiftpay-method-label{display:bloc
 
 .swiftpay-send-section{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 0;border-top:1px solid #e4e7e0}.swiftpay-send-section h2{margin:0 0 6px;font-size:21px}.swiftpay-send-section p{margin:0;color:#6a756c;font-size:14px;line-height:1.5}.swiftpay-send-section button{white-space:normal}
 .swiftpay-transfer-dialog{box-sizing:border-box;width:min(480px,calc(100% - 28px));max-height:calc(100dvh - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 36px);overflow:auto;border:1px solid #e1e5dc;border-radius:24px;padding:24px;color:#1c291f;background:#fff}.swiftpay-transfer-dialog::backdrop{background:#17231c80;backdrop-filter:blur(5px)}.swiftpay-transfer-dialog header{display:flex;justify-content:space-between;align-items:center;gap:12px}.swiftpay-transfer-dialog h2{margin:4px 0;font-size:25px}.swiftpay-transfer-dialog header button{width:44px;height:44px;border-radius:50%;border:0;background:#f3f5f0}.swiftpay-transfer-dialog>p{color:#6a756c;font-size:14px}.swiftpay-transfer-dialog label{display:grid;gap:7px;font-weight:600;font-size:14px;margin:18px 0}.swiftpay-transfer-dialog input{box-sizing:border-box;width:100%;min-height:48px;border:1px solid #dce2d7;border-radius:12px;padding:12px;font:inherit;font-size:16px;background:#f8faf6}.swiftpay-transfer-dialog input:focus{outline:2px solid #ff8a3d;outline-offset:2px}.swiftpay-transfer-dialog small{font-weight:400;color:#68746a;font-size:12px}.swiftpay-transfer-dialog .swiftpay-primary{width:100%;min-height:48px;border-radius:12px}.swiftpay-transfer-dialog [data-transfer-review]{background:#f5f8f2;border-radius:16px;padding:18px;margin-top:18px}.swiftpay-transfer-dialog [data-transfer-review]>p{font-size:10px;letter-spacing:.12em;color:#64725f}.swiftpay-transfer-dialog [data-friend-name],.swiftpay-transfer-dialog [data-friend-phone]{display:block;margin-bottom:6px}.swiftpay-transfer-dialog dl div{display:flex;justify-content:space-between;gap:12px;margin:12px 0;font-size:14px}.swiftpay-transfer-dialog dd{margin:0;font-weight:700}.swiftpay-transfer-dialog [data-transfer-notice]{font-size:14px;line-height:1.5;overflow-wrap:anywhere}.swiftpay-transfer-fee{color:#65725f;font-size:13px}@media(max-width:600px){.swiftpay-send-section{align-items:stretch;flex-direction:column;gap:14px}.swiftpay-send-section button{width:100%}.swiftpay-transfer-dialog{padding:20px}}
+
+/* Spacious, readable laptop wallet; phone layout remains independent. */
+@media(min-width:1000px){
+.swiftpay-page{padding:36px clamp(28px,4vw,80px) 48px}
+.swiftpay-shell{max-width:1520px;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px 32px;align-items:start}
+.swiftpay-header{grid-column:1/-1;grid-row:1;margin-bottom:8px}
+.swiftpay-header h1{font-size:40px}.swiftpay-header p{font-size:12px}
+.swiftpay-header>button{width:52px;height:52px}.swiftpay-header>span{font-size:12px;padding:10px 16px}
+.swiftpay-card{grid-column:1;grid-row:2;max-width:none;min-height:320px;padding:32px 36px}
+.swiftpay-card-top strong{font-size:30px}.swiftpay-card-top>span{font-size:13px}
+.swiftpay-card>p{font-size:12px}.swiftpay-card-amount{font-size:clamp(48px,4vw,64px)}
+.swiftpay-card>small{font-size:15px}.swiftpay-card-bottom small{font-size:11px}.swiftpay-card-bottom strong{font-size:18px}
+.swiftpay-card-pay{grid-column:1;grid-row:3;max-width:none;padding:22px 24px;gap:16px;background:#fff}
+.swiftpay-card-pay strong{font-size:18px}.swiftpay-card-pay p{font-size:14px;max-width:none}
+.swiftpay-payment-choice{font-size:13px}.swiftpay-payment-choice select{font-size:16px;min-height:50px;padding:12px 14px}
+.swiftpay-pay-switch{font-size:16px;min-height:48px}
+.swiftpay-recharge{grid-column:2;grid-row:2;align-self:stretch;justify-content:center;padding:30px;border:1px solid #e4e7e0;border-radius:24px;background:#fff;gap:22px}
+.swiftpay-recharge h2,.swiftpay-send-section h2{font-size:26px}
+.swiftpay-recharge p,.swiftpay-send-section p{font-size:16px;max-width:540px}
+.swiftpay-recharge>div:last-child{flex-direction:row;flex-wrap:wrap}
+.swiftpay-recharge a{font-size:15px;min-height:50px;box-sizing:border-box;display:inline-flex;align-items:center;padding:14px 20px}
+.swiftpay-send-section{grid-column:2;grid-row:3;align-self:stretch;background:#fff;border:1px solid #e4e7e0;border-radius:20px;padding:24px;box-sizing:border-box;flex-wrap:wrap}
+.swiftpay-primary{font-size:15px;min-height:50px;padding:14px 20px}
+.swiftpay-shell>[data-notice]{grid-column:1/-1;grid-row:4;font-size:15px}
+.swiftpay-section{grid-column:1/-1}
+.swiftpay-section-heading h2{font-size:25px;margin-bottom:18px}
+.swiftpay-section-heading>span,.swiftpay-section-heading button{font-size:14px}
+.swiftpay-empty{font-size:15px;padding:24px}
+.swiftpay-transaction,.swiftpay-payment-row{padding:20px 24px}
+.swiftpay-transaction strong,.swiftpay-payment-row strong{font-size:16px}
+.swiftpay-transaction small,.swiftpay-payment-row small{font-size:13px}
+.swiftpay-footnote{font-size:13px}
+}
