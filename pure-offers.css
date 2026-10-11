@@ -17,3 +17,13 @@ body #promoPage.po-page.shop-active-page,.po-admin-page.shop-active-page{padding
 @media(max-width:540px){.po-grid{grid-template-columns:1fr}.po-card-copy h3{font-size:20px}.po-art{aspect-ratio:2.1}.po-page-header{margin-bottom:20px}.po-store-offers>header{align-items:start}.po-store-grid .po-card{padding:10px}.po-preview{aspect-ratio:2}.po-form-actions button{flex:1}}
 @supports(-webkit-touch-callout:none){@media(max-width:799px){body #promoPage.po-page.shop-active-page,.po-admin-page.shop-active-page{padding-top:calc(16px + max(59px,env(safe-area-inset-top,0px)))!important}}}
 @media(prefers-reduced-motion:reduce){.po-art img{transition:none}}
+
+/* Open offer layouts: banners sit directly on the page. */
+body #promoPage.po-page.shop-active-page{border:0!important;border-radius:0!important;box-shadow:none!important;max-width:none!important;height:100dvh!important;overflow-y:auto!important;overscroll-behavior-y:contain}
+#promoPage.po-page .po-card,.po-store-offers .po-card{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:0!important;overflow:visible}
+#promoPage.po-page .po-grid{max-width:none;gap:36px 24px}
+.po-store-offers{border:0;padding:0;margin-block:28px 32px}
+.po-store-offers .po-store-grid{display:flex;gap:22px;max-width:none;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:2px;padding:2px 2px 16px;-webkit-overflow-scrolling:touch}
+.po-store-offers .po-store-grid .po-card{flex:0 0 clamp(280px,30vw,440px);scroll-snap-align:start}
+.po-store-offers .po-card-copy{padding-inline:0}
+@media(max-width:540px){#promoPage.po-page .po-grid{gap:30px}.po-store-offers .po-store-grid{gap:16px}.po-store-offers .po-store-grid .po-card{flex-basis:86%;min-width:0}}
