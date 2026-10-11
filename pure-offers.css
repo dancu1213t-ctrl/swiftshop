@@ -46,3 +46,10 @@ body #promoPage.po-page.shop-active-page{border:0!important;border-radius:0!impo
 #promoPage.po-page .po-toolbar>span{margin-right:auto}
 #promoPage.po-page .po-grid{background:transparent!important;border:0!important;box-shadow:none!important}
 @media(max-width:600px){#promoPage.po-page .po-toolbar input{order:3;flex-basis:100%;width:100%!important}.po-categories{gap:10px}#promoPage.po-page .po-page-header h1{font-size:38px}}
+/* Compact offer badges, matching the offer-card reference. */
+.po-feature-tag{top:12px;bottom:auto;left:12px;background:#e71919;border-radius:5px;padding:7px 10px;font-size:13px;line-height:1.25;font-weight:750;box-shadow:none;max-width:calc(100% - 92px)}
+.po-tags{gap:7px;margin-top:9px}.po-tags>span{background:#f1f1ef;color:#343a34;border-radius:5px;padding:5px 8px;font-size:12px;line-height:1.3;font-weight:600;border:0}
+.po-tags>span:first-child{background:#ffe2de;color:#b62820;font-weight:700}
+.po-live{background:#fff;color:#21633e;border-radius:5px;font-size:10px;padding:6px 8px;box-shadow:0 1px 4px #00000010}
+.po-editor .po-tag-remove{background:#f1f1ef;color:#343a34;border-radius:6px;border:0}
+@media(max-width:600px){.po-feature-tag{top:10px;left:10px;font-size:12px;padding:6px 9px}.po-tags>span{font-size:11px}}
