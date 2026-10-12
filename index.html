@@ -8249,7 +8249,14 @@ async function load(){if(busy)return;busy=true;$('apRefresh').disabled=true;$('a
 $('apRefresh').onclick=load;$('apFilter').onchange=draw;const original=window.switchAdminTab;window.switchAdminTab=function(name){original.apply(this,arguments);if(name==='plans')load();};
 });</script><link rel="stylesheet" href="pickup-discovery.css?v=map70v320261008">
 <link rel="stylesheet" href="customer-usability.css?v=reviewsfinal20261008">
-</body>
+<script>
+window.switchToggle=function(button){
+ document.querySelectorAll('.toggle-box .toggle-btn').forEach(b=>b.classList.toggle('active',b===button));
+ if(button.textContent.trim()==='Pickup'){openPickupOrder(button);}
+ else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox').style.display='none';}
+ window.SwiftNavigation?.refresh();
+};
+</script></body>
 
 
 
