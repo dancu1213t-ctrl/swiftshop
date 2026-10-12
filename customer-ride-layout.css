@@ -1,0 +1,34 @@
+/* Responsive customer SwiftRide workspace. */
+html.swift-design body #customerRidePanel{padding:24px clamp(16px,3vw,48px) calc(32px + env(safe-area-inset-bottom))!important;background:#f5f7f2!important}
+html.swift-design body #customerRidePanel .cr-shell{width:100%!important;max-width:1400px!important;margin:0 auto!important;padding:0!important;min-width:0}
+html.swift-design body #customerRidePanel .cr-header{padding:18px 22px!important;border-radius:18px!important;margin:0 0 20px!important;min-width:0}
+html.swift-design body #customerRidePanel .cr-header h1{font-size:clamp(24px,2.4vw,34px)!important;line-height:1.2!important}
+html.swift-design body #customerRidePanel #crClose{min-width:44px;min-height:44px}
+html.swift-design body #customerRidePanel #crForm,html.swift-design body #customerRidePanel #crTracking{min-width:0!important;margin:0!important;padding:24px!important;border-radius:18px!important;background:#fff!important;border:1px solid #e0e6dc!important}
+html.swift-design body #customerRidePanel input{box-sizing:border-box!important;font-size:16px!important;min-height:48px!important}
+html.swift-design body #customerRidePanel .cr-tools{display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;margin:18px 0!important}
+html.swift-design body #customerRidePanel .cr-tools button{min-height:44px!important;font-size:12px!important;padding:12px!important}
+html.swift-design body #customerRidePanel #crMap{border-radius:18px!important;min-height:280px!important;overflow:hidden!important}
+html.swift-design body #customerRidePanel #crNotice{font-size:13px!important;margin:0 0 14px!important}
+@media(min-width:900px){
+html.swift-design body #customerRidePanel .cr-shell{display:grid!important;grid-template-columns:minmax(0,1.2fr) minmax(350px,.85fr)!important;column-gap:24px!important;align-items:start!important}
+html.swift-design body #customerRidePanel .cr-header{grid-column:1/-1!important;grid-row:1!important}
+html.swift-design body #customerRidePanel .sd-ride-map,html.swift-design body #customerRidePanel .cr-shell>#crMap{grid-column:1!important;grid-row:2/10!important;position:sticky!important;top:0!important;min-width:0!important}
+html.swift-design body #customerRidePanel #crMap{height:clamp(380px,65dvh,650px)!important;max-height:650px!important}
+html.swift-design body #customerRidePanel #crUpdated{grid-column:1!important;grid-row:10!important;margin:10px 0!important}
+html.swift-design body #customerRidePanel #crNotice{grid-column:2!important;grid-row:2!important}
+html.swift-design body #customerRidePanel #crForm{grid-column:2!important;grid-row:3!important}
+html.swift-design body #customerRidePanel #crTracking{grid-column:2!important;grid-row:4!important}
+html.swift-design body #customerRidePanel #crThanks,html.swift-design body #customerRidePanel #crRating{grid-column:2!important}
+}
+@media(max-width:899px){
+html.swift-design body #customerRidePanel{padding:calc(12px + env(safe-area-inset-top,0px)) 12px calc(30px + env(safe-area-inset-bottom,0px))!important}
+html.swift-design body #customerRidePanel .cr-shell{display:flex!important;flex-direction:column!important;gap:14px!important}
+html.swift-design body #customerRidePanel .cr-shell>*{width:100%!important;box-sizing:border-box!important}
+html.swift-design body #customerRidePanel .cr-header{padding:16px!important;margin:0!important}
+html.swift-design body #customerRidePanel .sd-ride-map,html.swift-design body #customerRidePanel .cr-shell>#crMap{position:relative!important;top:auto!important}
+html.swift-design body #customerRidePanel #crMap{height:clamp(230px,34dvh,360px)!important;min-height:230px!important;max-height:360px!important}
+html.swift-design body #customerRidePanel #crForm,html.swift-design body #customerRidePanel #crTracking{padding:18px!important}
+html.swift-design body #customerRidePanel .cr-contact{grid-template-columns:1fr!important}
+html.swift-design body #customerRidePanel #crNotice,html.swift-design body #customerRidePanel #crUpdated{margin:0!important}
+}
