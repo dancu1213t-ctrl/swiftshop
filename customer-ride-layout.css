@@ -32,3 +32,8 @@ html.swift-design body #customerRidePanel[id] #crForm,html.swift-design body #cu
 html.swift-design body #customerRidePanel[id] .cr-contact{grid-template-columns:1fr!important}
 html.swift-design body #customerRidePanel[id] #crNotice,html.swift-design body #customerRidePanel[id] #crUpdated{margin:0!important}
 }
+
+/* Centre booking content instead of retaining an empty legacy grid column. */
+html.swift-design body #customerRidePanel[id] #crForm{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:0!important;grid-template-columns:none!important}
+html.swift-design body #customerRidePanel[id] #crForm>*{width:100%!important;max-width:560px!important;margin-left:auto!important;margin-right:auto!important;grid-column:auto!important;box-sizing:border-box!important}
+html.swift-design body #customerRidePanel[id] #crForm[hidden]{display:none!important}
