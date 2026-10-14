@@ -6719,7 +6719,20 @@ html.swift-design #appScreen #merchantBannerSlider button:focus-visible{outline:
 
 
 </style>
-<link rel="manifest" href="customer-manifest.json"></head>
+<link rel="manifest" href="customer-manifest.json"><style id="customer-audit-layout-20261014">
+html.swift-design body #merchantStorePage .store-hero,
+html.swift-design body #merchantStorePage .store-identity,
+html.swift-design body #merchantStorePage .store-identity-copy{min-width:0!important;max-width:100%!important;box-sizing:border-box}
+html.swift-design body #merchantStorePage .store-header-actions{display:flex!important;flex-wrap:wrap!important;gap:8px!important;min-width:0!important;max-width:100%!important}
+html.swift-design body #merchantStorePage .store-header-actions :is(button,a){min-width:0!important;box-sizing:border-box}
+html.swift-design body #merchantStorePage .store-identity h1{overflow-wrap:anywhere!important}
+html.swift-design body #merchantStorePage .store-blue-check{flex-shrink:0}
+.customer-cart-item{display:flex;align-items:center;gap:12px;margin-bottom:14px;padding:12px;border-radius:14px;background:#f7f7f7;min-width:0}
+.customer-cart-item-copy{flex:1;min-width:0}.customer-cart-item-copy strong{display:block;overflow-wrap:anywhere;font-size:14px;line-height:1.5}.customer-cart-item-copy small{display:block;margin-top:5px;line-height:1.5;color:#68746c}
+.customer-cart-item-actions{display:flex;align-items:center;gap:10px;flex-shrink:0}.customer-cart-item-actions strong{font-size:13px;white-space:nowrap}.customer-cart-item-actions .minus-btn{width:44px!important;height:44px!important;min-width:44px!important;padding:0!important}
+.customer-cart-savings{color:#167448;font-size:14px;margin-bottom:8px}
+@media(max-width:400px){html.swift-design body #merchantStorePage .store-header-actions :is(button,a){flex:1 1 110px!important}.customer-cart-item{flex-wrap:wrap}.customer-cart-item-actions{width:100%;justify-content:space-between}}
+</style></head>
 
 <body>
 
@@ -7892,7 +7905,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   finally{busy=false;}
  }
  window.SwiftLive={async submit(snapshot){const id=this.prepare(snapshot,false);const record=records.find(r=>r.id===id);await register(record);record.checkoutCommitted=true;save();const checkout=document.getElementById('orderBox');if(checkout)checkout.style.display='none';this.openOrder(id);return id;},prepare(snapshot,show=true){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined,dispatch_text:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&(!last.registered||last.checkoutCommitted===false||Date.now()-Date.parse(last.created)<15000)){current=last;if(show)open();return last.id;}
-   const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false,checkoutCommitted:false};records.unshift(record);current=record;save();chip.hidden=false;if(show)open();return record.id;},open,async openOrder(id){restore();try{await syncAccountOrders(true);}catch{}const record=records.find(r=>r.id===id);if(!record)return;current=record;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);}};
+   const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false,checkoutCommitted:false};records.unshift(record);current=record;save();chip.hidden=false;if(show)open();return record.id;},open,async openOrder(id){restore();try{await syncAccountOrders(true);}catch{}const record=records.find(r=>r.id===id);if(!record)return false;current=record;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);return true;}};
  chip.onclick=open;node('cloClose').onclick=()=>root.close();node('cloRetry').onclick=()=>poll(true);node('cloSelect').onchange=e=>{current=records.find(r=>r.id===e.target.value);paint();poll(true);};
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){restore();poll(true);}});window.addEventListener('pageshow',()=>{restore();if(current&&sessionStorage.getItem('swiftshop.pendingLiveReturn')===current.id){sessionStorage.removeItem('swiftshop.pendingLiveReturn');open();}});window.addEventListener('online',()=>poll(true));setInterval(()=>poll(),5000);restore();
 })();
@@ -8976,7 +8989,7 @@ function getCartDeliveryFee() { return FIXED_DELIVERY_FEE; }
     });
   }
 
-  let allProducts=[], cart={}, total=0, cat="Snack";
+  let allProducts=[], cart=Object.create(null), total=0, cat="Snack";
 
   let customerName = "";
   let customerPhone = "";
@@ -9091,8 +9104,7 @@ function getCartDeliveryFee() { return FIXED_DELIVERY_FEE; }
 
     cartMap.addListener('click', event => { if (event.latLng) snapPinTo(event.latLng); });
     cartMarker.addListener('dragend', () => snapPinTo(cartMarker.getPosition()));
-    // Request GPS once when the location map first opens, unless a location is already chosen.
-    if (!window.lastCartCoords) setTimeout(() => { if (!window.lastCartCoords) getCurrentLocation(true); }, 0);
+    // Ask for GPS only after the customer chooses Use my current location.
   }
 
   let cartGeoRequest = 0;
@@ -9181,16 +9193,17 @@ function refreshCartTotals() {
   const grandTotalText = document.getElementById('cartGrandTotal');
   const itemsTotal = Object.values(cart).reduce((sum, item) => sum + item.q * item.p, 0);
   const tipAmount = parseFloat(document.getElementById('selectedTipAmount')?.value || '0') || 0;
-  const deliveryFee = getCartDeliveryFee();
-  const swiftPayFee=document.getElementById('paymentMethod')?.value==='SwiftPay'?0.15:0;
-  const finalAmount = itemsTotal + deliveryFee + PLATFORM_FEE + tipAmount + swiftPayFee;
+  const hasOrder=Object.values(cart).some(item=>Number(item.q)>0)||!!localStorage.getItem('tacoOrder');
+  const deliveryFee = hasOrder?getCartDeliveryFee():0;
+  const swiftPayFee=hasOrder&&document.getElementById('paymentMethod')?.value==='SwiftPay'?0.15:0;
+  const finalAmount = hasOrder?Math.round((itemsTotal + deliveryFee + tipAmount + swiftPayFee)*100)/100:0;
   window.lastCartFee = deliveryFee;
   if (feeText) {
     feeText.innerHTML =
-      `<div class="checkout-row"><span>Delivery Fee</span><strong class="${deliveryFee === 0 ? 'checkout-free' : ''}">${deliveryFee === 0 ? 'FREE' : '$' + deliveryFee.toFixed(2)}</strong></div>` +
+      (hasOrder?`<div class="checkout-row"><span>Delivery Fee</span><strong>${deliveryFee.toFixed(2)}</strong></div>`:'') +
       (swiftPayFee ? '<div class="checkout-row"><span>SwiftPay transaction fee</span><strong>$0.15</strong></div>' : '') +
-      (tipAmount > 0 ? `<div class="checkout-row"><span>Runner tip (optional)</span><strong>$${tipAmount.toFixed(2)}</strong></div>` : '') +
-      (deliveryFee === 0 ? '<div class="checkout-promo">Free delivery applied</div>' : '');
+      (hasOrder && tipAmount > 0 ? `<div class="checkout-row"><span>Runner tip (optional)</span><strong>$${tipAmount.toFixed(2)}</strong></div>` : '') +
+      '';
   }
   if (grandTotalText) {
     grandTotalText.innerHTML = `<span>Total <small>BZD</small></span><strong>$${finalAmount.toFixed(2)}</strong>`;
@@ -9678,61 +9691,27 @@ function closeCart() {
   }
 
   function renderCartPanel() {
-    const cartTitle = document.getElementById("cartTitle");
-    const userName = localStorage.getItem("userName");
-
-    if (cartTitle && userName) {
-      cartTitle.innerHTML =
-        `Your Cart <span style="color:#ff6a00; font-weight:700;">(${userName})</span>`;
+    const cartTitle=document.getElementById('cartTitle'),userName=localStorage.getItem('userName');
+    if(cartTitle){cartTitle.textContent='Your Cart';if(userName){const person=document.createElement('span');person.style.color='#ff6a00';person.textContent=' ('+userName+')';cartTitle.append(person);}}
+    const itemsDiv=document.getElementById('cartPanelItems');if(!itemsDiv)return;
+    const fragment=document.createDocumentFragment();let cents=0,savings=0;
+    for(const [name,item] of Object.entries(cart)){
+      const price=Number(item.p),was=Number(item.w),subtotal=Math.round(price*100)*item.q;cents+=subtotal;
+      if(was>price)savings+=(Math.round(was*100)-Math.round(price*100))*item.q;
+      const row=document.createElement('div');row.className='customer-cart-item';
+      const info=document.createElement('div');info.className='customer-cart-item-copy';
+      const title=document.createElement('strong');title.textContent=name;
+      const details=document.createElement('small');details.textContent=item.q+' × $'+price.toFixed(2)+' BZD';
+      if(was>price){const old=document.createElement('del');old.textContent='$'+was.toFixed(2)+' ';details.prepend(old);}info.append(title,details);
+      const actions=document.createElement('div');actions.className='customer-cart-item-actions';
+      const amount=document.createElement('strong');amount.textContent='$'+(subtotal/100).toFixed(2)+' BZD';
+      const minus=document.createElement('button');minus.type='button';minus.className='minus-btn';minus.textContent='−';minus.setAttribute('aria-label','Remove one '+name);minus.onclick=()=>remove(name);
+      actions.append(amount,minus);row.append(info,actions);fragment.append(row);
     }
-
-    const itemsDiv = document.getElementById("cartPanelItems");
-    if (!itemsDiv) return;
-    itemsDiv.innerHTML = "";
-
-    let sum = 0;
-    let totalSavings = 0; 
-    let html = "";
-
-    for (let name in cart) {
-      const item = cart[name];
-      const subtotal = item.q * item.p;
-      sum += subtotal;
-
-      if (item.w && item.w > item.p) {
-        totalSavings += (item.w - item.p) * item.q;
-      }
-
-      const safeName = name.replace(/'/g, "\\'");
-      html += `
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding:10px; border-radius:14px; background:#f7f7f7;">
-          <div>
-            <strong>${name}</strong><br>
-            <small>
-              ${item.w ? `<span class="price-was" style="font-size:10px;">$${item.w.toFixed(2)}</span> ` : ''}
-              ${item.q} × $${item.p.toFixed(2)} BZD
-            </small>
-          </div>
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-weight:700;">$${subtotal.toFixed(2)} BZD</span>
-            ${item.q >= 1 ? `<button onclick="remove('${safeName}')" class="minus-btn">−</button>` : ""}
-          </div>
-        </div>
-      `;
-    }
-
-    itemsDiv.innerHTML = html;
-
-    // Track global total for checkout
-    window.total = sum;
-
-    const savingsDisplay = totalSavings > 0 
-      ? `<div style="color:#1ebe57; font-weight:700; font-size:14px; margin-bottom:5px;">You're saving $${totalSavings.toFixed(2)} BZD!</div>` 
-      : "";
-
-    const totalDiv = document.getElementById("cartPanelTotal");
-    if (totalDiv) totalDiv.innerHTML = savingsDisplay + `<div class="checkout-row"><span>Items subtotal</span><strong>$${sum.toFixed(2)}</strong></div>`;
-
+    itemsDiv.replaceChildren(fragment);total=cents/100;window.total=total;
+    const totalDiv=document.getElementById('cartPanelTotal');
+    if(totalDiv){totalDiv.replaceChildren();if(savings>0){const saving=document.createElement('div');saving.className='customer-cart-savings';saving.textContent="You're saving $"+(savings/100).toFixed(2)+' BZD!';totalDiv.append(saving);}
+      const row=document.createElement('div');row.className='checkout-row';const label=document.createElement('span');label.textContent='Items subtotal';const value=document.createElement('strong');value.textContent='$'+total.toFixed(2);row.append(label,value);totalDiv.append(row);}
     refreshCartTotals();
   }
 
@@ -9747,6 +9726,7 @@ function closeCart() {
   function submitAdminLogin(){return window.SwiftAdmin?.login();}
 
   function goToOrder() {
+    if(!Object.values(cart).some(item=>Number(item.q)>0)&&!localStorage.getItem('tacoOrder')){alert('Add an item before checkout.');return;}
     closeCart();
     const box = document.getElementById("orderBox");
     if (box) box.style.display = "block";   // ✅ SHOW ORDER BOX
@@ -9924,68 +9904,26 @@ async function render() {
     return;
   }
 
-  /* GROUP BY SUBCATEGORY */
-  const grouped = {};
-
-  filteredItems.forEach(p => {
-    if (!p.subcategory) return;   
-    const sub = window.SwiftProductFilters.state.sort==='recommended'?p.subcategory:'Filtered products';
-    if (!grouped[sub]) grouped[sub] = [];
-    grouped[sub].push(p);
-  });
-
-  /* RENDER GROUPS */
-  Object.keys(grouped).forEach(sub => {
-    box.innerHTML += `
-      <div class="subcategory-title">${sub}</div>
-    `;
-
-    grouped[sub].forEach(p => {
-      let badgeHTML = "";
-      let wasPriceHTML = "";
-
-      if (p.was) {
-        const isNumeric = !isNaN(parseFloat(p.was)) && isFinite(p.was);
-        if (isNumeric && Number(p.was) > p.price) {
-          const savings = Math.round(((p.was - p.price) / p.was) * 100);
-          badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
-          wasPriceHTML = `<span class="price-was">$${Number(p.was).toFixed(2)}</span>`;
-        }
-      }
-
-      const displayPrice = (typeof p.price === 'number') ? p.price.toFixed(2) : p.price;
-      const safeName = p.name.replace(/'/g, "\\'");
-
-      box.innerHTML += `
-        <div class="product">
-          ${badgeHTML}
-          <div class="product-img-wrap">
-            <button class="heart-btn" onclick="toggleLike(this, event)">
-              <svg viewBox="0 0 24 24">
-                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-              </svg>
-            </button>
-            <img src="${p.image}" onclick="openImage(this.src)">
-          </div>
-          <div class="product-info">
-            <strong>${p.name}</strong>
-            <div class="price">
-              ${wasPriceHTML}
-              $${displayPrice} BZD
-            </div>
-            <button onclick="add('${safeName}', ${p.price}, this, ${!isNaN(p.was) ? p.was : 'null'})">
-              Add
-            </button>
-          </div>
-        </div>
-      `;
-    });
-  });
-  for(const card of box.querySelectorAll('.product')){
-    const name=card.querySelector('.product-info strong')?.textContent;
-    const p=filteredItems.find(item=>item.name===name);
-    if(p&&window.attachStoreItemShare)window.attachStoreItemShare(card,p);
+  const grouped=new Map();
+  for(const p of filteredItems){const sub=window.SwiftProductFilters.state.sort==='recommended'?(p.subcategory||'Items'):'Filtered products';if(!grouped.has(sub))grouped.set(sub,[]);grouped.get(sub).push(p);}
+  const fragment=document.createDocumentFragment();
+  for(const [sub,items] of grouped){
+    const heading=document.createElement('div');heading.className='subcategory-title';heading.textContent=sub;fragment.append(heading);
+    for(const p of items){
+      const price=Number(p.price),was=Number(p.was);if(!Number.isFinite(price)||price<0)continue;
+      const card=document.createElement('div');card.className='product';
+      if(was>price){const badge=document.createElement('div');badge.className='sale-badge';badge.textContent='SAVE '+Math.round((was-price)/was*100)+'%';card.append(badge);}
+      const wrap=document.createElement('div');wrap.className='product-img-wrap';
+      const heart=document.createElement('button');heart.type='button';heart.className='heart-btn';heart.setAttribute('aria-label','Save '+p.name);heart.onclick=event=>toggleLike(heart,event);
+      heart.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
+      const image=document.createElement('img');image.src=p.image;image.alt=p.name;image.loading='lazy';wrap.append(heart,image);card.append(wrap);
+      const info=document.createElement('div');info.className='product-info';const name=document.createElement('strong');name.textContent=p.name;
+      const prices=document.createElement('div');prices.className='price';if(was>price){const old=document.createElement('span');old.className='price-was';old.textContent='$'+was.toFixed(2);prices.append(old);}prices.append(document.createTextNode('$'+price.toFixed(2)+' BZD'));
+      const button=document.createElement('button');button.type='button';button.className='customer-product-add';button.textContent='Add';button.onclick=()=>addCatalogItem(p,button);
+      info.append(name,prices,button);card.append(info);window.attachStoreItemShare?.(card,p);fragment.append(card);
+    }
   }
+  box.replaceChildren(fragment);
 }
   let searchIdleTimer=null,lastSearchValue='';
   function handleSearchInput(value){lastSearchValue=value;if(searchIdleTimer)cancelAnimationFrame(searchIdleTimer);searchIdleTimer=requestAnimationFrame(runSearchSafely);}
@@ -10009,14 +9947,44 @@ async function render() {
       const price=document.createElement('div');price.className='price';price.textContent='BZ$'+Number(p.price).toFixed(2);
       info.append(name,store,price);card.append(info);
       const button=document.createElement('button');button.type='button';button.className='customer-product-add';button.textContent='Add';
-      button.onclick=()=>add(p.name,Number(p.price),button,Number(p.was)||null,p.category);card.append(button);
+      button.onclick=()=>addCatalogItem(p,button);card.append(button);
       window.attachStoreItemShare?.(card,p);box.append(card);
     }
   }
 
+  const catalogueAddChecks=new Map();
+  async function addCatalogItem(product,button){
+    if(button?.disabled)return;
+    const label=button?.textContent;
+    if(button){button.disabled=true;button.textContent='Adding…';button.setAttribute('aria-busy','true');}
+    try{
+      const key=String(product.id)+':'+product.category+':'+product.price;
+      let check=catalogueAddChecks.get(key);
+      if(!check||Date.now()-check.started>5000){
+        const started=Date.now();
+        const promise=(async()=>{
+          const general=['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(product.category);
+          if(product.id==null)throw Error('Reopen this store for current items.');
+          const [current,store]=await Promise.all([
+            supabaseClient.from('products').select('id,price,active,category,name').eq('id',product.id).maybeSingle().abortSignal(AbortSignal.timeout(10000)),
+            general?Promise.resolve({data:{is_open:'yes'}}):supabaseClient.from('stores').select('is_open').eq('category',product.category).maybeSingle().abortSignal(AbortSignal.timeout(10000))
+          ]);
+          if(store.error||store.data?.is_open!=='yes')throw Error('This store is closed or unavailable.');
+          if(current.error||!current.data||String(current.data.active).toLowerCase()!=='yes'||Number(current.data.price)!==Number(product.price)||current.data.category!==product.category||current.data.name!==product.name)throw Error('This item changed or sold out. Reopen the store for current items.');
+        })();
+        check={started,promise};catalogueAddChecks.set(key,check);
+      }
+      try{await check.promise;}catch(error){catalogueAddChecks.delete(key);throw error;}
+      add(product.name,Number(product.price),button,Number(product.was)||null,product.category);
+    }catch(error){alert(error.message||'Could not add this item. Please try again.');}
+    finally{if(button){button.disabled=false;button.textContent=label;button.removeAttribute('aria-busy');}}
+  }
   function add(n, p, btn, w, category=cat) {
     if(window.swiftMobileItemAllowed&&!window.swiftMobileItemAllowed({name:n,category})){alert("This digital item is unavailable in the mobile app.");return;}
     if(cart[n]&&(cart[n].cat!==category||Number(cart[n].p)!==Number(p))){alert('Remove the existing item from your cart before adding it from another store.');return;}
+    if(!Number.isFinite(Number(p))||Number(p)<0||!String(n).trim()||!category){alert('This item is unavailable. Reopen the store for current items.');return;}
+    p=Math.round(Number(p)*100)/100;
+    if((cart[n]?.q||0)>=100){alert('You can add up to 100 of this item.');return;}
     buzz(15); 
 
     if (btn) showAddCheck(btn);
@@ -10122,9 +10090,12 @@ async function render() {
     let forcedTotal = 0;
 
     for (let name in cart) {
-      forcedTotal += cart[name].q * cart[name].p;
+      const item=cart[name];
+      if(!Number.isInteger(item.q)||item.q<1||item.q>100||!Number.isFinite(item.p)||item.p<0||!item.cat){alert('An item in your cart is unavailable. Remove it and add it again from the store.');return;}
+      forcedTotal += Math.round(item.p*100) * item.q;
     }
 
+    forcedTotal/=100;
     total = forcedTotal;
 
     const userName = localStorage.getItem("userName") || "";
@@ -10135,16 +10106,18 @@ async function render() {
 
     const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
     const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
-    const tipAmount = parseFloat(document.getElementById("selectedTipAmount")?.value || 0);
+    const tipAmount = Number(document.getElementById('selectedTipAmount')?.value||0);
+    if(!Number.isFinite(tipAmount)||tipAmount<0||tipAmount>1000){alert('Choose a valid tip between BZ$0 and BZ$1,000.');return;}
 
     const orderNum = Math.floor(100 + Math.random() * 900);
 
-    if (forcedTotal <= 0 && !hasTacos) {
+    const hasItems=Object.values(cart).some(item=>item.q>0);
+    if (!hasItems && !hasTacos) {
       alert("Your cart is empty");
       return;
     }
 
-    if (!gift && !window.lastCartCoords && total > 0) {
+    if (!gift && !window.lastCartCoords && (hasItems||hasTacos)) {
       alert("Please pin your location on the map!");
       return;
     }
@@ -10166,7 +10139,7 @@ async function render() {
     const deliveryFee = getCartDeliveryFee();
     const platformFee = PLATFORM_FEE;
     const itemsTotal = total;
-    const grandTotal = itemsTotal + deliveryFee + platformFee + tipAmount;
+    const grandTotal = Math.round((itemsTotal + deliveryFee + platformFee + tipAmount)*100)/100;
     const customerCoords = gift ? gift.address : window.lastCartCoords || "18.0777,-88.5667";
 
     if (paymentMethod === "SwiftPay" && grandTotal + 0.15 > walletBalance) {
@@ -10176,10 +10149,10 @@ async function render() {
 
     let msg = `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
 
-    const groupedCart = {};
+    const groupedCart = Object.create(null);
     const activeBusinesses = new Set();
 
-    if (itemsTotal > 0) {
+    if (hasItems) {
       msg += `ITEMS%0A`;
       msg += `----------------------------%0A`;
 
@@ -10322,10 +10295,14 @@ async function render() {
     try {
       const id=await window.SwiftLive.submit(snapshot);
       if(orderStatus)orderStatus.textContent='Order sent. Follow its progress in live tracking.';
-      // Clear only after Dispatch confirms registration; failed sends keep the cart.
-      for(const key of ['tacoOrder','tacoPlace','tacoZone'])localStorage.removeItem(key);
-      for(const id of ['tacoDetails','tacoPlace','tacoDeliveryZone']){const field=document.getElementById(id);if(field)field.value='';}
-      cart={};total=0;update();updateCartBubble();renderCartPanel();
+      // Registration is final even if saving or painting the local receipt fails.
+      cart=Object.create(null);total=0;
+      try{for(const key of ['tacoOrder','tacoPlace','tacoZone'])localStorage.removeItem(key);}catch{console.warn('Could not clear the local taco draft.');}
+      try{for(const id of ['tacoDetails','tacoPlace','tacoDeliveryZone']){const field=document.getElementById(id);if(field)field.value='';}
+        const tip=document.getElementById('selectedTipAmount');if(tip)tip.value='0';
+        for(const id of ['groupEnabled','giftEnabled']){const toggle=document.getElementById(id);if(toggle?.checked){toggle.checked=false;toggle.dispatchEvent(new Event('change'));}}
+        update();updateCartBubble();renderCartPanel();
+      }catch{console.warn('Order sent; local cart display could not refresh.');}
       window.dispatchEvent(new CustomEvent('swift-order-submitted',{detail:{id,snapshot}}));
       return id;
     } catch(error) {
@@ -10357,7 +10334,7 @@ async function render() {
     if (tf) tf.textContent = "";
 
     // 3. Reset Cart Data
-    cart = {};
+    cart = Object.create(null);
     total = 0;
     
     // 4. IMPORTANT: Clear the last pinned location so next order is fresh
@@ -11114,31 +11091,7 @@ function setDeliveryZone(val) {
     if (pi) pi.innerText = initial;
   }
 
-  function quickAdd(name, price, wasPrice = null) {
-    // Make sure cart exists
-    if (!window.cart) window.cart = {};
-
-    // Add or increase quantity
-    if (cart[name]) {
-      cart[name].q += 1;
-    } else {
-      cart[name] = {
-        q: 1,
-        p: price,
-        w: wasPrice // optional (for discounts)
-      };
-    }
-
-    // Update cart bubble count
-    if (typeof updateCartBubble === "function") {
-      updateCartBubble();
-    }
-
-    // Open cart automatically (your existing flow)
-    if (typeof openCart === "function") {
-      openCart();
-    }
-  }
+  function quickAdd(name,price,wasPrice=null){const product=allProducts.find(p=>p.name===name&&Number(p.price)===Number(price));if(!product){alert('Open the store to choose an available item at its current price.');return;}add(product.name,Number(product.price),null,Number(product.was)||null,product.category);openCart();}
 
   function openFoodMap() {
     const screen = document.getElementById("foodMapScreen");
@@ -11169,10 +11122,10 @@ function setDeliveryZone(val) {
     list.innerHTML = "";
 
     const suggestions = [
-      { name: "TFC: 10 PC Wings", price: 23, image: "https://i.imgur.com/AeYUFed.png" },
-      { name: "Dumpling Kings: Japanese Dumplings", price: 11, image: "https://i.imgur.com/aaCuA71.png" },
-      { name: "Maria's: Salted Caramel", price: 12.50, image: "https://i.imgur.com/P8sjMJQ.png" },
-      { name: "Guerreros: 3 Cheese Burger Combo", price: 26.50, image: "https://i.imgur.com/c14NCA3.png" }
+      { name: "TFC: Wings", category:"TFC", price: 23, image: "https://i.imgur.com/AeYUFed.png" },
+      { name: "Dumpling King: Dumplings", category:"Dumpling", price: 11, image: "https://i.imgur.com/aaCuA71.png" },
+      { name: "Maria Cafe: Coffee", category:"Maria", price: 12.50, image: "https://i.imgur.com/P8sjMJQ.png" },
+      { name: "Guerrero: Burgers", category:"Guerrero", price: 26.50, image: "https://i.imgur.com/c14NCA3.png" }
     ];
 
     suggestions.forEach(item => {
@@ -11186,18 +11139,17 @@ function setDeliveryZone(val) {
       info.className = "suggestion-info";
       info.innerHTML = `
         <strong>${item.name}</strong>
-        <span>$${item.price.toFixed(2)} BZD</span>
+        <span>View the current menu</span>
       `;
 
       const btn = document.createElement("button");
       btn.className = "suggestion-add-btn";
-      btn.textContent = "Add";
+      btn.textContent = "View store";
 
       // 🔥 Each button ONLY controls its own item
       const safeName = item.name.replace(/'/g, "\\'");
       btn.onclick = function () {
-        cat = "Suggestions"; // 🔥 force category name
-        add(safeName, item.price, btn, null);
+        closeFoodMap();window.openMerchantStore(item.category);
       };
 
       card.appendChild(img);
@@ -13365,7 +13317,7 @@ function selectTip(amount, element) {
     document.querySelectorAll('#products .product').forEach(card=>{
       const p=matchProduct(card);if(!p)return;
       const heart=card.querySelector('.heart-btn');if(heart){heart.classList.toggle('liked',saved.has(productKey(p)));heart.setAttribute('aria-pressed',String(saved.has(productKey(p))));heart.setAttribute('aria-label','Save '+p.name);}
-      const addButton=[...card.querySelectorAll('button[onclick]')].find(b=>(b.getAttribute('onclick')||'').startsWith('add('));
+      const addButton=card.querySelector('button.customer-product-add')||[...card.querySelectorAll('button[onclick]')].find(b=>(b.getAttribute('onclick')||'').startsWith('add('));
       if(!addButton)return;
       if(!addButton.dataset.storeBound){
         const handler=addButton.onclick;
@@ -14201,7 +14153,7 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=webpush20261009"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=customer-audit20261011"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
+});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=customer-audit20261014"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=customer-audit20261014"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=orders20261004"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=orders20261004"></script>
 <script src="customer-auth.js?v=email-identity20261007"></script><script src="account-requests.js?v=orders20261004"></script>
