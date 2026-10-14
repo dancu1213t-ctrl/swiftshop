@@ -122,7 +122,25 @@
  const logout=window.handleLogout;window.handleLogout=async function(...args){if(!window.swiftLogoutConfirmed&&!confirmLogout())return;const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error){alert(r.error.message);return;}document.documentElement?.classList.add('swift-awaiting-auth');clearDraft();state='signin';render();window.swiftLogoutConfirmed=true;return logout.apply(this,args);};
  function confirmLogout(){return window.confirm('Sign out of SwiftShop on this device?');}
  render();
- window.saveProfile=async()=>{try{const result=await customerDataClient.rpc('swift_customer_profile',{p_name:document.getElementById('profileName').value.trim()});if(result.error)throw result.error;localStorage.setItem('userName',result.data.name);localStorage.setItem('userPhone',result.data.phone);document.getElementById('profileDisplayName').textContent=result.data.name;localStorage.setItem('contactPhone',result.data.contact_phone||(!String(result.data.phone).startsWith('account:')?result.data.phone:''));document.getElementById('profilePhone').value=localStorage.getItem('contactPhone');}catch(e){alert(e.message);}};
+ const profileNameField=document.getElementById('profileName');
+ const profileSave=make('button','Save name'),profileStatus=make('p');
+ profileSave.type='button';profileSave.id='profileSaveName';profileStatus.id='profileSaveStatus';profileStatus.setAttribute('role','status');
+ let profileSaving=false;
+ if(profileNameField){profileNameField.removeAttribute?.('oninput');profileNameField.oninput=()=>{profileStatus.textContent='Unsaved changes';};profileNameField.maxLength=80;profileNameField.after(profileSave,profileStatus);}
+ window.saveProfile=async()=>{
+  if(profileSaving||!profileNameField)return;
+  const value=profileNameField.value.trim(),identity=localStorage.getItem('userPhone');
+  if(value.length<2||value.length>80){profileStatus.textContent='Enter a name with 2–80 characters.';return;}
+  profileSaving=true;profileSave.disabled=true;profileStatus.textContent='Saving…';
+  try{const result=await customerDataClient.rpc('swift_customer_profile',{p_name:value,p_phone:null}).abortSignal(AbortSignal.timeout(10000));if(result.error||!result.data)throw result.error||Error('Could not save your name.');
+   if(identity!==localStorage.getItem('userPhone'))return;
+   localStorage.setItem('userName',result.data.name);document.getElementById('profileDisplayName').textContent=result.data.name;customerName=result.data.name;
+   profileStatus.textContent=profileNameField.value.trim()===value?'Name saved':'Unsaved changes';
+  }catch{if(identity===localStorage.getItem('userPhone'))profileStatus.textContent='Could not save. Tap Save name to retry.';}
+  finally{profileSaving=false;profileSave.disabled=false;}
+ };
+ profileSave.onclick=()=>window.saveProfile();
+ const profileSaveStyles=make('style');profileSaveStyles.textContent='html.swift-design #profileOverlay #profileSaveName{display:block;width:100%;min-height:44px;margin-top:12px;border:0;border-radius:12px;background:#111;color:white;font:600 14px system-ui;cursor:pointer}#profileSaveStatus{min-height:20px;font-size:12px;line-height:1.5;color:#687269;margin:8px 0}#profileSaveStatus:empty{display:none}';document.body.append(profileSaveStyles);
  const phoneField=document.getElementById('profilePhone');if(phoneField){phoneField.readOnly=true;phoneField.title='Contact support to change the account phone safely.';}
  const restorePanel=document.getElementById('customerSessionRestore');
  async function restoreSession(){
