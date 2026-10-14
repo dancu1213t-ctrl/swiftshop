@@ -7612,8 +7612,8 @@ html.swift-design #appScreen #merchantBannerSlider button:focus-visible{outline:
   <article class="hero-promo-card promo-slide is-active">
     <div class="hero-promo-content">
       <span class="hero-promo-tag">Brew and Browse</span>
-      <div class="hero-promo-title">3+ Drinks, Free Delivery</div>
-      <div class="hero-promo-sub">Brew &amp; Browse orders only. $0.50 platform fee applies.</div>
+      <div class="hero-promo-title">Your next coffee run</div>
+      <div class="hero-promo-sub">Brew &amp; Browse favorites, delivered.</div>
       <button class="hero-promo-btn" onclick="bannerCategory('Brew')">Shop now ➔</button>
     </div>
     <div class="hero-promo-image-wrap">
@@ -8027,7 +8027,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   pins[name].setPosition(point);pins[name].setMap(map);pins[name].setDraggable(!ride&&name!=='driver');
   if(!pins[name]._wired&&name!=='driver'){pins[name]._wired=true;pins[name].addListener('dragend',e=>{if(!ride)setPoint(name,{lat:e.latLng.lat(),lng:e.latLng.lng()});});}
  }
- function frame(){if(!map)return;const b=new google.maps.LatLngBounds();[pickup,dropoff,ride&&ride.location_fresh&&ride.lat!=null?{lat:ride.lat,lng:ride.lng}:null].filter(Boolean).forEach(p=>b.extend(p));if(!b.isEmpty()){map.fitBounds(b,55);if(!dropoff)map.setZoom(16);}}
+ function frame(){if(!map)return;google.maps.event.trigger(map,'resize');const b=new google.maps.LatLngBounds();[...routePath,pickup,dropoff,ride&&ride.location_fresh&&ride.lat!=null?{lat:ride.lat,lng:ride.lng}:null].filter(Boolean).forEach(p=>b.extend(p));if(!b.isEmpty()){map.fitBounds(b,window.innerWidth<600?32:48);google.maps.event.addListenerOnce(map,'idle',()=>{if(map.getZoom()>16)map.setZoom(16);});}}
  function routeRemainder(path,point,minProgress=0){
   if(path.length<2)return null;const scale=111195,cos=Math.cos(point.lat*Math.PI/180);let along=0,best=null;
   for(let i=0;i<path.length-1;i++){const a=path[i],b=path[i+1],dx=(b.lng-a.lng)*scale*cos,dy=(b.lat-a.lat)*scale,len=Math.hypot(dx,dy);if(!len)continue;
@@ -8046,10 +8046,10 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   if(!ride)invalidateFare();
   if(!map)return;const signature=pickup&&dropoff?[pickup.lat,pickup.lng,dropoff.lat,dropoff.lng,ride?.id||'',ride?.status==='in_progress'?'driving':'preview'].join(','):'';
   if(signature===routeSignature){trimCurrentRoute();return;}routeSignature=signature;routePath=[];routeProgress=0;const token=++routeVersion;routeLines.forEach(l=>l.setMap(null));routeLines=[];
-  if(!signature)return;
+  if(!signature)return;requestAnimationFrame(frame);
   const guide=new google.maps.Polyline({path:[pickup,dropoff],strokeOpacity:0,icons:[{icon:{path:'M 0,-1 0,1',strokeOpacity:1,strokeColor:'#ed7a2b',scale:3},offset:'0',repeat:'14px'}],map});routeLines=[guide];$('crMapNotice').textContent='Dotted line connects A to B; loading road route…';
   try{const {Route}=await google.maps.importLibrary('routes');const {routes}=await Route.computeRoutes({origin:pickup,destination:dropoff,travelMode:'DRIVING',fields:['path']});
-   if(token!==routeVersion)return;if(!routes?.length)throw Error('No route');routeLines.forEach(l=>l.setMap(null));const roadLines=routes[0].createPolylines({strokeColor:'#4285f4',strokeWeight:5});routePath=roadLines.flatMap(line=>line.getPath().getArray().map(p=>({lat:p.lat(),lng:p.lng()})));routeLines=[new google.maps.Polyline({path:routePath,strokeColor:'#4285f4',strokeWeight:5,map})];trimCurrentRoute();$('crMapNotice').textContent=ride?.status==='in_progress'?'Blue line: road ahead. Completed sections disappear as fresh driver GPS arrives.':'A: Pickup · B: Destination · Driver location updates live. Blue route follows roads.';
+   if(token!==routeVersion)return;if(!routes?.length)throw Error('No route');routeLines.forEach(l=>l.setMap(null));const roadLines=routes[0].createPolylines({strokeColor:'#4285f4',strokeWeight:5});routePath=roadLines.flatMap(line=>line.getPath().getArray().map(p=>({lat:p.lat(),lng:p.lng()})));routeLines=[new google.maps.Polyline({path:routePath,strokeColor:'#4285f4',strokeWeight:5,map})];trimCurrentRoute();frame();$('crMapNotice').textContent=ride?.status==='in_progress'?'Blue line: road ahead. Completed sections disappear as fresh driver GPS arrives.':'A: Pickup · B: Destination · Driver location updates live. Blue route follows roads.';
   }catch{if(token===routeVersion)$('crMapNotice').textContent='Dotted line is a pickup-to-destination guide, not a road route. Road routing is unavailable; fare quoting requires road routing to be available.';}
  }
  async function mapReady(){
@@ -8074,7 +8074,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
  async function gps(){
   if(ride)return;if(!navigator.geolocation||!isSecureContext){notice('Use the published HTTPS website for GPS, or choose your pickup on the map.');return;}
   const token=++geoVersion;$('crGPS').disabled=true;notice('Finding your pickup…');
-  navigator.geolocation.getCurrentPosition(pos=>{ $('crGPS').disabled=false;if(token!==geoVersion||ride)return;setPoint('pickup',{lat:pos.coords.latitude,lng:pos.coords.longitude});map.panTo(pickup);map.setZoom(17);notice('Pickup found. Adjust the pin to your entrance if needed.');},()=>{$('crGPS').disabled=false;if(token===geoVersion)notice('GPS is unavailable. Search your street or tap the map.');},{enableHighAccuracy:true,timeout:10000,maximumAge:10000});
+  navigator.geolocation.getCurrentPosition(pos=>{ $('crGPS').disabled=false;if(token!==geoVersion||ride)return;setPoint('pickup',{lat:pos.coords.latitude,lng:pos.coords.longitude});if(dropoff)frame();else{map.panTo(pickup);map.setZoom(16);}notice('Pickup found. Adjust the pin to your entrance if needed.');},()=>{$('crGPS').disabled=false;if(token===geoVersion)notice('GPS is unavailable. Search your street or tap the map.');},{enableHighAccuracy:true,timeout:10000,maximumAge:10000});
  }
  let finishing=null,ratingSaving=false;
  function finishRide(){
@@ -8872,21 +8872,10 @@ window.switchToggle=function(button){
   }
 
   // --- SERVICE FEE HELPER ---
-const FIXED_DELIVERY_FEE = 3.00;
-const PLATFORM_FEE = 0.50;
+const FIXED_DELIVERY_FEE = 3.50;
+const PLATFORM_FEE = 0;
 function getServiceFee(zone) { return FIXED_DELIVERY_FEE; }
-function getCartDeliveryFee() {
-  const items = Object.values(cart).filter(item => Number(item.q) > 0);
-  const onlyBrew = items.length > 0 && items.every(item =>
-    String(item.cat || '').trim().toLowerCase() === 'brew'
-  );
-  const drinkCount = items.reduce((sum, item) => sum + Number(item.q), 0);
-  const hasTacos = !!localStorage.getItem('tacoOrder');
-  const categories=[...new Set(items.map(i=>i.cat))];
-  const custom=categories.length===1&&!hasTacos?window.swiftMerchantDeliveryFees?.[categories[0]]:undefined;
-  if(custom!==undefined&&Number.isFinite(Number(custom)))return Number(custom);
-  return onlyBrew && drinkCount >= 3 && !hasTacos ? 0 : FIXED_DELIVERY_FEE;
-}
+function getCartDeliveryFee() { return FIXED_DELIVERY_FEE; }
 
   function buzz(ms = 30) {
     if (navigator.vibrate) navigator.vibrate(ms);
@@ -9189,8 +9178,7 @@ function refreshCartTotals() {
   window.lastCartFee = deliveryFee;
   if (feeText) {
     feeText.innerHTML =
-      `<div class="checkout-row"><span>Delivery</span><strong class="${deliveryFee === 0 ? 'checkout-free' : ''}">${deliveryFee === 0 ? 'FREE' : '$' + deliveryFee.toFixed(2)}</strong></div>` +
-      `<div class="checkout-row"><span>Platform fee</span><strong>$${PLATFORM_FEE.toFixed(2)}</strong></div>` +
+      `<div class="checkout-row"><span>Delivery Fee</span><strong class="${deliveryFee === 0 ? 'checkout-free' : ''}">${deliveryFee === 0 ? 'FREE' : '$' + deliveryFee.toFixed(2)}</strong></div>` +
       (swiftPayFee ? '<div class="checkout-row"><span>SwiftPay transaction fee</span><strong>$0.15</strong></div>' : '') +
       (tipAmount > 0 ? `<div class="checkout-row"><span>Runner tip (optional)</span><strong>$${tipAmount.toFixed(2)}</strong></div>` : '') +
       (deliveryFee === 0 ? '<div class="checkout-promo">Free delivery applied</div>' : '');
@@ -9886,7 +9874,11 @@ function enterApp() {
   };
 
  
+let homeRenderVersion=0;
 async function render() {
+  const version=++homeRenderVersion,renderCategory=cat;
+  const query=document.getElementById("searchInput")?.value.trim();
+  if(query){searchProducts(query);return;}
   const box = document.getElementById("products");
   if (!box) return;
 
@@ -9899,6 +9891,7 @@ async function render() {
     .eq('category', cat)
     .single();
 
+  if(version!==homeRenderVersion||cat!==renderCategory||document.getElementById('searchInput')?.value.trim())return;
   const isOpen = ['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(cat) ? 'yes' : (storeData ? storeData.is_open : 'yes');
 
   if (isOpen === 'no') {
@@ -9985,88 +9978,37 @@ async function render() {
     if(p&&window.attachStoreItemShare)window.attachStoreItemShare(card,p);
   }
 }
-  let searchIdleTimer = null;
-  let lastSearchValue = "";
-
-  function handleSearchInput(value) {
-    document.body.classList.add("searching");
-    lastSearchValue = value;
-
-    if (searchIdleTimer) clearTimeout(searchIdleTimer);
-
-    searchIdleTimer = setTimeout(() => {
-      document.body.classList.remove("searching");
-      runSearchSafely();
-    }, 200);
-  }
-
-  function runSearchSafely() {
-    const value = lastSearchValue.trim();
-
-    // 🧠 Skip if same value
-    if (value === runSearchSafely.lastValue) return;
-    runSearchSafely.lastValue = value;
-
-    // 🚀 Run search in next paint cycle (no input lag)
-    requestAnimationFrame(() => {
-      searchProducts(value);
-    });
-  }
-
-  function searchProducts(query) {
-    const pickupBox = document.getElementById("pickupOrderBox");
-    if (pickupBox) pickupBox.style.display = "none";
-    const box = document.getElementById("products");
-    if (!box) return;
-    box.innerHTML = "";
-
-    const q = query.toLowerCase();
-
-    // If search is empty, go back to category view
-    if (!q) {
-      render();
-      return;
+  let searchIdleTimer=null,lastSearchValue='';
+  function handleSearchInput(value){lastSearchValue=value;if(searchIdleTimer)cancelAnimationFrame(searchIdleTimer);searchIdleTimer=requestAnimationFrame(runSearchSafely);}
+  function runSearchSafely(){searchIdleTimer=null;searchProducts(lastSearchValue.trim());}
+  function searchProducts(query){
+    ++homeRenderVersion;
+    const q=String(query||'').trim().toLowerCase(),box=document.getElementById('products');
+    document.documentElement.classList.toggle('customer-live-search',!!q);
+    if(!box)return;if(!q){render();return;}
+    const pickupBox=document.getElementById('pickupOrderBox');if(pickupBox)pickupBox.style.display='none';
+    box.style.display='grid';box.replaceChildren();
+    const candidates=allProducts.filter(p=>String(p.name).toLowerCase().includes(q));
+    const matches=window.SwiftProductFilters?window.SwiftProductFilters.apply(candidates):candidates;
+    if(!matches.length){const empty=document.createElement('p');empty.style.gridColumn='1/-1';empty.textContent='No matching items. Try another name.';box.append(empty);}
+    for(const p of matches){
+      const card=document.createElement('div');card.className='product';
+      const image=document.createElement('img');image.src=p.image;image.alt=p.name;image.loading='lazy';card.append(image);
+      const info=document.createElement('div');info.className='product-info';
+      const name=document.createElement('strong');name.textContent=p.name;
+      const store=document.createElement('small');store.textContent=p.category;
+      const price=document.createElement('div');price.className='price';price.textContent='BZ$'+Number(p.price).toFixed(2);
+      info.append(name,store,price);card.append(info);
+      const button=document.createElement('button');button.type='button';button.className='customer-product-add';button.textContent='Add';
+      button.onclick=()=>add(p.name,Number(p.price),button,Number(p.was)||null,p.category);card.append(button);
+      window.attachStoreItemShare?.(card,p);box.append(card);
     }
-
-    const matches = window.SwiftProductFilters.apply(allProducts.filter(p =>
-      p.name.toLowerCase().includes(q)
-    ));
-
-    // Auto-select category if a match exists
-    if (matches.length > 0) {
-      cat = matches[0].category;
-      document.querySelectorAll(".cat-btn").forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.cat === cat);
-      });
-    }
-
-    if(!matches.length)box.innerHTML='<p style="grid-column:1/-1;padding:24px">No products match your search and filters.</p>';
-    matches.forEach(p => {
-      let badgeHTML = "";
-      if (p.was && p.was > p.price) {
-        const savings = Math.round(((p.was - p.price) / p.was) * 100);
-        badgeHTML = `<div class="sale-badge">SAVE ${savings}%</div>`;
-      }
-
-      const safeName = p.name.replace(/'/g, "\\'");
-      box.innerHTML += `
-        <div class="product">
-          ${badgeHTML} <img src="${p.image}">
-          <div class="product-info">
-            <strong>${p.name}</strong>
-            <div class="price">
-              ${p.was ? `<span class="price-was">$${p.was.toFixed(2)}</span>` : ''}
-              $${p.price.toFixed(2)} BZD
-            </div>
-          </div>
-          <button onclick="add('${safeName}', ${p.price}, this, ${p.was || 'null'})">Add</button>
-        </div>`;
-    });
   }
 
-  function add(n, p, btn, w) {
-    if(window.swiftMobileItemAllowed&&!window.swiftMobileItemAllowed({name:n,category:cat})){alert("This digital item is unavailable in the mobile app.");return;}
-    buzz(30); 
+  function add(n, p, btn, w, category=cat) {
+    if(window.swiftMobileItemAllowed&&!window.swiftMobileItemAllowed({name:n,category})){alert("This digital item is unavailable in the mobile app.");return;}
+    if(cart[n]&&(cart[n].cat!==category||Number(cart[n].p)!==Number(p))){alert('Remove the existing item from your cart before adding it from another store.');return;}
+    buzz(15); 
 
     if (btn) showAddCheck(btn);
 
@@ -10075,7 +10017,7 @@ async function render() {
         q: 0, 
         p: p, 
         w: w || null, 
-        cat: cat // <--- TAGS ITEM WITH ACTIVE STORE
+        cat: category
       };
     }
     
@@ -10264,7 +10206,6 @@ async function render() {
       msg += `DELIVERY AREA: ${deliveryZone}%0A`;
       if (itemsTotal <= 0) {
         msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
-        msg += `PLATFORM FEE: $${platformFee.toFixed(2)} BZD%0A`;
         if (tipAmount > 0) msg += `RUNNER TIP: $${tipAmount.toFixed(2)} BZD%0A`;
         msg += `FEES + TIP TOTAL: $${grandTotal.toFixed(2)} BZD%0A`;
         msg += `Taco food cost is additional.%0A`;
@@ -10275,7 +10216,6 @@ async function render() {
     if (itemsTotal > 0) {
       msg += `DELIVERY AREA: ${deliveryZone}%0A`;
       msg += `DELIVERY FEE: $${deliveryFee.toFixed(2)} BZD%0A`;
-      msg += `PLATFORM FEE: $${platformFee.toFixed(2)} BZD%0A`;
       msg += `ITEMS TOTAL: $${itemsTotal.toFixed(2)} BZD%0A`;
       if (hasTacos) msg += `Taco food cost is additional.%0A`;
       
@@ -10320,7 +10260,7 @@ async function render() {
       }
       if(hasTacos)lines.push(tacoPlace+': '+tacoOrder);
       lines.push('','TOTAL: $'+grandTotal.toFixed(2)+' BZD'+(hasTacos?' (taco cost extra)':''),
-        'Includes delivery $'+deliveryFee.toFixed(2)+', fee $'+platformFee.toFixed(2)+(tipAmount>0?', tip $'+tipAmount.toFixed(2):''),
+        'Includes delivery $'+deliveryFee.toFixed(2)+(tipAmount>0?', tip $'+tipAmount.toFixed(2):''),
         '', 'TO: '+gift.name+' · '+gift.phone,
         'Area: '+deliveryZone,
         'Address: '+gift.address,
@@ -10342,8 +10282,7 @@ async function render() {
       }
       lines.push(divider,'ORDER SUMMARY',divider,
         'Items: $'+itemsTotal.toFixed(2)+' BZD',
-        'Delivery: $'+deliveryFee.toFixed(2)+' BZD',
-        'Platform fee: $'+platformFee.toFixed(2)+' BZD');
+        'Delivery Fee: $'+deliveryFee.toFixed(2)+' BZD');
       if(tipAmount>0)lines.push('Tip: $'+tipAmount.toFixed(2)+' BZD');
       lines.push('TOTAL: $'+grandTotal.toFixed(2)+' BZD','',divider,'DELIVERY & PAYMENT',divider,
         'Area: '+deliveryZone,
@@ -10375,6 +10314,8 @@ async function render() {
       const id=await window.SwiftLive.submit(snapshot);
       if(orderStatus)orderStatus.textContent='Order sent. Follow its progress in live tracking.';
       // Clear only after Dispatch confirms registration; failed sends keep the cart.
+      for(const key of ['tacoOrder','tacoPlace','tacoZone'])localStorage.removeItem(key);
+      for(const id of ['tacoDetails','tacoPlace','tacoDeliveryZone']){const field=document.getElementById(id);if(field)field.value='';}
       cart={};total=0;update();updateCartBubble();renderCartPanel();
       window.dispatchEvent(new CustomEvent('swift-order-submitted',{detail:{id,snapshot}}));
       return id;
@@ -10412,7 +10353,7 @@ async function render() {
     
     // 4. IMPORTANT: Clear the last pinned location so next order is fresh
     window.lastCartCoords = null;
-    window.lastCartFee = 3.00;
+    window.lastCartFee = FIXED_DELIVERY_FEE;
     window.lastCartZone = "In-Town";
 
     // 5. Reset Payment Dropdown
@@ -11971,7 +11912,8 @@ function openImage(src) {
   check.style.top = Math.max(48, rect.top - 10) + 'px';
   check.style.zIndex = '2147483647';
   document.body.appendChild(check);
-  setTimeout(() => check.remove(), 800);
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches)btn.animate([{transform:"scale(1)"},{transform:"scale(.96)"},{transform:"scale(1)"}],{duration:160});
+  setTimeout(() => check.remove(), 400);
 }
   // Helper to downscale huge camera images before AI processing to prevent RAM crashes
 function resizeImageForAI(file, maxDimension = 1024) {
@@ -14275,6 +14217,15 @@ window.addEventListener('pageshow',sync);
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();
 })();
 </script>
+<style id="customer-refine-20261014">
+html.customer-live-search #heroPromoSlider,html.customer-live-search #merchantBannerSlider,html.customer-live-search #shopStoreDirectory,html.customer-live-search .store-navigation-wrapper,html.customer-live-search #subcategory-bar,html.customer-live-search #shoppingStoreStatus,html.customer-live-search .hero-toggle-row{display:none!important}
+html.customer-live-search #products{display:grid!important;margin-top:16px!important}
+html.swift-design body .product button.customer-product-add,html.swift-design body .product button[onclick^="add("],html.swift-design body .product-info button[onclick^="add("],html.swift-design body .store-product .store-add,html.swift-design body .store-item-share{background:#111!important;color:#fff!important;border:1px solid #111!important;transition:transform .16s ease!important}
+html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!important}
+.product-info small{display:block;margin:5px 0;color:#687269}
+.add-check-exclusive{animation-duration:.4s!important}
+#customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
+</style>
 </body>
 </html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=paymentqr20261010"></script><script src="swiftpay.js?v=message20261010"></script><script src="swiftpay-admin.js?v=search20261010"></script>
 
@@ -14283,3 +14234,4 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <link rel="stylesheet" href="desktop-customer-layout.css?v=20261009">
 
 <link rel="stylesheet" href="swift-interactions.css?v=20261009">
+
