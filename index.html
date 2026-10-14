@@ -7384,7 +7384,7 @@ html.swift-design #appScreen #merchantBannerSlider button:focus-visible{outline:
       <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
       <input 
         id="searchInput" 
-        type="text" 
+        type="search" 
         placeholder="Search for products..." 
         oninput="handleSearchInput(this.value)"
       />
@@ -14218,6 +14218,14 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 <style id="customer-refine-20261014">
+html.swift-design.customer-live-search body #appScreen>.header,
+html.swift-design.customer-live-search body #appScreen .hero-toggle-row,
+html.swift-design.customer-live-search body #appScreen .toggle-box,
+html.swift-design.customer-live-search body #appScreen .sd-home-shortcuts,
+html.swift-design.customer-live-search body #appScreen .store-navigation-wrapper{display:none!important}
+html.swift-design.customer-live-search body #appScreen .hero-section{padding-top:16px!important;margin-top:0!important}
+html.swift-design.customer-live-search body #appScreen #products::before{content:'Search results'!important}
+
 html.customer-live-search #heroPromoSlider,html.customer-live-search #merchantBannerSlider,html.customer-live-search #shopStoreDirectory,html.customer-live-search .store-navigation-wrapper,html.customer-live-search #subcategory-bar,html.customer-live-search #shoppingStoreStatus,html.customer-live-search .hero-toggle-row,html.customer-live-search .store-filter-heading{display:none!important}
 html.customer-live-search #products{display:grid!important;margin-top:16px!important}
 html.swift-design body #appScreen #products .product button.customer-product-add,html.swift-design body #appScreen #products .product button[onclick^="add("],html.swift-design body #appScreen #products .product-info button[onclick^="add("],html.swift-design body #merchantStorePage .store-product .store-add,html.swift-design body #appScreen #products .store-item-share,html.swift-design body #merchantStorePage .store-item-share,html.swift-design body .product.product .store-item-share{background:#111!important;color:#fff!important;border:1px solid #111!important;transition:transform .16s ease!important}
