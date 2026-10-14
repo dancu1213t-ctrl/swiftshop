@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><script id="stable-customer-entry">document.documentElement.classList.add('swift-entry-loading');if('scrollRestoration' in history)history.scrollRestoration='manual';</script>
+<style id="stable-customer-entry-style">
+html.swift-entry-loading body{visibility:hidden!important}
+html.swift-entry-loading::before{content:'SwiftShop';position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#fffaf5;color:#ff6a00;font:800 42px/1.2 system-ui}
+#customerSessionRestore{box-sizing:border-box}
+html.swift-entry-loading #authScreen{animation:none!important;transition:none!important}
+</style>
+<script>
+(function(){function ready(){const settle=document.fonts?Promise.race([document.fonts.ready,new Promise(resolve=>setTimeout(resolve,1200))]):Promise.resolve();settle.then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{window.scrollTo({top:0,left:0,behavior:'instant'});document.documentElement.classList.remove('swift-entry-loading');})));}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready();const root=document.documentElement;let awaiting=root.classList.contains('swift-awaiting-auth');new MutationObserver(()=>{const next=root.classList.contains('swift-awaiting-auth');if(awaiting&&!next){window.scrollTo({top:0,left:0,behavior:'instant'});}awaiting=next;}).observe(root,{attributes:true,attributeFilter:['class']});})();
+</script>
 <script src="customer-reviews.js?v=runneronly20261010" defer></script>
 <script src="customer-usability.js?v=reviewsfinal20261008" defer></script>
 <script src="pickup-discovery.js?v=anybusiness20261008" defer></script>
