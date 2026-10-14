@@ -8069,7 +8069,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   pin(type,point,type==='pickup'?'#ee792b':'#3c5345',type==='pickup'?'A':'B');route();
   const pointToken=++pointVersions[type];
   if(!label&&google.maps.Geocoder){geocoder=geocoder||new google.maps.Geocoder();geocoder.geocode({location:point}).then(({results})=>{if(pointVersions[type]!==pointToken||ride)return;const current=type==='pickup'?pickup:dropoff;if(!current||current.lat!==point.lat||current.lng!==point.lng)return;const result=results?.find(r=>r.types?.includes('street_address'))||results?.[0];if(result)$(type==='pickup'?'crPickup':'crDropoff').value=result.formatted_address;}).catch(()=>{});}
-  if(pickup&&dropoff)refresh();
+  if(pickup&&dropoff){refresh();if(document.activeElement===$('crPickup')||document.activeElement===$('crDropoff'))document.activeElement.blur();requestAnimationFrame(()=>{$('crMap').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});frame();});}
  }
  async function gps(){
   if(ride)return;if(!navigator.geolocation||!isSecureContext){notice('Use the published HTTPS website for GPS, or choose your pickup on the map.');return;}
