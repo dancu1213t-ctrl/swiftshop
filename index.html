@@ -9763,7 +9763,7 @@ function openProfile() {
   const pInitial = document.getElementById("profileInitial");
 
   if (pName) pName.value = name;
-  if (pPhone) pPhone.value = phone;
+  if (pPhone) pPhone.value = localStorage.getItem('contactPhone')||(!String(phone).startsWith('account:')?phone:'');
   if (pDisplayName) pDisplayName.innerText = name;
   if (pInitial) pInitial.innerText = name ? name.charAt(0).toUpperCase() : "?";
 
@@ -12194,7 +12194,7 @@ async function openProfile() {
   const pInitial = document.getElementById("profileInitial");
 
   if (pName) pName.value = name;
-  if (pPhone) pPhone.value = phone;
+  if (pPhone) pPhone.value = localStorage.getItem('contactPhone')||(!String(phone).startsWith('account:')?phone:'');
   if (pDisplayName) pDisplayName.innerText = name;
   if (pInitial) pInitial.innerText = name ? name.charAt(0).toUpperCase() : "?";
 
