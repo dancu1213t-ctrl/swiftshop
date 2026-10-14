@@ -14256,7 +14256,26 @@ const close=window.closeMerchantStore;window.closeMerchantStore=function(){++req
 <script src="customer-auth.js?v=email-identity20261007"></script><script src="account-requests.js?v=orders20261004"></script>
 <script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=20261009"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=20261011"><script src="offer-ordering.js?v=20261011"></script>
 <link rel="stylesheet" href="pure-offers.css?v=white20261010"><script src="pure-offers.js?v=order20261011"></script>
-<script src="product-cutouts.js?v=20261012"></script></body>
+<script src="product-cutouts.js?v=20261012"></script>
+<!-- Keep home banners out of search and keyboard views. -->
+<style id="customer-search-banner-fix">
+html.shop-page-open body #heroPromoSlider,
+html.shop-page-open body #merchantBannerSlider,
+html.customer-text-entry body #heroPromoSlider,
+html.customer-text-entry body #merchantBannerSlider{display:none!important}
+html.customer-text-entry body .shop-bottom-nav{visibility:hidden!important;pointer-events:none!important}
+</style>
+<script>
+(()=>{'use strict';
+const textField=el=>el instanceof Element&&el.matches('textarea,[contenteditable="true"],input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="hidden"])');
+const sync=()=>document.documentElement.classList.toggle('customer-text-entry',textField(document.activeElement));
+document.addEventListener('focusin',sync,true);
+document.addEventListener('focusout',()=>requestAnimationFrame(sync),true);
+window.addEventListener('pageshow',sync);
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sync);else sync();
+})();
+</script>
+</body>
 </html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=paymentqr20261010"></script><script src="swiftpay.js?v=message20261010"></script><script src="swiftpay-admin.js?v=search20261010"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
