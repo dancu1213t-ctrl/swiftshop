@@ -7905,7 +7905,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   finally{busy=false;}
  }
  window.SwiftLive={async submit(snapshot){const id=this.prepare(snapshot,false);const record=records.find(r=>r.id===id);await register(record);record.checkoutCommitted=true;save();const checkout=document.getElementById('orderBox');if(checkout)checkout.style.display='none';this.openOrder(id);return id;},prepare(snapshot,show=true){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined,dispatch_text:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&(!last.registered||last.checkoutCommitted===false||Date.now()-Date.parse(last.created)<15000)){current=last;if(show)open();return last.id;}
-   const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false,checkoutCommitted:false};records.unshift(record);current=record;save();chip.hidden=false;if(show)open();return record.id;},open,async openOrder(id){restore();try{await syncAccountOrders(true);}catch{}const record=records.find(r=>r.id===id);if(!record)return false;current=record;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);return true;}};
+   const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false,checkoutCommitted:false};records.unshift(record);current=record;save();chip.hidden=false;if(show)open();return record.id;},open,async history(){restore();const identity=scope();await syncAccountOrders(true);if(identity!==scope())return[];return records.filter(r=>r.registered).map(r=>({id:r.id,created:r.created,snapshot:r.snapshot,phase:r.remote?.phase||'sent'}));},async openOrder(id){restore();try{await syncAccountOrders(true);}catch{}const record=records.find(r=>r.id===id);if(!record)return false;current=record;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);return true;}};
  chip.onclick=open;node('cloClose').onclick=()=>root.close();node('cloRetry').onclick=()=>poll(true);node('cloSelect').onchange=e=>{current=records.find(r=>r.id===e.target.value);paint();poll(true);};
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){restore();poll(true);}});window.addEventListener('pageshow',()=>{restore();if(current&&sessionStorage.getItem('swiftshop.pendingLiveReturn')===current.id){sessionStorage.removeItem('swiftshop.pendingLiveReturn');open();}});window.addEventListener('online',()=>poll(true));setInterval(()=>poll(),5000);restore();
 })();
@@ -13517,13 +13517,18 @@ function selectTip(amount, element) {
     const record={id,created:new Date().toISOString(),items,delivery:snapshot.delivery_fee,platform:snapshot.platform_fee,tip:snapshot.tip,tacos:!!snapshot.taco_note,submitted:true};
     write('history',[record,...read('history')].slice(0,50));
   });
-  function showHistory(){
-    history.page.style.display='block';history.body.replaceChildren();const list=read('history');
+  let historyVersion=0;
+  async function showHistory(){
+    const stamp=++historyVersion;history.page.style.display='block';history.body.replaceChildren(el('p','shopping-notice','Loading your orders…'));const local=read('history');let remote;
+    try{remote=await window.SwiftLive.history();}catch{if(stamp===historyVersion){history.body.replaceChildren(el('p','shopping-notice','Could not load your orders. Check your connection and retry.'),button('Retry',showHistory));}return;}
+    if(stamp!==historyVersion||history.page.style.display==='none')return;
+    const merged=new Map(local.map(r=>[r.id||r.created,r]));for(const r of remote){const s=r.snapshot||{};merged.set(r.id,{id:r.id,created:r.created,items:s.items||[],delivery:Number(s.delivery_fee)||0,platform:Number(s.platform_fee)||0,tip:Number(s.tip)||0,tacos:!!s.taco_note,submitted:true,phase:r.phase,total:s.total});}
+    const list=[...merged.values()].sort((a,b)=>Date.parse(b.created)-Date.parse(a.created));history.body.replaceChildren();
     if(!list.length){history.body.textContent='Your orders will appear here after you send them.';return;}
     list.forEach(record=>{
-      const row=el('article','shopping-list-card');row.append(el('h3','',new Date(record.created).toLocaleString()),el('p','shopping-notice',record.submitted?'Sent to SwiftShop · view live tracking for status':'Previous order request'));
+      const row=el('article','shopping-list-card');row.append(el('h3','',new Date(record.created).toLocaleString()),el('p','shopping-notice',record.phase?record.phase.replace(/_/g,' ').replace(/^./,c=>c.toUpperCase()):record.submitted?'Sent to SwiftShop · view live tracking for status':'Previous order request'));
       record.items.forEach(item=>row.append(el('p','',item.quantity+' × '+item.name)));
-      const subtotal=record.items.reduce((s,i)=>s+i.price*i.quantity,0);row.append(el('strong','','Recorded total: '+money(subtotal+record.delivery+record.platform+record.tip)));
+      const subtotal=record.items.reduce((s,i)=>s+i.price*i.quantity,0);row.append(el('strong','','Recorded total: '+money(Number.isFinite(record.total)&&record.total!==null?record.total:Math.round((subtotal+record.delivery+record.platform+record.tip)*100)/100)));
       if(record.tacos)row.append(el('p','','Taco food cost was additional. Taco instructions are not included in reordering.'));
       const result=el('p','shopping-notice');result.setAttribute('role','status');
       const reorder=button('Add available items again',async()=>{
@@ -13533,7 +13538,9 @@ function selectTip(amount, element) {
           for(const item of record.items){const p=findCurrent(item,fresh.products);
             if(!p||!storeOpen(p,fresh.stores)||!Number.isFinite(Number(p.price))){skipped.push(item.name);continue;}
             if(cart[p.name] && cart[p.name].cat!==p.category){skipped.push(item.name);continue;}
-            const current=cart[p.name];cart[p.name]={q:(current?.q||0)+Number(item.quantity),p:Number(p.price),w:p.was?Number(p.was):null,cat:p.category};count+=Number(item.quantity);
+            const current=cart[p.name],quantity=Number(item.quantity);
+            if(!Number.isInteger(quantity)||quantity<1||(current?.q||0)+quantity>100||(current&&Number(current.p)!==Number(p.price))){skipped.push(item.name);continue;}
+            cart[p.name]={q:(current?.q||0)+quantity,p:Number(p.price),w:p.was?Number(p.was):null,cat:p.category};count+=quantity;
           }
           total=Object.values(cart).reduce((sum,i)=>sum+i.q*i.p,0);update();updateCartBubble();renderCartPanel();enhanceCards();
           result.textContent=count+' items added at current prices. '+(skipped.length?'Unavailable, closed or unverified: '+skipped.join(', ')+'. ':'')+'Review your cart before ordering.';
@@ -14156,7 +14163,7 @@ const close=window.closeMerchantStore;window.closeMerchantStore=function(){++req
 });</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=customer-audit20261014"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=customer-audit20261014"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=orders20261004"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=orders20261004"></script>
-<script src="customer-auth.js?v=email-identity20261007"></script><script src="account-requests.js?v=orders20261004"></script>
+<script src="customer-auth.js?v=profile-save20261014"></script><script src="account-requests.js?v=orders20261004"></script>
 <script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=20261009"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=20261011"><script src="offer-ordering.js?v=20261011"></script>
 <link rel="stylesheet" href="pure-offers.css?v=white20261010"><script src="pure-offers.js?v=order20261011"></script>
 <script src="product-cutouts.js?v=20261012"></script>
