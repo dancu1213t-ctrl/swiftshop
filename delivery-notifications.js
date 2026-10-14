@@ -57,7 +57,7 @@
       const title = document.createElement('strong'); title.textContent = row.title;
       const body = document.createElement('span'); body.textContent = row.body;
       const time = document.createElement('small'); time.textContent = `${row.kind==='promotion'?'Promotion':(row.kind==='ride'?'Ride':'Order')+' '+row.orderId.slice(0,8).toUpperCase()} · ${new Date(row.time).toLocaleString()}`;
-      button.append(title, body, time); button.onclick = async () => {write(read().map(item=>item.id===row.id?{...item,read:true}:item));render(); await openResource({kind:row.kind,promotion_id:row.orderId,ride_id:row.orderId,order_id:row.orderId}); }; host.append(button);
+      button.append(title, body, time); button.onclick = async () => {if(openingResource)return;write(read().map(item=>item.id===row.id?{...item,read:true}:item));render(); await openResource({kind:row.kind,promotion_id:row.orderId,ride_id:row.orderId,order_id:row.orderId}); }; host.append(button);
     }
     }
     panel.querySelector('[data-enable]').hidden = !window.SwiftPush;
@@ -138,7 +138,7 @@
         if(!window.SwiftRideNotificationBridge||await window.SwiftRideNotificationBridge.open(data.ride_id)===false)throw Error('Open SwiftRide to reconnect, or contact support with the ride reference.');
       }else{
         if(!orders().some(order=>order.id===data.order_id)||!window.SwiftLive)throw Error('This order is no longer saved on this device. Contact support with the order reference.');
-        window.SwiftLive.openOrder(data.order_id);
+        if(await window.SwiftLive.openOrder(data.order_id)===false)throw Error('This order could not be opened. Try again or contact support with the reference.');
       }
       window.SwiftNavigation?.refresh?.();
     }catch(error){openInbox();status(error.message);}
