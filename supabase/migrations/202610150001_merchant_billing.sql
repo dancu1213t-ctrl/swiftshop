@@ -92,7 +92,7 @@ create or replace function public.swift_merchant_access(p_category text,p_featur
  (exists(select 1 from public.merchant_members where user_id=auth.uid() and category=p_category) and
  case p_feature when 'inventory' then true when 'appearance' then true when 'orders' then true
  when 'revenue' then coalesce((select plan in('basic','pro','premium') from public.swift_merchant_plans where category=p_category),false)
- when 'campaigns' then coalesce((select plan in('pro','premium') and ads_enabled from public.swift_merchant_plans where category=p_category),false)
+ when 'campaigns' then coalesce((select plan in('pro','premium') from public.swift_merchant_plans where category=p_category),false)
  when 'delivery' then coalesce((select plan='premium' from public.swift_merchant_plans where category=p_category),false) else false end));
 $$;
 
