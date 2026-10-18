@@ -8281,7 +8281,7 @@ window.switchToggle=function(button){
  else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox').style.display='none';}
  window.SwiftNavigation?.refresh();
 };
-</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=20261012v3"></script><link rel="stylesheet" href="https://portal.swiftshopow.com/merchant-billing.css?v=20261015b"><script src="https://portal.swiftshopow.com/merchant-billing-admin.js?v=20261015c"></script></body>
+</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=details20261018"></script><link rel="stylesheet" href="https://portal.swiftshopow.com/merchant-billing.css?v=20261015b"><script src="https://portal.swiftshopow.com/merchant-billing-admin.js?v=20261015c"></script></body>
 
 
 
@@ -8816,7 +8816,8 @@ window.switchToggle=function(button){
       price: Number(r.price),
       image: r.image,
       was: r.was ? Number(r.was) : null,
-      subcategory: r.subcategory || "Items"
+      subcategory: r.subcategory || "Items",
+      description:r.description||"",tags:r.tags||[]
     }));
   }
 
@@ -9966,7 +9967,7 @@ async function render() {
   }
 
   const catalogueAddChecks=new Map();
-  async function addCatalogItem(product,button){
+  async function addCatalogItem(product,button,quantity=1){
     if(button?.disabled)return;
     const label=button?.textContent;
     if(button){button.disabled=true;button.textContent='Adding…';button.setAttribute('aria-busy','true');}
@@ -9988,16 +9989,17 @@ async function render() {
         check={started,promise};catalogueAddChecks.set(key,check);
       }
       try{await check.promise;}catch(error){catalogueAddChecks.delete(key);throw error;}
-      add(product.name,Number(product.price),button,Number(product.was)||null,product.category);
-    }catch(error){alert(error.message||'Could not add this item. Please try again.');}
+      return add(product.name,Number(product.price),button,Number(product.was)||null,product.category,quantity)===true;
+    }catch(error){alert(error.message||'Could not add this item. Please try again.');return false;}
     finally{if(button){button.disabled=false;button.textContent=label;button.removeAttribute('aria-busy');}}
   }
-  function add(n, p, btn, w, category=cat) {
+  function add(n, p, btn, w, category=cat, quantity=1) {
+    if(!Number.isInteger(quantity)||quantity<1||quantity>100){alert("Choose a valid quantity.");return false;}
     if(window.swiftMobileItemAllowed&&!window.swiftMobileItemAllowed({name:n,category})){alert("This digital item is unavailable in the mobile app.");return;}
     if(cart[n]&&(cart[n].cat!==category||Number(cart[n].p)!==Number(p))){alert('Remove the existing item from your cart before adding it from another store.');return;}
     if(!Number.isFinite(Number(p))||Number(p)<0||!String(n).trim()||!category){alert('This item is unavailable. Reopen the store for current items.');return;}
     p=Math.round(Number(p)*100)/100;
-    if((cart[n]?.q||0)>=100){alert('You can add up to 100 of this item.');return;}
+    if((cart[n]?.q||0)+quantity>100){alert('You can add up to 100 of this item.');return;}
     buzz(15); 
 
     if (btn) showAddCheck(btn);
@@ -10011,12 +10013,13 @@ async function render() {
       };
     }
     
-    cart[n].q++;
-    total += p;
+    cart[n].q+=quantity;
+    total += p*quantity;
 
     update();
     updateCartBubble();
     renderCartPanel();
+    return true;
   }
 
   function remove(n){
@@ -14003,6 +14006,7 @@ function storeHoursLabel(data){
 });
 </script><script>/* Product URLs contain identifiers only; prices and availability stay live. */
 window.attachStoreItemShare=function(card,product){
+ window.SwiftProductCards ||= new WeakMap();window.SwiftProductCards.set(card,product);
  const key=String(product.campaignId||product.id||product.name);
  const kind=product.campaignId?'offer':product.id!=null?'item':'name';
  card.dataset.shareKey=key;card.dataset.shareKind=kind;
@@ -14221,3 +14225,5 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 <script src="location-search-viewport.js?v=ios-offset20261018"></script>
 
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
+
+<link rel="stylesheet" href="product-details.css?v=20261018"><script src="product-details.js?v=20261018"></script>
