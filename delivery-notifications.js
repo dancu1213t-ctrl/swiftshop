@@ -151,12 +151,41 @@
   panel.querySelector('[data-read-all]').onclick=()=>{write(read().map(row=>({...row,read:true})));render();};
   panel.querySelector('[data-close]').onclick = () => panel.close();
   const status = text => { panel.querySelector('[data-status]').textContent = text; };
+  const testButton=document.createElement('button');testButton.type='button';testButton.textContent='Send test alert to this device';testButton.dataset.pushTest='true';
+  const testStatus=document.createElement('p');testStatus.setAttribute('role','status');testStatus.setAttribute('aria-live','polite');
+  panel.querySelector('.dn-settings').append(testButton,testStatus);let testTimer=null,testJob=null,testTries=0;
+  async function pollTest(){
+    if(!testJob||document.hidden)return;
+    const install=identity();
+    try{const {data,error}=await supabaseClient.rpc('customer_push_test_status',{p_install_id:install.id,p_install_secret:install.secret,p_job_id:testJob}).abortSignal(AbortSignal.timeout(10000));if(error)throw error;
+      if(data.state==='accepted'){testStatus.textContent='Test accepted by the push service. Check this device’s notifications.';testJob=null;}
+      else if(data.state==='failed'){testStatus.textContent='Test failed: '+(data.error||'Enable notifications and try again.');testJob=null;}
+      else{testStatus.textContent='Test queued for this device. You can lock your phone now.';if(++testTries>=30){testStatus.textContent='Still queued. The background sender needs attention.';testJob=null;}}
+    }catch(e){testStatus.textContent='Could not check test status: '+e.message;testJob=null;}
+    if(!testJob){clearInterval(testTimer);testTimer=null;testButton.disabled=false;}
+  }
+  testButton.onclick=async()=>{
+    if(testButton.disabled)return;testButton.disabled=true;
+    try{
+      if(!window.SwiftPush||!window.SWIFTSHOP_NOTIFICATION_BACKEND_ENABLED)throw Error('Phone notifications are unavailable here.');
+      registeredScope=scope();localStorage.setItem(preferenceKey(),'on');
+      const returned=await window.SwiftPush.enable(),token=deviceToken||returned;
+      if(!token?.token)throw Error('Enable phone notifications first, then send a test.');
+      const install=identity();
+      const registration=await mutate(()=>supabaseClient.rpc('register_promotion_device',{p_install_id:install.id,p_install_secret:install.secret,p_platform:token.platform,p_device_token:token.token,p_enabled:localStorage.getItem(promotionPreference())==='on'}).abortSignal(AbortSignal.timeout(10000)));
+      if(registration.error)throw registration.error;
+      const result=await supabaseClient.rpc('request_customer_push_test',{p_install_id:install.id,p_install_secret:install.secret}).abortSignal(AbortSignal.timeout(10000));if(result.error)throw result.error;
+      testJob=result.data.job_id;testTries=0;testStatus.textContent='Test queued for this device. Lock your phone to check the alert.';clearInterval(testTimer);testTimer=setInterval(pollTest,3000);
+    }catch(e){testStatus.textContent=e.message;testButton.disabled=false;}
+  };
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&testJob)pollTest();});
+
   panel.querySelector('[data-enable]').onclick = async () => { try { if (!window.SWIFTSHOP_NOTIFICATION_BACKEND_ENABLED) throw Error('Delivery notification setup is not complete yet.'); const permission=window.SwiftPush?.web?window.SwiftPush.requestPermission():null; if(permission)await permission; if(localStorage.getItem('swiftshop.push-revoke-pending')) {await revoke();localStorage.removeItem('swiftshop.push-revoke-pending');} registeredScope=scope(); localStorage.setItem(preferenceKey(), 'on'); status('Requesting notification permission…'); await window.SwiftPush.enable(); status('Registering delivery updates…'); await sync(); } catch (e) { localStorage.setItem(preferenceKey(), 'off'); status(e.message); } };
   panel.querySelector('[data-disable]').onclick = async () => { localStorage.setItem(preferenceKey(), 'off'); deviceToken=null; try { await window.SwiftPush.disable(); if(window.SWIFTSHOP_NOTIFICATION_BACKEND_ENABLED) await revoke(); status('Phone notifications turned off on this device.'); } catch { status('Phone alerts stopped locally. Open the app with internet access to finish removing its server subscription.'); localStorage.setItem('swiftshop.push-revoke-pending','true'); } };
   window.addEventListener('swift-push-token', async e => { if(scope()!==registeredScope || !active() || localStorage.getItem(preferenceKey())!=='on') { window.SwiftPush.disable().catch(()=>{}); return; } deviceToken=e.detail; await sync(); });
   window.addEventListener('swift-push-error', e => status(e.detail.message));
-  function known(data) { if(data.kind==='promotion')return !!data.promotion_id; if(data.kind==='ride')return rides().includes(data.ride_id); try { return JSON.parse(localStorage.getItem('swiftshop.live-orders.v1:' + scope()) || '[]').some(r => r.id === data.order_id); } catch { return false; } }
-  window.addEventListener('swift-delivery-push', e => { const data = e.detail.data || {}; if(data.kind==='promotion'){window.SwiftPromotions?.refresh(true);return;} if (known(data)) { record(data.ride_id||data.order_id, data.phase, true, data.event_id,null,data.kind||'delivery'); sync(); } });
+  function known(data) { if(data.kind==='push_test')return true; if(data.kind==='promotion')return !!data.promotion_id; if(data.kind==='ride')return rides().includes(data.ride_id); try { return JSON.parse(localStorage.getItem('swiftshop.live-orders.v1:' + scope()) || '[]').some(r => r.id === data.order_id); } catch { return false; } }
+  window.addEventListener('swift-delivery-push', e => { const data = e.detail.data || {}; if(data.kind==='push_test'){if(testJob)pollTest();return;} if(data.kind==='promotion'){window.SwiftPromotions?.refresh(true);return;} if (known(data)) { record(data.ride_id||data.order_id, data.phase, true, data.event_id,null,data.kind||'delivery'); sync(); } });
   window.addEventListener('swift-delivery-push-open', e => { const data = e.detail.data || {}; if(data.kind==='promotion'){if(active())openResource(data);else pendingOrder=data;return;} if (known(data)) { if(active()) { record(data.ride_id||data.order_id, data.phase, false, data.event_id,null,data.kind||'delivery'); openResource(data); } else pendingOrder=data; } });
   const screen = document.getElementById('appScreen');
   if (screen) new MutationObserver(() => { render(); if (!active()) { panel.close(); } else { if(pendingOrder && known(pendingOrder)) {openResource(pendingOrder);pendingOrder=null;} resume(); } }).observe(screen, { attributes: true, attributeFilter: ['style','class'] });
