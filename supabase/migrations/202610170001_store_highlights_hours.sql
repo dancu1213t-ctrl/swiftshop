@@ -1,0 +1,31 @@
+begin;
+alter table public.merchant_storefronts add column if not exists tags text[] not null default '{}', add column if not exists auto_close boolean not null default true, add column if not exists latitude double precision, add column if not exists longitude double precision;
+alter table public.merchant_storefronts add constraint storefront_coordinates_valid check ((latitude is null and longitude is null) or (latitude is not null and longitude is not null and latitude between -90 and 90 and longitude between -180 and 180));
+alter table public.merchant_storefronts add constraint storefront_tags_valid check (cardinality(tags)<=3 and tags <@ array['In-Store Prices','New Stock','Newly Added Items','Local Favourite','Fresh Daily','Made to Order','New on SwiftShop','Weekend Specials']::text[]);
+create or replace function public.swift_store_hours_open(o time,c time,at_time timestamptz default now()) returns boolean language sql stable set search_path=public,pg_temp as $$ select case when o is null or c is null then true when o=c then false when o<c then (at_time at time zone 'America/Belize')::time>=o and (at_time at time zone 'America/Belize')::time<c else (at_time at time zone 'America/Belize')::time>=o or (at_time at time zone 'America/Belize')::time<c end $$;
+create or replace function public.swift_storefront_guard() returns trigger language plpgsql set search_path=public,pg_temp as $$ begin
+if (tg_op='INSERT' and (new.latitude is not null or new.longitude is not null)) or (tg_op='UPDATE' and (new.latitude is distinct from old.latitude or new.longitude is distinct from old.longitude)) then
+ if auth.uid() is not null and public.swift_worker_kind() is distinct from 'admin' then raise exception 'Only administrators can set store coordinates' using errcode='42501';end if;
+end if;
+if (new.opens_at is null)<>(new.closes_at is null) or (new.opens_at is not null and new.opens_at=new.closes_at) then raise exception 'Set different opening and closing times, or clear both';end if;
+return new;end $$;
+create trigger swift_storefront_guard before insert or update on public.merchant_storefronts for each row execute function public.swift_storefront_guard();
+create or replace function public.swift_store_schedule_guard() returns trigger language plpgsql security definer set search_path=public,pg_temp as $$ begin
+if new.is_open='yes' and exists(select 1 from public.merchant_storefronts m where m.category=new.category and m.auto_close and not public.swift_store_hours_open(m.opens_at,m.closes_at)) then raise exception 'Outside your saved opening hours. Update Store appearance to change the schedule.';end if;return new;end $$;
+create trigger swift_store_schedule_guard before insert or update of is_open on public.stores for each row execute function public.swift_store_schedule_guard();
+create or replace function public.swift_store_auto_close() returns void language sql security definer set search_path=public,pg_temp as $$ update public.stores s set is_open='no' from public.merchant_storefronts m where m.category=s.category and s.is_open='yes' and m.auto_close and not public.swift_store_hours_open(m.opens_at,m.closes_at) $$;
+revoke all on function public.swift_store_auto_close() from public,anon,authenticated;
+create or replace function public.swift_storefront_close_after_save() returns trigger language plpgsql security definer set search_path=public,pg_temp as $$ begin if new.auto_close and not public.swift_store_hours_open(new.opens_at,new.closes_at) then update public.stores set is_open='no' where category=new.category and is_open='yes';end if;return new;end $$;
+create trigger swift_storefront_close_after_save after insert or update of opens_at,closes_at,auto_close on public.merchant_storefronts for each row execute function public.swift_storefront_close_after_save();
+create or replace function public.swift_store_directory() returns jsonb language sql stable security definer set search_path=public,pg_temp as $$ select coalesce(jsonb_agg(jsonb_build_object('category',s.category,'is_open',case when s.is_open='yes' and (not coalesce(m.auto_close,false) or public.swift_store_hours_open(m.opens_at,m.closes_at)) then 'yes' else 'no' end,'tags',coalesce(m.tags,'{}'::text[]),'opens_at',m.opens_at,'closes_at',m.closes_at,'auto_close',coalesce(m.auto_close,false),'latitude',m.latitude,'longitude',m.longitude)),'[]'::jsonb) from public.stores s left join public.merchant_storefronts m using(category) $$;
+revoke all on function public.swift_store_directory() from public;grant execute on function public.swift_store_directory() to anon,authenticated;
+create or replace function public.swift_store_checkout_hours_guard() returns trigger language plpgsql security definer set search_path=public,pg_temp as $$ declare v text;begin
+if exists(select 1 from public.customer_order_tracking where id=new.id) then return new;end if;
+select i->>'category' into v from jsonb_array_elements(new.snapshot->'items') i join public.merchant_storefronts m on m.category=i->>'category' where m.auto_close and not public.swift_store_hours_open(m.opens_at,m.closes_at) limit 1;
+if v is not null then raise exception 'Store % is closed. Remove its items or try again during opening hours.',v;end if;return new;end $$;
+create trigger swift_store_checkout_hours_guard before insert on public.customer_order_tracking for each row execute function public.swift_store_checkout_hours_guard();
+create or replace function public.swift_store_legacy_hours_guard() returns trigger language plpgsql security definer set search_path=public,pg_temp as $$ begin if exists(select 1 from public.merchant_storefronts m where m.category=new.category and m.auto_close and not public.swift_store_hours_open(m.opens_at,m.closes_at)) then raise exception 'Store % is outside opening hours',new.category;end if;return new;end $$;
+create trigger swift_store_legacy_hours_guard before insert on public.store_live_orders for each row execute function public.swift_store_legacy_hours_guard();
+select cron.schedule('swift-store-auto-close','* * * * *','select public.swift_store_auto_close()') where not exists(select 1 from cron.job where jobname='swift-store-auto-close');
+select public.swift_store_auto_close();
+commit;
