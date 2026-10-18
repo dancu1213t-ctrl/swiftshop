@@ -1,9 +1,10 @@
 (()=>{'use strict';
-const blocked='.hero-promo-image-wrap,.cat-btn,.store-directory-cover,#storePaidAd,.pure-offer-card,.live-offer-card,.offer-card';
-const cache=new Map();let aliases={};let queued=false;
-async function hash(src){if(!cache.has(src))cache.set(src,crypto.subtle.digest('SHA-256',new TextEncoder().encode(src)).then(buffer=>[...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,24)));return cache.get(src);}
-async function apply(img){const src=img.getAttribute('src');if(!src||img.closest(blocked)||src.includes('/customer-cutouts-20261012/'))return;const key=await hash(src);const target=aliases[key];if(!target||img.getAttribute('src')!==src)return;img.dataset.originalProductPhoto=src;img.addEventListener('error',()=>{if(img.getAttribute('src')===target){img.dataset.cutoutFailed='true';img.src=src;}},{once:true});if(img.dataset.cutoutFailed)return;img.src=target;img.classList.add('transparent-product-photo');}
-function scan(){queued=false;document.querySelectorAll('img[src]').forEach(img=>apply(img).catch(()=>{}));}
-function schedule(){if(!queued){queued=true;requestAnimationFrame(scan);}}
-fetch('product-cutouts.json?v=20261012').then(r=>{if(!r.ok)throw Error('Unavailable');return r.json();}).then(data=>{aliases=data;scan();new MutationObserver(schedule).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['src']});}).catch(()=>{});
+const blocked='.hero-promo-image-wrap,.cat-btn,.store-directory-cover,#storePaidAd,.pure-offer-card,.live-offer-card,.offer-card,.gm-style,#crMap,#pickupMap';
+const cache=new Map(),seen=new WeakMap(),pending=new Set();let aliases={},queued=false;
+async function hash(src){if(!cache.has(src)){if(cache.size>1200)cache.clear();cache.set(src,crypto.subtle.digest('SHA-256',new TextEncoder().encode(src)).then(buffer=>[...new Uint8Array(buffer)].map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,24)));}return cache.get(src);}
+async function apply(img){if(!img.isConnected)return;const src=img.getAttribute('src');if(!src||seen.get(img)===src||img.closest(blocked)||src.includes('/customer-cutouts-20261012/'))return;seen.set(img,src);img.decoding='async';const key=await hash(src),target=aliases[key];if(!target||img.getAttribute('src')!==src||img.dataset.cutoutFailed)return;img.dataset.originalProductPhoto=src;img.addEventListener('error',()=>{if(img.getAttribute('src')===target){img.dataset.cutoutFailed='true';img.src=src;}},{once:true});seen.set(img,target);img.src=target;img.classList.add('transparent-product-photo');}
+function flush(){queued=false;const batch=[...pending];pending.clear();for(const img of batch)apply(img).catch(()=>{});}
+function add(node){if(node.nodeType!==1)return;if(node.matches('img[src]'))pending.add(node);for(const img of node.querySelectorAll('img[src]'))pending.add(img);}
+function schedule(){if(!queued&&pending.size){queued=true;requestAnimationFrame(flush);}}
+fetch('product-cutouts.json?v=20261012').then(r=>{if(!r.ok)throw Error('Unavailable');return r.json();}).then(data=>{aliases=data;add(document.body);schedule();new MutationObserver(records=>{for(const record of records){if(record.type==='attributes')pending.add(record.target);else for(const node of record.addedNodes)add(node);}schedule();}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['src']});}).catch(()=>{});
 })();
