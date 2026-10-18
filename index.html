@@ -14187,7 +14187,11 @@ html.customer-text-entry body .shop-bottom-nav{visibility:hidden!important;point
 <script>
 (()=>{'use strict';
 const textField=el=>el instanceof Element&&el.matches('textarea,[contenteditable="true"],input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="hidden"])');
-const sync=()=>document.documentElement.classList.toggle('customer-text-entry',textField(document.activeElement));
+let textPointerInFlight=false;
+const sync=()=>{if(textPointerInFlight&&!textField(document.activeElement))return;document.documentElement.classList.toggle('customer-text-entry',textField(document.activeElement));};
+document.addEventListener('pointerdown',e=>{if(textField(document.activeElement)&&!textField(e.target))textPointerInFlight=true;},true);
+const finishTextPointer=()=>{textPointerInFlight=false;requestAnimationFrame(sync);};
+document.addEventListener('pointerup',finishTextPointer,true);document.addEventListener('pointercancel',finishTextPointer,true);
 document.addEventListener('focusin',sync,true);
 document.addEventListener('focusout',()=>requestAnimationFrame(sync),true);
 window.addEventListener('pageshow',sync);
@@ -14223,7 +14227,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 
 <script src="store-info.js?v=restored20261017"></script>
 
-<script src="location-search-viewport.js?v=ios-offset20261018"></script>
+<script src="location-search-viewport.js?v=stable-taps20261018"></script>
 
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
 
