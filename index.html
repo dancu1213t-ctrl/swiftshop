@@ -8183,7 +8183,10 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
 
  async function refresh(){
   if(refreshing||busy||document.hidden||!session)return;refreshing=true;const token=version;
-  try{const r=await rpc('swiftride_current_priced',ride?{p_id:ride.id}:{});if(token!==version)return;
+  try{let r=await rpc('swiftride_current_priced',ride?{p_id:ride.id}:{});if(token!==version)return;
+   // Historical completed rides must not reopen the post-trip rating screen.
+   if(r?.status==='completed'&&!ride){dismissed=r.id;localStorage.setItem('swiftride.customer.completed:'+encodeURIComponent(account),r.id);r=null;}
+
    if(r&&!((r.id===dismissed||r.id===localStorage.getItem('swiftride.customer.completed:'+encodeURIComponent(account)))&&terminal(r.status))){if(!ride||ride.id!==r.id)fitNext=true;try{const images=await rpc('swiftride_vehicle_photos_get',{p_ride_id:r.id});r.vehicle_photo=Object.values(images||{})[0]||null;}catch{r.vehicle_photo=null;}try{const plates=await rpc('swiftride_license_plates_get',{p_ride_id:r.id});r.license_plate=Object.values(plates||{})[0]||null;}catch{r.license_plate=null;}if(token!==version)return;ride=r;window.SwiftRideNotifications?.record(r.id,r.status);pending=null;localStorage.removeItem(key());paint();}
        else if(!ride&&pickup&&dropoff&&!panel.hidden){renderRideOption();}
 lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString()+' · Checks every 5 seconds');
@@ -8204,7 +8207,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
  }
  function close(){panel.hidden=true;button.setAttribute('aria-expanded','false');button.classList.remove('active');if(previousToggle)previousToggle.classList.add('active');button.focus();}
  button.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();open();},true);chip.onclick=open;
- $('crClose').onclick=close;$('crGPS').onclick=gps;$('crCenter').onclick=frame;$('crRefresh').onclick=refresh;$('crReconnect').onclick=async()=>{try{await mapReady();await auth();await refresh();paint();}catch(e){notice(e.message);}};
+ $('crClose').onclick=()=>{if(ride?.status==='completed'&&!$('crRating').hidden){$('crRatingContinue').click();return;}close();};$('crGPS').onclick=gps;$('crCenter').onclick=frame;$('crRefresh').onclick=refresh;$('crReconnect').onclick=async()=>{try{await mapReady();await auth();await refresh();paint();}catch(e){notice(e.message);}};
  $('crPin').onclick=()=>{pinMode=pinMode==='pickup'?'dropoff':'pickup';$('crPin').setAttribute('aria-pressed',String(pinMode==='dropoff'));$('crPin').textContent=pinMode==='dropoff'?'Pin pickup on map':'Pin destination on map';$('crMapNotice').textContent='Tap the map to set your '+(pinMode==='pickup'?'pickup':'destination')+'.';};
 
  function bookingFields(){return {p_name:$('crName').value.trim(),p_phone:$('crPhone').value.trim(),p_pickup:$('crPickup').value.trim(),p_dropoff:$('crDropoff').value.trim(),p_pickup_lat:pickup.lat,p_pickup_lng:pickup.lng,p_dropoff_lat:dropoff.lat,p_dropoff_lng:dropoff.lng};}
