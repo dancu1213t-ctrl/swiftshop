@@ -13646,7 +13646,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -13673,6 +13673,9 @@ document.addEventListener('DOMContentLoaded', () => {
     page.prepend(back);
   });
   function sync() {
+    // Restore covered screens before evaluating their own visibility signals.
+    for(const [el,inert,covered] of muted){el.inert=inert;if(covered===null)el.removeAttribute('data-swift-nav-muted');else el.setAttribute('data-swift-nav-muted',covered);}
+    muted=[];
     // Store screens are created by later DOMContentLoaded handlers.
     for(const id of ids){const page=document.getElementById(id);if(page&&!pages.includes(page)){pages.push(page);observer.observe(page,{attributes:true,attributeOldValue:true,attributeFilter:['style','class','hidden','open']});}}
     const open = new Set(pages.filter(isOpen));
@@ -13696,7 +13699,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const top = stack[stack.length - 1];
     const nav=document.querySelector('.shop-bottom-nav');
     if(nav){
-      const destination=top ? (['cartPanel','orderBox'].includes(top.id)?'cart':'profile') : null;
+      const destination=top ? (['cartPanel','orderBox'].includes(top.id)?'cart':['merchantStorePage','swiftProductDetails','productPhotoDialog','customerRidePanel','pickupOrderBox','tacoOrderBox','requestRideBox','promoPage','pureOfferOrderPage','customerLiveOrder'].includes(top.id)?'home':'profile') : null;
       const previousDestination=nav.querySelector('[aria-current]')?.dataset.destination;
       if(destination || ['cart','profile'].includes(previousDestination)){
         nav.querySelectorAll('button').forEach(button=>{
@@ -13709,21 +13712,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const desired = el === top;
       if (el.classList.contains('shop-active-page') !== desired) el.classList.toggle('shop-active-page', desired);
     }
-    for (const [el, inert] of muted) el.inert = inert;
-    muted = [];
     if (top) {
       top.inert=false;
       if (!locked) {
         scrollY = window.scrollY; priorFocus = document.activeElement;
-        bodyStyle = ['position','top','width','overflow'].map(key => document.body.style[key]);
-        Object.assign(document.body.style, {position:'fixed',top:`-${scrollY}px`,width:'100%',overflow:'hidden'});
+        bodyStyle = ['position','top','width','overflow','height','maxHeight'].map(key => document.body.style[key]);
+        Object.assign(document.body.style,{position:'fixed',top:'0px',width:'100%',height:'100dvh',maxHeight:'100dvh',overflow:'hidden'});
         document.documentElement.classList.add('shop-page-open'); locked = true;
       }
       // Only the active page and its ancestor path remain interactive.
       for (let node = top; node && node !== document.body && node.parentElement; node = node.parentElement) {
         for (const sibling of node.parentElement.children) {
           if (sibling !== node && !sibling.classList.contains('pac-container') && !['SCRIPT','STYLE','LINK'].includes(sibling.tagName)) {
-            muted.push([sibling, sibling.inert]); sibling.inert = true;
+            muted.push([sibling,sibling.inert,sibling.getAttribute('data-swift-nav-muted')]);sibling.inert=true;sibling.setAttribute('data-swift-nav-muted','');
           }
         }
       }
@@ -13731,7 +13732,7 @@ document.addEventListener('DOMContentLoaded', () => {
         top.setAttribute('tabindex','-1'); top.focus({preventScroll:true});
       }
     } else if (locked) {
-      ['position','top','width','overflow'].forEach((key,i) => document.body.style[key] = bodyStyle[i]);
+      ['position','top','width','overflow','height','maxHeight'].forEach((key,i) => document.body.style[key] = bodyStyle[i]);
       document.documentElement.classList.remove('shop-page-open'); locked = false;
       window.scrollTo({top:scrollY,behavior:'instant'});
       if (priorFocus?.isConnected) priorFocus.focus({preventScroll:true});
@@ -14227,3 +14228,16 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
 
 <link rel="stylesheet" href="product-details.css?v=20261018"><script src="product-details.js?v=20261018"></script>
+
+<style id="navigation-screen-isolation">
+[data-swift-nav-muted],[data-swift-nav-muted] *{visibility:hidden!important;pointer-events:none!important}
+html.shop-page-open{height:100%!important;min-height:100%!important}
+body .shop-active-page{visibility:visible!important}
+@media(max-width:700px){
+html.swift-design body #merchantStorePage.shop-active-page{padding-top:calc(14px + env(safe-area-inset-top,0px))!important;padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))!important}
+html.swift-design body #merchantStorePage .store-toolbar{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px}
+html.swift-design body #merchantStorePage .store-toolbar button{min-height:44px}
+html.swift-design body #merchantStorePage .store-identity-copy{min-width:0}
+html.swift-design body #merchantStorePage .store-identity-copy h1{overflow-wrap:anywhere}
+}
+</style>
