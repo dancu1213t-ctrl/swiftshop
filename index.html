@@ -8278,7 +8278,7 @@ window.switchToggle=function(button){
  else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox').style.display='none';}
  window.SwiftNavigation?.refresh();
 };
-</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=20261012v3"></script><link rel="stylesheet" href="https://portal.swiftshopow.com/merchant-billing.css?v=20261015b"><script src="https://portal.swiftshopow.com/merchant-billing-admin.js?v=20261015c"></script></body>
+</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=20261012v3"></script><link rel="stylesheet" href="https://portal.swiftshopow.com/merchant-billing.css?v=20261015b"><script src="https://portal.swiftshopow.com/merchant-billing-admin.js?v=20261015c"></script><script src="store-info.js?v=20261017"></script></body>
 
 
 
@@ -9972,7 +9972,7 @@ async function render() {
             supabaseClient.from('products').select('id,price,active,category,name').eq('id',product.id).maybeSingle().abortSignal(AbortSignal.timeout(10000)),
             general?Promise.resolve({data:{is_open:'yes'}}):supabaseClient.from('stores').select('is_open').eq('category',product.category).maybeSingle().abortSignal(AbortSignal.timeout(10000))
           ]);
-          if(store.error||store.data?.is_open!=='yes')throw Error('This store is closed or unavailable.');
+          if(store.error||store.data?.is_open!=='yes'||window.SwiftStoreInfo?.isOpen(product.category)===false)throw Error('This store is closed or unavailable.');
           if(current.error||!current.data||String(current.data.active).toLowerCase()!=='yes'||Number(current.data.price)!==Number(product.price)||current.data.category!==product.category||current.data.name!==product.name)throw Error('This item changed or sold out. Reopen the store for current items.');
         })();
         check={started,promise};catalogueAddChecks.set(key,check);
@@ -13792,7 +13792,7 @@ const merchantFeed=(()=>{
      try{
       if(p.campaignId){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('id',p.campaignId).maybeSingle();if(error||!data||!live(data)||Number(data.price)!==p.price)throw new Error('This offer has changed or ended. Reopen Live Deals for current offers.');}
       if(!['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(p.category)){
-       const {data,error}=await supabaseClient.from('stores').select('is_open').eq('category',p.category).maybeSingle();if(error||data?.is_open!=='yes')throw new Error('This store is closed or its availability could not be confirmed.');
+       const {data,error}=await supabaseClient.from('stores').select('is_open').eq('category',p.category).maybeSingle();if(error||data?.is_open!=='yes'||window.SwiftStoreInfo?.isOpen(p.category)===false)throw new Error('This store is closed or its availability could not be confirmed.');
       }
       if(cart[p.name]&&(cart[p.name].cat!==p.category||Number(cart[p.name].p)!==p.price))throw new Error('This item is already in your cart from another store or at a different price. Remove it first to use this offer.');
       const prev=cat;cat=p.category;try{window.add(p.name,p.price,b,p.was);}finally{cat=prev;}
@@ -13933,7 +13933,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   b.disabled=true;const category=p.category;
   try{
    const status=await supabaseClient.from('stores').select('is_open').eq('category',category).maybeSingle();
-   if(!general.has(category)&&(status.error||status.data?.is_open!=='yes'))throw Error('This store is closed or unavailable.');
+   if(!general.has(category)&&(status.error||status.data?.is_open!=='yes'||window.SwiftStoreInfo?.isOpen(category)===false))throw Error('This store is closed or unavailable.');
    if(p.campaignId){const fresh=await supabaseClient.from('merchant_campaigns').select('*').eq('id',p.campaignId).maybeSingle();if(fresh.error||!fresh.data||!merchantFeed.live(fresh.data)||Number(fresh.data.price)!==Number(p.price))throw Error('This offer changed or ended. Reopen the store for current prices.');}
    else if(!offers.includes(p)){const fresh=await supabaseClient.from('products').select('*').eq('id',p.id).maybeSingle();if(fresh.error||!fresh.data||String(fresh.data.active).toLowerCase()!=='yes'||Number(fresh.data.price)!==Number(p.price))throw Error('This item changed or sold out. Reopen the store for current items.');}
    if(cart[p.name]&&(cart[p.name].cat!==category||Number(cart[p.name].p)!==Number(p.price)))throw Error('This item is already in your cart from another store or at another price. Remove it first to change it.');
