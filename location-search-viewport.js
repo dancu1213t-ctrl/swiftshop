@@ -1,8 +1,9 @@
 (()=>{'use strict';
-const root=document.documentElement;let active=null,frame=0,lastInput=null;
+const root=document.documentElement;let active=null,frame=0,lastInput=null,pointerInFlight=false;
 const panelFor=e=>e instanceof Element?e.closest('#customerRidePanel,#pickupOrderBox'):null;
 const field=e=>e instanceof Element&&e.matches('input:not([type=button]):not([type=submit]):not([type=checkbox]):not([type=radio]):not([type=hidden]),textarea');
 function layout(){frame=0;const panel=panelFor(document.activeElement);const mobile=matchMedia('(max-width:700px)').matches;
+if(pointerInFlight&&active&&!field(document.activeElement))return;
 if(!mobile||!panel||!field(document.activeElement)){if(active){active.classList.remove('swift-location-editing');active=null;}lastInput=null;root.classList.remove('swift-location-search');return;}
 if(active&&active!==panel)active.classList.remove('swift-location-editing');active=panel;active.classList.add('swift-location-editing');root.classList.add('swift-location-search');
 const v=window.visualViewport,top=v?v.offsetTop:0,height=v?v.height:innerHeight;
@@ -12,6 +13,9 @@ const rect=input.getBoundingClientRect(),space=Math.max(60,top+height-rect.botto
 for(const list of document.querySelectorAll('.pac-container')){if(getComputedStyle(list).display==='none')continue;list.style.setProperty('position','fixed','important');list.style.setProperty('top',Math.min(rect.bottom+4,top+height-64)+'px','important');list.style.setProperty('left',Math.max(8,rect.left)+'px','important');list.style.setProperty('width',Math.min(rect.width,innerWidth-16)+'px','important');list.style.setProperty('max-height',space+'px','important');list.dataset.swiftLocationPosition='true';}}
 function queue(){if(!frame)frame=requestAnimationFrame(layout);}
 function restore(){if(panelFor(document.activeElement)&&field(document.activeElement))return;for(const list of document.querySelectorAll('.pac-container[data-swift-location-position]')){for(const p of ['position','top','left','width','max-height'])list.style.removeProperty(p);delete list.dataset.swiftLocationPosition;}}
+document.addEventListener('pointerdown',e=>{if(active&&!field(e.target))pointerInFlight=true;},true);
+const finishPointer=()=>{pointerInFlight=false;requestAnimationFrame(()=>{layout();restore();});};
+document.addEventListener('pointerup',finishPointer,true);document.addEventListener('pointercancel',finishPointer,true);
 document.addEventListener('focusin',queue,true);document.addEventListener('focusout',()=>requestAnimationFrame(()=>{layout();restore();}),true);
 window.visualViewport?.addEventListener('resize',queue);window.visualViewport?.addEventListener('scroll',queue);window.addEventListener('resize',queue);
 document.addEventListener('input',queue,true);document.addEventListener('scroll',()=>{if(active)queue();},true);
