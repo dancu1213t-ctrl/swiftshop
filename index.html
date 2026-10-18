@@ -13702,7 +13702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const top = stack[stack.length - 1];
     const nav=document.querySelector('.shop-bottom-nav');
     if(nav){
-      const destination=top ? (['cartPanel','orderBox'].includes(top.id)?'cart':['merchantStorePage','swiftProductDetails','productPhotoDialog','customerRidePanel','pickupOrderBox','tacoOrderBox','requestRideBox','promoPage','pureOfferOrderPage','customerLiveOrder'].includes(top.id)?'home':'profile') : null;
+      const destination=top ? (['cartPanel','orderBox'].includes(top.id)?'cart':['merchantStorePage','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','customerRidePanel','pickupOrderBox','tacoOrderBox','requestRideBox','promoPage','pureOfferOrderPage','customerLiveOrder'].includes(top.id)?'home':'profile') : null;
       const previousDestination=nav.querySelector('[aria-current]')?.dataset.destination;
       if(destination || ['cart','profile'].includes(previousDestination)){
         nav.querySelectorAll('button').forEach(button=>{
@@ -13876,7 +13876,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  const filterButton=btn('Filters',()=>window.openFilterModal(),'store-filter-button');
  const searchRow=el('div',undefined,'store-search-row');searchRow.append(search,filterButton);
  storePage.append(toolbar,hero,details,searchRow,chips,notice,offerBox,grid);
- function estimate(category){if(general.has(category))return '5–10 min';if(['Cosmetics','Faye','Sister','Electronics','AddToCart','Pocket Mobile'].includes(category))return 'Estimate confirmed by Dispatch';return '15–25 min';}
+ function estimate(category){if(general.has(category))return '5–10 min';if(['Cosmetics','Faye','Sister','Electronics','AddToCart','Pocket Mobile','DeLaFuentePharmacy'].includes(category))return 'Estimate confirmed by Dispatch';return '15–25 min';}
  function describe(category){return meta.get(category)||{name:category,logo:'',group:'local'};}
  function setStatus(){
   const m=describe(active);hero.replaceChildren();
