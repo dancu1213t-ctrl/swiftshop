@@ -8792,10 +8792,20 @@ window.switchToggle=function(button){
     const label=[p.name,p.category,p.subcategory,p.title,p.fulfilment_kind].filter(Boolean).join(' ');
     return !/\b(netflix|spotify|disney\s*\+|subscription|digital|streaming|game\s*credits?|top\s*up|gift\s*cards?)\b/i.test(label);
   };
+  // Share concurrent catalogue reads; checkout keeps its own fresh validation.
+  let catalogueRead=null,catalogueReadUntil=0;
+  function readActiveCatalogue(){
+    if(catalogueRead&&Date.now()<catalogueReadUntil)return catalogueRead;
+    catalogueReadUntil=Date.now()+5000;
+    const task=Promise.resolve(supabaseClient.from('products').select('*').ilike('active','yes').abortSignal(AbortSignal.timeout(15000)));
+    catalogueRead=task;
+    task.then(result=>{if(catalogueRead===task){if(result.error){catalogueRead=null;catalogueReadUntil=0;}else catalogueReadUntil=Date.now()+5000;}},()=>{if(catalogueRead===task){catalogueRead=null;catalogueReadUntil=0;}});
+    return task;
+  }
   async function getProducts() {
     window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState='loading'}}));
     let data,error;
-    try {({data,error}=await supabaseClient.from('products').select('*').ilike('active','yes').abortSignal(AbortSignal.timeout(15000)));}
+    try {({data,error}=await readActiveCatalogue());}
     catch(e){error=e;}
     if(error){window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState='error'}}));return [];}
     window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState=data?.length?'ready':'empty'}}));
@@ -9880,11 +9890,8 @@ async function render() {
   box.innerHTML = "";
 
   // 1. Check if store is open in Supabase before rendering
-  const { data: storeData } = await supabaseClient
-    .from('stores')
-    .select('is_open')
-    .eq('category', cat)
-    .single();
+  const generalCategory=['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(renderCategory);
+  const {data:storeData}=generalCategory?{data:null}:await supabaseClient.from('stores').select('is_open').eq('category',renderCategory).single();
 
   if(version!==homeRenderVersion||cat!==renderCategory||document.getElementById('searchInput')?.value.trim())return;
   const isOpen = ['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(cat) ? 'yes' : (storeData ? storeData.is_open : 'yes');
@@ -9922,7 +9929,7 @@ async function render() {
       const wrap=document.createElement('div');wrap.className='product-img-wrap';
       const heart=document.createElement('button');heart.type='button';heart.className='heart-btn';heart.setAttribute('aria-label','Save '+p.name);heart.onclick=event=>toggleLike(heart,event);
       heart.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>';
-      const image=document.createElement('img');image.src=p.image;image.alt=p.name;image.loading='lazy';wrap.append(heart,image);card.append(wrap);
+      const image=document.createElement('img');image.src=p.image;image.alt=p.name;image.loading='lazy';image.decoding='async';wrap.append(heart,image);card.append(wrap);
       const info=document.createElement('div');info.className='product-info';const name=document.createElement('strong');name.textContent=p.name;
       const prices=document.createElement('div');prices.className='price';if(was>price){const old=document.createElement('span');old.className='price-was';old.textContent='$'+was.toFixed(2);prices.append(old);}prices.append(document.createTextNode('$'+price.toFixed(2)+' BZD'));
       const button=document.createElement('button');button.type='button';button.className='customer-product-add';button.textContent='Add';button.onclick=()=>addCatalogItem(p,button);
@@ -9946,7 +9953,7 @@ async function render() {
     if(!matches.length){const empty=document.createElement('p');empty.style.gridColumn='1/-1';empty.textContent='No matching items. Try another name.';box.append(empty);}
     for(const p of matches){
       const card=document.createElement('div');card.className='product';
-      const image=document.createElement('img');image.src=p.image;image.alt=p.name;image.loading='lazy';card.append(image);
+      const image=document.createElement('img');image.src=p.image;image.alt=p.name;image.loading='lazy';image.decoding='async';card.append(image);
       const info=document.createElement('div');info.className='product-info';
       const name=document.createElement('strong');name.textContent=p.name;
       const store=document.createElement('small');store.textContent=p.category;
@@ -13765,7 +13772,7 @@ const merchantFeed=(()=>{
  async function campaigns(kind){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('kind',kind).eq('status','published').order('created_at',{ascending:false}).abortSignal(AbortSignal.timeout(15000));if(error)throw error;return (data||[]).filter(r=>live(r));}
  const legacyPromos=window.getPromos;
  window.getPromos=async function(){
-  const results=await Promise.allSettled([legacyPromos(),campaigns('promo'),supabaseClient.from('products').select('*').ilike('active','yes').abortSignal(AbortSignal.timeout(15000))]);
+  const results=await Promise.allSettled([legacyPromos(),campaigns('promo'),readActiveCatalogue()]);
   const legacy=results[0].status==='fulfilled'?results[0].value:[];
   if(results[1].status==='rejected')console.warn('Merchant promo feed unavailable; showing catalogue and existing promos.');
   const products=results[2].status==='fulfilled'&&!results[2].value.error?results[2].value.data||[]:[];
@@ -13924,7 +13931,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  function favouriteKey(){return 'swiftshop.v1.'+(localStorage.getItem('userPhone')||'guest')+'.favourites';}
  function saved(){try{return JSON.parse(localStorage.getItem(favouriteKey())||'[]');}catch{return [];}}
  function card(p,isOffer=false){
-  const c=el('article',undefined,'store-product');const image=el('img');image.src=merchantFeed.imageURL(p.image);image.alt=p.name;image.loading='lazy';c.append(image);
+  const c=el('article',undefined,'store-product');const image=el('img');image.src=merchantFeed.imageURL(p.image);image.alt=p.name;image.loading='lazy';image.decoding='async';c.append(image);
   const heart=btn('♡',()=>{try{const list=saved(),key=String(p.id??(p.category+'::'+p.name)),exists=list.some(x=>String(x.id??(x.category+'::'+x.name))===key);localStorage.setItem(favouriteKey(),JSON.stringify(exists?list.filter(x=>String(x.id??(x.category+'::'+x.name))!==key):[...list,{id:p.id,name:p.name,category:p.category,image:p.image}]));heart.setAttribute('aria-pressed',String(!exists));heart.textContent=exists?'♡':'♥';}catch{notice.textContent='Your browser could not save this favourite.';}},'store-heart');
   heart.setAttribute('aria-label','Save '+p.name);const liked=saved().some(x=>String(x.id??(x.category+'::'+x.name))===String(p.id??(p.category+'::'+p.name)));heart.setAttribute('aria-pressed',String(liked));heart.textContent=liked?'♥':'♡';c.append(heart);
   if(isOffer)c.append(el('small','LIVE OFFER','store-offer-badge'));
@@ -14163,7 +14170,7 @@ const close=window.closeMerchantStore;window.closeMerchantStore=function(){++req
 <script src="customer-auth.js?v=profile-save20261014"></script><script src="account-requests.js?v=orders20261004"></script>
 <script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=billing20261015"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=20261011"><script src="offer-ordering.js?v=20261011"></script>
 <link rel="stylesheet" href="pure-offers.css?v=white20261010"><script src="pure-offers.js?v=order20261011"></script>
-<script src="product-cutouts.js?v=20261012"></script>
+<script src="product-cutouts.js?v=incremental20261018"></script>
 <!-- Keep home banners out of search and keyboard views. -->
 <style id="customer-search-banner-fix">
 html.shop-page-open body #heroPromoSlider,
