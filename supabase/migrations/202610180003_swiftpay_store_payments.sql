@@ -1,13 +1,15 @@
 begin;
 create table if not exists public.swiftpay_store_providers(
- category text primary key references public.stores(category), code uuid not null unique default gen_random_uuid(),
+ category text primary key, code uuid not null unique default gen_random_uuid(),
  active boolean not null default true, created_at timestamptz not null default now());
 create table if not exists public.swiftpay_store_receipts(
  request_id uuid primary key, customer_id uuid not null references auth.users(id), profile_id uuid not null references public.swiftshop_users(id),
- category text not null references public.stores(category), amount_cents bigint not null check(amount_cents between 1 and 10000000),
+ category text not null, amount_cents bigint not null check(amount_cents between 1 and 10000000),
  fee_cents bigint not null default 15 check(fee_cents=15), balance_after_cents bigint not null check(balance_after_cents>=0),
  transaction_id uuid not null unique references public.swiftpay_transactions(id),
  created_at timestamptz not null default now(), settled_at timestamptz);
+alter table public.swiftpay_store_providers drop constraint if exists swiftpay_store_providers_category_fkey;
+alter table public.swiftpay_store_receipts drop constraint if exists swiftpay_store_receipts_category_fkey;
 alter table public.swiftpay_store_providers enable row level security;
 alter table public.swiftpay_store_receipts enable row level security;
 revoke all on public.swiftpay_store_providers,public.swiftpay_store_receipts from public,anon,authenticated;
