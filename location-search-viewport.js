@@ -37,8 +37,8 @@ html.swift-pickup-search .pac-item{min-height:42px;line-height:42px;font-size:12
    descendants to that displaced body when its keyboard opens. Neutralize the
    lock only during editing; the original inline position is restored on blur. */
 html.swift-location-search{height:100%!important;min-height:100%!important;overflow:hidden!important}
-html.swift-location-search body{position:fixed!important;top:0!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:100%!important;max-height:none!important;min-height:0!important;margin:0!important;overflow:visible!important;background:#fff!important}
-html.swift-location-search body #appScreen{position:static!important;overflow:visible!important;transform:none!important;min-height:0!important;height:0!important}
+html.swift-location-search body{position:relative!important;top:0!important;left:0!important;right:0!important;bottom:auto!important;width:100%!important;height:auto!important;max-height:none!important;min-height:0!important;margin:0!important;overflow:hidden!important;background:#fff!important}
+html.swift-location-search body #appScreen{position:static!important;overflow:visible!important;transform:none!important;min-height:0!important;height:auto!important}
 html.swift-location-search body #appScreen>:not(#pickupOrderBox){visibility:hidden!important;pointer-events:none!important}
 html.swift-location-search body #appScreen #pickupOrderBox{visibility:visible!important;pointer-events:auto!important}
 html.swift-location-search body #pickupOrderBox.swift-location-editing{clip:auto!important;clip-path:none!important;contain:none!important}
