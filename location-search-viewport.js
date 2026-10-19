@@ -4,11 +4,11 @@ const panelFor=e=>e instanceof Element?e.closest('#customerRidePanel,#pickupOrde
 const field=e=>e instanceof Element&&e.matches('input:not([type=button]):not([type=submit]):not([type=checkbox]):not([type=radio]):not([type=hidden]),textarea');
 function layout(){frame=0;const panel=panelFor(document.activeElement);const mobile=matchMedia('(max-width:700px)').matches;
 if(pointerInFlight&&active&&!field(document.activeElement))return;
-if(!mobile||!panel||!field(document.activeElement)){if(active){active.classList.remove('swift-location-editing');active=null;}lastInput=null;root.classList.remove('swift-location-search');return;}
-if(active&&active!==panel)active.classList.remove('swift-location-editing');active=panel;active.classList.add('swift-location-editing');root.classList.add('swift-location-search');
+if(!mobile||!panel||!field(document.activeElement)){if(active){active.classList.remove('swift-location-editing');active=null;}lastInput=null;root.classList.remove('swift-location-search','swift-pickup-search');return;}
+if(active&&active!==panel)active.classList.remove('swift-location-editing');active=panel;active.classList.add('swift-location-editing');root.classList.toggle('swift-location-search',panel.id!=='pickupOrderBox');root.classList.toggle('swift-pickup-search',panel.id==='pickupOrderBox');
 const v=window.visualViewport,top=v?v.offsetTop:0,height=v?v.height:innerHeight;
 root.style.setProperty('--location-view-top',top+'px');root.style.setProperty('--location-view-height',height+'px');
-const input=document.activeElement,r=input.getBoundingClientRect();if(input!==lastInput||revealPending){const upper=top+16,lower=top+height-64;if(r.top<upper)panel.scrollTop+=r.top-upper;else if(r.bottom>lower)panel.scrollTop+=r.bottom-lower;revealPending=false;}lastInput=input;
+const input=document.activeElement,r=input.getBoundingClientRect();if(input!==lastInput||revealPending){const safe=parseFloat(getComputedStyle(panel).paddingTop)||16,upper=top+safe,lower=top+height-64;if(r.top<upper)panel.scrollTop+=r.top-upper;else if(r.bottom>lower)panel.scrollTop+=r.bottom-lower;revealPending=false;}lastInput=input;
 const rect=input.getBoundingClientRect(),space=Math.max(0,Math.min(240,top+height-rect.bottom-12));
 for(const list of document.querySelectorAll('.pac-container')){if(getComputedStyle(list).display==='none')continue;list.style.setProperty('position','fixed','important');list.style.setProperty('top',Math.max(top,rect.bottom+4)+'px','important');list.style.setProperty('left',Math.max(8,rect.left)+'px','important');list.style.setProperty('width',Math.min(rect.width,innerWidth-16)+'px','important');list.style.setProperty('max-height',space+'px','important');list.dataset.swiftLocationPosition='true';}}
 function queue(){if(!frame)frame=requestAnimationFrame(layout);}
@@ -22,6 +22,17 @@ document.addEventListener('input',queue,true);document.addEventListener('scroll'
 new MutationObserver(()=>{if(active)queue();}).observe(document.body,{childList:true,subtree:true});
 const style=document.createElement('style');style.textContent=`
 @media(max-width:700px){
+/* Pickup needs one scroll surface; nested fixed ancestors clip on iOS. */
+html.swift-pickup-search{overflow:hidden!important}
+html.swift-pickup-search body{position:relative!important;top:0!important;bottom:auto!important;height:auto!important;min-height:0!important;overflow:hidden!important}
+html.swift-pickup-search #appScreen{position:static!important;transform:none!important;overflow:visible!important}
+html.swift-pickup-search body #pickupOrderBox.swift-location-editing{position:fixed!important;inset:auto 0 auto!important;top:var(--location-view-top,0px)!important;bottom:auto!important;width:100%!important;height:var(--location-view-height,100dvh)!important;max-height:var(--location-view-height,100dvh)!important;min-height:0!important;margin:0!important;padding:calc(16px + env(safe-area-inset-top,0px)) 16px 24px!important;box-sizing:border-box!important;transform:none!important;translate:none!important;animation:none!important;overflow:auto!important;overscroll-behavior:contain!important;-webkit-overflow-scrolling:touch;touch-action:pan-y!important;scroll-behavior:auto!important;z-index:70000!important;border:0!important;border-radius:0!important;background:#fff!important}
+html.swift-pickup-search #pickupOrderBox .pd-map-area{display:none!important}
+html.swift-pickup-search .shop-bottom-nav{display:none!important}
+html.swift-pickup-search #pickupOrderBox input,html.swift-pickup-search #pickupOrderBox textarea{font-size:16px!important}
+html.swift-pickup-search .pac-container{z-index:70010!important;overflow-y:auto!important;overscroll-behavior:contain;box-sizing:border-box;border-radius:12px}
+html.swift-pickup-search .pac-item{min-height:42px;line-height:42px;font-size:12px}
+
 /* Existing page navigation locks body with a negative top. iOS clips fixed
    descendants to that displaced body when its keyboard opens. Neutralize the
    lock only during editing; the original inline position is restored on blur. */
