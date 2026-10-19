@@ -9972,6 +9972,12 @@ async function render() {
   const catalogueAddChecks=new Map();
   async function addCatalogItem(product,button,quantity=1){
     if(button?.disabled)return;
+    window.SwiftCartDraft?.prepare();
+    // The displayed general catalogue is already loaded and checkout revalidates.
+    // Add locally without another network round trip for each snack or staple.
+    const generalCategory=['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(product.category);
+    const loaded=generalCategory&&allProducts.find(p=>p.id===product.id&&p.name===product.name&&p.category===product.category&&Number(p.price)===Number(product.price)&&String(p.active).toLowerCase()==='yes');
+    if(loaded)return add(product.name,Number(product.price),button,Number(product.was)||null,product.category,quantity)===true;
     const label=button?.textContent;
     if(button){button.disabled=true;button.textContent='Adding…';button.setAttribute('aria-busy','true');}
     try{
@@ -9997,6 +10003,7 @@ async function render() {
     finally{if(button){button.disabled=false;button.textContent=label;button.removeAttribute('aria-busy');}}
   }
   function add(n, p, btn, w, category=cat, quantity=1) {
+    window.SwiftCartDraft?.prepare();
     if(!Number.isInteger(quantity)||quantity<1||quantity>100){alert("Choose a valid quantity.");return false;}
     if(window.swiftMobileItemAllowed&&!window.swiftMobileItemAllowed({name:n,category})){alert("This digital item is unavailable in the mobile app.");return;}
     if(cart[n]&&(cart[n].cat!==category||Number(cart[n].p)!==Number(p))){alert('Remove the existing item from your cart before adding it from another store.');return;}
@@ -10005,7 +10012,6 @@ async function render() {
     if((cart[n]?.q||0)+quantity>100){alert('You can add up to 100 of this item.');return;}
     buzz(15); 
 
-    if (btn) showAddCheck(btn);
 
     if (!cart[n]) {
       cart[n] = { 
@@ -10022,10 +10028,12 @@ async function render() {
     update();
     updateCartBubble();
     renderCartPanel();
+    if(btn)showAddCheck(btn);
     return true;
   }
 
   function remove(n){
+    window.SwiftCartDraft?.prepare();
     buzz(20); // softer vibration
 
     if(!cart[n]) return;
@@ -13951,6 +13959,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  window.addEventListener('swift-filters-changed',()=>{if(active){drawProducts();drawOffers();}});
  function drawOffers(){offerBox.replaceChildren();if(!offers.length)return;offerBox.append(el('h2','Offers from this store'));const row=el('div',undefined,'store-offer-row');for(const p of window.SwiftProductFilters.apply(offers))row.append(card(p,true));offerBox.append(row);updateCounts();}
  async function addItem(p,b){
+  window.SwiftCartDraft?.prepare();
   b.disabled=true;const category=p.category;
   try{
    const status=await supabaseClient.from('stores').select('is_open').eq('category',category).maybeSingle();
@@ -14172,7 +14181,7 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=private-test20261018"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=customer-audit20261014"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
+});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=private-test20261018"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=cart-first-tap20261018"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=orders20261004"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=orders20261004"></script>
 <script src="customer-auth.js?v=profile-save20261014"></script><script src="account-requests.js?v=orders20261004"></script>
