@@ -122,3 +122,49 @@ body.swiftpay-open{overflow:hidden!important}.swiftpay-method-label{display:bloc
 }
 
 .swiftpay-transfer-message,.swiftpay-transfer-dialog [data-friend-message]{overflow-wrap:anywhere;white-space:pre-wrap;line-height:1.5}.swiftpay-transfer-dialog [data-friend-message]{border-left:3px solid #ff902f;padding:8px 12px;background:#fff7ee;border-radius:0 10px 10px 0;font-size:14px;color:#514b40}
+
+/* Wallet refinements: preserve card geometry; colours are decorative only. */
+html.swift-design body #swiftPayPage{padding-top:calc(28px + max(28px,env(safe-area-inset-top,0px)))!important}
+.swiftpay-header{align-items:center}.swiftpay-header>span{white-space:nowrap}
+.sp-card-wrap{min-width:0}.sp-card-wrap .swiftpay-card{width:100%}
+.swiftpay-card[data-colour=black]{background:linear-gradient(130deg,#262626,#111)}
+.swiftpay-card[data-colour=pink]{background:linear-gradient(130deg,#7d3259,#3d1935)}
+.swiftpay-card[data-colour=blue]{background:linear-gradient(130deg,#16476f,#101e3e)}
+.swiftpay-card[data-colour=grey]{background:linear-gradient(130deg,#5d646b,#30353b)}
+.swiftpay-card[data-colour] p,.swiftpay-card[data-colour]>small,.swiftpay-card[data-colour] .swiftpay-card-bottom small{color:#e1e5e8}
+.sp-palette{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:0;margin:14px 0 0;padding:0;min-width:0}
+.sp-palette legend{font-size:11px;color:#737973;margin-bottom:8px}
+.sp-colour{border:1px solid #dde1dd;background:#fff;color:#243027;border-radius:30px;padding:9px 12px;min-height:44px;font:inherit;font-size:12px;display:flex;align-items:center;gap:7px}
+.sp-colour:before{content:'';width:14px;height:14px;border-radius:50%;background:#1a1a1a}
+.sp-colour[data-colour=pink]:before{background:#a6517a}.sp-colour[data-colour=blue]:before{background:#265a99}.sp-colour[data-colour=grey]:before{background:#717983}
+.sp-colour[aria-pressed=true]{border-color:#29382d;box-shadow:0 0 0 1px #29382d}
+#swiftPayPage .swiftpay-card-pay,#swiftPayPage .swiftpay-send-section{display:block;padding:0;background:transparent;border:0}
+.sp-slide{position:relative;width:100%;height:62px;min-width:0;background:#1c2921;border:1px solid #23372a;border-radius:36px;isolation:isolate;box-sizing:border-box;overflow:hidden}
+.sp-slide>span{position:absolute;inset:0;display:grid;place-items:center;color:white;font-size:14px;font-weight:650;pointer-events:none;padding-left:24px}
+.sp-slide input{position:absolute;inset:0;width:100%;height:100%;padding:5px!important;margin:0!important;border:0!important;background:transparent!important;appearance:none;-webkit-appearance:none;cursor:ew-resize;box-sizing:border-box;touch-action:pan-y}
+.sp-slide input::-webkit-slider-runnable-track{height:50px;background:transparent;border:0}
+.sp-slide input::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:50px;height:50px;border-radius:50%;border:0;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' stroke='%231c2921' stroke-width='2'%3E%3Cpath d='M5 12h14m-6-6 6 6-6 6'/%3E%3C/svg%3E") center/24px no-repeat;box-shadow:0 2px 6px #0002}
+.sp-slide input::-moz-range-thumb{width:50px;height:50px;border:0;border-radius:50%;background:#fff}
+.sp-slide input:focus-visible{outline:3px solid #ff9a53!important;outline-offset:-3px}
+.sp-pay-options{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sp-pay-options[hidden],.sp-runner-choice[hidden],[data-store-review][hidden],.sp-store-dialog video[hidden]{display:none!important}
+.sp-choice{border:1px solid #dde3da;background:white;color:#223129;padding:18px 12px;border-radius:16px;min-height:58px;font:inherit;font-size:14px;font-weight:650}
+.sp-runner-choice{grid-column:1/-1;border:1px solid #e0e5dc;border-radius:16px;padding:16px;background:#fff}
+.sp-runner-choice .swiftpay-primary{width:100%;max-width:none;margin-top:12px}
+.sp-activity{border:1px solid #e1e5dd;background:#fff;border-radius:18px;padding:18px}
+.sp-activity summary{cursor:pointer;font-size:17px;font-weight:650;min-height:32px;list-style-position:inside}
+.sp-activity[open] summary{margin-bottom:18px}
+.sp-activity [data-wallet-refresh]{border:0;background:none;color:#9b5008;font:inherit;font-size:12px;min-height:44px;margin-bottom:8px}
+.swiftpay-qr-dialog>button.sp-bottom-close,.swiftpay-transfer-dialog>.sp-bottom-close,.sp-bottom-close{display:block;position:sticky;bottom:0;box-sizing:border-box;width:100%!important;height:auto!important;min-height:48px!important;border:1px solid #dce2d9!important;border-radius:14px!important;background:#f7f9f5!important;color:#25352a!important;font:inherit!important;font-size:14px!important;padding:13px 16px!important;margin:22px 0 0!important}
+.swiftpay-qr-dialog,.swiftpay-transfer-dialog{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))!important;max-height:calc(100dvh - max(40px,env(safe-area-inset-top,0px)) - 28px)!important}
+.sp-store-dialog h2{font-size:24px;margin:8px 0 18px}
+.sp-store-dialog video{display:block;width:100%;max-height:260px;border-radius:16px;object-fit:cover;background:#18221b;margin:16px 0}
+.sp-camera-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.sp-camera-actions .swiftpay-primary{flex:1;max-width:none}
+.sp-store-dialog .sp-upload{position:relative;display:grid;place-items:center;min-height:44px;padding:0 12px;border:1px solid #dee4dc;border-radius:12px;font-size:12px;margin:0;font-weight:500;overflow:hidden}
+.sp-upload input{position:absolute;inset:0;opacity:0;cursor:pointer;margin:0}
+.sp-store-dialog [data-store-review]{padding:18px;border:1px solid #dce6d9;border-radius:16px;margin-top:18px;background:#f6faf4}
+.sp-store-dialog [data-store-review]>.swiftpay-primary{max-width:none;margin-top:16px}
+.sp-store-dialog [data-store-review] p,.sp-store-dialog [data-store-status]{font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+@media(min-width:800px){.sp-card-wrap{grid-column:1;grid-row:2}.sp-card-wrap .swiftpay-card{max-width:600px}.swiftpay-send-section{align-self:start}.sp-card-wrap .sp-palette{max-width:600px}}
+@media(max-width:380px){.sp-colour{padding:8px 10px;font-size:11px}.sp-palette{gap:6px}.sp-slide>span{font-size:13px}}
