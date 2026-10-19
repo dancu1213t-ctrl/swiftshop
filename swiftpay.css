@@ -171,7 +171,9 @@ html.swift-design body #swiftPayPage{padding-top:calc(28px + max(28px,env(safe-a
 
 /* Store payment is a centred dialog, rather than a full-height app page. */
 html.swift-design body #swiftPayStoreDialog,
-html.swift-design body #swiftPayStoreDialog.shop-active-page{
+html.swift-design body #swiftPayStoreDialog.shop-active-page,
+html.swift-design body #swiftPayPaymentDialog,
+html.swift-design body #swiftPayPaymentDialog.shop-active-page{
  position:fixed!important;inset:auto!important;left:50%!important;top:calc(var(--sp-store-top,0px) + var(--sp-store-height,100dvh)/2)!important;
  transform:translate(-50%,-50%)!important;animation:none!important;translate:none!important;
  width:calc(100% - 32px)!important;max-width:420px!important;height:auto!important;min-height:0!important;
@@ -189,3 +191,13 @@ html.swift-design body #swiftPayStoreDialog.shop-active-page{
 #swiftPayStoreDialog [data-store-status]{margin:18px 0 0;color:#6a756c;font-size:12px;line-height:1.65}
 #swiftPayStoreDialog>[data-store-close]{margin-top:20px!important;position:sticky;bottom:0}
 @media(max-width:360px){html.swift-design body #swiftPayStoreDialog.shop-active-page,html.swift-design body #swiftPayStoreDialog{padding:22px 18px 16px!important;width:calc(100% - 24px)!important}}
+
+/* Runner QR uses the same centred payment box as the store scanner. */
+#swiftPayPaymentDialog .swiftpay-eyebrow{margin:0 0 8px;text-align:center}
+#swiftPayPaymentDialog h2{font-size:25px;letter-spacing:-.6px;margin:0 0 18px}
+#swiftPayPaymentDialog canvas{display:block;width:232px;max-width:100%;height:auto;margin:18px auto}
+#swiftPayPaymentDialog [data-qr-summary]{font-size:13px;line-height:1.6;margin:12px 0}
+#swiftPayPaymentDialog [data-qr-status]{font-size:12px;line-height:1.65;margin:16px 0;color:#6a756c}
+#swiftPayPaymentDialog [data-refresh-code]{width:100%;min-height:46px;border-radius:14px}
+#swiftPayPaymentDialog>[data-qr-close]{margin-top:20px!important}
+@media(max-width:360px){html.swift-design body #swiftPayPaymentDialog,html.swift-design body #swiftPayPaymentDialog.shop-active-page{padding:22px 18px 16px!important;width:calc(100% - 24px)!important}}
