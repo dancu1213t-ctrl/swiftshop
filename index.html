@@ -13846,7 +13846,7 @@ const merchantFeed=(()=>{
    const logoUrl=source?.querySelector('img')?.getAttribute('src');
    const brandMark=el('div');brandMark.className='banner-brand-mark';
    if(logoUrl){const logo=el('img');logo.src=logoUrl;logo.alt=r.category;logo.onerror=()=>{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');};brandMark.append(logo);}else{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');}
-   brand.append(brandMark);const eyebrow=el('span','LOCAL FAVOURITES');eyebrow.className='banner-editorial-label';brand.append(eyebrow);copy.append(brand,el('h2',r.title),el('p',r.subtitle));const b=el('button','Visit store →');b.type='button';b.onclick=()=>window.openMerchantStore(r.category);copy.append(b);const img=el('img');img.alt=r.title;
+   brand.append(brandMark);const eyebrow=el('span',source?.querySelector('img')?.alt||source?.querySelector('span')?.textContent||r.category);eyebrow.className='banner-editorial-label';brand.append(eyebrow);copy.append(brand,el('h2',r.title),el('p',r.subtitle));const b=el('button','Visit store →');b.type='button';b.onclick=()=>window.openMerchantStore(r.category);copy.append(b);const img=el('img');img.alt=r.title;
    const artwork=imageURL(r.image);
    img.onload=()=>{card.style.setProperty('--slide-artwork','url('+JSON.stringify(artwork)+')');card.classList.add('image-blended');};
    img.onerror=()=>{card.classList.remove('image-blended');card.style.removeProperty('--slide-artwork');};
@@ -14260,3 +14260,43 @@ html.swift-design body #merchantStorePage .store-identity-copy h1{overflow-wrap:
 </style>
 
 <script src="pharmacy-stores.js?v=20261018"></script>
+
+
+<style id="merchant-banner-professional-layout">
+/* Give merchant artwork its own bounded area; copy never overlaps uploads. */
+html.swift-design body #appScreen #merchantBannerSlider{position:relative!important;width:100%!important;max-width:1280px!important;margin:18px auto 26px!important;overflow:hidden!important;border:1px solid #e7e9e3!important;border-radius:24px!important;background:#fff!important;box-sizing:border-box!important;box-shadow:none!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner,
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner.image-blended{display:grid!important;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)!important;align-items:center!important;gap:24px!important;min-height:250px!important;padding:24px!important;background:#fff!important;border:0!important;border-radius:0!important;isolation:isolate;box-sizing:border-box!important;overflow:hidden!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner[hidden]{display:none!important}
+html.swift-design body #appScreen #merchantBannerSlider:has(.merchant-banner-controls) .merchant-banner{padding-bottom:62px!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner::before,
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner::after,
+html.swift-design body #appScreen #merchantBannerSlider .banner-art-panel::before,
+html.swift-design body #appScreen #merchantBannerSlider .banner-art-panel::after{display:none!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner>.banner-copy{position:relative!important;inset:auto!important;z-index:1!important;display:flex!important;flex-direction:column!important;align-items:flex-start!important;width:100%!important;max-width:none!important;min-width:0!important;padding:0!important;margin:0!important;gap:0!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-brand{display:flex!important;align-items:center!important;gap:8px!important;margin:0 0 14px!important;padding:0!important;background:transparent!important;border:0!important;max-width:100%!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-brand-mark{display:grid!important;place-items:center;flex:0 0 30px!important;width:30px!important;height:30px!important;border-radius:50%!important;overflow:hidden!important;background:#fff!important;border:1px solid #edf0e8!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-brand-mark img{position:static!important;width:100%!important;height:100%!important;object-fit:contain!important;margin:0!important;filter:none!important;transform:none!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-editorial-label{display:block!important;font-size:11px!important;font-weight:650!important;line-height:1.35!important;letter-spacing:0!important;text-transform:none!important;color:#657064!important;padding:0!important;background:none!important;border:0!important;overflow-wrap:anywhere}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner h2{font-size:clamp(22px,2.5vw,34px)!important;line-height:1.12!important;letter-spacing:-.7px!important;color:#202a23!important;margin:0 0 10px!important;max-width:22ch!important;overflow-wrap:anywhere!important;text-wrap:balance}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner p{font-size:13px!important;line-height:1.5!important;margin:0 0 18px!important;color:#697168!important;max-width:34ch!important;overflow-wrap:anywhere}
+html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-height:44px!important;min-width:0!important;width:auto!important;max-width:100%!important;padding:11px 15px!important;border:0!important;border-radius:24px!important;background:#202d24!important;color:#fff!important;font-size:12px!important;line-height:1.3!important;font-weight:650!important;box-shadow:none!important;margin:0!important;white-space:normal!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-copy button::before,
+html.swift-design body #appScreen #merchantBannerSlider .banner-copy button::after{display:none!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner>.banner-art-panel{position:relative!important;inset:auto!important;width:100%!important;height:210px!important;min-width:0!important;max-width:100%!important;display:grid!important;place-items:center!important;align-self:center!important;overflow:hidden!important;padding:8px!important;box-sizing:border-box!important;border-radius:18px!important;background:#fff!important;z-index:0!important;transform:none!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-art-panel>img{position:static!important;inset:auto!important;display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;opacity:1!important;mix-blend-mode:normal!important;transform:none!important;filter:none!important;border-radius:10px!important;animation:none!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner-controls{inset:auto 16px 10px!important;background:#fff!important;min-height:40px!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-count{font-size:10px!important;color:#7b8378!important;margin-right:8px!important}
+@media(max-width:600px){
+html.swift-design body #appScreen #merchantBannerSlider{border-radius:20px!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner,
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner.image-blended{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)!important;gap:12px!important;padding:18px!important;min-height:230px!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner h2{font-size:21px!important;line-height:1.15!important;letter-spacing:-.5px!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner p{font-size:11px!important;line-height:1.5!important;margin-bottom:14px!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-brand{gap:6px!important;margin-bottom:12px!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-editorial-label{font-size:10px!important}
+html.swift-design body #appScreen #merchantBannerSlider .merchant-banner>.banner-art-panel{height:184px!important;padding:2px!important;border-radius:12px!important}
+html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font-size:11px!important;padding:10px 12px!important}
+}
+@media(max-width:360px){html.swift-design body #appScreen #merchantBannerSlider .merchant-banner h2{font-size:19px!important}html.swift-design body #appScreen #merchantBannerSlider .merchant-banner>.banner-art-panel{height:166px!important}}
+</style>
