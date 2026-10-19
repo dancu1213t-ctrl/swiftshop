@@ -173,7 +173,9 @@ html.swift-design body #swiftPayPage{padding-top:calc(28px + max(28px,env(safe-a
 html.swift-design body #swiftPayStoreDialog,
 html.swift-design body #swiftPayStoreDialog.shop-active-page,
 html.swift-design body #swiftPayPaymentDialog,
-html.swift-design body #swiftPayPaymentDialog.shop-active-page{
+html.swift-design body #swiftPayPaymentDialog.shop-active-page,
+html.swift-design body #swiftCreditTransferDialog,
+html.swift-design body #swiftCreditTransferDialog.shop-active-page{
  position:fixed!important;inset:auto!important;left:50%!important;top:calc(var(--sp-store-top,0px) + var(--sp-store-height,100dvh)/2)!important;
  transform:translate(-50%,-50%)!important;animation:none!important;translate:none!important;
  width:calc(100% - 32px)!important;max-width:420px!important;height:auto!important;min-height:0!important;
@@ -201,3 +203,18 @@ html.swift-design body #swiftPayPaymentDialog.shop-active-page{
 #swiftPayPaymentDialog [data-refresh-code]{width:100%;min-height:46px;border-radius:14px}
 #swiftPayPaymentDialog>[data-qr-close]{margin-top:20px!important}
 @media(max-width:360px){html.swift-design body #swiftPayPaymentDialog,html.swift-design body #swiftPayPaymentDialog.shop-active-page{padding:22px 18px 16px!important;width:calc(100% - 24px)!important}}
+
+/* Match the other payment boxes, with scroll room for transfer review. */
+#swiftCreditTransferDialog>header{display:block;text-align:center}
+#swiftCreditTransferDialog>header .swiftpay-eyebrow{margin:0 0 8px}
+#swiftCreditTransferDialog h2{margin:0;font-size:25px;letter-spacing:-.6px;outline:none}
+#swiftCreditTransferDialog>p{text-align:center;font-size:12px;line-height:1.6;margin:12px 0 20px;color:#6a756c}
+#swiftCreditTransferDialog form label{margin:14px 0;gap:8px;font-size:13px}
+#swiftCreditTransferDialog input{min-height:48px;background:#f8faf7;border-radius:14px;font-size:16px!important}
+#swiftCreditTransferDialog form small{font-size:11px;line-height:1.5}
+#swiftCreditTransferDialog .swiftpay-primary{width:100%;max-width:none;min-height:48px;border-radius:14px}
+#swiftCreditTransferDialog [data-transfer-review]{padding:16px}
+#swiftCreditTransferDialog [data-transfer-review] dl div{font-size:13px;align-items:baseline}
+#swiftCreditTransferDialog [data-transfer-notice]{font-size:12px;line-height:1.65}
+#swiftCreditTransferDialog>.sp-bottom-close{margin-top:20px!important}
+@media(max-width:360px){html.swift-design body #swiftCreditTransferDialog,html.swift-design body #swiftCreditTransferDialog.shop-active-page{padding:22px 18px 16px!important;width:calc(100% - 24px)!important}}
