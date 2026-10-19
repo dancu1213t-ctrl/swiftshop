@@ -166,5 +166,5 @@ html.swift-design body #swiftPayPage{padding-top:calc(28px + max(28px,env(safe-a
 .sp-store-dialog [data-store-review]{padding:18px;border:1px solid #dce6d9;border-radius:16px;margin-top:18px;background:#f6faf4}
 .sp-store-dialog [data-store-review]>.swiftpay-primary{max-width:none;margin-top:16px}
 .sp-store-dialog [data-store-review] p,.sp-store-dialog [data-store-status]{font-size:13px;line-height:1.6;overflow-wrap:anywhere}
-@media(min-width:800px){.sp-card-wrap{grid-column:1;grid-row:2}.sp-card-wrap .swiftpay-card{max-width:600px}.swiftpay-send-section{align-self:start}.sp-card-wrap .sp-palette{max-width:600px}}
+@media(min-width:800px){.sp-card-wrap{grid-column:1;grid-row:2}.swiftpay-send-section{align-self:start}.sp-card-wrap .sp-palette{max-width:600px}}
 @media(max-width:380px){.sp-colour{padding:8px 10px;font-size:11px}.sp-palette{gap:6px}.sp-slide>span{font-size:13px}}
