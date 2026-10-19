@@ -154,7 +154,7 @@
    document.getElementById('customerSessionRestoreStatus').textContent='Welcome back';
    document.getElementById('customerSessionRetry').hidden=true;document.getElementById('customerSessionLogout').hidden=true;
    if(await finish(true))restorePanel.hidden=true;else{restorePanel.hidden=true;authScreen();}
-  }catch(e){document.getElementById('authScreen').style.display='none';restorePanel.hidden=false;document.getElementById('customerSessionRestoreStatus').textContent='Could not reconnect. Your saved session has not been signed out.';document.getElementById('customerSessionRetry').hidden=false;document.getElementById('customerSessionLogout').hidden=false;}
+  }catch(e){if(/invalid refresh token|refresh_token_not_found|refresh_token_already_used|session_not_found|auth session missing|jwt expired/i.test([e.code,e.message].join(' '))){restorePanel.hidden=true;state='signin';password.value=confirm.value=code.value='';status.textContent='Your session expired. Sign in again to continue.';render();authScreen();}else{document.getElementById('authScreen').style.display='none';restorePanel.hidden=false;document.getElementById('customerSessionRestoreStatus').textContent='Could not reconnect. Your saved session has not been signed out.';document.getElementById('customerSessionRetry').hidden=false;document.getElementById('customerSessionLogout').hidden=false;}}
   finally{document.documentElement?.classList.remove('swift-restoring-auth');}
  }
  document.getElementById('customerSessionRetry').onclick=restoreSession;
