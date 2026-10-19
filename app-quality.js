@@ -39,9 +39,11 @@
     let draftScope=draftKey();
     function saveCart(){if(draftScope!==draftKey())return;try{localStorage.setItem(draftScope,JSON.stringify({items:cart,savedAt:Date.now()}));}catch{live.textContent='Your cart could not be saved on this device.';}}
     function restoreCart(){try{const saved=JSON.parse(localStorage.getItem(draftKey())||'null');if(!saved?.items||Date.now()-saved.savedAt>86400000)return;const restored=Object.create(null);for(const [name,item] of Object.entries(saved.items)){if((name.length<=200||(name.length<=50000&&/^[0-9a-f-]{36}$/i.test(item.offer_id||'')))&&Number.isInteger(item.q)&&item.q>0&&item.q<=100&&Number.isFinite(item.p)&&item.p>=0&&typeof item.cat==='string')Object.defineProperty(restored,name,{value:{...item,w:Number.isFinite(Number(item.w))&&Number(item.w)>item.p?Number(item.w):null},writable:true,enumerable:true,configurable:true});}cart=restored;total=Object.values(cart).reduce((sum,item)=>sum+item.q*item.p,0);}catch{}}
+    function prepareCart(){if(draftScope===draftKey())return;draftScope=draftKey();cart=Object.create(null);total=0;restoreCart();}
+    window.SwiftCartDraft={prepare:prepareCart};
     if(!Object.keys(cart).length)restoreCart();
     const bubble=window.updateCartBubble;
-    window.updateCartBubble=function(...args){if(draftScope!==draftKey()){draftScope=draftKey();cart={};restoreCart();}saveCart();const result=bubble?.apply(this,args);return result;};
+    window.updateCartBubble=function(...args){prepareCart();saveCart();const result=bubble?.apply(this,args);return result;};
     window.updateCartBubble();
     window.addEventListener('pagehide',saveCart);window.addEventListener('swift-order-submitted',()=>{saveCart();live.textContent='Order sent to SwiftShop. Your cart is now clear.';});
     const logout=window.handleLogout;if(logout)window.handleLogout=async function(...args){if(!window.swiftLogoutConfirmed&&!confirm('Log out of SwiftShop?'))return;saveCart();window.swiftLogoutConfirmed=true;try{const result=await logout.apply(this,args);if(!localStorage.getItem('userPhone')){cart={};total=0;}return result;}finally{window.swiftLogoutConfirmed=false;}};
