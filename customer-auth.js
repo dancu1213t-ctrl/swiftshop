@@ -83,8 +83,12 @@
   localStorage.setItem('userName',p.name||'Customer');localStorage.setItem('userPhone',p.phone);localStorage.setItem('contactPhone',p.contact_phone||(!String(p.phone).startsWith('account:')?p.phone:''));localStorage.setItem('points',p.points||0);localStorage.setItem('loggedIn','true');customerName=p.name;customerPhone=p.phone;customerEmail=p.email;window.userPhone=p.phone;
   password.value=confirm.value=code.value='';document.documentElement?.classList.remove('swift-awaiting-auth');
   document.getElementById('authScreen').style.display='none';document.getElementById('appScreen').style.display='none';
-  if(animate&&window.showSwiftShopWelcome)window.showSwiftShopWelcome(enterApp);else enterApp();return true;
+  const ready=()=>{enterApp();window.dispatchEvent(new Event('swift-customer-session-ready'));};if(animate&&window.showSwiftShopWelcome)window.showSwiftShopWelcome(ready);else ready();return true;
  }
+ window.SwiftCustomerAuth={async reconnect(){
+   try{const r=await customerDataClient.auth.getSession();if(r.error||!r.data.session)await customerDataClient.auth.signOut({scope:'local'}).catch(()=>{});}catch{}
+   state='signin';password.value=confirm.value=code.value='';status.textContent='Your session expired. Sign in again to continue.';document.documentElement.classList.remove('swift-awaiting-auth','swift-restoring-auth');restorePanel.hidden=true;render();authScreen();
+  }};
  function errorText(error){if(/invalid login credentials/i.test(error.message))return 'Email or password is incorrect. Try again, or choose Forgot password to set or reset your password.';if(/already registered|user already exists/i.test(error.message))return 'This email already has an account. Choose Sign in, or reset your password.';if(/rate|too many|security purposes/i.test(error.message))return 'Please wait a moment before requesting another email.';return error.message||'Could not connect. Please try again.';}
  window.handleLogin=async()=>{if(busy)return;busy=true;status.textContent='';render();try{
   if(state==='signin'){
