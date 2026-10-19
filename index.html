@@ -13830,6 +13830,15 @@ const merchantFeed=(()=>{
    }
   }catch{const retry=el('button','Retry loading offers');retry.type='button';retry.onclick=()=>window.fetchAndShowPromos();box.replaceChildren(el('p','Offers could not load. Please try again.'),retry);}
  };
+function fitBannerArtwork(img){
+  if(img.dataset.bannerFitted||!img.naturalWidth||!img.naturalHeight)return;img.dataset.bannerFitted='true';
+  // Trim empty transparency only; preserve every visible pixel and all artwork.
+  try{const scale=Math.min(1,320/Math.max(img.naturalWidth,img.naturalHeight)),sample=document.createElement('canvas');sample.width=Math.max(1,Math.round(img.naturalWidth*scale));sample.height=Math.max(1,Math.round(img.naturalHeight*scale));const ctx=sample.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0,sample.width,sample.height);const pixels=ctx.getImageData(0,0,sample.width,sample.height).data;let left=sample.width,top=sample.height,right=-1,bottom=-1;for(let y=0;y<sample.height;y++)for(let x=0;x<sample.width;x++){if(pixels[(y*sample.width+x)*4+3]>12){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}}
+   if(right<left||bottom<top)return;const pad=Math.max(3,Math.round(Math.max(right-left,bottom-top)*.05));left=Math.max(0,left-pad);top=Math.max(0,top-pad);right=Math.min(sample.width,right+pad+1);bottom=Math.min(sample.height,bottom+pad+1);if((right-left)*(bottom-top)>sample.width*sample.height*.88)return;
+   const sourceX=Math.floor(left/scale),sourceY=Math.floor(top/scale),width=Math.min(img.naturalWidth-sourceX,Math.ceil((right-left)/scale)),height=Math.min(img.naturalHeight-sourceY,Math.ceil((bottom-top)/scale)),out=document.createElement('canvas'),outputScale=Math.min(1,1000/Math.max(width,height));out.width=Math.max(1,Math.round(width*outputScale));out.height=Math.max(1,Math.round(height*outputScale));out.getContext('2d').drawImage(img,sourceX,sourceY,width,height,0,0,out.width,out.height);img.src=out.toDataURL('image/webp',.94);
+  }catch{/* Remote artwork without canvas permission stays safely contained. */}
+ }
+ 
  let holder,signature='',slides=[],index=0,rotationTimer,paused=false,hovered=false;
  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
  function restartRotation(){clearInterval(rotationTimer);if(slides.length<2)return;rotationTimer=setInterval(()=>{if(paused||hovered||reducedMotion.matches||document.hidden||holder.hidden||holder.contains(document.activeElement)||document.documentElement.classList.contains('shop-page-open'))return;show(index+1);},5000);}
@@ -13848,7 +13857,7 @@ const merchantFeed=(()=>{
    if(logoUrl){const logo=el('img');logo.src=logoUrl;logo.alt=r.category;logo.onerror=()=>{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');};brandMark.append(logo);}else{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');}
    brand.append(brandMark);const eyebrow=el('span',source?.querySelector('img')?.alt||source?.querySelector('span')?.textContent||r.category);eyebrow.className='banner-editorial-label';brand.append(eyebrow);copy.append(brand,el('h2',r.title),el('p',r.subtitle));const b=el('button','Visit store →');b.type='button';b.onclick=()=>window.openMerchantStore(r.category);copy.append(b);const img=el('img');img.alt=r.title;
    const artwork=imageURL(r.image);
-   img.onload=()=>{card.style.setProperty('--slide-artwork','url('+JSON.stringify(artwork)+')');card.classList.add('image-blended');};
+   img.onload=()=>{card.style.setProperty('--slide-artwork','url('+JSON.stringify(artwork)+')');card.classList.add('image-blended');fitBannerArtwork(img);};
    img.onerror=()=>{card.classList.remove('image-blended');card.style.removeProperty('--slide-artwork');};
    img.src=artwork;const visual=el('div');visual.className='merchant-artwork';visual.append(img);card.append(copy,visual);holder.append(card);return card;});
    if(rows.length>1){const controls=el('div');controls.className='merchant-banner-controls';
