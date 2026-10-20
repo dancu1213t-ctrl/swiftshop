@@ -26,7 +26,6 @@
    const load=async()=>{content.replaceChildren(el('p','Loading completed orders…'));try{const orders=await rpc('swift_completed_review_orders',{});content.replaceChildren();if(!orders.length)content.append(el('p','After your first completed order, you can rate your runner here.'));for(const order of orders){const entry=el('details'),summary=el('summary','Order '+order.id.slice(0,8).toUpperCase()),host=el('div');entry.append(summary,host);entry.ontoggle=()=>{if(entry.open)window.SwiftReviews.update(host,{id:order.id,completed:true});};content.append(entry);}}catch{content.replaceChildren(el('p','Completed orders could not load.'));const retry=el('button','Try again');retry.type='button';retry.onclick=load;content.append(retry);}};
    button.onclick=()=>{dialog.inert=false;dialog.showModal();load();};
   }
-  const original=window.openMerchantStore;if(!original)return;let version=0;
-  window.openMerchantStore=async function(category){const stamp=++version,result=original.apply(this,arguments);await result;if(stamp!==version)return result;const parent=document.querySelector('#merchantStorePage .store-header-meta');if(!parent)return result;parent.querySelector('.swift-real-rating')?.remove();const label=el('span','Loading ratings…');label.className='swift-real-rating';parent.append(label);try{const summary=await rpc('swift_rating_summary',{p_kind:'store',p_key:category});if(stamp!==version)return result;label.textContent=summary.count?'★ '+summary.average+' · '+summary.count+' verified order '+(summary.count===1?'rating':'ratings'):'No customer ratings yet';}catch{label.remove();}return result;};
+
  });
 })();
