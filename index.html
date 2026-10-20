@@ -10,7 +10,7 @@ html.swift-entry-loading #authScreen{animation:none!important;transition:none!im
 <script>
 (function(){function ready(){const settle=document.fonts?Promise.race([document.fonts.ready,new Promise(resolve=>setTimeout(resolve,1200))]):Promise.resolve();settle.then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{window.scrollTo({top:0,left:0,behavior:'instant'});document.documentElement.classList.remove('swift-entry-loading');})));}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready();const root=document.documentElement;let awaiting=root.classList.contains('swift-awaiting-auth');new MutationObserver(()=>{const next=root.classList.contains('swift-awaiting-auth');if(awaiting&&!next){window.scrollTo({top:0,left:0,behavior:'instant'});}awaiting=next;}).observe(root,{attributes:true,attributeFilter:['class']});})();
 </script>
-<script src="customer-reviews.js?v=runneronly20261010" defer></script>
+<script src="customer-reviews.js?v=nostoreratings20261020" defer></script>
 <script src="customer-usability.js?v=reviewsfinal20261008" defer></script>
 <script src="pickup-discovery.js?v=anybusiness20261008" defer></script>
 <link rel="stylesheet" href="swiftpay.css?v=transfer-centered20261019">
@@ -10318,7 +10318,10 @@ async function render() {
       msg=lines.join('\n');
     }
     // Keep the current Dispatch payload and submit through the existing tracking RPC.
+    const orderInstructions=window.SwiftOrderInstructions?.value()||{};
+    const instructionText=window.SwiftOrderInstructions?.text()||'';
     const snapshot={
+      order_instructions:orderInstructions,
       customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
       items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p,...(item.offer_id?{offer_id:item.offer_id,offer_option_id:item.offer_option_id,offer_choices:item.offer_choices}: {})})),
       total:grandTotal,payment:paymentMethod,
@@ -10328,7 +10331,7 @@ async function render() {
       delivery_area:deliveryZone,customer_location:customerCoords,
       sender_name:userName,sender_phone:userPhone,gift:gift||null,group:group||null,
       delivery_fee:deliveryFee,platform_fee:platformFee,tip:tipAmount,
-      dispatch_text:msg.replace(/%0A/g,'\n')
+      dispatch_text:msg.replace(/%0A/g,'\n')+(instructionText?'\n\nORDER INSTRUCTIONS\n'+instructionText:'')
     };
     window.swiftOrderSending=true;
     const submit=document.querySelector('#orderBox .submit-inner');
@@ -13682,7 +13685,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -14334,3 +14337,4 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 }
 @media(max-width:360px){html.swift-design body #appScreen #merchantBannerSlider .merchant-banner h2{font-size:19px!important}html.swift-design body #appScreen #merchantBannerSlider .merchant-banner>.merchant-artwork{height:166px!important}}
 </style><style id="ride-session-recovery-style">html.swift-design body #customerRidePanel #crSignIn{display:block;position:relative;width:calc(100% - 24px);margin:0 12px 12px;padding:14px 18px;min-height:48px;border:0;border-radius:14px;background:#202d24;color:#fff;font:600 14px system-ui;box-sizing:border-box}html.swift-design body #customerRidePanel #crSignIn[hidden]{display:none!important}</style>
+<script src="order-instructions.js?v=20261020"></script>
