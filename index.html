@@ -9255,7 +9255,8 @@ function refreshCartTotals() {
   }
 }
 
-  function sendRideRequest() {
+  async function sendRideRequest() {
+    if(!await window.SwiftCustomerAuth?.require('Sign in to send your ride request.'))return;
     if (!rideLocation) {
       alert("Please pin your location first");
       return;
