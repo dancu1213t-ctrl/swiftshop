@@ -37,7 +37,7 @@
  @media(max-width:480px){#authScreen.auth-screen{padding:24px 16px!important}#authScreen #loginBox{padding:24px!important}}
  `;layout.textContent=layout.textContent.replace('#authScreen.auth-screen{display:grid!important','#authScreen.auth-screen:not([style*="display: none"]):not([style*="display:none"]){display:grid!important').replaceAll('#authScreen','html.swift-design #authScreen');document.body.append(layout);
 
- let verified=false,pendingReturn=null;
+ let signedIn=false;
  let state='signin',busy=false,pendingEmail='',pendingName='',pendingPhone='',resendAfter=0;
  const name=document.getElementById('userName'),phone=document.getElementById('userPhone');
  name.setAttribute('aria-label','Full name');phone.setAttribute('aria-label','Contact phone number');
@@ -68,9 +68,6 @@
  function validatePassword(isNew=false){if(!password.value)throw Error('Enter your password.');if(isNew&&password.value.length<8)throw Error('Use at least 8 characters for your password.');if(isNew&&password.value!==confirm.value)throw Error('Passwords do not match.');}
  function readContact(){const n=name.value.trim(),p=phone.value.trim(),digits=p.replace(/\D/g,'');if(!n)throw Error('Enter your full name.');if(!(digits.length===7||/^[1-9]\d{7,14}$/.test(digits)))throw Error('Enter a valid contact number, including country code if outside Belize.');pendingName=n;pendingPhone=p;}
  async function getSession(){const r=await customerDataClient.auth.getSession();if(r.error)throw r.error;return r.data.session;}
- function browse(){verified=false;entry.hidden=false;document.documentElement.classList.remove('swift-awaiting-auth','swift-restoring-auth');restorePanel.hidden=true;document.getElementById('authScreen').style.display='none';for(const key of ['userName','userPhone','contactPhone','loggedIn'])localStorage.removeItem(key);customerName='';customerPhone='';window.userPhone=null;window.SwiftCartDraft?.prepare();enterApp();window.updateCartBubble?.();window.SwiftNavigation?.refresh();}
- function showSignIn(reason){status.textContent=reason||'Sign in to continue.';state='signin';render();document.documentElement.classList.remove('swift-awaiting-auth','swift-restoring-auth');restorePanel.hidden=true;for(const d of document.querySelectorAll('dialog[open]'))d.close();for(const id of ['cartPanel','orderBox','profileOverlay']){const e=document.getElementById(id);if(e){e.classList.remove('shop-active-page','active');if(id==='cartPanel')e.style.bottom='-100%';else e.style.display='none';}}authScreen();window.SwiftNavigation?.refresh();}
- const browseButton=make('button','Continue browsing');browseButton.type='button';browseButton.id='customerContinueBrowsing';send.after(browseButton);browseButton.onclick=()=>{pendingReturn=null;password.value=confirm.value=code.value='';document.getElementById('authScreen').style.display='none';document.getElementById('appScreen').style.display='block';document.documentElement.classList.remove('swift-awaiting-auth');window.SwiftNavigation?.refresh();};
  function authScreen(){document.getElementById('appScreen').style.display='none';document.getElementById('authScreen').style.display='flex';}
  async function loadProfile(args={p_name:null,p_phone:null}){const r=await customerDataClient.rpc('swift_customer_profile',args).abortSignal(AbortSignal.timeout(10000));if(r.error)throw r.error;return r.data;}
  async function finish(animate=false){
@@ -84,16 +81,16 @@
    }
   }
   if(!p){state='contact';status.textContent='';render();authScreen();return false;}
-  const fromGuest=!localStorage.getItem('userPhone');
+  signedIn=true;
   localStorage.setItem('userName',p.name||'Customer');localStorage.setItem('userPhone',p.phone);localStorage.setItem('contactPhone',p.contact_phone||(!String(p.phone).startsWith('account:')?p.phone:''));localStorage.setItem('points',p.points||0);localStorage.setItem('loggedIn','true');customerName=p.name;customerPhone=p.phone;customerEmail=p.email;window.userPhone=p.phone;
-  verified=true;entry.hidden=true;if(fromGuest){window.SwiftCartDraft?.adoptGuest?.();window.SwiftOrderInstructions?.adoptGuest?.();}
   password.value=confirm.value=code.value='';document.documentElement?.classList.remove('swift-awaiting-auth');
   document.getElementById('authScreen').style.display='none';document.getElementById('appScreen').style.display='none';
-  const ready=()=>{enterApp();window.dispatchEvent(new Event('swift-customer-session-ready'));const resume=pendingReturn;pendingReturn=null;if(resume)resume();};if(animate&&window.showSwiftShopWelcome)window.showSwiftShopWelcome(ready);else ready();return true;
+  const ready=()=>{enterApp();window.dispatchEvent(new Event('swift-customer-session-ready'));};if(animate&&window.showSwiftShopWelcome)window.showSwiftShopWelcome(ready);else ready();return true;
  }
- window.SwiftCustomerAuth={get signedIn(){return verified;},async require(reason,resume){try{const r=await customerDataClient.auth.getUser();if(!r.error&&r.data.user?.email_confirmed_at&&verified)return true;}catch{}verified=false;pendingReturn=resume||(()=>window.openCart?.());showSignIn(reason||'Sign in or create an account to send your order.');return false;},open(){pendingReturn=null;showSignIn('Sign in or create your account.');},async reconnect(){
+ window.SwiftCustomerAuth={get signedIn(){return signedIn;},async require(){try{const r=await customerDataClient.auth.getUser();if(!r.error&&r.data.user?.email_confirmed_at&&signedIn)return true;}catch{}await this.reconnect();return false;},async reconnect(){
+   signedIn=false;
    try{const r=await customerDataClient.auth.getSession();if(r.error||!r.data.session)await customerDataClient.auth.signOut({scope:'local'}).catch(()=>{});}catch{}
-   verified=false;showSignIn('Your session expired. Sign in to continue.');
+   state='signin';password.value=confirm.value=code.value='';status.textContent='Your session expired. Sign in again to continue.';document.documentElement.classList.remove('swift-awaiting-auth','swift-restoring-auth');restorePanel.hidden=true;render();authScreen();
   }};
  function errorText(error){if(/invalid login credentials/i.test(error.message))return 'Email or password is incorrect. Try again, or choose Forgot password to set or reset your password.';if(/already registered|user already exists/i.test(error.message))return 'This email already has an account. Choose Sign in, or reset your password.';if(/rate|too many|security purposes/i.test(error.message))return 'Please wait a moment before requesting another email.';return error.message||'Could not connect. Please try again.';}
  window.handleLogin=async()=>{if(busy)return;busy=true;status.textContent='';render();try{
@@ -129,7 +126,7 @@
  resend.onclick=async()=>{if(busy)return;if(Date.now()<resendAfter){status.textContent='Please wait a minute before requesting another code.';return;}busy=true;render();try{const r=state==='verify-signup'?await customerDataClient.auth.resend({type:'signup',email:pendingEmail}):await customerDataClient.auth.signInWithOtp({email:pendingEmail,options:{shouldCreateUser:false}});if(r.error)throw r.error;resendAfter=Date.now()+60000;status.textContent='A new code has been sent. Check your inbox and spam folder.';}catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
  change.onclick=async()=>{if(busy)return;busy=true;render();try{const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error)throw r.error;clearDraft();state='signin';status.textContent='';}catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
  for(const input of [email,password,confirm,code,name,phone])input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();window.handleLogin();}});
- const logout=window.handleLogout;window.handleLogout=async function(...args){if(!window.swiftLogoutConfirmed&&!confirmLogout())return;const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error){alert(r.error.message);return;}document.documentElement?.classList.add('swift-awaiting-auth');clearDraft();state='signin';render();window.swiftLogoutConfirmed=true;return logout.apply(this,args);};
+ const logout=window.handleLogout;window.handleLogout=async function(...args){if(!window.swiftLogoutConfirmed&&!confirmLogout())return;const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error){alert(r.error.message);return;}signedIn=false;document.documentElement?.classList.add('swift-awaiting-auth');clearDraft();state='signin';render();window.swiftLogoutConfirmed=true;return logout.apply(this,args);};
  function confirmLogout(){return window.confirm('Sign out of SwiftShop on this device?');}
  render();
  const profileNameField=document.getElementById('profileName');
@@ -155,18 +152,16 @@
  const restorePanel=document.getElementById('customerSessionRestore');
  async function restoreSession(){
   try{const r=await customerDataClient.auth.getSession();if(r.error)throw r.error;
-   if(!r.data.session?.user?.email_confirmed_at){browse();return;}
+   if(!r.data.session?.user?.email_confirmed_at){restorePanel.hidden=true;authScreen();return;}
    document.getElementById('authScreen').style.display='none';restorePanel.hidden=false;
    document.getElementById('customerSessionRestoreStatus').textContent='Welcome back';
    document.getElementById('customerSessionRetry').hidden=true;document.getElementById('customerSessionLogout').hidden=true;
-   if(await finish(false))restorePanel.hidden=true;else{restorePanel.hidden=true;authScreen();}
-  }catch(e){if(/invalid refresh token|refresh_token_not_found|refresh_token_already_used|session_not_found|auth session missing|jwt expired/i.test([e.code,e.message].join(' '))){browse();}else{document.documentElement.classList.remove('swift-awaiting-auth');document.getElementById('authScreen').style.display='none';restorePanel.hidden=true;enterApp();}}
+   if(await finish(true))restorePanel.hidden=true;else{restorePanel.hidden=true;authScreen();}
+  }catch(e){if(/invalid refresh token|refresh_token_not_found|refresh_token_already_used|session_not_found|auth session missing|jwt expired/i.test([e.code,e.message].join(' '))){restorePanel.hidden=true;state='signin';password.value=confirm.value=code.value='';status.textContent='Your session expired. Sign in again to continue.';render();authScreen();}else{document.getElementById('authScreen').style.display='none';restorePanel.hidden=false;document.getElementById('customerSessionRestoreStatus').textContent='Could not reconnect. Your saved session has not been signed out.';document.getElementById('customerSessionRetry').hidden=false;document.getElementById('customerSessionLogout').hidden=false;}}
   finally{document.documentElement?.classList.remove('swift-restoring-auth');}
  }
  document.getElementById('customerSessionRetry').onclick=restoreSession;
  document.getElementById('customerSessionLogout').onclick=async()=>{await window.handleLogout();restorePanel.hidden=true;authScreen();};
- const entry=make('button','Sign in');entry.type='button';entry.id='guestSignIn';entry.hidden=true;entry.style.cssText='min-height:44px;padding:8px 16px;border:1px solid #e2e6df;border-radius:22px;background:white;color:#202923;font:600 14px system-ui';entry.onclick=()=>window.SwiftCustomerAuth.open();document.querySelector('#appScreen .header')?.append(entry);setInterval(()=>{entry.hidden=verified;},1000);
- document.addEventListener('click',e=>{if(verified)return;const target=e.target.closest('.shop-bottom-nav [data-destination="profile"],#profileCircle,[onclick="openProfile()"],[aria-label="Open SwiftPay prepaid wallet"]');if(target){e.preventDefault();e.stopImmediatePropagation();showSignIn('Sign in to access your account.');}},true);
  restoreSession();
  });
 })();
