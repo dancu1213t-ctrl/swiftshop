@@ -7904,7 +7904,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   }catch(error){if(scope()!==account)return;if(record.registered&&error?.code==='P0001'&&error?.message==='Tracking request unavailable'){forgetUnavailable(record);return;}retryAt=Date.now()+10000;if(current?.id===record.id)node('cloSync').textContent=record.registered?'Connection interrupted. Showing your last confirmed update; we’ll retry.':'Your order is waiting for a connection. Keep your details here and retry sending when connected.';}
   finally{busy=false;}
  }
- window.SwiftLive={async submit(snapshot){const id=this.prepare(snapshot,false);const record=records.find(r=>r.id===id);await register(record);record.checkoutCommitted=true;save();const checkout=document.getElementById('orderBox');if(checkout)checkout.style.display='none';this.openOrder(id);return id;},prepare(snapshot,show=true){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined,dispatch_text:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&(!last.registered||last.checkoutCommitted===false||Date.now()-Date.parse(last.created)<15000)){current=last;if(show)open();return last.id;}
+ window.SwiftLive={async submit(snapshot){if(!await window.SwiftCustomerAuth?.require('Sign in to send your order.'))throw Error('Sign in before sending your order.');const id=this.prepare(snapshot,false);const record=records.find(r=>r.id===id);await register(record);record.checkoutCommitted=true;save();const checkout=document.getElementById('orderBox');if(checkout)checkout.style.display='none';this.openOrder(id);return id;},prepare(snapshot,show=true){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined,dispatch_text:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&(!last.registered||last.checkoutCommitted===false||Date.now()-Date.parse(last.created)<15000)){current=last;if(show)open();return last.id;}
    const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false,checkoutCommitted:false};records.unshift(record);current=record;save();chip.hidden=false;if(show)open();return record.id;},open,async history(){restore();const identity=scope();await syncAccountOrders(true);if(identity!==scope())return[];return records.filter(r=>r.registered).map(r=>({id:r.id,created:r.created,snapshot:r.snapshot,phase:r.remote?.phase||'sent'}));},async openOrder(id){restore();try{await syncAccountOrders(true);}catch{}const record=records.find(r=>r.id===id);if(!record)return false;current=record;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);return true;}};
  chip.onclick=open;node('cloClose').onclick=()=>root.close();node('cloRetry').onclick=()=>poll(true);node('cloSelect').onchange=e=>{current=records.find(r=>r.id===e.target.value);paint();poll(true);};
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){restore();poll(true);}});window.addEventListener('pageshow',()=>{restore();if(current&&sessionStorage.getItem('swiftshop.pendingLiveReturn')===current.id){sessionStorage.removeItem('swiftshop.pendingLiveReturn');open();}});window.addEventListener('online',()=>poll(true));setInterval(()=>poll(),5000);restore();
@@ -8254,6 +8254,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   return result;
  }
  async function calculateFare(){
+  if(!window.SwiftCustomerAuth?.signedIn){$('crFareDetails').textContent='Sign in to see available rides and request yours.';$('crSignIn').hidden=false;return;}
   if(busy||ride||!pickup||!dropoff||panel.hidden)return;
   const token=fareVersion,signature=quoteSignature();fareBusy=true;fareRetryAt=Date.now()+30000;$('crFareDetails').textContent='Calculating fare…';
   try{const {data,error}=await requestRideQuotes(bookingFields());
@@ -8267,6 +8268,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   }catch(e){if(token===fareVersion){const message=errorMessage(e);$('crFareDetails').textContent=message;$('fleetNote').textContent=message;if(authIssue(e))notice(message);}}finally{fareBusy=false;}
  };
  $('crForm').onsubmit=async event=>{
+  if(!window.SwiftCustomerAuth?.signedIn){event.preventDefault();await window.SwiftCustomerAuth?.require('Sign in to request a ride.',()=>window.openSwiftRide?.());return;}
   event.preventDefault();if(busy)return;if(ride){bookingNotice(terminal(ride.status)?'Tap Request another ride to start a new trip.':'You already have a ride. Open your tracking to see it.');return;}
   if(!pickup||!dropoff){bookingNotice('Choose both pickup and destination from the dropdown suggestions or map pins. Typing a name alone does not set its location.');return;}
   if(!$('crName').value.trim()||$('crPhone').value.trim().length<7){bookingNotice('Enter your name and a phone number of at least 7 characters.');$('crForm').reportValidity();return;}if(!$('crForm').reportValidity()){bookingNotice('Please complete the highlighted fields.');return;}
@@ -9546,6 +9548,7 @@ function refreshCartTotals() {
   }
 
   async function sendPickupWhatsApp() {
+    if(!await window.SwiftCustomerAuth?.require("Sign in to send your pickup request.",()=>{document.getElementById("pickupOrderBox").style.display="block";}))return;
     if(document.getElementById('pickupPaymentMethod')?.value==='SwiftPay'){
       const status=document.getElementById('pickupLocationStatus');
       if(!pickupLatLng||!dropoffLatLng){status.textContent='Select both pickup and drop-off first.';return;}
@@ -10126,6 +10129,7 @@ async function render() {
   };
 
   async function order() {
+    if(!await window.SwiftCustomerAuth?.require("Sign in or create an account to send your order.",()=>{openCart();}))return;
     if(window.swiftOrderSending)return;
     if(window.swiftMobileItemAllowed&&Object.entries(cart).some(([name,item])=>!window.swiftMobileItemAllowed({name,category:item.cat}))){alert("Remove unavailable digital items from your cart before ordering.");return;}
     const gift=window.readGiftOrder();if(gift===false)return;
@@ -13685,7 +13689,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -14218,10 +14222,10 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=private-test20261018"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=cart-first-tap20261018"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
+});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=chat20261020"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=guest20261020"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=orders20261004"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=orders20261004"></script>
-<script src="customer-auth.js?v=ride-session-final20261019"></script><script src="account-requests.js?v=orders20261004"></script>
+<script src="customer-auth.js?v=guest20261020"></script><script src="account-requests.js?v=orders20261004"></script>
 <script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=billing20261015"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=20261011"><script src="offer-ordering.js?v=20261011"></script>
 <link rel="stylesheet" href="pure-offers.css?v=white20261010"><script src="pure-offers.js?v=order20261011"></script>
 <script src="product-cutouts.js?v=incremental20261018"></script>
@@ -14337,4 +14341,6 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 }
 @media(max-width:360px){html.swift-design body #appScreen #merchantBannerSlider .merchant-banner h2{font-size:19px!important}html.swift-design body #appScreen #merchantBannerSlider .merchant-banner>.merchant-artwork{height:166px!important}}
 </style><style id="ride-session-recovery-style">html.swift-design body #customerRidePanel #crSignIn{display:block;position:relative;width:calc(100% - 24px);margin:0 12px 12px;padding:14px 18px;min-height:48px;border:0;border-radius:14px;background:#202d24;color:#fff;font:600 14px system-ui;box-sizing:border-box}html.swift-design body #customerRidePanel #crSignIn[hidden]{display:none!important}</style>
-<script src="order-instructions.js?v=compact20261020"></script>
+<script src="order-instructions.js?v=compact-final20261020"></script>
+
+<script src="order-chat.js?v=20261020" data-chat-role="customer"></script>
