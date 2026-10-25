@@ -9138,6 +9138,8 @@ function getCartDeliveryFee() { return FIXED_DELIVERY_FEE; }
         const place = autocomplete.getPlace();
         if (!place.geometry) { locationStatus('Choose an address from the suggestions dropdown.'); return; }
         snapPinTo(place.geometry.location);
+        cartMap.setZoom(19);
+        locationStatus('Street found. Tap or drag the pin to your exact entrance.');
       });
     }
 
@@ -9164,13 +9166,16 @@ function getCartDeliveryFee() { return FIXED_DELIVERY_FEE; }
       if (request !== cartGeoRequest) return;
       resetGeoBtn();
       if (automatic && window.lastCartCoords !== previousCoords) return;
+      const accuracy=Number(pos.coords.accuracy);
+      if(!Number.isFinite(accuracy)||accuracy>50){locationStatus('GPS is not precise enough'+(Number.isFinite(accuracy)?' (about '+Math.round(accuracy)+' m)':'')+'. Search your street, then tap your exact entrance on the map. Your previous pin has not changed.');return;}
       snapPinTo(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-      locationStatus('Location found. Adjust the pin to your entrance if needed.');
+      cartMap.setZoom(19);
+      locationStatus('GPS is accurate to about '+Math.ceil(accuracy)+' m. Move the pin to your entrance before ordering.');
     }, error => {
       if (request !== cartGeoRequest) return;
       resetGeoBtn();
       locationStatus(error.code === 1 ? 'Location access was denied. Search a street or tap the map instead.' : 'Could not find your location. Try again, search a street, or tap the map.');
-    }, {enableHighAccuracy:true, timeout:10000, maximumAge:30000});
+    }, {enableHighAccuracy:true, timeout:20000, maximumAge:0});
   }
   function snapPinTo(latLng) {
     ++cartGeoRequest; resetGeoBtn();
@@ -9220,7 +9225,7 @@ function getCartDeliveryFee() { return FIXED_DELIVERY_FEE; }
       const label=status==='OK'&&result?result.formatted_address:coords;
       window.lastCartAddress=label;
       const search=document.getElementById('cartMapSearch');if(search)search.value=label;
-      locationStatus(status==='OK'?'Deliver to '+label:'Pin selected. Address unavailable; your coordinates are saved.');
+      locationStatus(status==='OK'?'Pin saved near '+label+'. Check that it marks your entrance; runners receive this exact pin.':'Pin saved. Check that it marks your entrance; runners receive this exact pin.');
       window.dispatchEvent(new CustomEvent('swift-delivery-location',{detail:{coords,label}}));
     });
     // Refresh totals independently of the address lookup.
