@@ -13,3 +13,16 @@
 #checkoutRouteCaption{margin:10px 14px 12px;font:12px/1.5 Arial,sans-serif;color:#69746d;overflow-wrap:anywhere}
 #checkoutGiftArea{display:block;font-size:13px;margin:14px 0}
 #checkoutGiftArea select{margin-top:8px;box-sizing:border-box}
+
+/* Scoped overrides for the portal-wide heading and checkout spacing rules. */
+html.swift-design body #orderBox .checkout-route{margin:20px 0!important;padding:0!important;border-radius:18px!important;overflow:hidden!important}
+html.swift-design body #orderBox .checkout-route>h3{margin:0!important;padding:16px 18px!important;font:700 16px/1.35 Arial,sans-serif!important;letter-spacing:0!important}
+html.swift-design body #orderBox #checkoutRouteMap{height:240px!important;width:100%!important;min-height:240px!important;margin:0!important;border:0!important;border-radius:0!important;overflow:hidden!important}
+html.swift-design body #orderBox #checkoutRouteCaption{margin:0!important;padding:12px 18px 14px!important;font:500 12px/1.4 Arial,sans-serif!important;color:#68756c!important;letter-spacing:0!important}
+html.swift-design body #orderBox .checkout-choices{margin:18px 0 22px!important;gap:10px!important}
+html.swift-design body #orderBox .payment-section{padding:0!important;margin:0!important}
+html.swift-design body #orderBox .payment-section>label{margin:0 0 8px!important}
+html.swift-design body #orderBox .sq-review{margin:20px 0!important;padding:18px!important;border-radius:18px!important}
+html.swift-design body #orderBox .sq-review h3{margin:0 0 14px!important;letter-spacing:0!important;font-size:16px!important}
+html.swift-design body #orderBox .gift-card:has(>[hidden]){display:none!important;margin:0!important}
+@media(min-width:768px){html.swift-design body #orderBox #checkoutRouteMap{height:280px!important;min-height:280px!important}}
