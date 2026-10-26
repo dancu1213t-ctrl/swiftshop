@@ -10,7 +10,9 @@ function routeArc(a,b){
  path[0]=a;path[path.length-1]=b;return path;
 }
 function pickupPoint(category){
- const row=window.SwiftStoreInfo?.rows?.get(category);
+ if(typeof storePickupCoordinates==='function')return point(storePickupCoordinates(category));
+ const rows=window.SwiftStoreInfo?.rows;
+ const row=rows&&[...rows.values()].find(r=>String(r.category||'').trim().toUpperCase()===String(category).trim().toUpperCase());
  const saved=row?.latitude!=null&&row?.longitude!=null?point(String(row.latitude)+','+String(row.longitude)):null;
  return saved||point(typeof storeLocations==='undefined'?null:storeLocations[category]);
 }

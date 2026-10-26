@@ -48,7 +48,7 @@
 
 ["Tan's Pizza", 18.0759021, -88.5597238, "Food & drinks"],
 
-["The Dinner House", 18.0921243, -88.5611144, "Food & drinks"],
+["The Dinner House", 18.09212659249729, -88.56105123358884, "Food & drinks"],
 
 ["Snow Lovers Stop", 18.0693479, -88.5699495, "Food & drinks"],
 

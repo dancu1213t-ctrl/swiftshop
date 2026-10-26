@@ -12,7 +12,7 @@ html.swift-entry-loading #authScreen{animation:none!important;transition:none!im
 </script>
 <script src="customer-reviews.js?v=nostoreratings20261020" defer></script>
 <script src="customer-usability.js?v=reviewsfinal20261008" defer></script>
-<script src="pickup-discovery.js?v=anybusiness20261008" defer></script>
+<script src="pickup-discovery.js?v=store-pins20261025" defer></script>
 <link rel="stylesheet" href="swiftpay.css?v=transfer-centered20261019">
 <script src="product-filters.js"></script>
   <meta charset="UTF-8"><meta name="swiftshop-build" content="customer-orders-verified-20261004">
@@ -10074,31 +10074,32 @@ async function render() {
 
   // 📍 Store Coordinates Lookup Map
   const storeLocations = {
-    "SNACK": "18.084406,-88.565955",
-    "BREAKFAST": "18.084406,-88.565955",
-    "LUNCH": "18.084406,-88.565955",
-    "DRINK": "18.084406,-88.565955",
-    "HOUSEHOLD": "18.084406,-88.565955",
-    "HYGIENE": "18.084406,-88.565955",
-    "VEGETABLES": "18.080916,-88.562782",
-    "TREATS": "18.084406,-88.565955",
+    "DELAFUENTEPHARMACY": "18.08504430134634,-88.56481738037706",
+    "SNACK": "18.08431842035662,-88.5646854712427",
+    "BREAKFAST": "18.084394342585536,-88.56592749264674",
+    "LUNCH": "18.084394342585536,-88.56592749264674",
+    "DRINK": "18.08431842035662,-88.5646854712427",
+    "HOUSEHOLD": "18.08431842035662,-88.5646854712427",
+    "HYGIENE": "18.08431842035662,-88.5646854712427",
+    "VEGETABLES": "18.08431842035662,-88.5646854712427",
+    "TREATS": "18.08431842035662,-88.5646854712427",
     "ELECTRONICS": "18.079305,-88.562638",
-    "GENERAL": "18.084406,-88.565955",
+    "GENERAL": "18.08431842035662,-88.5646854712427",
     "ADDTOCART": "18.079295476139862,-88.56424639397503",
-    "LEO MEATPIES": "18.074378416952662,-88.56807829803518",
+    "LEO MEATPIES": "18.07438771976185,-88.56801153232601",
     "HOMESWEETBAKES": "18.070522945782205,-88.55808732836645",
-    "BETTER LIFE PHARMACY": "18.08322088265203,-88.5600940507101",
+    "BETTER LIFE PHARMACY": "18.083227134422003,-88.56010753004772",
     "SARITAS": "18.084406,-88.565955",
-    "URBAN": "18.06826937898531,-88.57071217399431",
+    "URBAN": "18.068257039635636,-88.5706750704981",
     "AROMA": "18.081252196733367,-88.56688290267675",
     "BREW": "18.095301428406426,-88.56395246250682",
     "MARIA": "18.083880977603187,-88.56199213802994",
-    "LEO": "18.074378416952662,-88.56807829803518",
+    "LEO": "18.07438771976185,-88.56801153232601",
     "SHAKEN": "18.08170052940821,-88.56504133563116",
-    "DAILY MENU": "18.084406,-88.565955",
+    "DAILY MENU": "18.09212659249729,-88.56105123358884",
     "DUMPLING": "18.067995805951213,-88.56307905042725",
     "FONDA": "18.084406,-88.565955",
-    "SALSAS": "18.088118318415674,-88.5677573146454",
+    "SALSAS": "18.088068820358625,-88.56774067195431",
     "BURGA": "18.084406,-88.565955",
     "TFC": "18.082628485605387,-88.5622431184445",
     "GUERRERO": "18.09252315891488,-88.56110020087203",
@@ -10109,6 +10110,19 @@ async function render() {
     "NEEYA": "18.086068,-88.568782",
     "FLOWER": "18.084406,-88.565955"
   };
+
+
+  // Shared pickup source for checkout previews and dispatched order routes.
+  function storePickupCoordinates(category) {
+    const key=String(category||'').trim().toUpperCase();
+    const rows=window.SwiftStoreInfo?.rows;
+    const row=rows&&[...rows.values()].find(r=>String(r.category||'').trim().toUpperCase()===key);
+    if(row?.latitude!=null&&row?.longitude!=null){
+      const lat=Number(row.latitude),lng=Number(row.longitude);
+      if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180)return lat+','+lng;
+    }
+    return storeLocations[key]||storeLocations.GENERAL;
+  }
 
   async function order() {
     if(!await window.SwiftCustomerAuth?.require("Sign in or create an account to send your order.",()=>{openCart();}))return;
@@ -10247,7 +10261,7 @@ async function render() {
       msg += `RUNNER ROUTE:%0A`;
       
       activeBusinesses.forEach(bizName => {
-        const storeCoords = storeLocations[bizName] || storeLocations["GENERAL"];
+        const storeCoords = storePickupCoordinates(bizName);
         const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${encodeURIComponent(customerCoords)}`;
         
         msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
@@ -10305,7 +10319,7 @@ async function render() {
       customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
       items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p,...(item.offer_id?{offer_id:item.offer_id,offer_option_id:item.offer_option_id,offer_choices:item.offer_choices}: {})})),
       total:grandTotal,payment:paymentMethod,
-      routes:gift?[]:[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storeLocations[biz]||storeLocations.GENERAL}&destination=${encodeURIComponent(customerCoords)}`),
+      routes:gift?[]:[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storePickupCoordinates(biz)}&destination=${encodeURIComponent(customerCoords)}`),
       arrival_notes:gift?gift.address+(gift.message?' · '+gift.message:''):'Delivery area: '+deliveryZone,
       taco_note:hasTacos?(tacoPlace+': '+tacoOrder):'',original_order_number:orderNum,
       delivery_area:deliveryZone,customer_location:customerCoords,
@@ -14319,7 +14333,7 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 </style><style id="ride-session-recovery-style">html.swift-design body #customerRidePanel #crSignIn{display:block;position:relative;width:calc(100% - 24px);margin:0 12px 12px;padding:14px 18px;min-height:48px;border:0;border-radius:14px;background:#202d24;color:#fff;font:600 14px system-ui;box-sizing:border-box}html.swift-design body #customerRidePanel #crSignIn[hidden]{display:none!important}</style>
 <script src="order-instructions.js?v=checkout20261025"></script>
 <link rel="stylesheet" href="checkout-final.css?v=arc20261025">
-<script src="checkout-final.js?v=arc20261025"></script>
+<script src="checkout-final.js?v=store-pins20261025"></script>
 
 <script src="order-chat.js?v=customer-photo20261020" data-chat-role="customer"></script>
 
