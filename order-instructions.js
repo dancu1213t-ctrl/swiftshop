@@ -12,7 +12,7 @@ document.head.append(style);
 dialog=make('dialog');dialog.id='swiftOrderInstructions';dialog.setAttribute('aria-labelledby','soiTitle');const header=make('header'),title=make('h2','Order instructions'),close=make('button','×');title.id='soiTitle';close.type='button';close.dataset.close='';close.setAttribute('aria-label','Close instructions');close.onclick=()=>dialog.close();header.append(title,close);fields=make('div');const help=make('p','Optional requests. Subject to availability and extra charges.'),save=make('button','Save instructions');save.type='button';save.dataset.save='';save.onclick=()=>{for(const input of fields.querySelectorAll('textarea'))drafts.set(input.dataset.category,input.value.trim());paint();dialog.close();};dialog.append(header,help,fields,save);document.body.append(dialog);
 dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 dialog.addEventListener('close',()=>opener?.focus({preventScroll:true}));
-for(const anchor of [document.getElementById('cartPanelItems'),document.getElementById('orderHint')])if(anchor){const b=make('button','Add instructions');b.type='button';b.dataset.orderInstructions='';b.onclick=open;anchor.after(b);}
+for(const anchor of [document.getElementById('cartPanelItems')])if(anchor){const b=make('button','Add instructions');b.type='button';b.dataset.orderInstructions='';b.onclick=open;anchor.after(b);}
 window.addEventListener('swift-order-submitted',()=>{drafts.clear();paint();});
 document.addEventListener('click',()=>{queueMicrotask(paint);},{passive:true});
 });

@@ -8700,7 +8700,7 @@ window.switchToggle=function(button){
   <label>Gift message <span class="gift-optional">Optional</span><textarea id="giftMessage" rows="3" maxlength="300" placeholder="Write a little something to brighten their day…"></textarea></label>
   <label class="gift-check"><input id="giftCall" type="checkbox" checked>Call the recipient on arrival</label>
   <div class="gift-note">You’re the sender and payer. SwiftShop will confirm payment with you. Your saved profile and address stay unchanged.</div>
-  <label class="gift-check"><input id="giftAreaConfirmed" type="checkbox">I’ve selected the recipient’s delivery area below.</label>
+  <label class="gift-check"><input id="giftAreaConfirmed" type="checkbox">I’ve selected the recipient’s delivery area.</label>
   <div id="giftReview" class="gift-review" aria-live="polite"></div>
   <p id="giftError" role="status"></p>
  </div>
@@ -8715,11 +8715,7 @@ window.switchToggle=function(button){
       </select>
     </div>
   </div>
-  <label style="font-weight:800; font-size:13px; color:#666; display:block; margin:15px 0 10px;">
-  DELIVERY AREA:
-</label>
-
-<select id="deliveryZoneSelect" onchange="setDeliveryZone(this.value)" style="
+<div id="checkoutAreaState" hidden><select id="deliveryZoneSelect" onchange="setDeliveryZone(this.value)" style="
   width:100%;
   padding:14px;
   border-radius:14px;
@@ -8739,23 +8735,8 @@ window.switchToggle=function(button){
 <option value="Palmar">Palmar</option>
 <option value="Petville">Petville</option>
 <option value="Muffles Junior College">Muffles Junior College</option>
-</select>
-
-  <!-- TIP BOX -->
-  <div style="margin-top:20px; padding:0 10px;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-      <label style="font-weight:800; font-size:13px; color:#666; display:block;">RUNNER TIP (OPTIONAL):</label>
-      <span style="font-size:11px; font-weight:700; color:#ff6a00;">100% Tips go to Runner</span>
-    </div>
-    <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;">
-      <button type="button" class="tip-btn active" onclick="selectTip(0, this)">No Tip</button>
-      <button type="button" class="tip-btn" onclick="selectTip(1, this)">$1</button>
-      <button type="button" class="tip-btn" onclick="selectTip(2, this)">$2</button>
-      <button type="button" class="tip-btn" onclick="selectTip(3, this)">$3</button>
-    </div>
-    <input type="hidden" id="selectedTipAmount" value="0">
-  </div>
-
+</select></div>
+<input type="hidden" id="selectedTipAmount" value="0">
   <div class="submit-track" style="margin-top:25px;">
     <button type="button" class="submit-inner" onclick="order()">Send order</button>
   </div>
@@ -14223,7 +14204,7 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=chat20261020"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=guest20261020"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
+});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=chat20261020"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=checkout20261025"></script><script src="customer-refinement.js?v=20261007"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=orders20261004"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=orders20261004"></script>
 <script src="customer-auth.js?v=signin-restored20261020"></script><script src="account-requests.js?v=orders20261004"></script>
@@ -14342,7 +14323,9 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 }
 @media(max-width:360px){html.swift-design body #appScreen #merchantBannerSlider .merchant-banner h2{font-size:19px!important}html.swift-design body #appScreen #merchantBannerSlider .merchant-banner>.merchant-artwork{height:166px!important}}
 </style><style id="ride-session-recovery-style">html.swift-design body #customerRidePanel #crSignIn{display:block;position:relative;width:calc(100% - 24px);margin:0 12px 12px;padding:14px 18px;min-height:48px;border:0;border-radius:14px;background:#202d24;color:#fff;font:600 14px system-ui;box-sizing:border-box}html.swift-design body #customerRidePanel #crSignIn[hidden]{display:none!important}</style>
-<script src="order-instructions.js?v=fit20261020"></script>
+<script src="order-instructions.js?v=checkout20261025"></script>
+<link rel="stylesheet" href="checkout-final.css?v=20261025">
+<script src="checkout-final.js?v=20261025"></script>
 
 <script src="order-chat.js?v=customer-photo20261020" data-chat-role="customer"></script>
 
