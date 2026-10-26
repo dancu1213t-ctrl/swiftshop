@@ -10151,20 +10151,14 @@ async function render() {
       return;
     }
 
-    if (!window.lastCartZone) {
-      alert("Please select your delivery area");
-      return;
-    }
-
     const deliverySelect = document.getElementById("deliveryZoneSelect");
     const selectedValue = deliverySelect?.value;
-
-    if (!selectedValue) {
-      alert("Please select your delivery area");
+    if (gift && !selectedValue) {
+      alert("Please select the recipient's delivery area");
       return;
     }
-
-    const deliveryZone = selectedValue;
+    // Normal checkout uses the delivery pin already selected in the cart.
+    const deliveryZone = gift ? selectedValue : (window.lastCartZone || "Pinned location");
     const deliveryFee = getCartDeliveryFee();
     const platformFee = PLATFORM_FEE;
     const itemsTotal = total;
