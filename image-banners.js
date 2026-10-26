@@ -1,0 +1,8 @@
+(()=>{'use strict';
+function card(r){const make=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};const article=make('article',undefined,'merchant-banner sb-image-banner');article.setAttribute('aria-label',r.title||'Store banner');
+const source=[...document.querySelectorAll('.cat-btn[data-cat]')].find(n=>n.dataset.cat===r.category),store=source?.querySelector('img')?.alt||source?.querySelector('span')?.textContent||r.category;
+const art=make('div',undefined,'sb-banner-art'),img=make('img');img.src=typeof merchantFeed!=='undefined'?merchantFeed.imageURL(r.image):r.image;img.alt=r.title||store+' banner';img.decoding='async';img.loading='eager';img.onerror=()=>{img.hidden=true;art.append(make('span','Banner image unavailable','sb-banner-unavailable'));};art.append(img);
+const footer=make('div',undefined,'sb-banner-footer'),copy=make('div',undefined,'sb-banner-store'),name=make('strong',store);copy.append(name);const tags=make('div',undefined,'sb-banner-tags');for(const text of (Array.isArray(r.banner_tags)?r.banner_tags:[]).filter(t=>typeof t==='string').slice(0,3))tags.append(make('span',text.slice(0,24)));if(tags.childElementCount)copy.append(tags);
+const action=make('button',(String(r.button_label||'Shop now').trim().slice(0,24)||'Shop now')+' \u2192','sb-banner-action');action.type='button';action.setAttribute('aria-label',(r.button_label||'Shop now')+' at '+store);action.onclick=()=>window.openMerchantStore(r.category);footer.append(copy,action);article.append(art,footer);return article;}
+window.SwiftImageBanners={card};
+})();

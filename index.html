@@ -8303,7 +8303,7 @@ window.switchToggle=function(button){
  else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox').style.display='none';}
  window.SwiftNavigation?.refresh();
 };
-</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=details20261018"></script></body>
+</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=details20261018"></script><script src="image-banners.js?v=20261026"></script></body>
 
 
 
@@ -13871,17 +13871,7 @@ function fitBannerArtwork(img){
    const original=document.getElementById('heroPromoSlider');if(!holder){holder=el('section');holder.id='merchantBannerSlider';holder.setAttribute('aria-label','Offers from local merchants');if(original)original.before(holder);else document.getElementById('products')?.before(holder);}
    holder.onmouseenter=()=>{hovered=true;};holder.onmouseleave=()=>{hovered=false;restartRotation();};
    holder.replaceChildren();holder.hidden=!rows.length;if(original)original.hidden=!!rows.length;
-   slides=rows.map(r=>{const card=el('article');card.className='merchant-banner';card.dataset.theme=['mint','peach','lavender','sky','rose','sunset','ocean','lemon','berry','sand'].includes(r.banner_theme)?r.banner_theme:'mint';card.dataset.motion=r.banner_motion===false?'off':'on';const copy=el('div');copy.className='banner-copy';
-   const brand=el('div');brand.className='banner-brand';
-   const source=[...document.querySelectorAll('.cat-btn')].find(n=>n.dataset.cat===r.category||n.getAttribute('onclick')?.includes("setCategory('"+r.category+"'"));
-   const logoUrl=source?.querySelector('img')?.getAttribute('src');
-   const brandMark=el('div');brandMark.className='banner-brand-mark';
-   if(logoUrl){const logo=el('img');logo.src=logoUrl;logo.alt=r.category;logo.onerror=()=>{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');};brandMark.append(logo);}else{brandMark.textContent=r.category;brandMark.classList.add('banner-brand-fallback');}
-   brand.append(brandMark);const eyebrow=el('span',source?.querySelector('img')?.alt||source?.querySelector('span')?.textContent||r.category);eyebrow.className='banner-editorial-label';brand.append(eyebrow);copy.append(brand,el('h2',r.title),el('p',r.subtitle));const b=el('button','Visit store →');b.type='button';b.onclick=()=>window.openMerchantStore(r.category);copy.append(b);const img=el('img');img.alt=r.title;
-   const artwork=imageURL(r.image);
-   img.onload=()=>{card.style.setProperty('--slide-artwork','url('+JSON.stringify(artwork)+')');card.classList.add('image-blended');fitBannerArtwork(img);};
-   img.onerror=()=>{card.classList.remove('image-blended');card.style.removeProperty('--slide-artwork');};
-   img.src=artwork;const visual=el('div');visual.className='merchant-artwork';visual.append(img);card.append(copy,visual);holder.append(card);return card;});
+   slides=rows.map(r=>{const card=window.SwiftImageBanners.card(r);holder.append(card);return card;});
    if(rows.length>1){const controls=el('div');controls.className='merchant-banner-controls';
    const count=el('span');count.className='banner-count';controls.append(count);
    for(const [direction,label] of [[-1,'Previous offer'],[1,'Next offer']]){const arrow=el('button',direction<0?'←':'→');arrow.type='button';arrow.className='banner-arrow';arrow.setAttribute('aria-label',label);arrow.onclick=()=>{show(index+direction);restartRotation();};controls.append(arrow);}
@@ -14258,7 +14248,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 .add-check-exclusive{animation-duration:.4s!important}
 #customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
 </style>
-</body>
+<script src="image-banners.js?v=20261026"></script></body>
 </html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=paymentqr20261010"></script><script src="swiftpay.js?v=transfer-centered20261019"></script><script src="swiftpay-admin.js?v=search20261010"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
@@ -14341,3 +14331,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 
 
 
+
+<link rel="stylesheet" href="image-banners.css?v=20261026">
