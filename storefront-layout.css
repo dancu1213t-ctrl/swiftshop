@@ -50,3 +50,5 @@ html.swift-design body #merchantStorePage .store-item-share{margin:8px 0 0!impor
 html.swift-design body #merchantStorePage.shop-active-page{padding-top:0!important;padding-bottom:calc(172px + env(safe-area-inset-bottom))!important}
 html.swift-design body #merchantStorePage #storePublicDetails[hidden]{display:none!important}
 html.swift-design body #merchantStorePage .store-section-nav button{font-family:inherit;font-size:14px;font-weight:650}
+html.swift-design body #merchantStorePage .store-profile-cover>img:not(.store-cover-product){object-fit:contain!important;background:#f5f5f3}
+html.swift-design body #merchantStorePage .store-toolbar .store-cart-link{bottom:calc(16px + env(safe-area-inset-bottom))!important}
