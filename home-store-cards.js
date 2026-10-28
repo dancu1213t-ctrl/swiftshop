@@ -15,7 +15,7 @@
     const source=[...document.querySelectorAll('.cat-btn[onclick]')].find(n=>(n.getAttribute('onclick')||'').includes("setCategory('"+category+"'"));
     const group=source?.closest('.category-panel')?.id.replace('panel-','');
     const tab=[...document.querySelectorAll('.main-tab-btn[onclick]')].find(n=>(n.getAttribute('onclick')||'').includes("switchMainTab('"+group+"'"));
-    const label=tab?.textContent?.replace(/^[^A-Za-z]+/,'').trim();
+    const label=/pharmacy/i.test(category)?(document.getElementById('homePharmacyButton')?.textContent?.trim()||'Pharmacy'):tab?.textContent?.replace(/^[^A-Za-z]+/,'').trim();
     if(label){const text=make('span','home-store-category');text.textContent=label;card.append(text);}
    }
    const src=safe(rows.get(category)?.cover_image);
