@@ -62,3 +62,19 @@ html.swift-design body #merchantStorePage .store-header-actions .store-profile-s
 html.swift-design body #merchantStorePage .store-profile-cover{height:clamp(130px,15vw,210px)!important;width:100%!important;margin:0!important;border-radius:18px 18px 0 0!important}
 html.swift-design body #merchantStorePage .store-profile-cover>img:not(.store-cover-product){object-fit:cover!important;object-position:center!important}
 @media(max-width:540px){html.swift-design body #merchantStorePage .store-profile-cover{height:125px!important;border-radius:14px 14px 0 0!important}}
+/* A solid safe area separates store artwork and controls from phone cutouts. */
+html.swift-design body #merchantStorePage.shop-active-page{--store-safe-top:max(24px,calc(env(safe-area-inset-top,0px) + 12px));padding-top:var(--store-safe-top)!important;mask-image:none!important;-webkit-mask-image:none!important;scroll-padding-top:16px}
+html.swift-design body #merchantStorePage .store-toolbar{top:calc(var(--store-safe-top) + 12px)!important;left:36px!important;right:36px!important}
+html.swift-design body #merchantStorePage .store-header-actions .store-header-save,html.swift-design body #merchantStorePage .store-header-actions .store-profile-share{top:calc(var(--store-safe-top) + 12px)!important}
+html.swift-design body #merchantStorePage .store-header-actions .store-header-save{right:88px!important}
+html.swift-design body #merchantStorePage .store-header-actions .store-profile-share{right:36px!important}
+html.swift-design body #merchantStorePage .store-section-nav{gap:24px;flex-wrap:nowrap}
+html.swift-design body #merchantStorePage .store-section-nav button{white-space:nowrap;min-height:48px}
+html.swift-design body #merchantStorePage .store-location-panel[hidden]{display:none!important}
+html.swift-design body #merchantStorePage .store-location-panel{padding:18px;border:1px solid #e8e8e5;border-radius:16px;margin:0 0 20px;background:#fff}
+#merchantStorePage .store-location-panel h2{font-size:18px;margin:0 0 10px}
+#merchantStorePage .store-location-panel p{font-size:14px;color:#616661;line-height:1.5;overflow-wrap:anywhere}
+#merchantStorePage .store-location-panel iframe{width:100%;height:240px;border:0;border-radius:12px;display:block;margin:16px 0}
+#merchantStorePage .store-location-panel a{display:inline-flex;min-height:44px;align-items:center;padding:10px 16px;border-radius:12px;background:#171918;color:#fff;font-size:13px;text-decoration:none}
+html.swift-design body #merchantStorePage:is([data-store-view=about],[data-store-view=location]) :is(.store-search-row,.store-chips,.store-product-grid,.store-offers,.po-store-offers,.store-notice,#storePaidAd){display:none!important}
+@media(max-width:600px){html.swift-design body #merchantStorePage.shop-active-page{--store-safe-top:max(56px,calc(env(safe-area-inset-top,0px) + 12px))}html.swift-design body #merchantStorePage .store-toolbar{left:26px!important;right:26px!important}html.swift-design body #merchantStorePage .store-header-actions .store-header-save{right:78px!important}html.swift-design body #merchantStorePage .store-header-actions .store-profile-share{right:26px!important}}
