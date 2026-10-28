@@ -75,7 +75,7 @@ html.swift-design body #merchantStorePage .store-location-panel{padding:18px;bor
 #merchantStorePage .store-location-panel h2{font-size:18px;margin:0 0 10px}
 #merchantStorePage .store-location-panel p{font-size:14px;color:#616661;line-height:1.5;overflow-wrap:anywhere}
 #merchantStorePage .store-location-panel iframe{width:100%;height:240px;border:0;border-radius:12px;display:block;margin:16px 0}
-#merchantStorePage .store-location-panel a{display:inline-flex;min-height:44px;align-items:center;padding:10px 16px;border-radius:12px;background:#171918;color:#fff;font-size:13px;text-decoration:none}
+#merchantStorePage .store-location-panel>a{display:inline-flex;min-height:44px;align-items:center;padding:10px 16px;border-radius:12px;background:#171918;color:#fff;font-size:13px;text-decoration:none}
 html.swift-design body #merchantStorePage:is([data-store-view=about],[data-store-view=location]) :is(.store-search-row,.store-chips,.store-product-grid,.store-offers,.po-store-offers,.store-notice,#storePaidAd){display:none!important}
 @media(max-width:600px){html.swift-design body #merchantStorePage.shop-active-page{--store-safe-top:max(56px,calc(env(safe-area-inset-top,0px) + 12px))}html.swift-design body #merchantStorePage .store-toolbar{left:26px!important;right:26px!important}html.swift-design body #merchantStorePage .store-header-actions .store-header-save{right:78px!important}html.swift-design body #merchantStorePage .store-header-actions .store-profile-share{right:26px!important}}
 html.swift-design body #catalogueFilterDialog{box-sizing:border-box;width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - max(80px,env(safe-area-inset-top)) - max(32px,env(safe-area-inset-bottom)));margin:auto;border-radius:20px;overflow-y:auto}
@@ -84,3 +84,6 @@ html.swift-design body #merchantStorePage .store-location-panel iframe{filter:gr
 #merchantStorePage .store-branded-map{width:100%;height:260px;border-radius:12px;overflow:hidden;margin:16px 0;background:#eeece6}
 #merchantStorePage .store-map-logo{position:absolute;width:38px;height:38px;box-sizing:border-box;transform:translate(-50%,-50%);border:3px solid #fff;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #252b26,0 3px 10px #0003;display:grid;place-items:center;color:#252b26;font:700 18px system-ui;pointer-events:none}
 #merchantStorePage .store-map-logo img{display:block;width:100%;height:100%;border-radius:50%;object-fit:contain;background:#fff}
+
+#merchantStorePage .store-branded-map .gm-style button{background-color:transparent!important;color:#333!important;min-width:0!important;min-height:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;font-family:Arial,sans-serif!important}
+#merchantStorePage .store-branded-map .gm-style a{background:transparent!important;color:#333!important;min-height:0!important;padding:0!important;border-radius:0!important;box-shadow:none!important}
