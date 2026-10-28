@@ -29,3 +29,5 @@ html.swift-design body #appScreen #shopStoreDirectory .store-directory-cover .sd
 @media(prefers-reduced-motion:reduce){html.swift-design body #appScreen #shopStoreDirectory .home-store-card{transition:none!important}}
 /* Fill the card's banner frame without top/bottom letterboxing. Logos stay contained. */
 html.swift-design body #appScreen #shopStoreDirectory .home-store-card .store-directory-cover img.home-store-banner.home-store-artwork{object-fit:cover!important;object-position:center!important}
+/* Existing merchant tags only; no badge is created for an untagged store. */
+html.swift-design body #appScreen #shopStoreDirectory .home-store-card .swift-store-tag{display:inline-block!important;align-self:flex-start;max-width:100%;margin:4px 0 0!important;padding:3px 7px!important;border:0!important;border-radius:5px!important;background:#d82929!important;color:#fff!important;font-size:10px!important;font-weight:650!important;line-height:15px!important;letter-spacing:0;text-align:left;white-space:normal;overflow-wrap:anywhere}
