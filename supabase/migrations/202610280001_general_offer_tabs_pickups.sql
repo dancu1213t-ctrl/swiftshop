@@ -49,7 +49,7 @@ begin
  new.snapshot:=jsonb_set(new.snapshot,'{items}',items);
  if jsonb_array_length(pickups)>0 then
   new.snapshot:=jsonb_set(new.snapshot,'{offer_pickups}',pickups);
-  if all_offers and all_pinned and jsonb_array_length(routes)>0 then new.snapshot:=jsonb_set(new.snapshot,'{routes}',routes);
+  if all_offers and all_pinned and jsonb_array_length(routes)>0 and coalesce(new.snapshot->'gift','null'::jsonb)='null'::jsonb then new.snapshot:=jsonb_set(new.snapshot,'{routes}',routes);
   elsif not all_offers and jsonb_array_length(routes)>0 and coalesce(new.snapshot->'gift','null'::jsonb)='null'::jsonb then
    for route in select value from jsonb_array_elements(routes) loop
     if not exists(select 1 from jsonb_array_elements_text(coalesce(new.snapshot->'routes','[]'::jsonb)) v where strpos(v,split_part(route#>>'{}','&destination=',1)||'&destination=')=1) then raise exception 'An offer pickup location changed. Remove the offer and choose it again before checkout.';end if;
