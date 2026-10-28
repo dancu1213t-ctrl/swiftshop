@@ -40,7 +40,7 @@ new ResizeObserver(frame).observe(mapNode);
 function render(){if(box.style.display==='none'||!box.style.display)return;area();document.getElementById('selectedTipAmount').value='0';
  const destination=gift.checked?point(document.getElementById('giftAddress').value):point(window.lastCartCoords);
  const categories=[...new Set(Object.values(typeof cart==='undefined'?{}:cart).filter(v=>v.q>0).map(v=>String(v.cat||'').toUpperCase()))];
- const stops=categories.map(category=>({category,position:pickupPoint(category)})).filter(v=>v.position);
+ const stops=window.SwiftOfferPickups?window.SwiftOfferPickups.points(typeof cart==='undefined'?{}:cart,c=>{const p=pickupPoint(c);return p?p.lat+','+p.lng:'';}):categories.map(category=>({category,position:pickupPoint(category)})).filter(v=>v.position);
  const key=JSON.stringify([destination,stops,gift.checked]);if(key===fingerprint&&map){frame();return;}fingerprint=key;
  objects.forEach(v=>v.setMap(null));objects=[];routeBounds=null;
  if(!destination||!stops.length){mapNode.hidden=true;caption.textContent=gift.checked?'Recipient\u2019s address will be confirmed by Dispatch.':'Select your delivery pin in the previous step to preview the route.';return;}

@@ -10318,9 +10318,9 @@ async function render() {
     const snapshot={
       order_instructions:orderInstructions,
       customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
-      items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p,...(item.offer_id?{offer_id:item.offer_id,offer_option_id:item.offer_option_id,offer_choices:item.offer_choices}: {})})),
+      items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p,...(item.offer_id?{offer_id:item.offer_id,offer_option_id:item.offer_option_id,offer_choices:item.offer_choices,offer_pickup:item.offer_pickup}: {})})),
       total:grandTotal,payment:paymentMethod,
-      routes:gift?[]:[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storePickupCoordinates(biz)}&destination=${encodeURIComponent(customerCoords)}`),
+      routes:gift?[]:(window.SwiftOfferPickups?.routes(cart,customerCoords)||[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storePickupCoordinates(biz)}&destination=${encodeURIComponent(customerCoords)}`)),
       arrival_notes:gift?gift.address+(gift.message?' · '+gift.message:''):'Delivery area: '+deliveryZone,
       taco_note:hasTacos?(tacoPlace+': '+tacoOrder):'',original_order_number:orderNum,
       delivery_area:deliveryZone,customer_location:customerCoords,
@@ -14207,8 +14207,8 @@ const close=window.closeMerchantStore;window.closeMerchantStore=function(){++req
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=admin-recovery20261026"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=orders20261004"></script>
 <script src="customer-auth.js?v=signin-restored20261020"></script><script src="account-requests.js?v=orders20261004"></script>
-<script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=full-access20261024"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=20261011"><script src="offer-ordering.js?v=20261011"></script>
-<link rel="stylesheet" href="pure-offers.css?v=white20261010"><script src="pure-offers.js?v=general-destination20261028"></script>
+<script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=full-access20261024"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=20261011"><script src="offer-ordering.js?v=general-pins20261028"></script>
+<link rel="stylesheet" href="pure-offers.css?v=white20261010"><link rel="stylesheet" href="offer-admin-tools.css?v=20261028"><script src="offer-admin-tools.js?v=20261028"></script><script src="offer-pickups.js?v=20261028"></script><script src="pure-offers.js?v=general-tabs-pins20261028"></script>
 <script src="product-cutouts.js?v=incremental20261018"></script>
 <!-- Keep home banners out of search and keyboard views. -->
 <style id="customer-search-banner-fix">
@@ -14324,7 +14324,7 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 </style><style id="ride-session-recovery-style">html.swift-design body #customerRidePanel #crSignIn{display:block;position:relative;width:calc(100% - 24px);margin:0 12px 12px;padding:14px 18px;min-height:48px;border:0;border-radius:14px;background:#202d24;color:#fff;font:600 14px system-ui;box-sizing:border-box}html.swift-design body #customerRidePanel #crSignIn[hidden]{display:none!important}</style>
 <script src="order-instructions.js?v=checkout20261025"></script>
 <link rel="stylesheet" href="checkout-final.css?v=arc20261025">
-<script src="checkout-final.js?v=store-pins20261025"></script>
+<script src="checkout-final.js?v=offer-pins20261028"></script>
 
 <script src="order-chat.js?v=customer-photo20261020" data-chat-role="customer"></script>
 
