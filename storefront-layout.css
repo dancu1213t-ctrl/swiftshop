@@ -52,3 +52,9 @@ html.swift-design body #merchantStorePage #storePublicDetails[hidden]{display:no
 html.swift-design body #merchantStorePage .store-section-nav button{font-family:inherit;font-size:14px;font-weight:650}
 html.swift-design body #merchantStorePage .store-profile-cover>img:not(.store-cover-product){object-fit:contain!important;background:#f5f5f3}
 html.swift-design body #merchantStorePage .store-toolbar .store-cart-link{bottom:calc(16px + env(safe-area-inset-bottom))!important}
+html.swift-design body #merchantStorePage .store-header-actions .store-header-save,html.swift-design body #merchantStorePage .store-header-actions .store-profile-share{position:absolute!important;top:calc(16px + env(safe-area-inset-top))!important;width:42px!important;min-width:42px!important;height:42px!important;padding:0!important;border-radius:50%!important;border-color:#ffffff40!important;background:#111c!important;color:#fff!important;font-size:0!important;z-index:5}
+html.swift-design body #merchantStorePage .store-header-actions .store-header-save{right:72px!important}
+html.swift-design body #merchantStorePage .store-header-actions .store-profile-share{right:20px!important}
+#merchantStorePage .store-profile-share>span{display:none}
+html.swift-design body #merchantStorePage .store-header-actions .store-header-save>span{font-size:25px!important}
+html.swift-design body #merchantStorePage .store-header-actions .store-profile-share svg{width:19px;height:19px}
