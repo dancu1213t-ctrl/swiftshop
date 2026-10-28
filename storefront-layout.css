@@ -81,3 +81,6 @@ html.swift-design body #merchantStorePage:is([data-store-view=about],[data-store
 html.swift-design body #catalogueFilterDialog{box-sizing:border-box;width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - max(80px,env(safe-area-inset-top)) - max(32px,env(safe-area-inset-bottom)));margin:auto;border-radius:20px;overflow-y:auto}
 /* Neutral store-map palette; map pins, controls and coordinates are unchanged. */
 html.swift-design body #merchantStorePage .store-location-panel iframe{filter:grayscale(1) contrast(1.08);background:#f3f3f1}
+#merchantStorePage .store-branded-map{width:100%;height:260px;border-radius:12px;overflow:hidden;margin:16px 0;background:#eeece6}
+#merchantStorePage .store-map-logo{position:absolute;width:38px;height:38px;box-sizing:border-box;transform:translate(-50%,-50%);border:3px solid #fff;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #252b26,0 3px 10px #0003;display:grid;place-items:center;color:#252b26;font:700 18px system-ui;pointer-events:none}
+#merchantStorePage .store-map-logo img{display:block;width:100%;height:100%;border-radius:50%;object-fit:contain;background:#fff}
