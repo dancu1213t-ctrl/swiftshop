@@ -58,3 +58,7 @@ html.swift-design body #merchantStorePage .store-header-actions .store-profile-s
 #merchantStorePage .store-profile-share>span{display:none}
 html.swift-design body #merchantStorePage .store-header-actions .store-header-save>span{font-size:25px!important}
 html.swift-design body #merchantStorePage .store-header-actions .store-profile-share svg{width:19px;height:19px}
+/* Restore the original store-cover dimensions and fill behavior only. */
+html.swift-design body #merchantStorePage .store-profile-cover{height:clamp(130px,15vw,210px)!important;width:100%!important;margin:0!important;border-radius:18px 18px 0 0!important}
+html.swift-design body #merchantStorePage .store-profile-cover>img:not(.store-cover-product){object-fit:cover!important;object-position:center!important}
+@media(max-width:540px){html.swift-design body #merchantStorePage .store-profile-cover{height:125px!important;border-radius:14px 14px 0 0!important}}
