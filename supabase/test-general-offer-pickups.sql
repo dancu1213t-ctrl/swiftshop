@@ -3,7 +3,7 @@ create temporary table swift_offer_pickup_test(snapshot jsonb) on commit drop;
 alter table swift_offer_pickup_test enable row level security;
 create trigger test_pickup before insert on swift_offer_pickup_test for each row execute function public.swift_order_offer_pickups();
 do $$
-declare offer_id uuid:=gen_random_uuid(); result jsonb; denied boolean:=false; invalid boolean:=false;stale boolean:=false;
+declare offer_id uuid:=gen_random_uuid(); result jsonb; denied boolean:=false; invalid boolean:=false;stale boolean:=false;duplicate_tab boolean:=false;tab_name text:='rollback-tab-'||gen_random_uuid()::text;
 begin
  insert into public.swift_store_offers(id,category,title,description,image_url,tags,published,starts_at,created_by,order_config,pickup_name,pickup_lat,pickup_lng)
  values(offer_id,'Aroma','Rollback-only pickup test','','https://example.invalid/offer-test.png','{}',false,now(),(select id from auth.users limit 1),'{"enabled":false,"options":[],"groups":[]}', 'Test entrance',18.08125,-88.56688);
@@ -16,6 +16,10 @@ begin
  if not invalid then raise exception 'Out-of-range location was accepted';end if;
  begin update public.swift_store_offers set is_general=true,category='Snack' where id=offer_id;exception when insufficient_privilege then denied:=true;end;
  if not denied then raise exception 'Non-admin General offer mutation was accepted';end if;
+ insert into public.swift_offer_tabs(name,position) values(tab_name,9999);
+ if not exists(select 1 from public.swift_offer_tabs where name=tab_name) then raise exception 'Tab was not persisted';end if;
+ begin insert into public.swift_offer_tabs(name) values(upper(tab_name));exception when unique_violation then duplicate_tab:=true;end;
+ if not duplicate_tab then raise exception 'Duplicate tab names were accepted';end if;
  if has_table_privilege('anon','public.swift_offer_tabs','INSERT') then raise exception 'Anonymous tab writes are allowed';end if;
 end $$;
 select 'PASS: canonical pickup routes, coordinate validation, General admin guard and tab permissions. All temporary data rolled back.' as checks;
