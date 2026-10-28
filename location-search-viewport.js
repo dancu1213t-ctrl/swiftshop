@@ -1,7 +1,7 @@
 (()=>{'use strict';
 const root=document.documentElement;let active=null,frame=0,lastInput=null,pointerInFlight=false,revealPending=false;
 const panelFor=e=>e instanceof Element?e.closest('#customerRidePanel,#pickupOrderBox'):null;
-const field=e=>e instanceof Element&&e.matches('input:not([type=button]):not([type=submit]):not([type=checkbox]):not([type=radio]):not([type=hidden]),textarea');
+const field=e=>e instanceof Element&&!e.readOnly&&e.matches('input:not([type=button]):not([type=submit]):not([type=checkbox]):not([type=radio]):not([type=hidden]),textarea');
 function layout(){frame=0;const panel=panelFor(document.activeElement);const mobile=matchMedia('(max-width:700px)').matches;
 if(pointerInFlight&&active&&!field(document.activeElement))return;
 if(!mobile||!panel||!field(document.activeElement)){if(active){active.classList.remove('swift-location-editing');active=null;}lastInput=null;root.classList.remove('swift-location-search','swift-pickup-search');return;}

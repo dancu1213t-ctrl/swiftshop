@@ -7978,16 +7978,16 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
 #customerRidePanel #crBookingNotice{font-size:12px!important;line-height:1.65;font-weight:400}
 #customerRidePanel #crUpdated{font-size:11px;line-height:1.6;color:#8c8295}
 @media(max-width:600px){#customerRidePanel #crTracking{padding:18px}#customerRidePanel .cr-status-top h2{font-size:19px}#customerRidePanel .cr-receipt-total>strong{font-size:25px}#customerRidePanel #crSteps li{font-size:10px;line-height:1.5}#customerRidePanel #crFareBox{padding:16px!important}}
-</style><style id="pickup-fee-waiver-style">#customerRidePanel .cr-pickup-promo{display:inline-flex;flex-direction:column;align-items:flex-end;gap:4px}#customerRidePanel .cr-pickup-promo s{font-size:11px;font-weight:400;color:#958d9e;margin-right:6px;text-decoration-thickness:1px}#customerRidePanel .cr-pickup-promo strong{font-size:12px;font-weight:600}#customerRidePanel .cr-pickup-promo small{font-size:10px;font-weight:500;color:#34765b;line-height:1.4}</style><script id="customer-swiftride-controller">
+</style><style id="pickup-fee-waiver-style">#customerRidePanel .cr-pickup-promo{display:inline-flex;flex-direction:column;align-items:flex-end;gap:4px}#customerRidePanel .cr-pickup-promo s{font-size:11px;font-weight:400;color:#958d9e;margin-right:6px;text-decoration-thickness:1px}#customerRidePanel .cr-pickup-promo strong{font-size:12px;font-weight:600}#customerRidePanel .cr-pickup-promo small{font-size:10px;font-weight:500;color:#34765b;line-height:1.4}</style><link rel="stylesheet" href="ride-pin-picker.css?v=precise20261027"><script src="ride-pin-picker.js?v=precise20261027"></script><script id="customer-swiftride-controller">
 (() => {
  'use strict';
  const button=document.getElementById('swiftRideButton');if(!button)return;
  const panel=document.createElement('section');panel.id='customerRidePanel';panel.hidden=true;panel.setAttribute('role','dialog');panel.setAttribute('aria-labelledby','crTitle');
  panel.innerHTML=`<div class="cr-shell"><header class="cr-header"><div><span>SWIFTRIDE</span><h1 id="crTitle" tabindex="-1">Where are you going?</h1></div><button type="button" id="crClose" aria-label="Close SwiftRide">✕</button></header>
  <p id="crThanks" hidden role="status">Thank you for riding with SwiftRide!</p><section id="crRating" hidden aria-label="Rate your driver"><h2>How was your ride?</h2><p id="crRatingDriver"></p><div class="cr-rating-stars" role="group" aria-label="Choose a rating"><button type="button" data-stars="1" aria-label="Rate 1 star" aria-pressed="false">★</button><button type="button" data-stars="2" aria-label="Rate 2 stars" aria-pressed="false">★</button><button type="button" data-stars="3" aria-label="Rate 3 stars" aria-pressed="false">★</button><button type="button" data-stars="4" aria-label="Rate 4 stars" aria-pressed="false">★</button><button type="button" data-stars="5" aria-label="Rate 5 stars" aria-pressed="false">★</button></div><p id="crRatingNotice" role="status" aria-live="polite">Tap a star to rate your driver.</p><button type="button" id="crRatingContinue">Skip for now</button></section><p id="crNotice" role="status" aria-live="polite">Choose your pickup and destination.</p>
- <button type="button" id="crSignIn" hidden>Sign in again</button><form id="crForm" novalidate><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Search a street or drop a pin" autocomplete="off" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Where to?" autocomplete="off" required></label></div>
- <div class="cr-tools"><button type="button" id="crGPS">◎ Use my location</button><button type="button" id="crPin" aria-pressed="false">Pin destination on map</button><button type="button" id="crCenter">Center map</button><button type="button" id="crReconnect">Refresh connection</button></div>
- <div id="crMap" aria-label="Pickup, destination and live ride map"></div><p id="crMapNotice" role="status">Tap the map to set your pickup. Choose destination mode to set your destination.</p>
+ <button type="button" id="crSignIn" hidden>Sign in again</button><form id="crForm" novalidate><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Choose pickup on the map" autocomplete="off" readonly aria-haspopup="dialog" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Choose destination on the map" autocomplete="off" readonly aria-haspopup="dialog" required></label></div>
+ <div class="cr-tools"><button type="button" id="crGPS">◎ GPS pickup pin</button><button type="button" id="crPin">Choose destination pin</button><button type="button" id="crCenter">Center map</button><button type="button" id="crReconnect">Refresh connection</button></div>
+ <div id="crMap" aria-label="Pickup, destination and live ride map"></div><p id="crMapNotice" role="status">Confirm your pickup and destination pins. The map below previews your route.</p>
  <div id="crNearby" hidden><div class="fleet-heading"><strong id="fleetCount">Available rides</strong><select id="fleetRange" aria-label="Driver map area"><option value="nearby">Within 15 km</option><option value="all">All available drivers</option></select><button type="button" id="fleetFit">Show drivers on map</button></div><p id="fleetNote">Choose pickup and destination to see rides.</p><div id="fleetCards" class="fleet-cards"></div></div>
  <div class="cr-contact"><label>Your name<input id="crName" maxlength="100" autocomplete="name" required></label><label>Phone number<input id="crPhone" maxlength="30" autocomplete="tel" inputmode="tel" required minlength="7"></label></div>
  <section id="crFareBox" hidden aria-label="Ride fare">
@@ -8001,7 +8001,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
  <section id="crTracking" hidden aria-label="Live ride progress"><div id="crTrackingFare" class="cr-fee-receipt"></div><div class="cr-status-top"><h2 id="crStatus"></h2><span id="crRideId"></span></div><div id="crConfirmation"></div><ol id="crSteps"></ol><div class="cr-driver-card"><div class="cr-driver-person"><img id="crDriverPhoto" alt="Your driver" hidden><span id="crDriverAvatar" aria-hidden="true">D</span><div class="cr-driver-info"><p id="crDriver"></p><span id="crLicensePlate" class="cr-license-plate" hidden></span></div></div><img id="crVehicleArt" class="cr-vehicle-cutout" alt="Driver’s vehicle" hidden onerror="this.hidden=true"></div><div class="cr-track-actions"><a id="crCall" hidden>Call driver</a><button type="button" id="crRefresh">Refresh</button><button type="button" id="crCancel">Cancel ride</button><button type="button" id="crNew" hidden>Request another ride</button></div><p id="crUpdated" role="status"></p></section></div>`;
  document.body.append(panel);
  const chip=document.createElement('button');chip.type='button';chip.id='customerRideChip';chip.hidden=true;chip.textContent='View your ride';button.closest('.hero-toggle-row').after(chip);
- const $=id=>document.getElementById(id),terminal=s=>['completed','cancelled'].includes(s);
+ const $=id=>document.getElementById(id),terminal=s=>['completed','cancelled'].includes(s);let pinsConfirmed={pickup:false,dropoff:false};
  let rideOptions=[], fareQuote=null, fareVersion=0, fareTimer=null, fareBusy=false, fareRetryAt=0;
  const money=n=>'BZD $'+Number(n).toFixed(2);
  function pickupFeeDisplay(amount){return money(amount);}
@@ -8066,9 +8066,9 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
  function pin(name,point,color,label){
   if(!map)return;
   if(!point){if(pins[name])pins[name].setMap(null);delete pins[name];return;}
-  if(!pins[name])pins[name]=new google.maps.Marker({map,position:point,title:label,label:name==='driver'?null:{text:label,color:'#fff',fontSize:'11px'},draggable:name!=='driver',icon:name==='driver'?vehicleIcon(ride?.vehicle_type):{path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:color,fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
-  pins[name].setPosition(point);pins[name].setMap(map);pins[name].setDraggable(!ride&&name!=='driver');
-  if(!pins[name]._wired&&name!=='driver'){pins[name]._wired=true;pins[name].addListener('dragend',e=>{if(!ride)setPoint(name,{lat:e.latLng.lat(),lng:e.latLng.lng()});});}
+  if(!pins[name])pins[name]=new google.maps.Marker({map,position:point,title:label,label:name==='driver'?null:{text:label,color:'#fff',fontSize:'11px'},draggable:false,icon:name==='driver'?vehicleIcon(ride?.vehicle_type):{path:google.maps.SymbolPath.CIRCLE,scale:14,fillColor:color,fillOpacity:1,strokeColor:'#fff',strokeWeight:3}});
+  pins[name].setPosition(point);pins[name].setMap(map);pins[name].setDraggable(false);
+
  }
  function frame(){if(!map)return;google.maps.event.trigger(map,'resize');const b=new google.maps.LatLngBounds();[...routePath,pickup,dropoff,ride&&ride.location_fresh&&ride.lat!=null?{lat:ride.lat,lng:ride.lng}:null].filter(Boolean).forEach(p=>b.extend(p));if(!b.isEmpty()){map.fitBounds(b,window.innerWidth<600?32:48);google.maps.event.addListenerOnce(map,'idle',()=>{if(map.getZoom()>16)map.setZoom(16);});}}
  function routeRemainder(path,point,minProgress=0){
@@ -8099,26 +8099,27 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   if(map){google.maps.event.trigger(map,'resize');return;}
   if(!window.google?.maps?.Map)throw Error('Google Maps is unavailable. Check your connection and reopen SwiftRide.');
   map=new google.maps.Map($('crMap'),{center:{lat:18.0777,lng:-88.5667},zoom:14,streetViewControl:false,mapTypeControl:false,fullscreenControl:true,gestureHandling:'greedy'});
-  map.addListener('click',e=>{if(!ride&&e.latLng)setPoint(pinMode,{lat:e.latLng.lat(),lng:e.latLng.lng()});});
-  for(const [id,type] of [['crPickup','pickup'],['crDropoff','dropoff']]){
-   if(google.maps.places?.Autocomplete){const ac=new google.maps.places.Autocomplete($(id),{componentRestrictions:{country:'bz'},fields:['geometry','formatted_address','name']});ac.bindTo('bounds',map);ac.addListener('place_changed',()=>{if(ride)return;const p=ac.getPlace();if(!p.geometry?.location){notice('Select a street from the suggestions or pin it on the map.');return;}setPoint(type,{lat:p.geometry.location.lat(),lng:p.geometry.location.lng()},[p.name,p.formatted_address].filter(Boolean).filter((v,i,a)=>a.indexOf(v)===i).join(' · '));});}
-   $(id).addEventListener('input',()=>{if(ride)return;if(type==='pickup'){pickup=null;clearNearby();}else dropoff=null;pin(type,null);route();});
-  }
+  for(const [id,type] of [['crPickup','pickup'],['crDropoff','dropoff']]){$(id).readOnly=true;$(id).setAttribute('aria-label',type==='pickup'?'Choose pickup pin on map':'Choose destination pin on map');$(id).onclick=()=>choosePoint(type);$(id).onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choosePoint(type);}};}
+ }
+ async function choosePoint(type,requestGPS=false){
+  if(ride||busy)return;if(pending){notice('Your previous request is pending. Retry it or refresh before changing pins.');return;}
+  const token=++geoVersion,identity=scope();try{await mapReady();const saved=String(window.lastCartCoords||'').split(',').map(Number);const fallback=pickup||dropoff||(saved.length===2&&saved.every(Number.isFinite)?{lat:saved[0],lng:saved[1]}:null);if(!window.SwiftRidePinPicker)throw Error('Map pin picker could not load. Refresh SwiftShop and try again.');
+  const result=await window.SwiftRidePinPicker.open({kind:type,point:type==='pickup'?pickup:dropoff,fallback,requestGPS});if(!result||token!==geoVersion||identity!==scope()||ride||panel.hidden)return;
+  pinsConfirmed[type]=true;setPoint(type,result.point,type==='pickup'?'Confirmed pickup pin':'Confirmed destination pin');notice(type==='pickup'?(dropoff?'Both pins confirmed. Choose an available ride.':'Pickup confirmed. Now choose your destination pin.'):'Destination confirmed. Check both pins before choosing a ride.');
+  }catch(e){notice(e.message||'Map is unavailable. Reconnect and try again.');}
  }
  let geocoder=null,pointVersions={pickup:0,dropoff:0};
  function setPoint(type,point,label){
-  ++geoVersion;if(type==='pickup')pickup=point;else dropoff=point;
+  if(!point||!Number.isFinite(point.lat)||!Number.isFinite(point.lng)||Math.abs(point.lat)>90||Math.abs(point.lng)>180)return;
+  ++geoVersion;if(type==='pickup')pickup={lat:point.lat,lng:point.lng};else dropoff={lat:point.lat,lng:point.lng};
   $(type==='pickup'?'crPickup':'crDropoff').value=label||'Map pin · '+point.lat.toFixed(5)+', '+point.lng.toFixed(5);
   pin(type,point,type==='pickup'?'#ee792b':'#3c5345',type==='pickup'?'A':'B');route();
   const pointToken=++pointVersions[type];
-  if(!label&&google.maps.Geocoder){geocoder=geocoder||new google.maps.Geocoder();geocoder.geocode({location:point}).then(({results})=>{if(pointVersions[type]!==pointToken||ride)return;const current=type==='pickup'?pickup:dropoff;if(!current||current.lat!==point.lat||current.lng!==point.lng)return;const result=results?.find(r=>r.types?.includes('street_address'))||results?.[0];if(result)$(type==='pickup'?'crPickup':'crDropoff').value=result.formatted_address;}).catch(()=>{});}
-  if(pickup&&dropoff){refresh();if(document.activeElement===$('crPickup')||document.activeElement===$('crDropoff'))document.activeElement.blur();requestAnimationFrame(()=>{$('crMap').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});frame();});}
+  if(google.maps.Geocoder){geocoder=geocoder||new google.maps.Geocoder();geocoder.geocode({location:point}).then(({results})=>{if(pointVersions[type]!==pointToken||ride)return;const current=type==='pickup'?pickup:dropoff;if(!current||current.lat!==point.lat||current.lng!==point.lng)return;const result=results?.find(r=>r.types?.includes('street_address'))||results?.[0];if(result){$(type==='pickup'?'crPickup':'crDropoff').value=(type==='pickup'?'Pickup pin · ':'Destination pin · ')+result.formatted_address;if(pinsConfirmed.pickup&&pinsConfirmed.dropoff)invalidateFare();}}).catch(()=>{});}
+  if(pickup&&dropoff)refresh();
  }
- async function gps(){
-  if(ride)return;if(!navigator.geolocation||!isSecureContext){notice('Use the published HTTPS website for GPS, or choose your pickup on the map.');return;}
-  const token=++geoVersion;$('crGPS').disabled=true;notice('Finding your pickup…');
-  navigator.geolocation.getCurrentPosition(pos=>{ $('crGPS').disabled=false;if(token!==geoVersion||ride)return;setPoint('pickup',{lat:pos.coords.latitude,lng:pos.coords.longitude});if(dropoff)frame();else{map.panTo(pickup);map.setZoom(16);}notice('Pickup found. Adjust the pin to your entrance if needed.');},()=>{$('crGPS').disabled=false;if(token===geoVersion)notice('GPS is unavailable. Search your street or tap the map.');},{enableHighAccuracy:true,timeout:10000,maximumAge:10000});
- }
+ async function gps(){return choosePoint('pickup',true);}
+
  let finishing=null,ratingSaving=false;
  function finishRide(){
   if(finishing===ride.id)return;finishing=ride.id;const id=ride.id,owner=account;
@@ -8127,7 +8128,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   for(const star of $('crRating').querySelectorAll('[data-stars]')){star.disabled=false;star.setAttribute('aria-pressed','false');}
   $('crRatingContinue').onclick=()=>{if(ratingSaving)return;
    if(account!==owner||ride?.id!==id)return;
-   dismissed=id;localStorage.setItem('swiftride.customer.completed:'+encodeURIComponent(account),id);ride=null;pending=null;finishing=null;pickup=null;dropoff=null;localStorage.removeItem(key());
+   dismissed=id;localStorage.setItem('swiftride.customer.completed:'+encodeURIComponent(account),id);ride=null;pending=null;finishing=null;pickup=null;dropoff=null;pinsConfirmed={pickup:false,dropoff:false};localStorage.removeItem(key());
    pin('pickup',null);pin('dropoff',null);$('crPickup').value='';$('crDropoff').value='';$('crBookingNotice').textContent='';route();close();paint();
    window.closeMerchantStore?.();window.closePromoPage?.();window.closeProfile?.();
    document.querySelector('.shop-bottom-nav [data-destination="home"]')?.click();
@@ -8142,7 +8143,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   $('crThanks').hidden=true;$('crRating').hidden=true;$('crNotice').hidden=false;$('crForm').hidden=false;
 
   window.SwiftCompletionCards?.update($('crConfirmation'),{kind:'ride',id:ride?.id,payment:ride?.payment_method,active:ride?.status==='in_progress'});
-  const tracking=!!ride; $('crTracking').hidden=!tracking;$('crForm').classList.toggle('cr-has-ride',tracking);
+  const tracking=!!ride;if(tracking)window.SwiftRidePinPicker?.cancel(); $('crTracking').hidden=!tracking;$('crForm').classList.toggle('cr-has-ride',tracking);
   ['crPickup','crDropoff','crName','crPhone'].forEach(id=>$(id).disabled=tracking);
   ['crGPS','crPin'].forEach(id=>$(id).hidden=tracking);$('crRequest').hidden=tracking||(!rideOptionSelected&&!pending);$('crFareBox').hidden=tracking||!rideOptionSelected;
   syncFleetVisibility();chip.hidden=!tracking;chip.textContent=tracking?labels[ride.status]+' · View ride':'View ride';
@@ -8222,18 +8223,18 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   try{await mapReady();await auth();try{pending=JSON.parse(localStorage.getItem(key())||'null');}catch{pending=null;}await refresh();
    if(pending&&!pending.p_quote_id){pending=null;localStorage.removeItem(key());}
    if(!ride&&pending){$('crName').value=pending.p_name;$('crPhone').value=pending.p_phone;setPoint('pickup',{lat:pending.p_pickup_lat,lng:pending.p_pickup_lng},pending.p_pickup);setPoint('dropoff',{lat:pending.p_dropoff_lat,lng:pending.p_dropoff_lng},pending.p_dropoff);notice('Your previous request is awaiting confirmation. Tap Request ride to safely retry that same trip.');}
-   else if(!ride&&!pickup){const pair=String(window.lastCartCoords||'').split(',').map(Number);if(pair.length===2&&pair.every(Number.isFinite)&&Math.abs(pair[0])<=90&&Math.abs(pair[1])<=180)setPoint('pickup',{lat:pair[0],lng:pair[1]});}
+   // Saved addresses are picker hints only; the customer must confirm the pickup pin.
    paint();frame();if(!ride)invalidateFare();
   }catch(e){notice(errorMessage(e));}
  }
- function close(){panel.hidden=true;button.setAttribute('aria-expanded','false');button.classList.remove('active');if(previousToggle)previousToggle.classList.add('active');button.focus();}
+ function close(){window.SwiftRidePinPicker?.cancel();panel.hidden=true;button.setAttribute('aria-expanded','false');button.classList.remove('active');if(previousToggle)previousToggle.classList.add('active');button.focus();}
  let resumeAfterSignIn=false;
  $('crSignIn').onclick=async()=>{resumeAfterSignIn=true;close();if(window.SwiftCustomerAuth?.reconnect)await window.SwiftCustomerAuth.reconnect();else notice('Reopen SwiftShop and sign in again.');};
  window.addEventListener('swift-customer-session-ready',()=>{session=null;if(client&&client!==customerDataClient)client.auth.stopAutoRefresh();client=null;if(resumeAfterSignIn){resumeAfterSignIn=false;open();}});
 
  button.addEventListener('click',event=>{event.preventDefault();event.stopImmediatePropagation();open();},true);chip.onclick=open;
  $('crClose').onclick=()=>{if(ride?.status==='completed'&&!$('crRating').hidden){$('crRatingContinue').click();return;}close();};$('crGPS').onclick=gps;$('crCenter').onclick=frame;$('crRefresh').onclick=refresh;$('crReconnect').onclick=async()=>{try{await mapReady();session=null;await auth();await refresh();paint();if(!ride&&pickup&&dropoff)invalidateFare();}catch(e){notice(errorMessage(e));}};
- $('crPin').onclick=()=>{pinMode=pinMode==='pickup'?'dropoff':'pickup';$('crPin').setAttribute('aria-pressed',String(pinMode==='dropoff'));$('crPin').textContent=pinMode==='dropoff'?'Pin pickup on map':'Pin destination on map';$('crMapNotice').textContent='Tap the map to set your '+(pinMode==='pickup'?'pickup':'destination')+'.';};
+ $('crPin').onclick=()=>choosePoint('dropoff');
 
  function bookingFields(){return {p_name:$('crName').value.trim(),p_phone:$('crPhone').value.trim(),p_pickup:$('crPickup').value.trim(),p_dropoff:$('crDropoff').value.trim(),p_pickup_lat:pickup.lat,p_pickup_lng:pickup.lng,p_dropoff_lat:dropoff.lat,p_dropoff_lng:dropoff.lng};}
  function quoteSignature(){return pickup&&dropoff?JSON.stringify(bookingFields()):'';}
@@ -8255,7 +8256,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
  }
  async function calculateFare(){
   if(!window.SwiftCustomerAuth?.signedIn){$('crFareDetails').textContent='Sign in to see available rides and request yours.';$('crSignIn').hidden=false;return;}
-  if(busy||ride||!pickup||!dropoff||panel.hidden)return;
+  if(busy||ride||!pickup||!dropoff||panel.hidden||!pending&&(!pinsConfirmed.pickup||!pinsConfirmed.dropoff))return;
   const token=fareVersion,signature=quoteSignature();fareBusy=true;fareRetryAt=Date.now()+30000;$('crFareDetails').textContent='Calculating fare…';
   try{const {data,error}=await requestRideQuotes(bookingFields());
    if(error){let message=error.message;try{message=(await error.context.json()).error||message;}catch{}throw Error(message);}if(data?.error)throw Error(data.error);
@@ -8270,7 +8271,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
  $('crForm').onsubmit=async event=>{
   if(!window.SwiftCustomerAuth?.signedIn){event.preventDefault();await window.SwiftCustomerAuth?.require('Sign in to request a ride.',()=>window.openSwiftRide?.());return;}
   event.preventDefault();if(busy)return;if(ride){bookingNotice(terminal(ride.status)?'Tap Request another ride to start a new trip.':'You already have a ride. Open your tracking to see it.');return;}
-  if(!pickup||!dropoff){bookingNotice('Choose both pickup and destination from the dropdown suggestions or map pins. Typing a name alone does not set its location.');return;}
+  if(!pickup||!dropoff||!pending&&(!pinsConfirmed.pickup||!pinsConfirmed.dropoff)){bookingNotice('Confirm your pickup pin and destination pin on the map first.');return;}
   if(!$('crName').value.trim()||$('crPhone').value.trim().length<7){bookingNotice('Enter your name and a phone number of at least 7 characters.');$('crForm').reportValidity();return;}if(!$('crForm').reportValidity()){bookingNotice('Please complete the highlighted fields.');return;}
   if(!pending&&!rideOptionSelected){bookingNotice('Select an available ride to review its fare before booking.');return;}
   if(!pending&&(!fareQuote||fareQuote.signature!==quoteSignature()||Date.parse(fareQuote.expiresAt)<=Date.now())){invalidateFare();bookingNotice('Your fare is updating. Please wait for the total before booking.');return;}
@@ -8282,10 +8283,10 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   finally{busy=false;$('crRequest').disabled=false;}
  };
  $('crCancel').onclick=async()=>{if(!ride||busy||!confirm('Cancel this ride?'))return;busy=true;$('crCancel').disabled=true;try{await rpc('swiftride_cancel',{p_id:ride.id});await refresh();}catch(e){notice(errorMessage(e));}finally{busy=false;$('crCancel').disabled=false;}};
- $('crNew').onclick=()=>{if(!ride||!terminal(ride.status))return;dismissed=ride.id;ride=null;pending=null;if(client&&client!==customerDataClient){client.auth.stopAutoRefresh();client=null;session=null;}$('crBookingNotice').textContent='';pickup=null;dropoff=null;pin('pickup',null);pin('dropoff',null);$('crPickup').value='';$('crDropoff').value='';route();paint();notice('Choose pickup and destination for your next ride.');};
+ $('crNew').onclick=()=>{if(!ride||!terminal(ride.status))return;dismissed=ride.id;ride=null;pending=null;if(client&&client!==customerDataClient){client.auth.stopAutoRefresh();client=null;session=null;}$('crBookingNotice').textContent='';pickup=null;dropoff=null;pinsConfirmed={pickup:false,dropoff:false};pin('pickup',null);pin('dropoff',null);$('crPickup').value='';$('crDropoff').value='';route();paint();notice('Choose pickup and destination for your next ride.');};
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden)close();});
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refresh();});
- setInterval(()=>{if(!ride&&!panel.hidden&&pickup&&dropoff&&!fareBusy&&Date.now()>fareRetryAt&&(!fareQuote||Date.parse(fareQuote.expiresAt)<=Date.now()))calculateFare();if(account!==scope()){++version;session=null;ride=null;pending=null;dismissed=null;clearNearby();pin('driver',null);chip.hidden=true;close();if(client&&client!==customerDataClient)client.auth.stopAutoRefresh();client=null;auth(false).then(s=>{if(s)refresh();}).catch(()=>{});return;}if(!panel.hidden||ride&&!terminal(ride.status))refresh();if(ride&&ride.location_updated_at&&Date.now()-new Date(ride.location_updated_at).getTime()>=90000){pin('driver',null);if(!terminal(ride.status)&&ride.status!=='requested')$('crUpdated').textContent='Driver GPS is stale. Waiting for an update.';}},5000);
+ setInterval(()=>{if(!ride&&!panel.hidden&&pickup&&dropoff&&!fareBusy&&Date.now()>fareRetryAt&&(!fareQuote||Date.parse(fareQuote.expiresAt)<=Date.now()))calculateFare();if(account!==scope()){++version;++geoVersion;session=null;ride=null;pending=null;dismissed=null;pickup=null;dropoff=null;pinsConfirmed={pickup:false,dropoff:false};pointVersions.pickup++;pointVersions.dropoff++;$('crPickup').value='';$('crDropoff').value='';pin('pickup',null);pin('dropoff',null);routeLines.forEach(l=>l.setMap(null));routeLines=[];routePath=[];routeSignature='';clearNearby();pin('driver',null);chip.hidden=true;close();invalidateFare();if(client&&client!==customerDataClient)client.auth.stopAutoRefresh();client=null;auth(false).then(s=>{if(s)refresh();}).catch(()=>{});return;}if(!panel.hidden||ride&&!terminal(ride.status))refresh();if(ride&&ride.location_updated_at&&Date.now()-new Date(ride.location_updated_at).getTime()>=90000){pin('driver',null);if(!terminal(ride.status)&&ride.status!=='requested')$('crUpdated').textContent='Driver GPS is stale. Waiting for an update.';}},5000);
  window.SwiftRideNotificationBridge={
   async request(name,args){if(!await auth(false))throw Error('Open SwiftRide to reconnect your ride session.');return rpc(name,args);},
   async open(id){try{if(!await auth(false))return false;const r=await rpc('swiftride_current_priced',{p_id:id});if(!r)return false;ride=r;await open();paint();return true;}catch(e){notice(errorMessage(e));return false;}}
@@ -14219,7 +14220,7 @@ html.customer-text-entry body .shop-bottom-nav{visibility:hidden!important;point
 </style>
 <script>
 (()=>{'use strict';
-const textField=el=>el instanceof Element&&el.matches('textarea,[contenteditable="true"],input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="hidden"])');
+const textField=el=>el instanceof Element&&!el.readOnly&&el.matches('textarea,[contenteditable="true"],input:not([type="button"]):not([type="submit"]):not([type="reset"]):not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]):not([type="hidden"])');
 let textPointerInFlight=false;
 const sync=()=>{if(textPointerInFlight&&!textField(document.activeElement))return;document.documentElement.classList.toggle('customer-text-entry',textField(document.activeElement));};
 document.addEventListener('pointerdown',e=>{if(textField(document.activeElement)&&!textField(e.target))textPointerInFlight=true;},true);
@@ -14260,7 +14261,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 
 <script src="store-info.js?v=reopen20261019"></script>
 
-<script src="location-search-viewport.js?v=ride-recovery20261019"></script>
+<script src="location-search-viewport.js?v=pin-picker20261027"></script>
 
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
 
