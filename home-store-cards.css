@@ -27,3 +27,5 @@ html.swift-design body #appScreen #shopStoreDirectory .store-directory-cover .sd
 @media(min-width:750px){html.swift-design body #appScreen #shopStoreDirectory .store-directory-card.home-store-card{--home-store-width:204px}html.swift-design body #appScreen #shopStoreDirectory .home-store-card .store-directory-cover{height:118px!important;min-height:118px!important}}
 @media(hover:hover){html.swift-design body #appScreen #shopStoreDirectory .home-store-card:hover{opacity:.87}}
 @media(prefers-reduced-motion:reduce){html.swift-design body #appScreen #shopStoreDirectory .home-store-card{transition:none!important}}
+/* Fill the card's banner frame without top/bottom letterboxing. Logos stay contained. */
+html.swift-design body #appScreen #shopStoreDirectory .home-store-card .store-directory-cover img.home-store-banner.home-store-artwork{object-fit:cover!important;object-position:center!important}
