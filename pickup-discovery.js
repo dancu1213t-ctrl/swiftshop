@@ -130,7 +130,7 @@
  const normalize=v=>String(v||'').toLowerCase().replace(/[^a-z0-9]/g,'');
  async function refreshHours(){
   if(typeof customerDataClient==='undefined')return;
-  try{const r=await customerDataClient.from('merchant_storefronts').select('*');if(r.error)return;openingHours.clear();
+  try{const r=await customerDataClient.from('merchant_storefronts').select('*');if(r.error)return;window.SwiftHomeStores?.update(r.data||[]);openingHours.clear();
    for(const row of r.data||[]){const names=[row.category,row.store_name,row.name];for(const node of document.querySelectorAll('.cat-btn[onclick]')){if(node.getAttribute('onclick')?.includes("setCategory('"+row.category+"'"))names.push(node.querySelector('img')?.alt,node.querySelector('span')?.textContent);}
     for(const name of names)if(name)openingHours.set(normalize(name),row);
    }
