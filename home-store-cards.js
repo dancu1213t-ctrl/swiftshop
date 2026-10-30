@@ -27,7 +27,7 @@
    img.onerror=()=>{img.remove();card.classList.remove('home-store-has-banner');};img.src=src;cover.prepend(img);
   }
  }
- window.SwiftHomeStores={update(records){for(const row of records||[])if(row?.category)rows.set(row.category,row);paint();}};
+ window.SwiftHomeStores={update(records){for(const row of records||[])if(row?.category)rows.set(row.category,{...rows.get(row.category),...row});paint();}};
  document.addEventListener('DOMContentLoaded',()=>{
   directory=document.getElementById('shopStoreDirectory');if(!directory)return;
   const heading=directory.querySelector('h2'),subtitle=directory.querySelector(':scope > p');if(heading)heading.textContent='Explore local stores';if(subtitle)subtitle.textContent='Browse menus, discover offers, and shop your local favourites.';
