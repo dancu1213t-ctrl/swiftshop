@@ -5,7 +5,7 @@ const db=()=>typeof customerDataClient!=='undefined'?customerDataClient:supabase
 const rpc=async(name,args={})=>{const r=await db().rpc(name,args).abortSignal(AbortSignal.timeout(15000));if(r.error)throw r.error;return r.data;};
 function allowed(category){const row=rows.find(r=>r.category===category);return row?row.zone_id===zone&&row.status==='live':zone==='orange-walk'&&!String(category||'').startsWith('store_');}
 function filterProducts(products){return(products||[]).filter(p=>allowed(p.category));}
-const ready=rpc('swift_region_catalogue').then(data=>{rows=data.stores||[];zones=data.zones||[];districts=data.districts||[];if(!zones.some(z=>z.id===zone))zone='orange-walk';loaded=true;return data;}).catch(()=>null);
+const ready=rpc('swift_region_catalogue_fast').then(data=>{rows=data.stores||[];zones=data.zones||[];districts=data.districts||[];if(!zones.some(z=>z.id===zone))zone='orange-walk';loaded=true;return data;}).catch(()=>null);
 const items=()=>typeof cart==='undefined'?[]:Object.values(cart).filter(i=>Number(i.q)>0).map(i=>({category:i.cat,name:i.name,quantity:i.q,price:i.p}));
 const coords=()=>String(window.lastCartCoords||'');
 function fee(){const key=JSON.stringify([items(),coords()]);return quoteData&&key===quoteKey?quoteData.fee_cents/100:zone==='orange-walk'?3.5:0;}
