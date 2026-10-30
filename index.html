@@ -8309,7 +8309,7 @@ window.switchToggle=function(button){
  else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox').style.display='none';}
  window.SwiftNavigation?.refresh();
 };
-</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=details20261018"></script><link rel="stylesheet" href="store-onboarding.css?v=20261030"><link rel="stylesheet" href="customer-regions.css?v=20261030"><script src="store-onboarding.js?v=20261030"></script><script src="customer-regions.js?v=20261030"></script></body>
+</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=details20261018"></script></body>
 
 
 
@@ -14009,7 +14009,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  document.querySelector('.store-navigation-wrapper')?.before(directory);
 
  window.SwiftStoreRegistryApply=function(records){
-  for(const r of records||[]){if(!r.category)continue;meta.set(r.category,{name:r.name||r.category,logo:r.logo||'',group:r.business_type||'Shops'});
+  for(const r of records||[]){if(!r.category||r.legacy)continue;meta.set(r.category,{name:r.name||r.category,logo:r.logo||'',group:r.business_type||'Shops'});
    let b=[...row.children].find(n=>n.dataset.storeCategory===r.category);
    if(!b){b=btn('',()=>window.openMerchantStore(r.category),'store-directory-card');b.dataset.storeCategory=r.category;const img=el('img');img.src=r.logo||'';img.alt='';b.append(img,el('strong',r.name||r.category),el('small','Visit store →'));row.append(b);}
    b.querySelector('strong').textContent=r.name||r.category;const logo=b.querySelector('img.home-store-logo')||b.querySelector('img:not(.home-store-banner)');if(logo&&r.logo&&logo.getAttribute('src')!==r.logo)logo.src=r.logo;

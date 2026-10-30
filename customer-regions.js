@@ -1,5 +1,5 @@
 /* One customer app; service areas select catalogue visibility, never authorize payments. */
-(()=>{'use strict';
+(()=>{'use strict';if(window.SwiftRegions)return;
 const node=(t,text)=>{const n=document.createElement(t);if(text)n.textContent=text;return n;};let rows=[],zones=[],districts=[],zone=localStorage.getItem('swift-service-zone')||'orange-walk',loaded=false,resolveRun=0,quoteData=null,quoteKey='',quotePromise=null;
 const db=()=>typeof customerDataClient!=='undefined'?customerDataClient:supabaseClient;
 const rpc=async(name,args={})=>{const r=await db().rpc(name,args).abortSignal(AbortSignal.timeout(15000));if(r.error)throw r.error;return r.data;};
