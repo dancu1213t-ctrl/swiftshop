@@ -45,14 +45,14 @@
     document.documentElement.classList.add('swift-design');
     const login=document.getElementById('loginBox');
     if(login){
-      const logo=el('img','sd-login-logo');logo.src='apple-touch-icon.png';logo.alt='SwiftShop';login.prepend(logo);
+      const logo=el('img','sd-login-logo');logo.src='apple-touch-icon.png?v=brand20261029';logo.alt='SwiftShop';login.prepend(logo);
       for(const [id,text,autocomplete] of [['userName','Full name','name'],['userPhone','Phone number','tel']]){
         const input=document.getElementById(id);if(!input)continue;
         const label=el('label','sd-login-label');label.htmlFor=id;label.textContent=text;input.before(label);input.setAttribute('autocomplete',autocomplete);
       }
     }
     const header=app.querySelector('.header'),title=document.getElementById('title');
-    if(title){title.textContent='SwiftShop';const brand=el('div','sd-brand');const logo=el('img','sd-brand-mark');logo.src='favicon.png';logo.alt='';title.before(brand);brand.append(logo,title);}
+    if(title){title.textContent='SwiftShop';const brand=el('div','sd-brand');const logo=el('img','sd-brand-mark');logo.src='favicon.png?v=brand20261029';logo.alt='';title.before(brand);brand.append(logo,title);}
     const slogan=header?.querySelector(':scope > p');if(slogan){slogan.textContent='';const greeting=el('strong','sd-home-greeting');greeting.textContent='What’s the plan?';const detail=el('span','sd-home-subtitle');detail.textContent='Local favourites. Everyday essentials. Your next ride.';slogan.append(greeting,detail);}
     const balanceValue=document.getElementById('userBalance'),balance=balanceValue?.parentElement;
     if(header&&balance&&balanceValue){
