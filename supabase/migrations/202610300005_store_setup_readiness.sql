@@ -1,0 +1,7 @@
+begin;
+create or replace function public.swift_region_context() returns jsonb language plpgsql stable security definer set search_path='' as $$begin
+ if auth.uid() is null then raise exception 'Sign in required';end if;
+ return jsonb_build_object('admin',public.swift_region_admin(),'staff_zones',coalesce((select jsonb_agg(zone_id) from public.swift_region_staff where user_id=auth.uid()),'[]'::jsonb),'stores',coalesce((select jsonb_agg(to_jsonb(r)||jsonb_build_object('owner_email',o.owner_email,'claimed',o.claimed_at is not null,'owner_linked',exists(select 1 from public.merchant_members mm where mm.category=r.category),'can_manage',public.swift_region_admin() or exists(select 1 from public.merchant_members mm where mm.category=r.category and mm.user_id=auth.uid()),'product_count',(select count(*) from public.products pp where pp.category=r.category and pp.active='yes'),'phone',m.phone,'address',m.address,'latitude',m.latitude,'longitude',m.longitude,'opens_at',m.opens_at,'closes_at',m.closes_at)) from public.swift_store_registry r left join public.swift_store_onboarding o using(category) left join public.merchant_storefronts m using(category) where public.swift_region_staff_zone(r.zone_id) or exists(select 1 from public.merchant_members x where x.category=r.category and x.user_id=auth.uid())),'[]'::jsonb),'zones',case when public.swift_region_admin() then (select jsonb_agg(to_jsonb(z)) from public.swift_service_zones z) else null end);
+end$$;
+notify pgrst,'reload schema';
+commit;
