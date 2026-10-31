@@ -7983,7 +7983,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
 #customerRidePanel #crBookingNotice{font-size:12px!important;line-height:1.65;font-weight:400}
 #customerRidePanel #crUpdated{font-size:11px;line-height:1.6;color:#8c8295}
 @media(max-width:600px){#customerRidePanel #crTracking{padding:18px}#customerRidePanel .cr-status-top h2{font-size:19px}#customerRidePanel .cr-receipt-total>strong{font-size:25px}#customerRidePanel #crSteps li{font-size:10px;line-height:1.5}#customerRidePanel #crFareBox{padding:16px!important}}
-</style><style id="pickup-fee-waiver-style">#customerRidePanel .cr-pickup-promo{display:inline-flex;flex-direction:column;align-items:flex-end;gap:4px}#customerRidePanel .cr-pickup-promo s{font-size:11px;font-weight:400;color:#958d9e;margin-right:6px;text-decoration-thickness:1px}#customerRidePanel .cr-pickup-promo strong{font-size:12px;font-weight:600}#customerRidePanel .cr-pickup-promo small{font-size:10px;font-weight:500;color:#34765b;line-height:1.4}</style><link rel="stylesheet" href="ride-pin-picker.css?v=precise20261027b"><script src="district-maps.js?v=20261031"></script><script src="ride-pin-picker.js?v=district-flow20261031"></script><script id="customer-swiftride-controller">
+</style><style id="pickup-fee-waiver-style">#customerRidePanel .cr-pickup-promo{display:inline-flex;flex-direction:column;align-items:flex-end;gap:4px}#customerRidePanel .cr-pickup-promo s{font-size:11px;font-weight:400;color:#958d9e;margin-right:6px;text-decoration-thickness:1px}#customerRidePanel .cr-pickup-promo strong{font-size:12px;font-weight:600}#customerRidePanel .cr-pickup-promo small{font-size:10px;font-weight:500;color:#34765b;line-height:1.4}</style><link rel="stylesheet" href="ride-pin-picker.css?v=precise20261027b"><script src="product-images.js?v=20261031"></script><script src="district-maps.js?v=20261031"></script><script src="ride-pin-picker.js?v=district-flow20261031"></script><script id="customer-swiftride-controller">
 (() => {
  'use strict';
  const button=document.getElementById('swiftRideButton');if(!button)return;
@@ -8693,11 +8693,11 @@ window.switchToggle=function(button){
   function readActiveCatalogue(){
     if(catalogueRead&&Date.now()<catalogueReadUntil)return catalogueRead;catalogueReadUntil=Date.now()+5000;
     const task=(async()=>{await window.SwiftRegions?.ready;const regions=window.SwiftRegions,general=['Snack','Drink','Household','Hygiene','Vegetables','Treats'];
-      const common=scopedCatalogue('general',()=>customerDataClient.from('products').select('*').ilike('active','yes').in('category',general));
+      const common=scopedCatalogue('general',()=>customerDataClient.from('products').select('id,name,category,price,was,subcategory,description,tags').ilike('active','yes').in('category',general));
       const categories=regions?.stores.filter(r=>regions.allowed(r.category)&&!general.includes(r.category)).map(r=>r.category)||[];
       const zone=regions?.zone||'orange-walk',key=zone+':'+categories.join(',');
-      const local=zone==='orange-walk'?scopedCatalogue(key,()=>customerDataClient.from('products').select('*').ilike('active','yes').not('category','in','(Snack,Drink,Household,Hygiene,Vegetables,Treats)')):categories.length?scopedCatalogue(key,()=>customerDataClient.from('products').select('*').ilike('active','yes').in('category',categories)):Promise.resolve({data:[]});
-      const results=await Promise.all([common,local]);const error=results.find(r=>r.error)?.error;if(error)return{data:[],error};const data=results.flatMap(r=>r.data||[]);return{data:regions?regions.filterProducts(data):data,error:null};})();
+      const local=zone==='orange-walk'?scopedCatalogue(key,()=>customerDataClient.from('products').select('id,name,category,price,was,subcategory,description,tags').ilike('active','yes').not('category','in','(Snack,Drink,Household,Hygiene,Vegetables,Treats)')):categories.length?scopedCatalogue(key,()=>customerDataClient.from('products').select('id,name,category,price,was,subcategory,description,tags').ilike('active','yes').in('category',categories)):Promise.resolve({data:[]});
+      const results=await Promise.all([common,local]);const error=results.find(r=>r.error)?.error;if(error)return{data:[],error};const data=results.flatMap(r=>r.data||[]).map(r=>({...r,image:window.SwiftProductImages?.reference(r.id)||''}));return{data:regions?regions.filterProducts(data):data,error:null};})();
     catalogueRead=task;task.then(result=>{if(catalogueRead===task){if(result.error){catalogueRead=null;catalogueReadUntil=0;}else catalogueReadUntil=Date.now()+5000;}},()=>{if(catalogueRead===task){catalogueRead=null;catalogueReadUntil=0;}});return task;
   }
   async function getProducts() {
