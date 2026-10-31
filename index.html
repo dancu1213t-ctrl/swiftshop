@@ -12,7 +12,7 @@ html.swift-entry-loading #authScreen{animation:none!important;transition:none!im
 </script>
 <script src="customer-reviews.js?v=nostoreratings20261020" defer></script>
 <script src="customer-usability.js?v=reviewsfinal20261008" defer></script>
-<script src="pickup-discovery.js?v=home-covers20261028" defer></script>
+<script src="pickup-discovery.js?v=district-flow20261031" defer></script>
 <link rel="stylesheet" href="swiftpay.css?v=transfer-centered20261019">
 <script src="product-filters.js?v=store-scope20261027"></script>
   <meta charset="UTF-8"><meta name="swiftshop-build" content="customer-orders-verified-20261004">
@@ -7983,7 +7983,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
 #customerRidePanel #crBookingNotice{font-size:12px!important;line-height:1.65;font-weight:400}
 #customerRidePanel #crUpdated{font-size:11px;line-height:1.6;color:#8c8295}
 @media(max-width:600px){#customerRidePanel #crTracking{padding:18px}#customerRidePanel .cr-status-top h2{font-size:19px}#customerRidePanel .cr-receipt-total>strong{font-size:25px}#customerRidePanel #crSteps li{font-size:10px;line-height:1.5}#customerRidePanel #crFareBox{padding:16px!important}}
-</style><style id="pickup-fee-waiver-style">#customerRidePanel .cr-pickup-promo{display:inline-flex;flex-direction:column;align-items:flex-end;gap:4px}#customerRidePanel .cr-pickup-promo s{font-size:11px;font-weight:400;color:#958d9e;margin-right:6px;text-decoration-thickness:1px}#customerRidePanel .cr-pickup-promo strong{font-size:12px;font-weight:600}#customerRidePanel .cr-pickup-promo small{font-size:10px;font-weight:500;color:#34765b;line-height:1.4}</style><link rel="stylesheet" href="ride-pin-picker.css?v=precise20261027b"><script src="ride-pin-picker.js?v=precise20261027d"></script><script id="customer-swiftride-controller">
+</style><style id="pickup-fee-waiver-style">#customerRidePanel .cr-pickup-promo{display:inline-flex;flex-direction:column;align-items:flex-end;gap:4px}#customerRidePanel .cr-pickup-promo s{font-size:11px;font-weight:400;color:#958d9e;margin-right:6px;text-decoration-thickness:1px}#customerRidePanel .cr-pickup-promo strong{font-size:12px;font-weight:600}#customerRidePanel .cr-pickup-promo small{font-size:10px;font-weight:500;color:#34765b;line-height:1.4}</style><link rel="stylesheet" href="ride-pin-picker.css?v=precise20261027b"><script src="district-maps.js?v=20261031"></script><script src="ride-pin-picker.js?v=district-flow20261031"></script><script id="customer-swiftride-controller">
 (() => {
  'use strict';
  const button=document.getElementById('swiftRideButton');if(!button)return;
@@ -8103,12 +8103,12 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
  async function mapReady(){
   if(map){google.maps.event.trigger(map,'resize');return;}
   if(!window.google?.maps?.Map)throw Error('Google Maps is unavailable. Check your connection and reopen SwiftRide.');
-  map=new google.maps.Map($('crMap'),{center:{lat:18.0777,lng:-88.5667},zoom:14,streetViewControl:false,mapTypeControl:false,fullscreenControl:true,gestureHandling:'greedy'});
+  map=new google.maps.Map($('crMap'),{center:window.SwiftDistrictMaps?.center()||{lat:18.0777,lng:-88.5667},zoom:14,streetViewControl:false,mapTypeControl:false,fullscreenControl:true,gestureHandling:'greedy'});window.SwiftDistrictMaps?.apply(map);
   for(const [id,type] of [['crPickup','pickup'],['crDropoff','dropoff']]){$(id).readOnly=true;$(id).setAttribute('aria-label',type==='pickup'?'Choose pickup pin on map':'Choose destination pin on map');$(id).onclick=()=>choosePoint(type);$(id).onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choosePoint(type);}};}
  }
  async function choosePoint(type,requestGPS=false){
   if(ride||busy)return;if(pending){notice('Your previous request is pending. Retry it or refresh before changing pins.');return;}
-  const token=++geoVersion,identity=scope();try{await mapReady();const saved=String(window.lastCartCoords||'').split(',').map(Number);const fallback=pickup||dropoff||(saved.length===2&&saved.every(Number.isFinite)?{lat:saved[0],lng:saved[1]}:null);if(!window.SwiftRidePinPicker)throw Error('Map pin picker could not load. Refresh SwiftShop and try again.');
+  const token=++geoVersion,identity=scope();try{await mapReady();const saved=String(window.lastCartCoords||'').split(',').map(Number);const fallback=window.SwiftDistrictMaps?.center(pickup||dropoff||(saved.length===2&&saved.every(Number.isFinite)?{lat:saved[0],lng:saved[1]}:null));if(!window.SwiftRidePinPicker)throw Error('Map pin picker could not load. Refresh SwiftShop and try again.');
   const result=await window.SwiftRidePinPicker.open({kind:type,point:type==='pickup'?pickup:dropoff,fallback,requestGPS});if(!result||token!==geoVersion||identity!==scope()||ride||panel.hidden)return;
   pinsConfirmed[type]=true;setPoint(type,result.point,type==='pickup'?'Confirmed pickup pin':'Confirmed destination pin');notice(type==='pickup'?(dropoff?'Both pins confirmed. Choose an available ride.':'Pickup confirmed. Now choose your destination pin.'):'Destination confirmed. Check both pins before choosing a ride.');
   }catch(e){notice(e.message||'Map is unavailable. Reconnect and try again.');}
@@ -8124,6 +8124,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   if(pickup&&dropoff)refresh();
  }
  async function gps(){return choosePoint('pickup',true);}
+window.addEventListener('swift-region-change',()=>{if(ride||pending)return;geoVersion++;pickup=dropoff=null;pinsConfirmed={pickup:false,dropoff:false};for(const id of ['crPickup','crDropoff'])if($(id))$(id).value='';pin('pickup',null);pin('dropoff',null);routeSignature='';routePath=[];routeLines.forEach(l=>l.setMap(null));routeLines=[];invalidateFare();if(map)window.SwiftDistrictMaps?.apply(map);});
 
  let finishing=null,ratingSaving=false;
  function finishRide(){
@@ -8685,15 +8686,19 @@ window.switchToggle=function(button){
     const label=[p.name,p.category,p.subcategory,p.title,p.fulfilment_kind].filter(Boolean).join(' ');
     return !/\b(netflix|spotify|disney\s*\+|subscription|digital|streaming|game\s*credits?|top\s*up|gift\s*cards?)\b/i.test(label);
   };
-  // Share concurrent catalogue reads; checkout keeps its own fresh validation.
-  let catalogueRead=null,catalogueReadUntil=0;
+  // General inventory is shared across areas; area-specific store inventory is cached separately.
+  let catalogueRead=null,catalogueReadUntil=0;const catalogueScopes=new Map();
+  function scopedCatalogue(key,build){const old=catalogueScopes.get(key);if(old&&Date.now()<old.until)return old.promise;const promise=Promise.resolve(build().abortSignal(AbortSignal.timeout(30000)));const saved={promise,until:Date.now()+60000};catalogueScopes.set(key,saved);promise.then(r=>{if(r.error&&catalogueScopes.get(key)===saved)catalogueScopes.delete(key);},()=>{if(catalogueScopes.get(key)===saved)catalogueScopes.delete(key);});return promise;}
+  window.addEventListener('swift-store-publication-changed',()=>{catalogueScopes.clear();catalogueRead=null;catalogueReadUntil=0;});
   function readActiveCatalogue(){
-    if(catalogueRead&&Date.now()<catalogueReadUntil)return catalogueRead;
-    catalogueReadUntil=Date.now()+5000;
-    const task=(async()=>{await window.SwiftRegions?.ready;let query=customerDataClient.from('products').select('*').ilike('active','yes');const regions=window.SwiftRegions;if(regions&&regions.zone!=='orange-walk'){const categories=regions.stores.filter(r=>regions.allowed(r.category)).map(r=>r.category);if(!categories.length)return {data:[],error:null};query=query.in('category',categories);}const result=await query.abortSignal(AbortSignal.timeout(30000));return {...result,data:regions?regions.filterProducts(result.data):result.data};})();
-    catalogueRead=task;
-    task.then(result=>{if(catalogueRead===task){if(result.error){catalogueRead=null;catalogueReadUntil=0;}else catalogueReadUntil=Date.now()+5000;}},()=>{if(catalogueRead===task){catalogueRead=null;catalogueReadUntil=0;}});
-    return task;
+    if(catalogueRead&&Date.now()<catalogueReadUntil)return catalogueRead;catalogueReadUntil=Date.now()+5000;
+    const task=(async()=>{await window.SwiftRegions?.ready;const regions=window.SwiftRegions,general=['Snack','Drink','Household','Hygiene','Vegetables','Treats'];
+      const common=scopedCatalogue('general',()=>customerDataClient.from('products').select('*').ilike('active','yes').in('category',general));
+      const categories=regions?.stores.filter(r=>regions.allowed(r.category)&&!general.includes(r.category)).map(r=>r.category)||[];
+      const zone=regions?.zone||'orange-walk',key=zone+':'+categories.join(',');
+      const local=zone==='orange-walk'?scopedCatalogue(key,()=>customerDataClient.from('products').select('*').ilike('active','yes').not('category','in','(Snack,Drink,Household,Hygiene,Vegetables,Treats)')):categories.length?scopedCatalogue(key,()=>customerDataClient.from('products').select('*').ilike('active','yes').in('category',categories)):Promise.resolve({data:[]});
+      const results=await Promise.all([common,local]);const error=results.find(r=>r.error)?.error;if(error)return{data:[],error};const data=results.flatMap(r=>r.data||[]);return{data:regions?regions.filterProducts(data):data,error:null};})();
+    catalogueRead=task;task.then(result=>{if(catalogueRead===task){if(result.error){catalogueRead=null;catalogueReadUntil=0;}else catalogueReadUntil=Date.now()+5000;}},()=>{if(catalogueRead===task){catalogueRead=null;catalogueReadUntil=0;}});return task;
   }
   async function getProducts() {
     window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState='loading'}}));
@@ -9291,10 +9296,10 @@ function refreshCartTotals() {
     });
 
     // 🏪 STORE LOCATION (POINT A)
-    const STORE_LOCATION = { lat: 18.081, lng: -88.563 };
+    const STORE_LOCATION = window.SwiftDistrictMaps?.center()||{lat:18.081,lng:-88.563};
 
     // DEFAULT (Orange Walk)
-    pickupLatLng = { lat: 18.081, lng: -88.563 };
+    pickupLatLng = STORE_LOCATION;
 
     pickupMap = new google.maps.Map(document.getElementById("pickupMap"), {
       center: pickupLatLng,
@@ -9341,7 +9346,7 @@ function refreshCartTotals() {
 
   let pickupLabelRequest={pickup:0,dropoff:0};
   function setPickupPoint(kind,point,label){
-    const coords={lat:typeof point.lat==='function'?point.lat():point.lat,lng:typeof point.lng==='function'?point.lng():point.lng};
+    const coords={lat:typeof point.lat==='function'?point.lat():point.lat,lng:typeof point.lng==='function'?point.lng():point.lng};if(window.SwiftDistrictMaps?.contains(coords)===false){(kind==='pickup'?pickupMarker:dropoffMarker)?.setVisible(false);if(kind==='pickup')pickupLatLng=null;else dropoffLatLng=null;document.getElementById('pickupLocationStatus').textContent='Choose a point inside your selected district, or change district first.';return;}
     const marker=kind==='pickup'?pickupMarker:dropoffMarker,input=document.getElementById(kind==='pickup'?'pickupSearch':'pickupDropoff');
     if(kind==='pickup')pickupLatLng=coords;else dropoffLatLng=coords;
     marker.setPosition(coords);marker.setVisible(true);pickupMap.panTo(coords);
@@ -9946,7 +9951,7 @@ async function render() {
 
   // Shared pickup source for checkout previews and dispatched order routes.
   function storePickupCoordinates(category) {
-    const key=String(category||'').trim().toUpperCase();
+    const key=String(category||'').trim().toUpperCase();if(['SNACK','DRINK','HOUSEHOLD','HYGIENE','VEGETABLES','TREATS'].includes(key))return '';
     const rows=window.SwiftStoreInfo?.rows;
     const row=rows&&[...rows.values()].find(r=>String(r.category||'').trim().toUpperCase()===key);
     if(row?.latitude!=null&&row?.longitude!=null){
@@ -10093,7 +10098,7 @@ async function render() {
       msg += `RUNNER ROUTE:%0A`;
       
       activeBusinesses.forEach(bizName => {
-        const storeCoords = storePickupCoordinates(bizName);
+        const storeCoords = storePickupCoordinates(bizName);if(!storeCoords){msg+='Shop nearby for '+bizName+'. Start delivery from current GPS after purchase.%0A';return;}
         const routeMapLink = `https://www.google.com/maps/dir/?api=1&origin=${storeCoords}&destination=${encodeURIComponent(customerCoords)}`;
         
         msg += ` ${bizName}:%0A${routeMapLink}%0A%0A`;
@@ -10151,6 +10156,7 @@ async function render() {
       customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
       items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p,...(item.offer_id?{offer_id:item.offer_id,offer_option_id:item.offer_option_id,offer_choices:item.offer_choices,offer_pickup:item.offer_pickup}: {})})),
       total:grandTotal,payment:paymentMethod,
+      local_shopping:Object.values(cart).every(i=>['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(i.cat)&&!i.offer_id),
       routes:gift?[]:(window.SwiftOfferPickups?.routes(cart,customerCoords)||[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storePickupCoordinates(biz)}&destination=${encodeURIComponent(customerCoords)}`)),
       arrival_notes:gift?gift.address+(gift.message?' · '+gift.message:''):'Delivery area: '+deliveryZone,
       taco_note:hasTacos?(tacoPlace+': '+tacoOrder):'',original_order_number:orderNum,
@@ -13511,7 +13517,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -13638,7 +13644,10 @@ const merchantFeed=(()=>{
  const el=(tag,text)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
  const live=(r,now=Date.now())=>r.status==='published'&&Date.parse(r.starts_at)<=now&&(!r.ends_at||Date.parse(r.ends_at)>now);
  const imageURL=value=>/^(https?:\/\/|data:image\/(png|jpeg|jpg|webp|gif);base64,)/i.test(value||'')?value:'';
- async function campaigns(kind){const {data,error}=await supabaseClient.from('merchant_campaigns').select('*').eq('kind',kind).eq('status','published').order('created_at',{ascending:false}).abortSignal(AbortSignal.timeout(15000));if(error)throw error;return (data||[]).filter(r=>live(r)&&(!window.SwiftRegions||window.SwiftRegions.allowed(r.category)));}
+  const campaignCache=new Map(),campaignRequests=new Map();
+  async function campaignRows(kind,force=false){const saved=campaignCache.get(kind);if(!force&&saved&&Date.now()-saved.at<60000)return saved.rows;if(campaignRequests.has(kind))return campaignRequests.get(kind);const request=customerDataClient.from('merchant_campaigns').select('*').eq('kind',kind).eq('status','published').order('created_at',{ascending:false}).abortSignal(AbortSignal.timeout(15000)).then(({data,error})=>{if(error)throw error;campaignCache.set(kind,{rows:data||[],at:Date.now()});if(kind==='slide')for(const row of (data||[]).slice(0,50)){const img=new Image();img.decoding='async';img.src=imageURL(row.image);}return data||[];}).finally(()=>campaignRequests.delete(kind));campaignRequests.set(kind,request);return request;}
+  const visibleCampaigns=rows=>rows.filter(r=>live(r)&&(!window.SwiftRegions||window.SwiftRegions.allowed(r.category)));
+  async function campaigns(kind){return visibleCampaigns(await campaignRows(kind));}
  const legacyPromos=window.getPromos;
  window.getPromos=async function(){
   const results=await Promise.allSettled([legacyPromos(),campaigns('promo'),readActiveCatalogue()]);
@@ -13697,9 +13706,7 @@ function fitBannerArtwork(img){
  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
  function restartRotation(){clearInterval(rotationTimer);if(slides.length<2)return;rotationTimer=setInterval(()=>{if(paused||hovered||reducedMotion.matches||document.hidden||holder.hidden||holder.contains(document.activeElement)||document.documentElement.classList.contains('shop-page-open'))return;show(index+1);},5000);}
  function show(i){if(!slides.length)return;index=(i+slides.length)%slides.length;slides.forEach((s,j)=>s.hidden=j!==index);holder.querySelectorAll('[data-dot]').forEach((b,j)=>b.setAttribute('aria-current',String(index===j)));const count=holder.querySelector('.banner-count');if(count)count.textContent=String(index+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');}
- async function refresh(){
-  try{
-   const rows=await campaigns('slide'),next=JSON.stringify(rows);if(next===signature)return;signature=next;
+ function paintSlides(rows){const next=(window.SwiftRegions?.zone||'orange-walk')+'|'+rows.map(r=>r.id+':'+(r.updated_at||r.created_at)+':'+r.image.length+':'+r.button_label).join('|');if(next===signature)return;signature=next;
    const original=document.getElementById('heroPromoSlider');if(!holder){holder=el('section');holder.id='merchantBannerSlider';holder.setAttribute('aria-label','Offers from local merchants');if(original)original.before(holder);else document.getElementById('products')?.before(holder);}
    holder.onmouseenter=()=>{hovered=true;};holder.onmouseleave=()=>{hovered=false;restartRotation();};
    holder.replaceChildren();holder.hidden=!rows.length;if(original)original.hidden=!!rows.length;
@@ -13708,10 +13715,10 @@ function fitBannerArtwork(img){
    const count=el('span');count.className='banner-count';controls.append(count);
    for(const [direction,label] of [[-1,'Previous offer'],[1,'Next offer']]){const arrow=el('button',direction<0?'←':'→');arrow.type='button';arrow.className='banner-arrow';arrow.setAttribute('aria-label',label);arrow.onclick=()=>{show(index+direction);restartRotation();};controls.append(arrow);}
    rows.forEach((r,i)=>{const b=el('button',String(i+1));b.type='button';b.dataset.dot=i;b.setAttribute('aria-label','Show banner '+(i+1));b.onclick=()=>{show(i);restartRotation();};controls.append(b);});if(!reducedMotion.matches){const pause=el('button',paused?'Play':'Pause');pause.type='button';pause.className='banner-pause';pause.onclick=()=>{paused=!paused;pause.textContent=paused?'Play':'Pause';pause.setAttribute('aria-pressed',String(paused));restartRotation();};pause.setAttribute('aria-label','Pause automatic banners');pause.setAttribute('aria-pressed',String(paused));controls.append(pause);}holder.append(controls);}show(0);restartRotation();
-  }catch{console.warn('Merchant banners unavailable; existing slider retained.');}
  }
- window.addEventListener('swift-region-change',()=>{signature='';if(holder)holder.hidden=true;refresh();});
- document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if(!document.hidden)refresh();},60000);window.addEventListener('focus',refresh);});
+ async function refresh(force=false){try{await window.SwiftRegions?.ready;paintSlides(visibleCampaigns(await campaignRows('slide',force===true)));}catch{console.warn('Merchant banners unavailable; existing slider retained.');}}
+ window.addEventListener('swift-region-change',()=>{signature='';const saved=campaignCache.get('slide');if(saved)paintSlides(visibleCampaigns(saved.rows));else if(holder)holder.hidden=true;refresh();});
+ document.addEventListener('DOMContentLoaded',()=>{refresh();setInterval(()=>{if(!document.hidden)refresh(true);},60000);window.addEventListener('focus',refresh);});
  return {live,imageURL};
 })();
 </script><script>/* Storefronts share the existing cart; the home product grid never moves. */
@@ -14050,7 +14057,7 @@ const close=window.closeMerchantStore;window.closeMerchantStore=function(){++req
 <script src="login-transition.js?v=orders20261004"></script>
 <script src="customer-auth.js?v=signin-restored20261020"></script><script src="account-requests.js?v=orders20261004"></script>
 <script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=full-access20261024"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=20261011"><script src="offer-ordering.js?v=general-pins20261028"></script>
-<link rel="stylesheet" href="pure-offers.css?v=white20261010"><link rel="stylesheet" href="offer-admin-tools.css?v=map-controls20261028b"><script src="offer-admin-tools.js?v=map-controls20261028"></script><script src="offer-pickups.js?v=20261028"></script><script src="pure-offers.js?v=general-tabs-pins20261028b"></script>
+<link rel="stylesheet" href="pure-offers.css?v=white20261010"><link rel="stylesheet" href="offer-admin-tools.css?v=map-controls20261028b"><script src="offer-admin-tools.js?v=district-flow20261031"></script><script src="offer-pickups.js?v=20261028"></script><script src="pure-offers.js?v=district-flow20261031"></script>
 <script src="product-cutouts.js?v=incremental20261018"></script>
 <!-- Keep home banners out of search and keyboard views. -->
 <style id="customer-search-banner-fix">
@@ -14091,7 +14098,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 .add-check-exclusive{animation-duration:.4s!important}
 #customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
 </style>
-<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=repair-20261030c"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=repair-city-stores20261030"></script></body>
+<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=district-flow20261031"></script></body>
 </html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=paymentqr20261010"></script><script src="swiftpay.js?v=transfer-centered20261019"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
@@ -14123,7 +14130,7 @@ html.swift-design body #merchantStorePage .store-identity-copy h1{overflow-wrap:
 }
 </style>
 
-<script src="pharmacy-stores.js?v=20261018"></script>
+<script src="pharmacy-stores.js?v=district-flow20261031"></script>
 
 
 <style id="merchant-banner-professional-layout">
@@ -14166,7 +14173,7 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 </style><style id="ride-session-recovery-style">html.swift-design body #customerRidePanel #crSignIn{display:block;position:relative;width:calc(100% - 24px);margin:0 12px 12px;padding:14px 18px;min-height:48px;border:0;border-radius:14px;background:#202d24;color:#fff;font:600 14px system-ui;box-sizing:border-box}html.swift-design body #customerRidePanel #crSignIn[hidden]{display:none!important}</style>
 <script src="order-instructions.js?v=checkout20261025"></script>
 <link rel="stylesheet" href="checkout-final.css?v=arc20261025">
-<script src="checkout-final.js?v=offer-pins20261028"></script>
+<script src="checkout-final.js?v=local-shopping20261031"></script>
 
 <script src="order-chat.js?v=customer-photo20261020" data-chat-role="customer"></script>
 

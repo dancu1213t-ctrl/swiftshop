@@ -13,4 +13,6 @@ html.swift-design body #appScreen .header .swift-location-group #swiftRegionName
 @media(max-width:380px){html.swift-design body #appScreen .header .swift-location-group{gap:6px}html.swift-design body #appScreen .header .swift-location-group #swiftRegionName{font-size:10px;max-width:96px;padding:7px}}
 @media(max-width:600px){html.swift-design body #appScreen .header .swift-location-group{grid-template-columns:minmax(0,1fr);gap:0}html.swift-design body #appScreen .header .swift-location-group .swift-region-bar{padding-left:31px!important;max-width:100%}html.swift-design body #appScreen .header .swift-location-group #swiftRegionName{max-width:100%;font-size:11px;min-height:32px;background:transparent;border:0;padding:3px 0;border-radius:4px}}
 html.swift-design body #appScreen .header .swift-location-group{width:min(100%,380px)!important;justify-self:start!important}
-html[data-service-zone]:not([data-service-zone=orange-walk]) .store-navigation-wrapper{display:none!important}
+
+
+.main-tab-btn[hidden]{display:none!important}

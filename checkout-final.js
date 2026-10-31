@@ -43,8 +43,8 @@ function render(){if(box.style.display==='none'||!box.style.display)return;area(
  const stops=window.SwiftOfferPickups?window.SwiftOfferPickups.points(typeof cart==='undefined'?{}:cart,c=>{const p=pickupPoint(c);return p?p.lat+','+p.lng:'';}):categories.map(category=>({category,position:pickupPoint(category)})).filter(v=>v.position);
  const key=JSON.stringify([destination,stops,gift.checked]);if(key===fingerprint&&map){frame();return;}fingerprint=key;
  objects.forEach(v=>v.setMap(null));objects=[];routeBounds=null;
- if(!destination||!stops.length){mapNode.hidden=true;caption.textContent=gift.checked?'Recipient\u2019s address will be confirmed by Dispatch.':'Select your delivery pin in the previous step to preview the route.';return;}
- mapNode.hidden=false;caption.textContent=stops.length>1?'A: Store pickups  \u00b7  B: Delivery':'A: Store pickup  \u00b7  B: Delivery';
+ if(!destination){mapNode.hidden=true;caption.textContent=gift.checked?'Recipient\u2019s address will be confirmed by Dispatch.':'Select your delivery pin in the previous step to preview the route.';return;}
+ mapNode.hidden=false;caption.textContent=!stops.length?'Your runner shops nearby. Delivery starts from their GPS location after purchase.':stops.length>1?'A: Store pickups  \u00b7  B: Delivery':'A: Store pickup  \u00b7  B: Delivery';
  if(!window.google?.maps){mapNode.hidden=true;caption.textContent='Map unavailable. Your selected delivery pin is still saved.';return;}
  if(!map)map=new google.maps.Map(mapNode,{center:destination,zoom:14,maxZoom:16,styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}],disableDefaultUI:true,gestureHandling:'none',keyboardShortcuts:false,clickableIcons:false,draggable:false,scrollwheel:false,disableDoubleClickZoom:true,mapTypeControl:false,fullscreenControl:false});
  const bounds=new google.maps.LatLngBounds();bounds.extend(destination);

@@ -108,7 +108,8 @@
 
  ].map(([name,lat,lng,category],id)=>({id,name,lat,lng,category}));
 
- let businessSearch=null,placeSearch=null,selected=null,category='All',query='',overlays=[],card,notice;
+ let businessSearch=null,placeSearch=null,selected=null,category='All',query='',overlays=[],card,notice,pinnedMap=null;
+function syncRegionalStores(){for(let i=stores.length-1;i>=0;i--)if(stores[i].registry)stores.splice(i,1);for(const r of window.SwiftRegions?.stores||[]){if(!window.SwiftRegions.allowed(r.category)||r.latitude==null||r.longitude==null)continue;const lat=Number(r.latitude),lng=Number(r.longitude);if(stores.some(s=>Math.abs(s.lat-lat)<.0001&&Math.abs(s.lng-lng)<.0001))continue;stores.push({id:'registry-'+r.category,name:r.name,lat,lng,category:['Food','Cafes'].includes(r.business_type)?'Food & drinks':r.business_type==='Groceries'?'Groceries':'Shops',registry:true});}}
 
  const $=id=>document.getElementById(id);
 
@@ -116,7 +117,7 @@
 
  function distance(store){if(!dropoffLatLng)return null;const rad=x=>x*Math.PI/180,a=dropoffLatLng,b=store,dlat=rad(b.lat-a.lat),dlng=rad(b.lng-a.lng);return 6371*2*Math.atan2(Math.sqrt(Math.sin(dlat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dlng/2)**2),Math.sqrt(1-(Math.sin(dlat/2)**2+Math.cos(rad(a.lat))*Math.cos(rad(b.lat))*Math.sin(dlng/2)**2)));}
 
- function matches(s){return (category==='All'||s.category===category)&&s.name.toLowerCase().includes(query.toLowerCase());}
+ function matches(s){const local=window.SwiftDistrictMaps?.contains({lat:s.lat,lng:s.lng});if(local===false||local===null&&window.SwiftRegions?.zone!=='orange-walk')return false;return (category==='All'||s.category===category)&&s.name.toLowerCase().includes(query.toLowerCase());}
 
  const openingHours=new Map();
  function hoursStatus(hours,now=new Date()){
@@ -138,7 +139,7 @@
   }catch{/* No hours label is shown if the saved schedule cannot be loaded. */}
  }
  function savedHours(store){const aliases={'Aroma Cafe & Lounge':'Aroma','Brew & Browse':'BrewBrowse','The Dinner House':'DinnerHouse'};return openingHours.get(normalize(store.name))||openingHours.get(normalize(aliases[store.name]));}
- function showCard(s,focus=false){if(focus&&typeof innerWidth==='number'&&innerWidth<=600){const area=card.parentElement;area.classList.add('pd-expanded');const expand=area.querySelector('.pd-expand');expand.textContent='Close expanded map';expand.setAttribute('aria-expanded','true');google.maps.event.trigger(pickupMap,'resize');}selected=s;card.hidden=false;card.replaceChildren();const top=el('div',undefined,'pd-card-top'),copy=el('div');copy.append(el('small',s.category+' · '+(s.address||'Orange Walk')),el('h3',s.name));const close=el('button','×','pd-close');close.type='button';close.setAttribute('aria-label','Close store details');close.onclick=()=>{card.hidden=true;selected=null;drawPins();};top.append(copy,close);card.append(top);
+ function showCard(s,focus=false){if(focus&&typeof innerWidth==='number'&&innerWidth<=600){const area=card.parentElement;area.classList.add('pd-expanded');const expand=area.querySelector('.pd-expand');expand.textContent='Close expanded map';expand.setAttribute('aria-expanded','true');google.maps.event.trigger(pickupMap,'resize');}selected=s;card.hidden=false;card.replaceChildren();const top=el('div',undefined,'pd-card-top'),copy=el('div');copy.append(el('small',s.category+' · '+(s.address||window.SwiftRegions?.zones.find(z=>z.id===window.SwiftRegions.zone)?.name||'Local store')),el('h3',s.name));const close=el('button','×','pd-close');close.type='button';close.setAttribute('aria-label','Close store details');close.onclick=()=>{card.hidden=true;selected=null;drawPins();};top.append(copy,close);card.append(top);
 
   const availability=hoursStatus(savedHours(s));if(availability){const badge=el('p',availability,'pd-hours-status');badge.setAttribute('aria-live','polite');card.append(badge);}
   const km=distance(s);card.append(el('p',km===null?'Choose your drop-off to see distance.':km.toFixed(1)+' km from your drop-off · straight-line distance','pd-distance'));
@@ -166,7 +167,7 @@
    notice.textContent='Business found. Choose it as your pickup, then set point B.';
   });
  }
- function attachPins(){if(!pickupMap)return;attachBusinessSearch();if(overlays.length)return;class StorePill extends google.maps.OverlayView{constructor(store){super();this.store=store;this.setMap(pickupMap);}onAdd(){this.button=el('button',this.store.name,'pd-map-pill');this.button.type='button';this.button.setAttribute('aria-label','View '+this.store.name);this.button.onclick=()=>showCard(this.store,true);google.maps.OverlayView.preventMapHitsAndGesturesFrom(this.button);this.getPanes().floatPane.append(this.button);}draw(){drawPins();}onRemove(){this.button?.remove();}}overlays=stores.map(s=>new StorePill(s));google.maps.event.addListener(pickupMap,'idle',drawPins);pickupMap.setOptions({styles:[{featureType:'all',elementType:'geometry',stylers:[{color:'#eeeeec'}]},{featureType:'all',elementType:'labels.text.fill',stylers:[{color:'#666666'}]},{featureType:'all',elementType:'labels.text.stroke',stylers:[{color:'#ffffff'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#dadad7'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#ccd9df'}]},{featureType:'landscape.natural',elementType:'geometry',stylers:[{color:'#e6e8e3'}]}],fullscreenControl:false,gestureHandling:'greedy'});refresh();}
+ function attachPins(){if(!pickupMap)return;attachBusinessSearch();if(overlays.length)return;syncRegionalStores();class StorePill extends google.maps.OverlayView{constructor(store){super();this.store=store;this.setMap(pickupMap);}onAdd(){this.button=el('button',this.store.name,'pd-map-pill');this.button.type='button';this.button.setAttribute('aria-label','View '+this.store.name);this.button.onclick=()=>showCard(this.store,true);google.maps.OverlayView.preventMapHitsAndGesturesFrom(this.button);this.getPanes().floatPane.append(this.button);}draw(){drawPins();}onRemove(){this.button?.remove();}}overlays=stores.map(s=>new StorePill(s));if(pinnedMap!==pickupMap){google.maps.event.addListener(pickupMap,'idle',drawPins);pinnedMap=pickupMap;}pickupMap.setOptions({styles:[{featureType:'all',elementType:'geometry',stylers:[{color:'#eeeeec'}]},{featureType:'all',elementType:'labels.text.fill',stylers:[{color:'#666666'}]},{featureType:'all',elementType:'labels.text.stroke',stylers:[{color:'#ffffff'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#ffffff'}]},{featureType:'road.highway',elementType:'geometry',stylers:[{color:'#dadad7'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#ccd9df'}]},{featureType:'landscape.natural',elementType:'geometry',stylers:[{color:'#e6e8e3'}]}],fullscreenControl:false,gestureHandling:'greedy'});refresh();}
 
  function setup(){const page=$('pickupOrderBox');if(!page)return;page.classList.add('pd-page');const header=page.querySelector('.pickup-heading');header.querySelector('h2').textContent='Your next pickup, nearby.';header.querySelector('p').textContent='Find a local business. Choose A → B. We’ll handle the pickup.';
 
@@ -176,11 +177,12 @@
 
   refresh();
 
-  const init=window.initPickupMap;window.initPickupMap=function(...args){try{const result=init.apply(this,args);attachPins();refreshHours();return result;}catch(e){notice.textContent='The map could not load. Please retry your connection.';console.error('Pickup map',e);}};
+  const init=window.initPickupMap;window.initPickupMap=function(...args){try{const result=init.apply(this,args);attachPins();window.SwiftDistrictMaps?.apply(pickupMap,{frame:!pickupLatLng&&!dropoffLatLng}).then(refresh);refreshHours();return result;}catch(e){notice.textContent='The map could not load. Please retry your connection.';console.error('Pickup map',e);}};
 
   const setPoint=window.setPickupPoint;window.setPickupPoint=function(...args){const result=setPoint.apply(this,args);refresh();if(selected)showCard(selected);return result;};
 
   if(pickupMap)attachPins();
+  window.addEventListener('swift-region-change',()=>{selected=null;card.hidden=true;query='';businessSearch.value='';if(pickupMap){overlays.forEach(o=>o.setMap(null));overlays=[];syncRegionalStores();attachPins();pickupLatLng=dropoffLatLng=null;pickupMarker?.setVisible(false);dropoffMarker?.setVisible(false);directionsRenderer?.setMap(null);for(const id of ['pickupSearch','pickupDropoff'])$(id).value='';++pickupRouteRequest;window.SwiftDistrictMaps?.apply(pickupMap).then(refresh);}refresh();});
   refreshHours();setInterval(()=>{if(selected&&!card.hidden)showCard(selected);},60000);
 
  }
