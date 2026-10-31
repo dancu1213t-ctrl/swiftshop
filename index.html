@@ -11999,6 +11999,13 @@ function triggerCelebration() {
 
   // 4. Show the selected category panel
   document.getElementById('panel-' + panelId).classList.add('active');
+  // A store directory tab must not leave the previous General products underneath.
+  const general=panelId==='general';
+  for(const id of ['products','subcategory-bar','pickupOrderBox','requestRideBox','map']){
+    const section=document.getElementById(id);if(section)section.style.display='none';
+  }
+  if(general){cat='Snack';document.getElementById('products').style.display='grid';render();}
+
 }
 /* =========================================================
    SWIFTSHOP GAMIFICATION / REWARDS SYSTEM (FIXED & HARDENED)
@@ -14098,7 +14105,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 .add-check-exclusive{animation-duration:.4s!important}
 #customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
 </style>
-<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=district-flow20261031"></script></body>
+<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=portal-ui20261031"></script></body>
 </html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=paymentqr20261010"></script><script src="swiftpay.js?v=transfer-centered20261019"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
@@ -14130,7 +14137,7 @@ html.swift-design body #merchantStorePage .store-identity-copy h1{overflow-wrap:
 }
 </style>
 
-<script src="pharmacy-stores.js?v=district-flow20261031"></script>
+<script src="pharmacy-stores.js?v=portal-ui20261031"></script>
 
 
 <style id="merchant-banner-professional-layout">
@@ -14189,5 +14196,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 <link rel="stylesheet" href="storefront-layout.css?v=logo-maps20261028b">
 <script src="storefront-layout.js?v=logo-maps20261028"></script>
 
-<link rel="stylesheet" href="home-store-cards.css?v=red-tags20261028">
+<link rel="stylesheet" href="home-store-cards.css?v=portal-ui20261031">
 <script src="home-store-cards.js?v=pharmacy-label20261028"></script>
