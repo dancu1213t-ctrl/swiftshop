@@ -12004,7 +12004,7 @@ function triggerCelebration() {
   for(const id of ['products','subcategory-bar','pickupOrderBox','requestRideBox','map']){
     const section=document.getElementById(id);if(section)section.style.display='none';
   }
-  if(general){cat='Snack';document.getElementById('products').style.display='grid';render();}
+  if(general){document.querySelectorAll('.cat-btn.active').forEach(b=>b.classList.remove('active'));document.querySelector('#panel-general [data-cat=Snack]')?.classList.add('active');cat='Snack';document.getElementById('products').style.display='grid';render();}
 
 }
 /* =========================================================
