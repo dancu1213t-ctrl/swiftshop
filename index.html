@@ -8306,7 +8306,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
 window.switchToggle=function(button){
  document.querySelectorAll('.toggle-box .toggle-btn').forEach(b=>b.classList.toggle('active',b===button));
  if(button.textContent.trim()==='Pickup'){openPickupOrder(button);}
- else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox').style.display='none';}
+ else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox')?.style.setProperty('display','none');}
  window.SwiftNavigation?.refresh();
 };
 </script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=details20261018"></script></body>
@@ -8382,10 +8382,6 @@ window.switchToggle=function(button){
         <div class="cat-btn" data-cat="Lunch" onclick="setCategory('Lunch', this)">
           <img src="https://i.imgur.com/p8vx8Nz.png" class="cat-img" alt="Lunch">
           <span>Lunch</span>
-        </div>
-        <div class="cat-btn" onclick="openTacoOrder(this)">
-          <img src="https://i.imgur.com/hnzB4IP.png" class="cat-img" alt="Tacos">
-          <span>Tacos</span>
         </div>
         <div class="cat-btn" data-cat="Aroma" onclick="setCategory('Aroma', this)">
           <img src="https://i.imgur.com/i7i6bbl.png" class="cat-img" alt="Aroma">
@@ -8521,124 +8517,6 @@ window.switchToggle=function(button){
 
 
 <div class="section" id="products"></div>
-
-<!-- 🌮 TACO ORDER BOX -->
-<div class="section" id="tacoOrderBox" style="display:none;">
-
-  <h3 id="tacoUserTitle" style="text-align:center;">🌮 Order For</h3>
-
-  <label style="font-weight:700;">Select Taco Place</label>
-  <select id="tacoPlace" style="
-    width:100%;
-    padding:14px;
-    border-radius:14px;
-    border:none;
-    font-size:16px;
-    font-weight:600;
-    background:#f5f5f5;
-    box-shadow:0 6px 18px rgba(0,0,0,0.08);
-    outline:none;
-    margin-bottom:12px;
-  ">
-  <option value="">Choose taco place</option>
-
-<option value="Elma's Tacos">
-  🌮 Elma’s Tacos — ⏰ 6:00 AM–12:00 AM
-</option>
-
-<option value="Mery's Place">
-  🌮 Mercy's Place — ⏰ 12:00 AM–12:00 AM
-</option>
-
-<option value="Cheng's Tacos">
-  🌮 Cheng’s Tacos — ⏰ 7:00 AM–11:00 AM
-</option>
-
-<option value="Lily's Tacos">
-  🌮 Lily’s Tacos — ⏰ 5:30 AM–10:30 AM
-</option>
-
-<option value="A's Cool Spot">
-  🌮 A’s Cool Spot — ⏰ 6:00 AM–11:00 AM
-</option>
-
-<option value="A&G">
-  🌮 Alexis and Garcia — ⏰ 6:00 AM–11:00 AM
-</option>
-
-<option value="Chan's Tacos">
-  🌮 Chan’s Tacos — ⏰ 6:00 AM–1:00 PM
-</option>
-
-<option value="Garcias Tacos">
-  🌮 Garcia’s Tacos — ⏰ 6:00 AM–11:00 AM
-</option>
-
-</select>
-
- <!-- 🚚 DELIVERY AREA -->
-<label style="font-weight:700;">Delivery Area</label>
-<select id="tacoDeliveryZone" onchange="updateTacoDeliveryFee()" style="
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:none;
-  font-size:16px;
-  font-weight:600;
-  background:#f5f5f5;
-  box-shadow:0 6px 18px rgba(0,0,0,0.08);
-  outline:none;
-  margin-bottom:10px;
-">
-  <option value="">Select delivery area</option>
-  <option value="town">In Town (Orange Walk)</option>
-  <option value="muffles">Muffles Junior College</option>
-  <option value="trial_farm">Trial Farm</option>
-  <option value="pasadita">Pasadita Area</option>
-  <option value="palmar">Palmar</option>
-  <option value="chan_pine_ridge">Chan Pine Ridge</option>
-  <option value="yo_creek">Yo Creek</option>
-  <option value="san_estevan">San Estevan</option>
-  <option value="carmelita">Carmelita</option>
-  <option value="san_jose">San Jose</option>
-  <option value="san_pablo">San Pablo</option>
-
-</select>
-
-<div id="tacoFeeText" style="font-weight:700;color:#ff6a00;margin-bottom:12px;"></div>
-
-
-
-<label style="font-weight:700;">What do you want?</label>
-<textarea id="tacoDetails" placeholder="Example: 3 chicken tacos, extra salsa..."
-  style="
-    width:100%;
-    padding:14px;
-    border-radius:14px;
-    border:none;
-    font-size:15px;
-    background:#f5f5f5;
-    box-shadow:0 6px 18px rgba(0,0,0,0.08);
-    outline:none;
-    min-height:90px;
-    margin-bottom:14px;
-  "></textarea>
-
-
-  <button onclick="goToOrderFromTacos()" style="
-    width:100%;
-    padding:16px;
-    background:#ff9000;
-    color:white;
-    font-size:18px;
-    font-weight:700;
-    border:none;
-    border-radius:14px;
-  ">
-    Next ➜ Order
-  </button>
-
-</div>
 
 <div class="section" id="pickupOrderBox" style="display:none; padding:25px; background:#ffffff; border-radius:24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 
@@ -8798,6 +8676,7 @@ window.switchToggle=function(button){
   const customerDataClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
   const supabaseClient = new Proxy(customerDataClient,{get(target,key){const admin=window.SwiftAdmin;const useAdmin=admin?.verified&&document.getElementById('adminScreen')?.style.display==='block'&&['from','rpc','storage'].includes(key);const source=useAdmin?admin.client:target;const value=source[key];return typeof value==='function'?value.bind(source):value;}});
 
+  for(const key of ['tacoOrder','tacoPlace','tacoZone'])localStorage.removeItem(key);
   // --- SUPABASE DATA BRIDGE FUNCTIONS ---
 
   // Android digital goods require a supported Play billing implementation.
@@ -8811,7 +8690,7 @@ window.switchToggle=function(button){
   function readActiveCatalogue(){
     if(catalogueRead&&Date.now()<catalogueReadUntil)return catalogueRead;
     catalogueReadUntil=Date.now()+5000;
-    const task=Promise.resolve(supabaseClient.from('products').select('*').ilike('active','yes').abortSignal(AbortSignal.timeout(15000))).then(async result=>{await window.SwiftRegions?.ready;return {...result,data:window.SwiftRegions?window.SwiftRegions.filterProducts(result.data):result.data};});
+    const task=(async()=>{await window.SwiftRegions?.ready;let query=customerDataClient.from('products').select('*').ilike('active','yes');const regions=window.SwiftRegions;if(regions&&regions.zone!=='orange-walk'){const categories=regions.stores.filter(r=>regions.allowed(r.category)).map(r=>r.category);if(!categories.length)return {data:[],error:null};query=query.in('category',categories);}const result=await query.abortSignal(AbortSignal.timeout(30000));return {...result,data:regions?regions.filterProducts(result.data):result.data};})();
     catalogueRead=task;
     task.then(result=>{if(catalogueRead===task){if(result.error){catalogueRead=null;catalogueReadUntil=0;}else catalogueReadUntil=Date.now()+5000;}},()=>{if(catalogueRead===task){catalogueRead=null;catalogueReadUntil=0;}});
     return task;
@@ -8821,7 +8700,7 @@ window.switchToggle=function(button){
     let data,error;
     try {({data,error}=await readActiveCatalogue());}
     catch(e){error=e;}
-    if(error){window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState='error'}}));return [];}
+    if(error){console.warn('Catalogue load failed:',error.message||String(error));window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState='error'}}));return [];}
     window.dispatchEvent(new CustomEvent('swift-catalogue-state',{detail:{state:window.swiftCatalogueState=data?.length?'ready':'empty'}}));
     return (data||[]).filter(window.swiftMobileItemAllowed).map(r => ({
       id: r.id,
@@ -8967,10 +8846,7 @@ function getCartDeliveryFee() { return window.SwiftRegions?.fee() ?? FIXED_DELIV
     const comments = [
       "🌽Grab a Snack, with Krazy Corn, Best of the Best",
       "🍕Two 16 inch Pizza with Drinks at 35 Points",
-      "🌮 Mercy's Place Now Available on Tacos Order Box",
       "🍅 Get Fresh Vegetables at Emanuel's Frutas y Verduras(Don Tito)",
-      "🌮 Elma's Tacos Now Available",
-      "🌮 Lilly Tacos Now Available",
       "🌯 Get Your Burritos and Tostadas from around FireStation- ALicia's",
       "🚚 You Shop, We Deliver Seh the Word",
       "🔵Free Delivery when you purchase 🔵",
@@ -9042,7 +8918,7 @@ function getCartDeliveryFee() { return window.SwiftRegions?.fee() ?? FIXED_DELIV
       document.getElementById("pickupOrderBox").style.display = "none";
 
     if (document.getElementById("tacoOrderBox"))
-      document.getElementById("tacoOrderBox").style.display = "none";
+      document.getElementById("tacoOrderBox")?.style.setProperty("display","none");
 
     document.getElementById("requestRideBox").style.display = "block";
 
@@ -9383,51 +9259,13 @@ function refreshCartTotals() {
     }
   }
 
-  // 🌮 OPEN TACO ORDER SCREEN (NOT FROM SHEETS)
-  function openTacoOrder(btn){
-    // highlight active button
-    document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-
-    // hide products, show taco box
-    document.getElementById("products").style.display = "none";
-    document.getElementById("tacoOrderBox").style.display = "block";
-
-    const user = localStorage.getItem("userName") || "Customer";
-    document.getElementById("tacoUserTitle").innerText = "🌮 Order For " + user;
-  }
-
-  // ➜ GO FROM TACOS TO NORMAL ORDER FLOW
-  function goToOrderFromTacos(){
-    const place = document.getElementById("tacoPlace").value;
-    const details = document.getElementById("tacoDetails").value.trim();
-    const zone = document.getElementById("tacoDeliveryZone").value;
-
-    if(!place || !details || !zone){
-      alert("Please select taco place, delivery area, and enter your order.");
-      return;
-    }
-
-    // ✅ save taco info
-    localStorage.setItem("tacoPlace", place);
-    localStorage.setItem("tacoOrder", details);
-    localStorage.setItem("tacoZone", zone); // ✅ SAVE DELIVERY AREA
-
-    // ✅ close taco order box
-    document.getElementById("tacoOrderBox").style.display = "none";
-
-    const delivery=document.getElementById('deliveryZoneSelect');if(delivery)delivery.value=zone;
-    window.lastCartZone=zone;
-    updateCartBubble();openCart();
-  }
-
   function openPickupOrder(btn){
     document.querySelectorAll(".cat-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
     // Hide everything else
     document.getElementById("products").style.display = "none";
-    document.getElementById("tacoOrderBox").style.display = "none";
+    document.getElementById("tacoOrderBox")?.style.setProperty("display","none");
     
     // Show only pickup
     document.getElementById("pickupOrderBox").style.display = "block";
@@ -9701,20 +9539,6 @@ function updateCartBubble() {
         }, 350); 
       });
     }
-  }
-
-  // 🌮 TACO DELIVERY FEE (same zones & prices as grocery)
-  function updateTacoDeliveryFee() {
-    const zone = document.getElementById("tacoDeliveryZone").value;
-    const feeText = document.getElementById("tacoFeeText");
-
-    if (!zone) {
-      if (feeText) feeText.textContent = "";
-      return;
-    }
-
-    const fee = getServiceFee(zone);
-    if (feeText) feeText.textContent = `🚚 Delivery Fee: $${fee.toFixed(2)} BZD`;
   }
 
 function closeCart() {
@@ -14267,7 +14091,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 .add-check-exclusive{animation-duration:.4s!important}
 #customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
 </style>
-<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=20261030c"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=city-stores20261030"></script></body>
+<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=repair-20261030c"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=repair-city-stores20261030"></script></body>
 </html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=paymentqr20261010"></script><script src="swiftpay.js?v=transfer-centered20261019"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
