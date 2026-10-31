@@ -42,3 +42,4 @@ html.swift-design .store-navigation-wrapper{min-height:0!important;padding-botto
 
 html.swift-design .store-navigation-wrapper .categories{display:flex!important;align-items:flex-start!important;gap:14px!important;width:100%!important;min-height:0!important;height:auto!important;padding:0!important;margin:0!important;overflow-x:auto!important;overflow-y:hidden!important}
 html.swift-design .store-navigation-wrapper .cat-btn .uber-3d-icon{position:relative!important;inset:auto!important;transform:none!important;width:58px!important;height:58px!important;object-fit:contain!important;margin:0 0 8px!important}
+html.swift-design .store-navigation-wrapper .cat-btn[hidden],html.swift-design .store-navigation-wrapper .main-tab-btn[hidden]{display:none!important}
