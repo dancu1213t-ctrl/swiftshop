@@ -7863,7 +7863,7 @@ window.showLoginWelcome=function(){
   node('cloSteps').replaceChildren();stages.forEach((stage,i)=>{const li=document.createElement('li');li.className=i<index?'done':i===index?'active':'waiting';if(i===index)li.setAttribute('aria-current','step');const dot=document.createElement('span');dot.className='clo-dot';dot.textContent=i<index?'✓':String(i+1);const text=document.createElement('div'),title=document.createElement('strong'),desc=document.createElement('p');title.textContent=stage[1];desc.textContent=i===index?stage[2]:i<index?'Complete':'Coming next';text.append(title,desc);li.append(dot,text);node('cloSteps').append(li);});
   const runner=node('cloRunner');runner.replaceChildren();runner.hidden=index<4||!current.remote?.runner_name;
   if(!runner.hidden){const photo=current.remote.runner_photo;if(typeof photo==='string'&&photo.startsWith('data:image/jpeg;base64,')){const avatar=document.createElement('img');avatar.className='clo-runner-photo';avatar.src=photo;avatar.alt=current.remote.runner_name+' — your runner';avatar.width=avatar.height=64;avatar.onerror=()=>avatar.remove();runner.append(avatar);}const label=document.createElement('small');label.textContent='YOUR RUNNER';const name=document.createElement('h2');name.textContent=current.remote.runner_name;runner.append(label,name);const phone=String(current.remote.runner_phone||'').replace(/[^\d+]/g,'');if(phone){const a=document.createElement('a');a.href='tel:'+phone;a.textContent='Call '+phone;runner.append(a);}else{const p=document.createElement('p');p.textContent='Runner contact is being confirmed. Contact SwiftShop if you need help.';runner.append(p);}}
-  node('cloItems').replaceChildren();for(const item of current.snapshot.items){const row=document.createElement('p');row.textContent=item.quantity+' × '+item.name;node('cloItems').append(row);}const payment=window.SwiftPay?.payment('delivery',current.id);const isSwiftPay=!!payment||current.snapshot.payment==='SwiftPay';
+  node('cloItems').replaceChildren();for(const item of current.snapshot.items){const row=document.createElement('p');row.textContent=item.quantity+' × '+(item.display_name||item.name);node('cloItems').append(row);}const payment=window.SwiftPay?.payment('delivery',current.id);const isSwiftPay=!!payment||current.snapshot.payment==='SwiftPay';
   node('cloTotal').textContent=payment?money(payment.amount_cents/100):(current.snapshot.pickup_service?'Pickup service fee awaiting confirmation':money(current.snapshot.total))+(current.snapshot.taco_note?' + taco food cost':'');
   const totalRow=node('cloTotal').parentElement;totalRow.querySelector('span').textContent=isSwiftPay?'Order total · Runner enters this':'Order total';
   let feeRows=node('cloSwiftPayBreakdown');if(!feeRows){feeRows=document.createElement('div');feeRows.id='cloSwiftPayBreakdown';feeRows.innerHTML='<div style="display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:12px"><span>SwiftPay fee</span><b data-fee></b></div><div style="display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:13px"><span>Total deducted from SwiftPay</span><b data-deduction></b></div><p data-state style="margin:10px 0 0;font-size:11px;color:#738174"></p>';totalRow.after(feeRows);}
@@ -10140,7 +10140,7 @@ async function render() {
       for(const person of group){
         lines.push(divider,person.name.toUpperCase(),divider);
         let subtotal=0;
-        for(const item of person.items){subtotal+=item.quantity*item.price;lines.push(item.quantity+' x '+item.name,'Store: '+item.category+' | $'+(item.quantity*item.price).toFixed(2)+' BZD');}
+        for(const item of person.items){subtotal+=item.quantity*item.price;lines.push(item.quantity+' x '+(item.display_name||item.name),'Store: '+item.category+' | $'+(item.quantity*item.price).toFixed(2)+' BZD');}
         lines.push('Items subtotal: $'+subtotal.toFixed(2)+' BZD','');
       }
       lines.push(divider,'ORDER SUMMARY',divider,
@@ -10976,7 +10976,7 @@ function setDeliveryZone(val) {
     if (pi) pi.innerText = initial;
   }
 
-  function quickAdd(name,price,wasPrice=null){const product=allProducts.find(p=>p.name===name&&Number(p.price)===Number(price));if(!product){alert('Open the store to choose an available item at its current price.');return;}add(product.name,Number(product.price),null,Number(product.was)||null,product.category);openCart();}
+  async function quickAdd(name,price,wasPrice=null){const product=allProducts.find(p=>p.name===name&&Number(p.price)===Number(price));if(!product){alert('Open the store to choose an available item at its current price.');return;}if(await addCatalogItem(product,null))openCart();}
 
   function openFoodMap() {
     const screen = document.getElementById("foodMapScreen");
@@ -13202,7 +13202,7 @@ function selectTip(amount, element) {
   for(const name of ['updateCartBubble','doneOrder','quickAdd']){const fn=window[name];if(typeof fn==='function')window[name]=function(...args){const result=fn.apply(this,args);refreshCount();queueMicrotask(enhanceCards);return result;};}
   function addCurrent(p,btn){
     if(cart[p.name] && cart[p.name].cat!==p.category){alert('An item with this name from another store is already in your cart. Please order it separately.');return;}
-    const previous=cat;cat=p.category;try{window.add(p.name,Number(p.price),btn,p.was);}finally{cat=previous;}
+    return addCatalogItem(p,btn);
   }
   function enhanceCards(){
     const saved=new Set(read('favourites').map(productKey));
@@ -13419,7 +13419,7 @@ function selectTip(amount, element) {
     if(!list.length){history.body.textContent='Your orders will appear here after you send them.';return;}
     list.forEach(record=>{
       const row=el('article','shopping-list-card');row.append(el('h3','',new Date(record.created).toLocaleString()),el('p','shopping-notice',record.phase?record.phase.replace(/_/g,' ').replace(/^./,c=>c.toUpperCase()):record.submitted?'Sent to SwiftShop · view live tracking for status':'Previous order request'));
-      record.items.forEach(item=>row.append(el('p','',item.quantity+' × '+item.name)));
+      record.items.forEach(item=>row.append(el('p','',item.quantity+' × '+(item.display_name||item.name))));
       const subtotal=record.items.reduce((s,i)=>s+i.price*i.quantity,0);row.append(el('strong','','Recorded total: '+money(Number.isFinite(record.total)&&record.total!==null?record.total:Math.round((subtotal+record.delivery+record.platform+record.tip)*100)/100)));
       if(record.tacos)row.append(el('p','','Taco food cost was additional. Taco instructions are not included in reordering.'));
       const result=el('p','shopping-notice');result.setAttribute('role','status');
@@ -13429,10 +13429,13 @@ function selectTip(amount, element) {
           const fresh=await freshCatalogue();let count=0;const skipped=[];
           for(const item of record.items){const p=findCurrent(item,fresh.products);
             if(!p||!storeOpen(p,fresh.stores)||!Number.isFinite(Number(p.price))){skipped.push(item.name);continue;}
-            if(cart[p.name] && cart[p.name].cat!==p.category){skipped.push(item.name);continue;}
-            const current=cart[p.name],quantity=Number(item.quantity);
+            const m=p.catalog_details||{},o=item.selected_options||{},has=(m.sizes||[]).length||(m.colors||[]).length;
+            if(((m.sizes||[]).length&&(!(m.sizes||[]).includes(o.size)||o.size_system!==(m.size_system||'Standard')))||((m.colors||[]).length&&!(m.colors||[]).includes(o.color))||(!(m.sizes||[]).length&&o.size)||(!(m.colors||[]).length&&o.color)){skipped.push(item.display_name||item.name);continue;}
+            const key=p.name+(o.size?' — '+o.size_system+' '+o.size:'')+(o.color?' · '+o.color:'');
+            if(cart[key] && cart[key].cat!==p.category){skipped.push(item.name);continue;}
+            const current=cart[key],quantity=Number(item.quantity);
             if(!Number.isInteger(quantity)||quantity<1||(current?.q||0)+quantity>100||(current&&Number(current.p)!==Number(p.price))){skipped.push(item.name);continue;}
-            cart[p.name]={q:(current?.q||0)+quantity,p:Number(p.price),w:p.was?Number(p.was):null,cat:p.category};count+=quantity;
+            cart[key]={q:(current?.q||0)+quantity,p:Number(p.price),w:p.was?Number(p.was):null,cat:p.category,...(has?{product_name:p.name,product_id:p.id,selected_options:o}:{})};count+=quantity;
           }
           total=Object.values(cart).reduce((sum,i)=>sum+i.q*i.p,0);update();updateCartBubble();renderCartPanel();enhanceCards();
           result.textContent=count+' items added at current prices. '+(skipped.length?'Unavailable, closed or unverified: '+skipped.join(', ')+'. ':'')+'Review your cart before ordering.';
@@ -14129,7 +14132,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
 
-<link rel="stylesheet" href="product-details.css?v=20261018"><script src="product-details.js?v=commerce20261031"></script>
+<link rel="stylesheet" href="product-details.css?v=20261018"><script src="product-details.js?v=commerce20261031b"></script>
 
 <style id="navigation-screen-isolation">
 [data-swift-nav-muted],[data-swift-nav-muted] *{visibility:hidden!important;pointer-events:none!important}
@@ -14206,6 +14209,6 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 
 <link rel="stylesheet" href="home-store-cards.css?v=portal-ui20261031">
 <script src="home-store-cards.js?v=pharmacy-label20261028"></script>
-<link rel="stylesheet" href="commerce-ui.css?v=20261031">
+<link rel="stylesheet" href="commerce-ui.css?v=20261031b">
 
-<script src="store-entrance.js?v=20261031"></script>
+<script src="store-entrance.js?v=20261031b"></script>
