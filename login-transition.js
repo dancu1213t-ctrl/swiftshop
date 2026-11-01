@@ -10,7 +10,7 @@
   const app=document.getElementById('appScreen');
   let timer;
   cleanup=()=>{clearTimeout(timer);cover.hidden=true;cover.classList.remove('active');if(app)app.inert=false;cleanup=null;};
-  try{openHome();if(app)app.inert=true;timer=setTimeout(()=>cleanup?.(),1500);}
+  try{openHome();if(app)app.inert=true;timer=setTimeout(()=>cleanup?.(),420);}
   catch(error){cleanup();throw error;}
  };
 })();

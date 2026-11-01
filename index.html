@@ -7759,7 +7759,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(new Set(people.map(p=>p.name.trim().toLowerCase())).size!==people.length)return fail('Use a different name or initial for each person.');
   for(const [item,data] of entries()){const quantities=people.map(p=>Number(p.quantities[item]||0));if(quantities.some(q=>!Number.isInteger(q)||q<0)||quantities.reduce((a,b)=>a+b,0)!==Number(data.q))return fail('Assign exactly '+data.q+' of “'+item+'” across the group.');}
   if(people.some(p=>!entries().some(([n])=>Number(p.quantities[n])>0)))return fail('Assign at least one item to each person, or remove them.');
-  return people.map(p=>({name:p.name.trim(),items:entries().filter(([n])=>p.quantities[n]>0).map(([name,v])=>({name,category:v.cat,quantity:Number(p.quantities[name]),price:Number(v.p)}))}));
+  return people.map(p=>({name:p.name.trim(),items:entries().filter(([n])=>p.quantities[n]>0).map(([name,v])=>({name:v.product_name||name,display_name:name,category:v.cat,quantity:Number(p.quantities[name]),price:Number(v.p),...(v.product_id!=null?{product_id:v.product_id,selected_options:v.selected_options}:{})}))}));
  };
 });
 </script><script id="home-group-entry-code">
@@ -8693,10 +8693,10 @@ window.switchToggle=function(button){
   function readActiveCatalogue(){
     if(catalogueRead&&Date.now()<catalogueReadUntil)return catalogueRead;catalogueReadUntil=Date.now()+5000;
     const task=(async()=>{await window.SwiftRegions?.ready;const regions=window.SwiftRegions,general=['Snack','Drink','Household','Hygiene','Vegetables','Treats'];
-      const common=scopedCatalogue('general',()=>customerDataClient.from('products').select('id,name,category,price,was,subcategory,description,tags').ilike('active','yes').in('category',general));
+      const common=scopedCatalogue('general',()=>customerDataClient.from('products').select('id,name,category,price,was,subcategory,description,tags,catalog_details').ilike('active','yes').in('category',general));
       const categories=regions?.stores.filter(r=>regions.allowed(r.category)&&!general.includes(r.category)).map(r=>r.category)||[];
       const zone=regions?.zone||'orange-walk',key=zone+':'+categories.join(',');
-      const local=zone==='orange-walk'?scopedCatalogue(key,()=>customerDataClient.from('products').select('id,name,category,price,was,subcategory,description,tags').ilike('active','yes').not('category','in','(Snack,Drink,Household,Hygiene,Vegetables,Treats)')):categories.length?scopedCatalogue(key,()=>customerDataClient.from('products').select('id,name,category,price,was,subcategory,description,tags').ilike('active','yes').in('category',categories)):Promise.resolve({data:[]});
+      const local=zone==='orange-walk'?scopedCatalogue(key,()=>customerDataClient.from('products').select('id,name,category,price,was,subcategory,description,tags,catalog_details').ilike('active','yes').not('category','in','(Snack,Drink,Household,Hygiene,Vegetables,Treats)')):categories.length?scopedCatalogue(key,()=>customerDataClient.from('products').select('id,name,category,price,was,subcategory,description,tags,catalog_details').ilike('active','yes').in('category',categories)):Promise.resolve({data:[]});
       const results=await Promise.all([common,local]);const error=results.find(r=>r.error)?.error;if(error)return{data:[],error};const data=results.flatMap(r=>r.data||[]).map(r=>({...r,image:window.SwiftProductImages?.reference(r.id)||''}));return{data:regions?regions.filterProducts(data):data,error:null};})();
     catalogueRead=task;task.then(result=>{if(catalogueRead===task){if(result.error){catalogueRead=null;catalogueReadUntil=0;}else catalogueReadUntil=Date.now()+5000;}},()=>{if(catalogueRead===task){catalogueRead=null;catalogueReadUntil=0;}});return task;
   }
@@ -9817,14 +9817,18 @@ async function render() {
   }
 
   const catalogueAddChecks=new Map();
-  async function addCatalogItem(product,button,quantity=1){
+  async function addCatalogItem(product,button,quantity=1,selection=null){
+    const meta=product.catalog_details||{};if(!selection&&((meta.sizes||[]).length||(meta.colors||[]).length)){window.SwiftProductDetails?.openProduct(product);return false;}
+    selection=selection?{...(selection.size?{size_system:selection.size_system,size:selection.size}:{}),...(selection.color?{color:selection.color}:{})}:null;
+    const lineDetails=selection&&(selection.size||selection.color)?{product_name:product.name,product_id:product.id,selected_options:selection}:null;
+    const lineName=selection?product.name+(selection.size?' — '+selection.size_system+' '+selection.size:'')+(selection.color?' · '+selection.color:''):product.name;
     if(button?.disabled)return;
     window.SwiftCartDraft?.prepare();
     // The displayed general catalogue is already loaded and checkout revalidates.
     // Add locally without another network round trip for each snack or staple.
     const generalCategory=['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(product.category);
     const loaded=generalCategory&&allProducts.find(p=>p.id===product.id&&p.name===product.name&&p.category===product.category&&Number(p.price)===Number(product.price)&&String(p.active).toLowerCase()==='yes');
-    if(loaded)return add(product.name,Number(product.price),button,Number(product.was)||null,product.category,quantity)===true;
+    if(loaded)return add(lineName,Number(product.price),button,Number(product.was)||null,product.category,quantity,lineDetails)===true;
     const label=button?.textContent;
     if(button){button.disabled=true;button.textContent='Adding…';button.setAttribute('aria-busy','true');}
     try{
@@ -9836,23 +9840,25 @@ async function render() {
           const general=['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(product.category);
           if(product.id==null)throw Error('Reopen this store for current items.');
           const [current,store]=await Promise.all([
-            supabaseClient.from('products').select('id,price,active,category,name').eq('id',product.id).maybeSingle().abortSignal(AbortSignal.timeout(10000)),
+            supabaseClient.from('products').select('id,price,active,category,name,catalog_details').eq('id',product.id).maybeSingle().abortSignal(AbortSignal.timeout(10000)),
             general?Promise.resolve({data:{is_open:'yes'}}):supabaseClient.from('stores').select('is_open').eq('category',product.category).maybeSingle().abortSignal(AbortSignal.timeout(10000))
           ]);
           if(store.error||store.data?.is_open!=='yes'||window.SwiftStoreInfo?.isOpen(product.category)===false)throw Error('This store is closed or unavailable.');
           if(current.error||!current.data||String(current.data.active).toLowerCase()!=='yes'||Number(current.data.price)!==Number(product.price)||current.data.category!==product.category||current.data.name!==product.name)throw Error('This item changed or sold out. Reopen the store for current items.');
+          return current.data;
         })();
         check={started,promise};catalogueAddChecks.set(key,check);
       }
-      try{await check.promise;}catch(error){catalogueAddChecks.delete(key);throw error;}
-      return add(product.name,Number(product.price),button,Number(product.was)||null,product.category,quantity)===true;
+      try{const fresh=await check.promise;const m=fresh?.catalog_details||{};if(((m.sizes||[]).length&&(!(m.sizes||[]).includes(selection?.size)||selection?.size_system!==(m.size_system||'Standard')))||((m.colors||[]).length&&!(m.colors||[]).includes(selection?.color))){window.SwiftProductDetails?.openProduct({...product,...fresh});return false;}}catch(error){catalogueAddChecks.delete(key);throw error;}
+      return add(lineName,Number(product.price),button,Number(product.was)||null,product.category,quantity,lineDetails)===true;
     }catch(error){alert(error.message||'Could not add this item. Please try again.');return false;}
     finally{if(button){button.disabled=false;button.textContent=label;button.removeAttribute('aria-busy');}}
   }
-  function add(n, p, btn, w, category=cat, quantity=1) {
+  function add(n, p, btn, w, category=cat, quantity=1,details=null) {
     window.SwiftCartDraft?.prepare();
     if(!Number.isInteger(quantity)||quantity<1||quantity>100){alert("Choose a valid quantity.");return false;}
     if(window.swiftMobileItemAllowed&&!window.swiftMobileItemAllowed({name:n,category})){alert("This digital item is unavailable in the mobile app.");return;}
+    if(cart[n]&&details&&(String(cart[n].product_id)!==String(details.product_id)||JSON.stringify(cart[n].selected_options)!==JSON.stringify(details.selected_options))){alert('This selection conflicts with an existing cart item. Remove it and choose again.');return false;}
     if(cart[n]&&(cart[n].cat!==category||Number(cart[n].p)!==Number(p))){alert('Remove the existing item from your cart before adding it from another store.');return;}
     if(!Number.isFinite(Number(p))||Number(p)<0||!String(n).trim()||!category){alert('This item is unavailable. Reopen the store for current items.');return;}
     p=Math.round(Number(p)*100)/100;
@@ -9869,6 +9875,7 @@ async function render() {
       };
     }
     
+    if(details)Object.assign(cart[n],details);
     cart[n].q+=quantity;
     total += p*quantity;
 
@@ -10154,7 +10161,7 @@ async function render() {
     const snapshot={
       order_instructions:orderInstructions,
       customer_name:gift?gift.name:userName,phone:gift?gift.phone:userPhone,
-      items:Object.entries(cart).map(([name,item])=>({name,category:item.cat,quantity:item.q,price:item.p,...(item.offer_id?{offer_id:item.offer_id,offer_option_id:item.offer_option_id,offer_choices:item.offer_choices,offer_pickup:item.offer_pickup}: {})})),
+      items:Object.entries(cart).map(([name,item])=>({name:item.product_name||name,display_name:name,category:item.cat,quantity:item.q,price:item.p,...(item.product_id!=null?{product_id:item.product_id,selected_options:item.selected_options}:{}),...(item.offer_id?{offer_id:item.offer_id,offer_option_id:item.offer_option_id,offer_choices:item.offer_choices,offer_pickup:item.offer_pickup}: {})})),
       total:grandTotal,payment:paymentMethod,
       local_shopping:Object.values(cart).every(i=>['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(i.cat)&&!i.offer_id),
       routes:gift?[]:(window.SwiftOfferPickups?.routes(cart,customerCoords)||[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storePickupCoordinates(biz)}&destination=${encodeURIComponent(customerCoords)}`)),
@@ -13524,7 +13531,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -13827,6 +13834,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  window.addEventListener('swift-filters-changed',event=>{if(active&&event.detail?.category===active){drawProducts();drawOffers();}});
  function drawOffers(){offerBox.replaceChildren();if(!offers.length)return;offerBox.append(el('h2','Offers from this store'));const row=el('div',undefined,'store-offer-row');for(const p of window.SwiftProductFilters.apply(offers,window.SwiftProductFilters.forStore(active)))row.append(card(p,true));offerBox.append(row);updateCounts();}
  async function addItem(p,b){
+  if(!p.campaignId&&!offers.includes(p)){await addCatalogItem(p,b);updateCounts();return;}
   window.SwiftCartDraft?.prepare();
   b.disabled=true;const category=p.category;
   try{
@@ -13839,7 +13847,7 @@ document.addEventListener('DOMContentLoaded',()=>{
    updateCounts();
   }catch(e){notice.textContent=e.message;}finally{b.disabled=state!=='yes';}
  }
- function updateCounts(){storePage.querySelectorAll('.store-item-quantity').forEach(n=>{const entry=cart[n.dataset.name],q=entry?.cat===n.dataset.category&&Number(entry.p)===Number(n.dataset.price)?entry.q:0;n.textContent=q?q+' in your cart':'';});const count=Object.values(cart).reduce((s,p)=>s+Number(p.q||0),0);toolbar.lastChild.textContent=count?'View cart · '+count:'View cart';}
+ function updateCounts(){storePage.querySelectorAll('.store-item-quantity').forEach(n=>{const q=Object.entries(cart).filter(([key,i])=>(i.product_name||key)===n.dataset.name&&i.cat===n.dataset.category&&Number(i.p)===Number(n.dataset.price)).reduce((sum,[,i])=>sum+i.q,0);n.textContent=q?q+' in your cart':'';});const count=Object.values(cart).reduce((s,p)=>s+Number(p.q||0),0);toolbar.lastChild.textContent=count?'View cart · '+count:'View cart';}
  for(const name of ['add','remove','doneOrder']){const fn=window[name];if(typeof fn==='function')window[name]=function(...args){const result=fn.apply(this,args);updateCounts();return result;};}
  const directory=el('section',undefined,'store-directory');directory.id='shopStoreDirectory';directory.append(el('h2','Visit a store'),el('p','Browse menus, discover offers, and shop your local favourites.'));
  const row=el('div',undefined,'store-directory-row');directory.append(row);
@@ -14059,9 +14067,9 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=chat20261020"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=support20261028"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
+});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=chat20261020"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=commerce20261031"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=admin-code20261030"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
-<script src="login-transition.js?v=orders20261004"></script>
+<script src="login-transition.js?v=commerce20261031"></script>
 <script src="customer-auth.js?v=signin-restored20261020"></script><script src="account-requests.js?v=orders20261004"></script>
 <script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=full-access20261024"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=20261011"><script src="offer-ordering.js?v=general-pins20261028"></script>
 <link rel="stylesheet" href="pure-offers.css?v=white20261010"><link rel="stylesheet" href="offer-admin-tools.css?v=map-controls20261028b"><script src="offer-admin-tools.js?v=district-flow20261031"></script><script src="offer-pickups.js?v=20261028"></script><script src="pure-offers.js?v=district-flow20261031"></script>
@@ -14121,7 +14129,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
 
-<link rel="stylesheet" href="product-details.css?v=20261018"><script src="product-details.js?v=20261018"></script>
+<link rel="stylesheet" href="product-details.css?v=20261018"><script src="product-details.js?v=commerce20261031"></script>
 
 <style id="navigation-screen-isolation">
 [data-swift-nav-muted],[data-swift-nav-muted] *{visibility:hidden!important;pointer-events:none!important}
@@ -14198,3 +14206,6 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 
 <link rel="stylesheet" href="home-store-cards.css?v=portal-ui20261031">
 <script src="home-store-cards.js?v=pharmacy-label20261028"></script>
+<link rel="stylesheet" href="commerce-ui.css?v=20261031">
+
+<script src="store-entrance.js?v=20261031"></script>
