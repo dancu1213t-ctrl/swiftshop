@@ -39,3 +39,6 @@ html.swift-design body #appScreen #products .product .product-info>strong{displa
 html.swift-design body #appScreen #products .product .product-info button.customer-product-add{margin-top:auto!important}
 html.swift-design body #merchantStorePage .store-product>.store-price{margin-bottom:28px!important}
 html.swift-design body #merchantStorePage .store-product>.store-add{margin-top:auto!important}
+
+/* Full-bleed store entrance with a single unobstructive dismissal control. */
+#commerceStoreEntrance>img{position:absolute!important;inset:0!important;display:block;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center!important;margin:0!important;border-radius:0!important}#commerceStoreEntrance>img[hidden]{display:none!important}#commerceStoreEntrance>.entrance-close{z-index:2!important;top:max(16px,env(safe-area-inset-top))!important;right:max(16px,env(safe-area-inset-right))!important;width:44px!important;height:44px!important;min-height:44px!important;background:#151515cc!important;color:#fff!important;border:1px solid #ffffff80!important;box-shadow:0 2px 12px #0004!important}
