@@ -91,3 +91,6 @@ html.swift-design #commerceStoreEntrance>.entrance-close:active{transform:scale(
 #swiftProductDetails button:focus-visible{outline:2px solid #171917;outline-offset:3px}
 @media(max-width:600px){#swiftProductDetails{width:100%!important;height:100dvh!important;border-radius:0!important;margin:0!important}#swiftProductDetails .spd-header{padding:calc(10px + env(safe-area-inset-top)) 18px 8px}#swiftProductDetails .spd-scroll{display:block;background:#f4f4f1}#swiftProductDetails .spd-hero{position:relative;padding:6px 20px 22px}#swiftProductDetails .spd-photo img{height:clamp(205px,29dvh,310px)}#swiftProductDetails .spd-copy{position:relative;padding:20px 20px 24px;border-radius:24px 24px 0 0}#swiftProductDetails .spd-footer{padding:12px 18px calc(14px + env(safe-area-inset-bottom))}}
 @media(prefers-reduced-motion:no-preference){#swiftProductDetails[open]{animation:spdEditorial 160ms ease-out}@keyframes spdEditorial{from{opacity:.6}to{opacity:1}}}
+
+/* Keep a single cart action in product details. */
+#swiftProductDetails .spd-header{display:grid!important;grid-template-columns:44px minmax(0,1fr) 44px!important}#swiftProductDetails .spd-header>strong{text-align:center!important}#swiftProductDetails .spd-header [data-cart]{display:none!important}
