@@ -13858,10 +13858,10 @@ document.addEventListener('DOMContentLoaded',()=>{
  document.querySelector('.store-navigation-wrapper')?.before(directory);
 
  window.SwiftStoreRegistryApply=function(records){
-  for(const r of records||[]){if(!r.category||r.legacy)continue;meta.set(r.category,{name:r.name||r.category,logo:r.logo||'',group:r.business_type||'Shops'});
+  for(const r of records||[]){if(!r.category||(r.legacy&&!r.display_name))continue;meta.set(r.category,{...(meta.get(r.category)||{}),name:r.display_name||r.name||r.category,logo:r.logo||meta.get(r.category)?.logo||'',group:r.business_type||'Shops'});
    let b=[...row.children].find(n=>n.dataset.storeCategory===r.category);
    if(!b){b=btn('',()=>window.openMerchantStore(r.category),'store-directory-card');b.dataset.storeCategory=r.category;const img=el('img');img.src=r.logo||'';img.alt='';b.append(img,el('strong',r.name||r.category),el('small','Visit store →'));row.append(b);}
-   b.querySelector('strong').textContent=r.name||r.category;const logo=b.querySelector('img.home-store-logo')||b.querySelector('img:not(.home-store-banner)');if(logo&&r.logo&&logo.getAttribute('src')!==r.logo)logo.src=r.logo;
+   b.querySelector('strong').textContent=r.display_name||r.name||r.category;if(r.display_name){for(const node of document.querySelectorAll('.cat-btn')){const code=node.dataset.storeCategory||node.getAttribute('onclick')?.match(/setCategory\('([^']+)'/)?.[1];if(code===r.category){const label=node.querySelector(':scope > span');if(label)label.textContent=r.display_name;}}}const logo=b.querySelector('img.home-store-logo')||b.querySelector('img:not(.home-store-banner)');if(logo&&r.logo&&logo.getAttribute('src')!==r.logo)logo.src=r.logo;
    let type=b.querySelector('.home-store-category');if(!type){type=el('span',r.business_type||'Shops','home-store-category');b.append(type);}else if(!r.legacy)type.textContent=r.business_type||'Shops';
   }window.SwiftHomeStores?.update(records);
  };
@@ -14126,7 +14126,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 <link rel="stylesheet" href="swift-interactions.css?v=20261009">
 
 
-<script src="store-info.js?v=reopen20261019"></script>
+<script src="store-info.js?v=efficient20261101"></script>
 
 <script src="location-search-viewport.js?v=pin-picker20261027"></script>
 
