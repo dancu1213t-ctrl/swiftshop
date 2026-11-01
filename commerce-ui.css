@@ -1,6 +1,6 @@
 /* Visual commerce refresh. Existing navigation and checkout handlers remain in place. */
 html.swift-design body #appScreen .toggle-box .toggle-btn.active{background:#111!important;color:#fff!important;border-color:#111!important;box-shadow:none!important}html.swift-design body #appScreen .toggle-box .toggle-btn.active svg{color:white!important;stroke:currentColor!important}html.swift-design body #appScreen .toggle-box .toggle-btn{animation:none!important}
-html.swift-design body #appScreen,html.swift-design body .shop-active-page{animation:commerceFade .18s ease-out!important;transform:none!important}@keyframes commerceFade{from{opacity:.7}to{opacity:1}}
+html.swift-design body #appScreen,html.swift-design body .shop-active-page{animation:commerceFade .18s ease-out!important}@keyframes commerceFade{from{opacity:.7}to{opacity:1}}
 #swiftLoginReveal{animation:commerceWelcome .4s ease-out forwards!important;pointer-events:none!important;background:#ff6a00!important}#swiftLoginReveal .swift-reveal-half{animation:none!important;transform:none!important;background:transparent!important}@keyframes commerceWelcome{from{opacity:1}to{opacity:0;visibility:hidden}}
 html.swift-design body #appScreen .header::before{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 300' preserveAspectRatio='none'%3E%3Cdefs%3E%3ClinearGradient id='g' x2='0' y2='1'%3E%3Cstop stop-color='%23ffb97e'/%3E%3Cstop offset='1' stop-color='%23ffe5cf'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M0 0H600V266C450 220 180 320 0 272Z'/%3E%3C/svg%3E")!important}
 html.swift-design body :is(.product,.store-product){position:relative!important;background:#fff!important;border:1px solid #e9e9e5!important;border-radius:17px!important;box-shadow:0 3px 12px #171b1704!important;overflow:hidden!important;padding:0!important;min-width:0!important;transition:border-color .12s ease!important}
@@ -21,3 +21,21 @@ html.swift-design body .store-product>.store-add{width:calc(100% - 26px)!importa
 html.swift-design #commerceStoreEntrance>button:active{transform:translateX(-50%) scale(.98)!important}html.swift-design #commerceStoreEntrance>.entrance-close:active{transform:scale(.98)!important}
 
 #commerceStoreEntrance{touch-action:none!important;overscroll-behavior:none!important}
+
+/* Keep the existing action buttons together without changing their handlers. */
+html.swift-design body #appScreen{transform:none!important}
+html.swift-design body #appScreen #products .product{padding:0!important;position:relative!important;border-radius:17px!important}
+html.swift-design body #appScreen #products .product .product-info{padding:13px!important;gap:0!important}
+html.swift-design body #appScreen #products .product .product-info>strong{min-height:38px!important;font-size:14px!important;line-height:19px!important;font-weight:650!important;margin:0 0 8px!important}
+html.swift-design body #appScreen #products .product .product-info .price{margin:0 0 12px!important;font-size:15px!important;line-height:20px!important}
+html.swift-design body #appScreen #products .product .product-info button.customer-product-add{width:calc(100% - 52px)!important;min-height:42px!important;height:42px!important;margin:0!important;padding:8px 12px!important;border-radius:10px!important;background:#111!important;color:#fff!important;box-shadow:none!important;font-size:12px!important}
+html.swift-design body #appScreen #products .product>.store-item-share,html.swift-design body #merchantStorePage .store-product>.store-item-share{position:absolute!important;bottom:13px!important;right:13px!important;left:auto!important;top:auto!important;width:42px!important;min-width:42px!important;height:42px!important;min-height:42px!important;margin:0!important;padding:0!important;border:0!important;border-radius:10px!important;background:#111!important;color:#fff!important;box-shadow:none!important}
+html.swift-design body #merchantStorePage .store-product>.store-add{width:calc(100% - 78px)!important;height:42px!important;min-height:42px!important;margin:18px 13px 13px!important;border-radius:10px!important;background:#111!important;color:#fff!important;font-size:12px!important}
+html.swift-design body #merchantStorePage .store-product>.store-item-quantity{position:absolute;bottom:62px;left:13px;margin:0;font-size:10px;line-height:14px}
+
+html.swift-design body #appScreen #products .product,html.swift-design body #merchantStorePage .store-product{display:flex!important;flex-direction:column!important}
+html.swift-design body #appScreen #products .product .product-info{flex:1!important}
+html.swift-design body #appScreen #products .product .product-info>strong{display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important;max-height:38px!important}
+html.swift-design body #appScreen #products .product .product-info button.customer-product-add{margin-top:auto!important}
+html.swift-design body #merchantStorePage .store-product>.store-price{margin-bottom:28px!important}
+html.swift-design body #merchantStorePage .store-product>.store-add{margin-top:auto!important}
