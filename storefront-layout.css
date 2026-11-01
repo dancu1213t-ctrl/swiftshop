@@ -19,7 +19,7 @@ html.swift-design body #merchantStorePage .store-header-actions button,html.swif
 html.swift-design body #merchantStorePage .store-header-save>span{color:inherit!important;font-size:23px!important}
 html.swift-design body #merchantStorePage .store-header-save[aria-pressed=true]>span{color:#d84343!important}
 html.swift-design body #merchantStorePage .swift-store-highlights{margin:0 0 16px!important;gap:8px!important}
-html.swift-design body #merchantStorePage .swift-store-tag{background:#fff!important;border-color:#e8e8e5!important;color:#535651!important;border-radius:6px!important}
+html.swift-design body #merchantStorePage .swift-store-tag{background:#d82929!important;border-color:#d82929!important;color:#fff!important;border-radius:6px!important;font-weight:650!important}
 html.swift-design body #merchantStorePage #storePublicDetails{margin:0 0 20px!important;border:1px solid #ececea!important;border-radius:14px!important;background:#fff!important}
 html.swift-design body #merchantStorePage .store-section-nav{display:flex;gap:28px;border-bottom:1px solid #ececea;margin:0 0 20px;padding:0;background:#fff}
 html.swift-design body #merchantStorePage .store-section-nav button{position:relative;min-height:48px;margin:0;padding:12px 2px;border:0;border-radius:0;background:none;color:#777;font:600 14px inherit;box-shadow:none}
