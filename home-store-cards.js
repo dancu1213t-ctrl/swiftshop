@@ -27,11 +27,15 @@
    img.onerror=()=>{img.remove();card.classList.remove('home-store-has-banner');};img.src=src;cover.prepend(img);
   }
  }
- window.SwiftHomeStores={update(records){for(const row of records||[])if(row?.category)rows.set(row.category,{...rows.get(row.category),...row});paint();}};
+ const coverRequests=new Map(),coverTimes=new Map();
+ async function loadCovers(force=false){if(!directory)return;await Promise.resolve(window.SwiftRegions?.ready).catch(()=>{});const categories=[...new Set([...directory.querySelectorAll('[data-store-category]')].map(c=>c.dataset.storeCategory).filter(c=>!window.SwiftRegions||window.SwiftRegions.allowed(c)))].sort();if(!categories.length)return;const key=categories.join('|');if(coverRequests.has(key))return coverRequests.get(key);if(!force&&Date.now()-(coverTimes.get(key)||0)<60000)return;const client=typeof customerDataClient!=='undefined'?customerDataClient:typeof supabaseClient!=='undefined'?supabaseClient:null;if(!client)return;const task=(async()=>{try{const result=await client.from('merchant_storefronts').select('category,cover_image').in('category',categories).abortSignal(AbortSignal.timeout(12000));if(result.error)throw result.error;for(const record of result.data||[])rows.set(record.category,{...rows.get(record.category),...record});coverTimes.set(key,Date.now());paint();}catch{/* Keep existing covers and allow a later retry. */}finally{coverRequests.delete(key);}})();coverRequests.set(key,task);return task;}
+ window.SwiftHomeStores={update(records){for(const row of records||[])if(row?.category)rows.set(row.category,{...rows.get(row.category),...row});paint();loadCovers();}};
  document.addEventListener('DOMContentLoaded',()=>{
   directory=document.getElementById('shopStoreDirectory');if(!directory)return;
   const heading=directory.querySelector('h2'),subtitle=directory.querySelector(':scope > p');if(heading)heading.textContent='Explore local stores';if(subtitle)subtitle.textContent='Browse menus, discover offers, and shop your local favourites.';
-  directory.classList.add('home-store-directory');paint();
+  directory.classList.add('home-store-directory');paint();loadCovers();
   const row=directory.querySelector('.store-directory-row');if(row)new MutationObserver(records=>{if(records.some(r=>r.addedNodes.length))paint();}).observe(row,{childList:true});
+  window.addEventListener('swift-region-change',()=>{paint();loadCovers();});
+  window.addEventListener('swift-store-publication-changed',()=>loadCovers(true));
  });
 })();
