@@ -8310,7 +8310,7 @@ window.switchToggle=function(button){
  else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox')?.style.setProperty('display','none');}
  window.SwiftNavigation?.refresh();
 };
-</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=details20261018"></script></body>
+</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=details20261018"></script><link rel="stylesheet" href="customer-experience.css?v=20261101"></body>
 
 
 
@@ -13883,7 +13883,7 @@ function storeHoursLabel(data){
   const opening=original.apply(this,arguments);
   const cover=el('div',undefined,'store-profile-cover');cover.id='storeProfileCover';cover.setAttribute('aria-hidden','true');hero.before(cover);
   const info=el('section');info.id='storePublicDetails';info.setAttribute('aria-label','Store information');document.querySelector('#merchantStorePage .store-details').after(info);
-  try{const r=await supabaseClient.from('merchant_storefronts').select('*').eq('category',category).maybeSingle();if(token!==request)return await opening;
+  try{const r=await supabaseClient.from('merchant_storefronts').select('category,cover_image,phone,address,description,opens_at,closes_at,auto_close').eq('category',category).maybeSingle();if(token!==request)return await opening;
    const data=r.error?{}:r.data||{};
    const about=el('section',undefined,'store-profile-about store-about-accordion');about.setAttribute('aria-label','About the store');
    const heading=el('h2'),toggle=el('button',undefined,'store-about-toggle');toggle.type='button';toggle.id='storeAboutToggle';toggle.setAttribute('aria-expanded','false');toggle.setAttribute('aria-controls','storeAboutContent');
@@ -14128,7 +14128,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 
 <script src="store-info.js?v=efficient20261101"></script>
 
-<script src="location-search-viewport.js?v=pin-picker20261027"></script>
+<script src="location-search-viewport.js?v=experience20261101"></script>
 
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
 
@@ -14211,4 +14211,4 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 <script src="home-store-cards.js?v=covers20261101"></script>
 <link rel="stylesheet" href="commerce-ui.css?v=gallery20261101">
 
-<script src="store-entrance.js?v=20261101d"></script>
+<script src="store-entrance.js?v=experience20261101"></script>

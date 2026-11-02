@@ -1,0 +1,45 @@
+/* Customer safe areas, store information and wide-screen composition. */
+html.swift-design{background:#fff}
+html.swift-design body{background:#fff!important}
+html.swift-design body :is(button,a,input,select,textarea){touch-action:manipulation}
+html.swift-design body #merchantStorePage #storePublicDetails{display:block!important;border:0!important;background:transparent!important;padding:0!important;margin:24px 0 28px!important;max-width:980px}
+html.swift-design body #merchantStorePage #storePublicDetails .store-about-accordion{width:100%!important;border:1px solid #e6eae3!important;border-radius:20px!important;background:#fff!important;overflow:hidden}
+html.swift-design body #merchantStorePage #storePublicDetails .store-about-toggle{width:100%!important;justify-content:space-between!important;padding:22px 24px!important;min-height:64px!important;font-size:18px!important;letter-spacing:-.4px;font-weight:650!important;color:#20291e!important}
+html.swift-design body #merchantStorePage #storePublicDetails .store-about-chevron{width:20px!important;height:20px!important;color:#7c8873!important}
+html.swift-design body #merchantStorePage #storePublicDetails .store-about-inner{padding:0 24px 24px!important}
+html.swift-design body #merchantStorePage #storePublicDetails .store-about-inner>p{font-size:15px!important;line-height:1.85!important;color:#707e66!important;margin:0 0 24px!important;max-width:74ch;overflow-wrap:anywhere}
+html.swift-design body #merchantStorePage #storePublicDetails .store-profile-facts{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important;padding:0!important;border:0!important;margin:0!important}
+html.swift-design body #merchantStorePage #storePublicDetails .store-profile-facts>div{padding:18px!important;background:#f7f9f4!important;border:1px solid #edf1e7;border-radius:14px!important;min-width:0}
+html.swift-design body #merchantStorePage #storePublicDetails .store-profile-facts small{font-size:10px!important;letter-spacing:.1em!important;color:#87947b!important;font-weight:650}
+html.swift-design body #merchantStorePage #storePublicDetails .store-profile-facts p{font-size:13px!important;line-height:1.65!important;margin:8px 0 0!important;color:#505f46!important;overflow-wrap:anywhere}
+html.swift-design body #merchantStorePage #storePublicDetails .store-profile-call{display:inline-flex!important;width:auto!important;min-height:48px!important;align-items:center!important;gap:8px!important;padding:12px 18px!important;margin:16px 0 0!important;border:1px solid #e2e8da!important;border-radius:12px!important;background:#fff!important;color:#263d20!important;text-decoration:none}
+html.swift-design body #merchantStorePage #storePublicDetails .store-profile-call strong,html.swift-design body #merchantStorePage #storePublicDetails .store-profile-call span{font-size:13px!important}
+html.swift-design body #merchantStorePage .store-section-nav button[aria-current=true]:after{background:#20291e!important}
+html.swift-design body #catalogueFilterDialog{position:fixed!important;inset:0!important;margin:auto!important;width:min(460px,calc(100vw - 28px))!important;height:fit-content!important;max-height:calc(100dvh - 48px - env(safe-area-inset-top) - env(safe-area-inset-bottom))!important;border-radius:22px!important;box-sizing:border-box;overflow-y:auto!important}
+html.swift-design body #catalogueFilterDialog>header{background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;padding:22px!important;position:relative!important;top:auto!important}
+html.swift-design body #catalogueFilterDialog .sq-content{flex:0 1 auto!important;padding:22px!important;min-height:0!important}
+@media(max-width:800px){
+ html.swift-design:not(.swift-keyboard-open) body #appScreen{padding-top:calc(env(safe-area-inset-top,0px) + 12px)!important}
+ html.swift-design:not(.swift-keyboard-open) body #merchantStorePage.shop-active-page{--store-safe-top:max(56px,calc(env(safe-area-inset-top,0px) + 16px));padding-top:var(--store-safe-top)!important;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 20px)!important;mask-image:none!important;-webkit-mask-image:none!important}
+ html.swift-design:not(.swift-keyboard-open) body #merchantStorePage .store-toolbar,html.swift-design:not(.swift-keyboard-open) body #merchantStorePage .store-header-actions .store-header-save,html.swift-design:not(.swift-keyboard-open) body #merchantStorePage .store-header-actions .store-profile-share{top:calc(var(--store-safe-top,max(56px,env(safe-area-inset-top,0px))) + 12px)!important}
+ html.swift-design:not(.swift-keyboard-open) body #customerRidePanel[id] .cr-header{padding-top:max(56px,calc(18px + env(safe-area-inset-top,0px)))!important;background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+ html.swift-design:not(.swift-keyboard-open) body #swiftProductDetails .spd-header,html.swift-design:not(.swift-keyboard-open) body #swiftPayPage>header,html.swift-design:not(.swift-keyboard-open) body #swiftQualityDialog>header{padding-top:max(56px,calc(16px + env(safe-area-inset-top,0px)))!important;background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+ html.swift-design body #catalogueFilterDialog{inset:calc(env(safe-area-inset-top,0px) + 16px) 0 calc(env(safe-area-inset-bottom,0px) + 16px)!important}
+ html.swift-design body #merchantStorePage #storePublicDetails .store-profile-facts{grid-template-columns:minmax(0,1fr)!important}
+ html.swift-design body #merchantStorePage #storePublicDetails .store-about-toggle{padding:18px!important;font-size:17px!important}
+ html.swift-design body #merchantStorePage #storePublicDetails .store-about-inner{padding:0 18px 18px!important}
+ html.swift-design body #merchantStorePage #storePublicDetails .store-about-inner>p{font-size:14px!important;line-height:1.8!important}
+}
+@media(min-width:1100px){
+ html.swift-design body #appScreen{max-width:1480px!important;margin-inline:auto!important;padding-inline:40px!important;width:100%!important}
+ html.swift-design body #merchantStorePage{--store-desktop-gutter:max(40px,calc((100vw - 1400px)/2));padding-left:var(--store-desktop-gutter)!important;padding-right:var(--store-desktop-gutter)!important}
+ html.swift-design body #merchantStorePage .store-toolbar{left:calc(var(--store-desktop-gutter) + 12px)!important;right:calc(var(--store-desktop-gutter) + 12px)!important}
+ html.swift-design body #merchantStorePage .store-header-actions .store-header-save{right:calc(var(--store-desktop-gutter) + 64px)!important}
+ html.swift-design body #merchantStorePage .store-header-actions .store-profile-share{right:calc(var(--store-desktop-gutter) + 12px)!important}
+ html.swift-design body #merchantStorePage .store-product-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:24px!important}
+ html.swift-design body #appScreen #merchantBannerSlider{max-width:1180px!important;margin-inline:auto!important}
+ html.swift-design body #savedLocationPopover .location-picker-card{width:min(880px,calc(100vw - 96px))!important;max-width:880px!important;padding:28px!important;border-radius:24px!important}
+ html.swift-design body #savedLocationPopover #cartMap{height:360px!important;min-height:360px!important}
+ html.swift-design body #savedLocationPopover .location-picker-top{margin-bottom:20px!important}
+}
+@media(prefers-reduced-motion:reduce){html.swift-design body *{scroll-behavior:auto!important}}
