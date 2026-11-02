@@ -8,3 +8,17 @@ html:has(#promoPage.shop-active-page) .hero-promo-slider,html:has(#pureOfferOrde
 .oo-wings-plate{width:112px;height:80px;margin:4px 0 10px;pointer-events:none}.oo-wings-plate svg{width:100%;height:100%;overflow:visible}.oo-wing{transform-origin:70px 65px;animation:oo-wing-settle 3.6s ease-in-out infinite}.oo-wing-two{animation-delay:.2s}.oo-wing-three{animation-delay:.4s}.oo-steam{animation:oo-steam-rise 2.8s ease-in-out infinite}.oo-steam-two{animation-delay:.7s}.oo-steam-three{animation-delay:1.4s}@keyframes oo-wing-settle{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}@keyframes oo-steam-rise{0%{opacity:0;transform:translateY(4px)}35%{opacity:.7}100%{opacity:0;transform:translateY(-6px)}}@media(prefers-reduced-motion:reduce){.oo-wing,.oo-steam{animation:none!important}.oo-steam{opacity:.45}}
 
 .oo-category-animation{width:92px;height:92px;margin:6px 0 10px;pointer-events:none}.oo-category-animation svg{display:block;width:100%;height:100%;overflow:visible}.oo-category-art{transform-origin:42px 50px;animation:oo-category-bob 3.4s ease-in-out infinite}.oo-category-spark{animation:oo-category-glow 3.4s ease-in-out infinite}@keyframes oo-category-bob{0%,100%{transform:translate(10px,5px) rotate(-2deg)}50%{transform:translate(10px,1px) rotate(2deg)}}@keyframes oo-category-glow{0%,100%{opacity:.25}50%{opacity:.85}}@media(prefers-reduced-motion:reduce){.oo-category-art,.oo-category-spark{animation:none!important}.oo-category-art{transform:translate(10px,5px)}}
+
+/* Independently priced items and extras. */
+#pureOfferOrderPage .oo-item-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px;border:1px solid #e3e8df;border-radius:14px;margin:10px 0;background:#fff}
+#pureOfferOrderPage .oo-item-selected{border-color:#27352c;background:#f7f9f4}
+#pureOfferOrderPage .oo-item-copy{flex:1;min-width:0}
+#pureOfferOrderPage .oo-item-copy strong{display:block;font-size:15px;line-height:1.45;overflow-wrap:anywhere}
+#pureOfferOrderPage .oo-item-copy small{display:block;font-size:12px;line-height:1.5;color:#747d6e;margin-top:5px;font-variant-numeric:tabular-nums}
+#pureOfferOrderPage .oo-item-stepper{display:flex;align-items:center;gap:0;flex:0 0 auto;border:1px solid #e1e6db;border-radius:11px;background:#fff;overflow:hidden}
+#pureOfferOrderPage .oo-item-stepper button{display:grid;place-items:center;min-width:38px;min-height:44px;padding:0;border:0;border-radius:0;background:#fff;color:#171b18;font-size:20px}
+#pureOfferOrderPage .oo-item-stepper button:disabled{color:#c0c7ba;cursor:default}
+#pureOfferOrderPage .oo-item-stepper input{width:42px;min-width:0;height:44px;padding:0;border:0;border-radius:0;box-shadow:none;text-align:center;font:600 16px system-ui;color:#171b18;background:#fff;appearance:textfield;-moz-appearance:textfield}
+#pureOfferOrderPage .oo-item-stepper input::-webkit-inner-spin-button,#pureOfferOrderPage .oo-item-stepper input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+#pureOfferOrderPage .oo-add:disabled{opacity:.5;cursor:default}
+@media(max-width:700px){html.swift-design body #pureOfferOrderPage.oo-page{padding-top:max(60px,calc(env(safe-area-inset-top,0px) + 16px))!important}#pureOfferOrderPage .oo-item-row{padding:13px;gap:10px}#pureOfferOrderPage .oo-item-copy strong{font-size:14px}#pureOfferOrderPage .oo-item-stepper button{min-width:34px}#pureOfferOrderPage .oo-item-stepper input{width:34px}}
