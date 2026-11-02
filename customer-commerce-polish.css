@@ -48,3 +48,5 @@ html.swift-design body #savedLocationPopover #cartDeliveryMap{height:340px!impor
 @media(prefers-reduced-motion:reduce){html.swift-design body :is(#cartPanel,#orderBox,.product,.store-product){transition:none!important;animation:none!important}}
 
 @media(max-width:800px){html.swift-design:not(.swift-keyboard-open) body #appScreen #cartPanel.shop-active-page{padding:max(64px,calc(env(safe-area-inset-top) + 20px)) 18px calc(28px + env(safe-area-inset-bottom))!important}}
+
+@media(max-width:800px){html.swift-design:not(.swift-keyboard-open) body #appScreen :is(#promoPage,#favouritesPage,#orderHistoryPage,#savedAddressesPage).shop-active-page{padding-top:max(56px,calc(env(safe-area-inset-top,0px) + 16px))!important}html.swift-design:not(.swift-keyboard-open) body #profileOverlay .profile-card.gamified-card{padding-top:max(56px,calc(env(safe-area-inset-top,0px) + 16px))!important}}
