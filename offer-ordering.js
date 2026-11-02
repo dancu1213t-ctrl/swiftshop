@@ -83,7 +83,7 @@
     const name=safe(offer.title)+' · '+(d.group?safe(d.group.label)+': ':'')+safe(d.label)+' ['+offer.id.slice(0,8)+':'+d.id.slice(0,8)+']',old=next[name],q=(old?.q||0)+counts.get(d.key);
     if(old&&(old.cat!==offer.category||Math.round(old.p*100)!==d.price_cents))throw Error('Remove the older version of this item from your cart first.');
     if(q>100)throw Error('A maximum of 100 of each item can be added.');
-    next[name]={q,p:d.price_cents/100,w:null,cat:offer.category,offer_id:offer.id,offer_quantity_mode:'individual',offer_option_id:d.kind==='main'?d.id:null,offer_extra_group_id:d.group?.id||null,offer_extra_choice_id:d.kind==='extra'?d.id:null,offer_choices:[],...(data.pickup_lat!=null&&data.pickup_lng!=null?{offer_pickup:{lat:Number(data.pickup_lat),lng:Number(data.pickup_lng),name:data.pickup_name||offer.category}}:{})};
+    next[name]={q,p:d.price_cents/100,w:null,cat:offer.category,offer_id:offer.id,offer_display_name:safe(offer.title)+' · '+(d.group?safe(d.group.label)+': ':'')+safe(d.label),offer_quantity_mode:'individual',offer_option_id:d.kind==='main'?d.id:null,offer_extra_group_id:d.group?.id||null,offer_extra_choice_id:d.kind==='extra'?d.id:null,offer_choices:[],...(data.pickup_lat!=null&&data.pickup_lng!=null?{offer_pickup:{lat:Number(data.pickup_lat),lng:Number(data.pickup_lng),name:data.pickup_name||offer.category}}:{})};
    }
    for(const g of c.groups){const n=new Set(Object.values(next).filter(i=>i.offer_id===offer.id&&i.offer_extra_group_id===g.id).map(i=>i.offer_extra_choice_id)).size;if(n<g.min||n>g.max)throw Error('Choose '+g.min+'–'+g.max+' different items in '+g.label+'.');}
    if(Object.keys(next).length>100)throw Error('Your cart can hold up to 100 different items.');
