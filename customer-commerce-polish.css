@@ -25,7 +25,7 @@ html.swift-design body #orderBox label{line-height:1.5!important;font-size:13px!
 html.swift-design body #profileOverlay .profile-card{background:white!important;border:1px solid #e6e9e2!important;border-radius:24px!important;box-shadow:0 20px 70px #17201818!important;padding:26px!important}
 html.swift-design body #profileOverlay .profile-top{gap:16px!important;margin:22px 0!important}
 html.swift-design body #profileOverlay .profile-name{font-size:24px!important;letter-spacing:-.6px;line-height:1.25}
-html.swift-design body #profileOverlay :is(.gamification-box,.stat-card){box-shadow:none!important;border:1px solid #e8ece3!important;border-radius:16px!important;background:#f7f9f4!important}
+html.swift-design body #profileOverlay .stat-card{box-shadow:none!important;border:1px solid #e8ece3!important;border-radius:16px!important;background:#f7f9f4!important}
 html.swift-design body #profileOverlay .profile-field{margin-top:18px!important}
 html.swift-design body #profileOverlay .profile-field label{display:block;font-size:12px!important;font-weight:600!important;color:#707770!important;margin-bottom:8px!important}
 html.swift-design body #profileOverlay .profile-field input{min-height:48px!important;border:1px solid #e2e7dc!important;border-radius:12px!important;padding:12px 14px!important;background:#fafbf9!important;font-size:16px!important;width:100%;box-sizing:border-box}
@@ -46,3 +46,5 @@ html.swift-design body #profileOverlay .profile-card{width:540px!important;max-w
 html.swift-design body #savedLocationPopover #cartDeliveryMap{height:340px!important}
 }
 @media(prefers-reduced-motion:reduce){html.swift-design body :is(#cartPanel,#orderBox,.product,.store-product){transition:none!important;animation:none!important}}
+
+@media(max-width:800px){html.swift-design:not(.swift-keyboard-open) body #appScreen #cartPanel.shop-active-page{padding:max(64px,calc(env(safe-area-inset-top) + 20px)) 18px calc(28px + env(safe-area-inset-bottom))!important}}
