@@ -1,0 +1,48 @@
+/* Customer commerce presentation. No handlers or transaction logic changed. */
+html.swift-design body{--shop-ink:#171b18;--shop-muted:#707770;--shop-line:#e6e9e4;--shop-surface:#f6f7f4}
+html.swift-design body :is(#appScreen,#merchantStorePage,#cartPanel,#orderBox,#profileOverlay,#pickupOrderBox){font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-optical-sizing:auto}
+html.swift-design body :is(#appScreen,#merchantStorePage) h2{letter-spacing:-.65px;line-height:1.2}
+html.swift-design body :is(#appScreen,#merchantStorePage,#cartPanel,#orderBox,#pickupOrderBox) :is(input:not([type=checkbox]):not([type=radio]):not([type=range]),textarea,select){border-radius:14px;border-color:var(--shop-line);box-shadow:none}
+html.swift-design body :is(#appScreen,#merchantStorePage,#cartPanel,#orderBox,#pickupOrderBox) :is(button,input,textarea,select,a):focus-visible{outline:2px solid #303c32;outline-offset:3px}
+html.swift-design body :is(#appScreen #products .product,#merchantStorePage .store-product){border-color:#e9ece6!important;box-shadow:none!important;border-radius:18px!important}
+html.swift-design body :is(#appScreen #products .product .price,#merchantStorePage .store-product .store-price){font-variant-numeric:tabular-nums;font-weight:700!important;color:#171b18!important}
+html.swift-design body :is(#appScreen #products .product .product-info,#merchantStorePage .store-product){line-height:1.45}
+html.swift-design body #merchantStorePage .store-section-nav{gap:12px!important;border-bottom:1px solid var(--shop-line)!important}
+html.swift-design body #merchantStorePage .store-section-nav button{min-height:48px!important;font-size:14px!important;letter-spacing:-.15px}
+html.swift-design body #cartPanel{background:#f7f8f5!important;padding:28px!important;scroll-padding-top:24px;box-sizing:border-box!important}
+html.swift-design body #cartPanel #cartTitle{font-size:25px!important;line-height:1.25!important;letter-spacing:-.7px!important;margin:0 48px 24px 0!important;overflow-wrap:anywhere}
+html.swift-design body #cartPanel #cartTitle :is(span,small){color:#707770!important;font-size:15px!important;font-weight:500!important}
+html.swift-design body #cartPanel>button:first-child{display:grid;place-items:center;width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;right:22px!important;top:22px!important;border:1px solid #e4e8e0!important;border-radius:50%!important;background:white!important;color:#171b18!important;font-size:22px!important}
+html.swift-design body #cartPanel .checkout-summary{border:1px solid #e8ece4!important;border-radius:18px!important;box-shadow:none!important;padding:22px!important}
+html.swift-design body #cartPanel .checkout-summary-heading{font-size:14px!important;letter-spacing:-.2px}
+html.swift-design body #cartPanel #cartMapSection{border:1px solid #e5e9e0!important;border-radius:18px!important;padding:16px!important}
+html.swift-design body #cartPanel #cartMapSearch{font-size:16px!important;min-height:48px!important;background:#fff!important}
+html.swift-design body #cartPanel #cartGrandTotal{font-variant-numeric:tabular-nums}
+html.swift-design body #cartPanel .next-btn-inner{min-height:50px!important;border-radius:14px!important;background:#171b18!important;color:#fff!important;box-shadow:none!important}
+html.swift-design body #orderBox{background:#fff!important;border-radius:24px!important;border:1px solid #e6e9e2!important;box-shadow:0 20px 70px #17201815!important}
+html.swift-design body #orderBox :is(input:not([type=checkbox]):not([type=radio]),select,textarea){font-size:16px!important;min-height:48px!important;background:#fafbf9!important;border:1px solid #e2e7dd!important;padding:13px 14px!important;box-sizing:border-box!important}
+html.swift-design body #orderBox label{line-height:1.5!important;font-size:13px!important;font-weight:600!important}
+html.swift-design body #profileOverlay .profile-card{background:white!important;border:1px solid #e6e9e2!important;border-radius:24px!important;box-shadow:0 20px 70px #17201818!important;padding:26px!important}
+html.swift-design body #profileOverlay .profile-top{gap:16px!important;margin:22px 0!important}
+html.swift-design body #profileOverlay .profile-name{font-size:24px!important;letter-spacing:-.6px;line-height:1.25}
+html.swift-design body #profileOverlay :is(.gamification-box,.stat-card){box-shadow:none!important;border:1px solid #e8ece3!important;border-radius:16px!important;background:#f7f9f4!important}
+html.swift-design body #profileOverlay .profile-field{margin-top:18px!important}
+html.swift-design body #profileOverlay .profile-field label{display:block;font-size:12px!important;font-weight:600!important;color:#707770!important;margin-bottom:8px!important}
+html.swift-design body #profileOverlay .profile-field input{min-height:48px!important;border:1px solid #e2e7dc!important;border-radius:12px!important;padding:12px 14px!important;background:#fafbf9!important;font-size:16px!important;width:100%;box-sizing:border-box}
+html.swift-design body #pickupOrderBox :is(.pickup-route-card,.pickup-request-card){box-shadow:none!important;border:1px solid #e6e9e2!important;border-radius:20px!important}
+@media(hover:hover){html.swift-design body :is(#appScreen #products .product,#merchantStorePage .store-product):hover{border-color:#bfc8b8!important}html.swift-design body :is(.customer-product-add,.store-add):hover{background:#303a31!important}}
+@media(max-width:800px){
+html.swift-design:not(.swift-keyboard-open) body #cartPanel{padding: max(64px,calc(env(safe-area-inset-top) + 20px)) 18px calc(24px + env(safe-area-inset-bottom))!important}
+html.swift-design:not(.swift-keyboard-open) body #cartPanel>button:first-child{top:max(56px,calc(env(safe-area-inset-top) + 12px))!important;right:18px!important}
+html.swift-design body #cartPanel #cartTitle{font-size:24px!important}
+html.swift-design body #cartPanel .checkout-summary{padding:18px!important}
+html.swift-design body #profileOverlay .profile-card{padding:20px!important;max-width:100%!important}
+html.swift-design body #appScreen #products{gap:12px!important}
+}
+@media(min-width:1100px){
+html.swift-design body #appScreen #products{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:24px!important}
+html.swift-design body #cartPanel{max-width:880px!important;left:50%!important;right:auto!important;transform:translateX(-50%)!important;border:1px solid #e4e8de!important;border-radius:24px 24px 0 0!important}
+html.swift-design body #profileOverlay .profile-card{width:540px!important;max-width:calc(100vw - 64px)!important}
+html.swift-design body #savedLocationPopover #cartDeliveryMap{height:340px!important}
+}
+@media(prefers-reduced-motion:reduce){html.swift-design body :is(#cartPanel,#orderBox,.product,.store-product){transition:none!important;animation:none!important}}
