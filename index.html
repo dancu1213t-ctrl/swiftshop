@@ -7867,7 +7867,7 @@ window.showLoginWelcome=function(){
   node('cloTotal').textContent=payment?money(payment.amount_cents/100):(current.snapshot.pickup_service?'Pickup service fee awaiting confirmation':money(current.snapshot.total))+(current.snapshot.taco_note?' + taco food cost':'');
   const totalRow=node('cloTotal').parentElement;totalRow.querySelector('span').textContent=isSwiftPay?'Order total · Runner enters this':'Order total';
   let feeRows=node('cloSwiftPayBreakdown');if(!feeRows){feeRows=document.createElement('div');feeRows.id='cloSwiftPayBreakdown';feeRows.innerHTML='<div style="display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:12px"><span>SwiftPay fee</span><b data-fee></b></div><div style="display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:13px"><span>Total deducted from SwiftPay</span><b data-deduction></b></div><p data-state style="margin:10px 0 0;font-size:11px;color:#738174"></p>';totalRow.after(feeRows);}
-  feeRows.hidden=!isSwiftPay;feeRows.querySelector('[data-fee]').textContent=money((payment?.fee_cents??15)/100);
+  feeRows.hidden=!isSwiftPay;feeRows.querySelector('[data-fee]').textContent=money((payment?.fee_cents??25)/100);
   feeRows.querySelector('[data-deduction]').textContent=payment?money((payment.amount_cents+payment.fee_cents)/100):current.snapshot.total==null?'Awaiting invoice':money(Number(current.snapshot.total)+0.15);
   feeRows.querySelector('[data-state]').textContent=payment?.state==='captured'?'Paid':payment?.state==='released'?'Funds released':payment?.state==='quoted'?'Accept invoice in SwiftPay':'The scanner adds the SwiftPay fee automatically. Do not include it in the amount entered.';
 if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order cancelled';node('cloSubtitle').textContent='Any SwiftPay reservation has been released.';node('cloSteps').replaceChildren();node('cloProgress').replaceChildren();}
@@ -7909,7 +7909,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
   }catch(error){if(scope()!==account)return;if(record.registered&&error?.code==='P0001'&&error?.message==='Tracking request unavailable'){forgetUnavailable(record);return;}retryAt=Date.now()+10000;if(current?.id===record.id)node('cloSync').textContent=record.registered?'Connection interrupted. Showing your last confirmed update; we’ll retry.':'Your order is waiting for a connection. Keep your details here and retry sending when connected.';}
   finally{busy=false;}
  }
- window.SwiftLive={async submit(snapshot){if(!await window.SwiftCustomerAuth?.require('Sign in to send your order.'))throw Error('Sign in before sending your order.');const id=this.prepare(snapshot,false);const record=records.find(r=>r.id===id);await register(record);record.checkoutCommitted=true;save();const checkout=document.getElementById('orderBox');if(checkout)checkout.style.display='none';this.openOrder(id);return id;},prepare(snapshot,show=true){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined,dispatch_text:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&(!last.registered||last.checkoutCommitted===false||Date.now()-Date.parse(last.created)<15000)){current=last;if(show)open();return last.id;}
+ window.SwiftLive={async submit(snapshot){if(!await window.SwiftCustomerAuth?.require('Sign in to send your order.'))throw Error('Sign in before sending your order.');const id=this.prepare(snapshot,false);const record=records.find(r=>r.id===id);await register(record);record.checkoutCommitted=true;save();window.loadGamificationData?.();const checkout=document.getElementById('orderBox');if(checkout)checkout.style.display='none';this.openOrder(id);return id;},prepare(snapshot,show=true){restore();const fingerprint=JSON.stringify({...snapshot,original_order_number:undefined,dispatch_text:undefined}),last=records[0];if(last&&last.fingerprint===fingerprint&&(!last.registered||last.checkoutCommitted===false||Date.now()-Date.parse(last.created)<15000)){current=last;if(show)open();return last.id;}
    const record={id:crypto.randomUUID(),token:crypto.randomUUID(),created:new Date().toISOString(),snapshot,fingerprint,registered:false,checkoutCommitted:false};records.unshift(record);current=record;save();chip.hidden=false;if(show)open();return record.id;},open,async history(){restore();const identity=scope();await syncAccountOrders(true);if(identity!==scope())return[];return records.filter(r=>r.registered).map(r=>({id:r.id,created:r.created,snapshot:r.snapshot,phase:r.remote?.phase||'sent'}));},async openOrder(id){restore();try{await syncAccountOrders(true);}catch{}const record=records.find(r=>r.id===id);if(!record)return false;current=record;paint();if(!root.open){root.inert=false;root.showModal();scrollArea.scrollTop=0;}poll(true);return true;}};
  chip.onclick=open;node('cloClose').onclick=()=>root.close();node('cloRetry').onclick=()=>poll(true);node('cloSelect').onchange=e=>{current=records.find(r=>r.id===e.target.value);paint();poll(true);};
  document.addEventListener('visibilitychange',()=>{if(!document.hidden){restore();poll(true);}});window.addEventListener('pageshow',()=>{restore();if(current&&sessionStorage.getItem('swiftshop.pendingLiveReturn')===current.id){sessionStorage.removeItem('swiftshop.pendingLiveReturn');open();}});window.addEventListener('online',()=>poll(true));setInterval(()=>poll(),5000);restore();
@@ -8806,7 +8806,7 @@ window.switchToggle=function(button){
   }
 
   // --- SERVICE FEE HELPER ---
-const FIXED_DELIVERY_FEE = 3.50;
+const FIXED_DELIVERY_FEE = 4.50;
 const PLATFORM_FEE = 0;
 function getServiceFee(zone) { return window.SwiftRegions?.fee() ?? FIXED_DELIVERY_FEE; }
 function getCartDeliveryFee() { return window.SwiftRegions?.fee() ?? FIXED_DELIVERY_FEE; }
@@ -9110,13 +9110,13 @@ function refreshCartTotals() {
   const hasTacos=!!localStorage.getItem('tacoOrder');
   const hasOrder=Object.values(cart).some(item=>Number(item.q)>0)||hasTacos;
   const deliveryFee = hasOrder?getCartDeliveryFee():0;
-  const swiftPayFee=hasOrder&&document.getElementById('paymentMethod')?.value==='SwiftPay'?0.15:0;
+  const swiftPayFee=hasOrder&&document.getElementById('paymentMethod')?.value==='SwiftPay'?0.25:0;
   const finalAmount = hasOrder?Math.round((itemsTotal + deliveryFee + tipAmount + swiftPayFee)*100)/100:0;
   window.lastCartFee = deliveryFee;
   if (feeText) {
     feeText.innerHTML =
-      (hasOrder?`<div class="checkout-row"><span>Delivery Fee</span><strong>${deliveryFee.toFixed(2)}</strong></div>`:'') +
-      (swiftPayFee ? '<div class="checkout-row"><span>SwiftPay transaction fee</span><strong>$0.15</strong></div>' : '') +
+      (hasOrder?`<div class="checkout-row"><span>Delivery Fee</span><strong>${deliveryFee.toFixed(2)}</strong></div>${window.SwiftRegions?.breakdown?.()?.extra_stop_fee_cents?'<small class="checkout-delivery-breakdown">Base BZ$4.50 · '+(window.SwiftRegions.breakdown().nearby_extra_stops||0)+' nearby extra pickup(s) × BZ$1.50 · '+(window.SwiftRegions.breakdown().cross_town_extra_stops||0)+' cross-town extra pickup(s) × BZ$2.00</small>':''}`:'') +
+      (swiftPayFee ? '<div class="checkout-row"><span>SwiftPay transaction fee</span><strong>$0.25</strong></div>' : '') +
       (hasOrder && tipAmount > 0 ? `<div class="checkout-row"><span>Runner tip (optional)</span><strong>$${tipAmount.toFixed(2)}</strong></div>` : '') +
       '';
   }
@@ -9958,7 +9958,7 @@ async function render() {
 
   // Shared pickup source for checkout previews and dispatched order routes.
   function storePickupCoordinates(category) {
-    const key=String(category||'').trim().toUpperCase();if(['SNACK','DRINK','HOUSEHOLD','HYGIENE','VEGETABLES','TREATS'].includes(key))return '';
+    const key=String(category||'').trim().toUpperCase();if(['SNACK','DRINK','HOUSEHOLD','HYGIENE','VEGETABLES','TREATS'].includes(key)){const mixed=typeof cart!=='undefined'&&Object.values(cart).some(i=>Number(i.q)>0&&(i.offer_id||!['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(i.cat)));return mixed&&(!window.SwiftRegions||window.SwiftRegions.zone==='orange-walk')?(storeLocations[key]||storeLocations.GENERAL):'';}
     const rows=window.SwiftStoreInfo?.rows;
     const row=rows&&[...rows.values()].find(r=>String(r.category||'').trim().toUpperCase()===key);
     if(row?.latitude!=null&&row?.longitude!=null){
@@ -10023,8 +10023,8 @@ async function render() {
     const grandTotal = Math.round((itemsTotal + deliveryFee + platformFee + tipAmount)*100)/100;
     const customerCoords = gift ? gift.address : window.lastCartCoords || "18.0777,-88.5667";
 
-    if (paymentMethod === "SwiftPay" && grandTotal + 0.15 > walletBalance) {
-      alert(`Insufficient Wallet Balance\n\nOrder Total including fee: ${(grandTotal+0.15).toFixed(2)} BZD`);
+    if (paymentMethod === "SwiftPay" && grandTotal + 0.25 > walletBalance) {
+      alert(`Insufficient Wallet Balance\n\nOrder Total including fee: ${(grandTotal+0.25).toFixed(2)} BZD`);
       return;
     }
 
@@ -14116,8 +14116,8 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 .add-check-exclusive{animation-duration:.4s!important}
 #customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
 </style>
-<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=portal-ui20261031"></script></body>
-</html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=paymentqr20261010"></script><script src="swiftpay.js?v=transfer-centered20261019"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
+<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=pricing20261106"></script></body>
+</html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=pricing20261105"></script><script src="swiftpay.js?v=pricing20261105"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
 
