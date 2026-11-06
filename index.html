@@ -13788,7 +13788,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   clearTimeout(searchTimer);const token=++request;active=category;items=[];offers=[];state='unknown';filter='All';query='';search.value='';const settings=window.SwiftProductFilters.forStore(category);filterButton.setAttribute('aria-pressed',String(settings.min!==null||settings.max!==null||settings.sort!=='recommended'));
   // Restore any promo-owned grid before opening another destination.
   if(document.getElementById('promoPage')?.style.display!=='none')window.closePromoPage?.();
-  storePage.style.display='block';storePage.setAttribute('aria-busy','true');storePage.scrollTop=0;setStatus();grid.replaceChildren();chips.replaceChildren();offerBox.replaceChildren();notice.textContent='Loading this store…';
+  storePage.style.display='block';storePage.setAttribute('aria-busy','true');storePage.scrollTop=0;updateCounts();setStatus();grid.replaceChildren();chips.replaceChildren();offerBox.replaceChildren();notice.textContent='Loading this store…';
   try{
    const [inventory,status,promos]=await Promise.all([
     supabaseClient.from('products').select('*').eq('category',category).ilike('active','yes').abortSignal(AbortSignal.timeout(15000)),
