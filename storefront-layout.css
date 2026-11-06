@@ -87,3 +87,27 @@ html.swift-design body #merchantStorePage .store-location-panel iframe{filter:gr
 
 #merchantStorePage .store-branded-map .gm-style button{background-color:transparent!important;color:#333!important;min-width:0!important;min-height:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;font-family:Arial,sans-serif!important}
 #merchantStorePage .store-branded-map .gm-style a{background:transparent!important;color:#333!important;min-height:0!important;padding:0!important;border-radius:0!important;box-shadow:none!important}
+
+/* A fixed action must not lose its horizontal position when pressed. */
+html.swift-design body #merchantStorePage .store-toolbar .store-cart-link{
+ left:16px!important;right:16px!important;margin-inline:auto!important;
+ transform:none!important;translate:none!important;scale:1!important;animation:none!important;
+ transition:background-color 120ms ease,opacity 120ms ease!important;
+}
+html.swift-design body #merchantStorePage .store-toolbar .store-cart-link:active{
+ transform:none!important;translate:none!important;scale:1!important;background:#303531!important;
+}
+html.swift-design body #merchantStorePage .store-toolbar .store-cart-link::after{transition:translate 120ms ease}
+html.swift-design body #merchantStorePage .store-toolbar .store-cart-link:active::after{translate:3px 0}
+/* The actual cart uses a short fade, without competing slide/centering transforms. */
+@keyframes swift-cart-open{from{opacity:.65}to{opacity:1}}
+html.swift-design body #cartPanel.shop-active-page{
+ left:0!important;right:0!important;transform:none!important;translate:none!important;
+ width:100%!important;max-width:none!important;animation:swift-cart-open 140ms ease-out both!important;
+}
+@media(prefers-reduced-motion:reduce){
+ html.swift-design body #cartPanel.shop-active-page{animation:none!important}
+ html.swift-design body #merchantStorePage .store-toolbar .store-cart-link,
+ html.swift-design body #merchantStorePage .store-toolbar .store-cart-link::after{transition:none!important}
+ html.swift-design body #merchantStorePage .store-toolbar .store-cart-link:active::after{translate:none}
+}

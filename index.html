@@ -9522,38 +9522,27 @@ function updateCartBubble() {
     const panel = document.getElementById("cartPanel");
     const bubble = document.getElementById("cartBubble");
     if (!panel) return;
-
-    const isOpen = panel.style.bottom === "0px";
-
-    if (isOpen) {
-      panel.style.bottom = "-100%";
-      // Show bubble again when closing
-      if (bubble) bubble.style.display = "flex"; 
-    } else {
-      panel.style.bottom = "0";             // Open cart panel
-      // Completely hide the bubble while the cart is open
-      if (bubble) bubble.style.display = "none"; 
-
-      requestAnimationFrame(() => {
-        renderCartPanel();                  // Render items
-        
-        setTimeout(() => {
-          if (typeof initCartMap === "function") {
-            initCartMap();
-          }
-        }, 350); 
-      });
-    }
+    // Opening is idempotent: repeated taps never close or swap the cart.
+    panel.style.bottom = "0";
+    panel.inert = false;
+    if (bubble) bubble.style.display = "none";
+    renderCartPanel();
+    window.SwiftNavigation?.refresh();
+    panel.scrollTop = 0;
+    requestAnimationFrame(() => {
+      if (panel.style.bottom !== "0px" && panel.style.bottom !== "0") return;
+      const title = document.getElementById("cartTitle");
+      if (title) { title.tabIndex = -1; title.focus({preventScroll:true}); }
+      if (typeof initCartMap === "function") initCartMap();
+    });
   }
 
 function closeCart() {
     const cp = document.getElementById("cartPanel");
     const cb = document.getElementById("cartBubble");
     if (cp) cp.style.bottom = "-100%";
-    // Make sure the bubble reappears when closed/minimized
-    if (cb && Object.values(cart).reduce((a, b) => a + b.q, 0) > 0) {
-      cb.style.display = "flex";
-    }
+    if (cb) cb.style.display = Object.values(cart).some(item => Number(item.q)>0) ? "flex" : "none";
+    window.SwiftNavigation?.refresh();
   }
 
   function renderCartPanel() {
@@ -14204,7 +14193,7 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 
 <script src="image-banners.js?v=20261026"></script>
 
-<link rel="stylesheet" href="storefront-layout.css?v=redtags20261101">
+<link rel="stylesheet" href="storefront-layout.css?v=cart20261106">
 <script src="storefront-layout.js?v=logo-maps20261028"></script>
 
 <link rel="stylesheet" href="home-store-cards.css?v=portal-ui20261031">
