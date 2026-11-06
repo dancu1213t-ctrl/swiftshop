@@ -9115,7 +9115,7 @@ function refreshCartTotals() {
   window.lastCartFee = deliveryFee;
   if (feeText) {
     feeText.innerHTML =
-      (hasOrder?`<div class="checkout-row"><span>Delivery Fee</span><strong>${deliveryFee.toFixed(2)}</strong></div>${window.SwiftRegions?.breakdown?.()?.extra_stop_fee_cents?'<small class="checkout-delivery-breakdown">Base BZ$4.50 · '+(window.SwiftRegions.breakdown().nearby_extra_stops||0)+' nearby extra pickup(s) × BZ$1.50 · '+(window.SwiftRegions.breakdown().cross_town_extra_stops||0)+' cross-town extra pickup(s) × BZ$2.00</small>':''}`:'') +
+      (hasOrder?`<div class="checkout-row"><span class="checkout-delivery-label">Delivery Fee<button type="button" class="delivery-fee-info-button" data-delivery-fee-info aria-label="Delivery Fee info" title="Delivery Fee info">ⓘ</button></span><strong>${deliveryFee.toFixed(2)}</strong></div>`:'') +
       (swiftPayFee ? '<div class="checkout-row"><span>SwiftPay transaction fee</span><strong>$0.25</strong></div>' : '') +
       (hasOrder && tipAmount > 0 ? `<div class="checkout-row"><span>Runner tip (optional)</span><strong>$${tipAmount.toFixed(2)}</strong></div>` : '') +
       '';
@@ -13523,7 +13523,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['swiftDeliveryFeeInfo','commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -14205,3 +14205,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 <link rel="stylesheet" href="customer-commerce-polish.css?v=notifications20261101">
 
 <link rel="stylesheet" href="customer-interactions.css?v=20261105">
+
+<link rel="stylesheet" href="delivery-fee-info.css?v=20261106"><script src="delivery-fee-info.js?v=20261106"></script>
