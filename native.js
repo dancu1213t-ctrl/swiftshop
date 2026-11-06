@@ -794,7 +794,7 @@
       App.addListener('backButton', ({ canGoBack }) => {
         if (window.SwiftNavigation?.back()) return;
         if (canGoBack) history.back();
-        else if (confirm('Close SwiftShop?')) App.exitApp();
+        else App.minimizeApp();
       });
     }
 
@@ -1002,3 +1002,5 @@
     });
 
 })();
+
+
