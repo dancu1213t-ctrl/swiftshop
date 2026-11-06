@@ -1,0 +1,7 @@
+/* Immediate touch feedback; no navigation, checkout or cart handlers are changed. */
+html.swift-design :is(button,a,input,select,textarea){touch-action:manipulation}
+html.swift-design button{-webkit-tap-highlight-color:transparent;transition-duration:100ms!important;transition-property:background-color,color,border-color,opacity!important}
+html.swift-design button:active:not(:disabled){filter:brightness(.94)}
+html.swift-design :is(.product,.store-card){transition-duration:120ms!important;transition-property:border-color,background-color!important}
+@media(prefers-reduced-motion:reduce){html.swift-design :is(.product,.store-card,.shop-bottom-nav button){animation:none!important;transition:none!important}}
+
