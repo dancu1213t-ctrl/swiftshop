@@ -124,3 +124,5 @@ html.swift-design body #swiftDeliveryFeeInfo{box-sizing:border-box;width:min(360
 #swiftDeliveryFeeInfo .delivery-fee-info-total{border-top:1px solid #e8ebe5;margin-top:9px;padding-top:16px;font-size:14px}
 #swiftDeliveryFeeInfo p{font-size:12px;line-height:1.65;color:#737b72;margin:14px 0 20px}
 #swiftDeliveryFeeInfo .delivery-fee-info-done{width:100%;min-height:44px;padding:12px;border:0;border-radius:11px;background:#19211b;color:#fff;font-size:14px;font-weight:650}
+
+html.swift-design body #swiftDeliveryFeeInfo{height:fit-content!important;min-height:0!important;inset:50% auto auto 50%!important;margin:0!important;transform:translate(-50%,-50%)!important}
