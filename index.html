@@ -8,14 +8,14 @@ html.swift-entry-loading::before{content:'SwiftShop';position:fixed;inset:0;z-in
 html.swift-entry-loading #authScreen{animation:none!important;transition:none!important}
 </style>
 <script>
-(function(){function ready(){const settle=document.fonts?Promise.race([document.fonts.ready,new Promise(resolve=>setTimeout(resolve,1200))]):Promise.resolve();settle.then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{window.scrollTo({top:0,left:0,behavior:'instant'});document.documentElement.classList.remove('swift-entry-loading');})));}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready();const root=document.documentElement;let awaiting=root.classList.contains('swift-awaiting-auth');new MutationObserver(()=>{const next=root.classList.contains('swift-awaiting-auth');if(awaiting&&!next){window.scrollTo({top:0,left:0,behavior:'instant'});}awaiting=next;}).observe(root,{attributes:true,attributeFilter:['class']});})();
+(function(){function ready(){const settle=Promise.resolve();settle.then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{window.scrollTo({top:0,left:0,behavior:'instant'});document.documentElement.classList.remove('swift-entry-loading');})));}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready();const root=document.documentElement;let awaiting=root.classList.contains('swift-awaiting-auth');new MutationObserver(()=>{const next=root.classList.contains('swift-awaiting-auth');if(awaiting&&!next){window.scrollTo({top:0,left:0,behavior:'instant'});}awaiting=next;}).observe(root,{attributes:true,attributeFilter:['class']});})();
 </script>
 <script src="customer-reviews.js?v=nostoreratings20261020" defer></script>
 <script src="customer-usability.js?v=reviewsfinal20261008" defer></script>
 <script src="pickup-discovery.js?v=town20261101" defer></script>
 <link rel="stylesheet" href="swiftpay.css?v=transfer-centered20261019">
 <script src="product-filters.js?v=store-scope20261027"></script>
-  <meta charset="UTF-8"><meta name="swiftshop-build" content="customer-orders-verified-20261004">
+  <meta charset="UTF-8"><link rel="stylesheet" href="customer-interactions.css?v=smooth20261111"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><meta name="swiftshop-build" content="customer-orders-verified-20261004">
 <script src="app-config.js?v=orders20261004"></script><script src="native.js?v=back20261105"></script><link rel="stylesheet" href="mobile.css?v=orders20261004">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script>
@@ -8310,7 +8310,7 @@ window.switchToggle=function(button){
  else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox')?.style.setProperty('display','none');}
  window.SwiftNavigation?.refresh();
 };
-</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=details20261018"></script><link rel="stylesheet" href="customer-experience.css?v=20261101"></body>
+</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=smooth20261111"></script><link rel="stylesheet" href="customer-experience.css?v=20261101"></body>
 
 
 
@@ -8715,7 +8715,7 @@ window.switchToggle=function(button){
       image: r.image,
       was: r.was ? Number(r.was) : null,
       subcategory: r.subcategory || "Items",
-      description:r.description||"",tags:r.tags||[]
+      description:r.description||"",tags:r.tags||[],catalog_details:r.catalog_details||{},active:'yes'
     }));
   }
 
@@ -9790,7 +9790,7 @@ async function render() {
     box.style.display='grid';box.replaceChildren();
     const candidates=allProducts.filter(p=>String(p.name).toLowerCase().includes(q));
     const matches=window.SwiftProductFilters?window.SwiftProductFilters.apply(candidates):candidates;
-    if(!matches.length){const empty=document.createElement('p');empty.style.gridColumn='1/-1';empty.textContent='No matching items. Try another name.';box.append(empty);}
+    const fragment=document.createDocumentFragment();if(!matches.length){const empty=document.createElement('p');empty.style.gridColumn='1/-1';empty.textContent='No matching items. Try another name.';fragment.append(empty);}
     for(const p of matches){
       const card=document.createElement('div');card.className='product';
       const image=document.createElement('img');image.src=p.image;image.alt=p.name;image.loading='lazy';image.decoding='async';card.append(image);
@@ -9801,8 +9801,9 @@ async function render() {
       info.append(name,store,price);card.append(info);
       const button=document.createElement('button');button.type='button';button.className='customer-product-add';button.textContent='Add';
       button.onclick=()=>addCatalogItem(p,button);card.append(button);
-      window.attachStoreItemShare?.(card,p);box.append(card);
+      window.attachStoreItemShare?.(card,p);fragment.append(card);
     }
+    box.replaceChildren(fragment);
   }
 
   const catalogueAddChecks=new Map();
@@ -13788,16 +13789,16 @@ document.addEventListener('DOMContentLoaded',()=>{
   clearTimeout(searchTimer);const token=++request;active=category;items=[];offers=[];state='unknown';filter='All';query='';search.value='';const settings=window.SwiftProductFilters.forStore(category);filterButton.setAttribute('aria-pressed',String(settings.min!==null||settings.max!==null||settings.sort!=='recommended'));
   // Restore any promo-owned grid before opening another destination.
   if(document.getElementById('promoPage')?.style.display!=='none')window.closePromoPage?.();
-  storePage.style.display='block';storePage.setAttribute('aria-busy','true');storePage.scrollTop=0;updateCounts();setStatus();grid.replaceChildren();chips.replaceChildren();offerBox.replaceChildren();notice.textContent='Loading this store…';
+  storePage.style.display='block';storePage.setAttribute('aria-busy','true');storePage.scrollTop=0;updateCounts();setStatus();grid.replaceChildren();chips.replaceChildren();offerBox.replaceChildren();notice.textContent='Loading this store…';window.SwiftLoading?.show(grid);
   try{
    const [inventory,status,promos]=await Promise.all([
-    supabaseClient.from('products').select('*').eq('category',category).ilike('active','yes').abortSignal(AbortSignal.timeout(15000)),
+    supabaseClient.from('products').select('id,name,category,price,was,active,subcategory,description,tags,catalog_details').eq('category',category).ilike('active','yes').abortSignal(AbortSignal.timeout(15000)),
     supabaseClient.from('stores').select('is_open').eq('category',category).maybeSingle().abortSignal(AbortSignal.timeout(15000)),
     Promise.resolve([])
    ]);
    if(token!==request||active!==category)return;
    if(inventory.error)throw Error('This store could not load. Please try again.');
-   items=(inventory.data||[]).filter(window.swiftMobileItemAllowed).map(p=>({...p,price:Number(p.price)}));
+   items=(inventory.data||[]).filter(window.swiftMobileItemAllowed).map(p=>({...p,price:Number(p.price),image:window.SwiftProductImages.reference(p.id)}));
    // Reuse existing favourites matching with the freshest inventory snapshot.
    const productIndex=new Map(allProducts.map((p,i)=>[String(p.id),i]));
    for(const p of items){const id=String(p.id),i=productIndex.get(id);if(i!==undefined)allProducts[i]=p;else {productIndex.set(id,allProducts.length);allProducts.push(p);}}
@@ -13807,22 +13808,22 @@ document.addEventListener('DOMContentLoaded',()=>{
    if(state==='unknown')notice.append(btn('Retry',()=>window.openMerchantStore(category)));
    drawChips();drawProducts();drawOffers();
    const cover=document.getElementById('storeProfileCover');if(cover&&!cover.querySelector('img')){const intro=el('div',undefined,'store-cover-intro');intro.append(el('small','LOCAL FAVOURITES'),el('strong','Explore the menu.'),el('span',describe(active).name));cover.append(intro);for(const product of items.filter(p=>p.image).slice(0,3)){const artwork=new Image();artwork.alt='';artwork.className='store-cover-product';artwork.onload=()=>{if(token===request&&!cover.querySelector('img:not(.store-cover-product)'))cover.append(artwork);};artwork.src=merchantFeed.imageURL(product.image);}}
-  }catch(e){if(token!==request)return;notice.replaceChildren(el('span',navigator.onLine===false?'You’re offline. Connect to load this store.':e.message),btn('Retry',()=>window.openMerchantStore(category)));}finally{if(token===request)storePage.removeAttribute('aria-busy');}
+  }catch(e){if(token!==request)return;notice.replaceChildren(el('span',navigator.onLine===false?'You’re offline. Connect to load this store.':e.message),btn('Retry',()=>window.openMerchantStore(category)));}finally{if(token===request){storePage.removeAttribute('aria-busy');window.SwiftLoading?.clear(grid);}}
  };
  function drawChips(){chips.replaceChildren();for(const label of ['All',...new Set(items.map(p=>p.subcategory||'Items'))]){const b=btn(label,()=>{filter=label;drawChips();drawProducts();});b.setAttribute('aria-pressed',String(label===filter));chips.append(b);}}
  function favouriteKey(){return 'swiftshop.v1.'+(localStorage.getItem('userPhone')||'guest')+'.favourites';}
  function saved(){try{return JSON.parse(localStorage.getItem(favouriteKey())||'[]');}catch{return [];}}
- function card(p,isOffer=false){
+ function card(p,isOffer=false,likedItems=saved()){
   const c=el('article',undefined,'store-product');const image=el('img');image.src=merchantFeed.imageURL(p.image);image.alt=p.name;image.loading='lazy';image.decoding='async';c.append(image);
   const heart=btn('♡',()=>{try{const list=saved(),key=String(p.id??(p.category+'::'+p.name)),exists=list.some(x=>String(x.id??(x.category+'::'+x.name))===key);localStorage.setItem(favouriteKey(),JSON.stringify(exists?list.filter(x=>String(x.id??(x.category+'::'+x.name))!==key):[...list,{id:p.id,name:p.name,category:p.category,image:p.image}]));heart.setAttribute('aria-pressed',String(!exists));heart.textContent=exists?'♡':'♥';}catch{notice.textContent='Your browser could not save this favourite.';}},'store-heart');
-  heart.setAttribute('aria-label','Save '+p.name);const liked=saved().some(x=>String(x.id??(x.category+'::'+x.name))===String(p.id??(p.category+'::'+p.name)));heart.setAttribute('aria-pressed',String(liked));heart.textContent=liked?'♥':'♡';c.append(heart);
+  heart.setAttribute('aria-label','Save '+p.name);const liked=likedItems.some(x=>String(x.id??(x.category+'::'+x.name))===String(p.id??(p.category+'::'+p.name)));heart.setAttribute('aria-pressed',String(liked));heart.textContent=liked?'♥':'♡';c.append(heart);
   if(isOffer)c.append(el('small','LIVE OFFER','store-offer-badge'));
   c.append(el('h3',p.name));if(p.was>p.price)c.append(el('del','$'+Number(p.was).toFixed(2)));
   c.append(el('strong','$'+Number(p.price).toFixed(2)+' BZD','store-price'));
   const add=btn(state==='yes'?'Add':'Unavailable',()=>addItem(p,add),'store-add');add.disabled=state!=='yes';c.append(add);
   const qty=el('small',undefined,'store-item-quantity');qty.dataset.name=p.name;qty.dataset.category=p.category;qty.dataset.price=p.price;c.append(qty);window.attachStoreItemShare(c,p);return c;
  }
- function drawProducts(){grid.replaceChildren();const list=window.SwiftProductFilters.apply(items.filter(p=>(filter==='All'||(p.subcategory||'Items')===filter)&&p.name.toLowerCase().includes(query)),window.SwiftProductFilters.forStore(active));if(!list.length)grid.append(el('p',items.length?'No matching items.':'No items are available yet.'));for(const p of list)grid.append(card(p));updateCounts();}
+ function drawProducts(){const fragment=document.createDocumentFragment();const list=window.SwiftProductFilters.apply(items.filter(p=>(filter==='All'||(p.subcategory||'Items')===filter)&&p.name.toLowerCase().includes(query)),window.SwiftProductFilters.forStore(active));if(!list.length)fragment.append(el('p',items.length?'No matching items.':'No items are available yet.'));const likedItems=saved();for(const p of list)fragment.append(card(p,false,likedItems));grid.replaceChildren(fragment);updateCounts();}
  window.addEventListener('swift-filters-changed',event=>{if(active&&event.detail?.category===active){drawProducts();drawOffers();}});
  function drawOffers(){offerBox.replaceChildren();if(!offers.length)return;offerBox.append(el('h2','Offers from this store'));const row=el('div',undefined,'store-offer-row');for(const p of window.SwiftProductFilters.apply(offers,window.SwiftProductFilters.forStore(active)))row.append(card(p,true));offerBox.append(row);updateCounts();}
  async function addItem(p,b){
@@ -14059,7 +14060,7 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=chat20261020"></script><script src="app-polish.js?v=orders20261004"></script><script src="premium-motion.js?v=orders20261004"></script><script src="app-design.js?v=orders20261004"></script><script src="app-quality.js?v=commerce20261031"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
+});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=chat20261020"></script><script src="app-polish.js?v=smooth20261111"></script><script src="app-design.js?v=smooth20261111"></script><script src="app-quality.js?v=smooth20261111"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=admin-code20261030"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=commerce20261031"></script>
 <script src="customer-auth.js?v=signin-restored20261020"></script><script src="account-requests.js?v=orders20261004"></script>
@@ -14204,5 +14205,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 
 <link rel="stylesheet" href="customer-commerce-polish.css?v=notifications20261101">
 
-<link rel="stylesheet" href="customer-interactions.css?v=20261105">
+
 

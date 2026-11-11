@@ -6,7 +6,11 @@
   function el(tag,cls){const e=document.createElement(tag);e.className=cls;return e;}
   function prependIcon(button,name){if(!button||button.querySelector('svg'))return;button.prepend(icon(name));}
   function markImage(img){
-    if(img.dataset.designImage)return;img.dataset.designImage='true';
+    if(img.dataset.designImage)return;img.dataset.designImage='true';img.decoding='async';
+    const placeholder=()=>String(img.getAttribute('src')||'').includes('#swift-product=');
+    const pending=()=>img.classList.toggle('swift-photo-pending',placeholder()||!img.complete);pending();
+    img.addEventListener('load',()=>{if(!placeholder())img.classList.remove('swift-photo-pending');});
+    img.addEventListener('error',()=>img.classList.remove('swift-photo-pending'));
     const fail=()=>{
       if(img.closest('.gm-style'))return;
       img.classList.add('sd-image-unavailable');
@@ -114,8 +118,10 @@
       if(receipt&&actions)actions.after(receipt);
     }
     enhanceCards(document);
-    new MutationObserver(entries=>{for(const entry of entries)for(const node of entry.addedNodes)if(node.nodeType===1){if(node.matches('img'))markImage(node);enhanceCards(node);}}).observe(app,{childList:true,subtree:true});
-    const merchant=document.getElementById('merchantStorePage');if(merchant)new MutationObserver(entries=>{for(const entry of entries)for(const node of entry.addedNodes)if(node.nodeType===1){if(node.matches('img'))markImage(node);enhanceCards(node);}}).observe(merchant,{childList:true,subtree:true});
+    const pending=new Set();let queued=false;
+    const observer=new MutationObserver(entries=>{for(const entry of entries)for(const node of entry.addedNodes)if(node.nodeType===1)pending.add(node);if(!pending.size||queued)return;queued=true;queueMicrotask(()=>{queued=false;const roots=[...pending].filter(n=>n.isConnected&&![...pending].some(p=>p!==n&&p.contains(n)));pending.clear();for(const node of roots){if(node.matches('img'))markImage(node);enhanceCards(node);}});});
+    observer.observe(app,{childList:true,subtree:true});
+    const merchant=document.getElementById('merchantStorePage');if(merchant)observer.observe(merchant,{childList:true,subtree:true});
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start,{once:true});else start();
 })();

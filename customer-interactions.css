@@ -5,3 +5,28 @@ html.swift-design button:active:not(:disabled){filter:brightness(.94)}
 html.swift-design :is(.product,.store-card){transition-duration:120ms!important;transition-property:border-color,background-color!important}
 @media(prefers-reduced-motion:reduce){html.swift-design :is(.product,.store-card,.shop-bottom-nav button){animation:none!important;transition:none!important}}
 
+/* Loading surfaces reserve the same columns and image space as the real cards. */
+.swift-skeleton-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.swift-skeleton-grid[hidden]{display:none!important}
+.swift-skeleton-card{min-width:0;overflow:hidden;border:1px solid #eceeea;border-radius:18px;padding:12px;background:#fff;pointer-events:none}
+.swift-skeleton-card span{display:block;background:#eef0ec;border-radius:7px}
+.swift-skeleton-photo{aspect-ratio:1/1;margin-bottom:18px;border-radius:12px!important}
+.swift-skeleton-line{height:14px;margin:10px 0;width:90%}
+.swift-skeleton-line.short{width:50%}
+.swift-skeleton-action{height:42px;margin-top:20px;border-radius:12px!important}
+.swift-photo-pending{background:#f1f2ef!important;color:transparent}
+html.swift-design .sq-catalogue[aria-busy=true]{background:transparent;border:0;padding:0;text-align:left}
+html.swift-design .sq-catalogue[aria-busy=true]>p{font-size:13px;color:#6e756e;margin:0 0 16px}
+html.swift-design .shop-bottom-nav{background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+/* A single short screen fade is owned by app-polish.js. */
+html.swift-design body :is(#appScreen,.shop-active-page,#swiftProductDetails[open]){animation:none!important}
+html.swift-design body :is(.product,.store-product){overflow-anchor:none}
+@media(min-width:800px){.swift-skeleton-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(prefers-reduced-motion:no-preference){
+ .swift-skeleton-card{animation:swift-skeleton-breathe 1.5s ease-in-out infinite alternate}
+ @keyframes swift-skeleton-breathe{from{opacity:.5}to{opacity:1}}
+ html.swift-design :is(.customer-product-add,.store-add,.spd-choice-row button,.main-tab-btn,.toggle-btn){transition:background-color 100ms ease,color 100ms ease,border-color 100ms ease,scale 100ms ease!important}
+ html.swift-design :is(.customer-product-add,.store-add,.spd-choice-row button,.main-tab-btn,.toggle-btn):active:not(:disabled){scale:.98}
+}
+@media(prefers-reduced-motion:reduce){.swift-skeleton-card{animation:none!important}html.swift-design body *{scroll-behavior:auto!important}}
+
