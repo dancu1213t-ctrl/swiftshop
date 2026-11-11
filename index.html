@@ -15,7 +15,7 @@ html.swift-entry-loading #authScreen{animation:none!important;transition:none!im
 <script src="pickup-discovery.js?v=town20261101" defer></script>
 <link rel="stylesheet" href="swiftpay.css?v=transfer-centered20261019">
 <script src="product-filters.js?v=store-scope20261027"></script>
-  <meta charset="UTF-8"><link rel="stylesheet" href="customer-interactions.css?v=smooth20261111"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><meta name="swiftshop-build" content="customer-orders-verified-20261004">
+  <meta charset="UTF-8"><link rel="stylesheet" href="guest-browsing.css?v=guest20261111"><link rel="stylesheet" href="customer-interactions.css?v=smooth20261111"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><meta name="swiftshop-build" content="customer-orders-verified-20261004">
 <script src="app-config.js?v=orders20261004"></script><script src="native.js?v=back20261105"></script><link rel="stylesheet" href="mobile.css?v=orders20261004">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script>
@@ -6585,7 +6585,7 @@ html.clo-page-locked{overflow:hidden!important;overscroll-behavior:none!importan
 #customerLiveOrder .clo-shell{width:100%;height:100%;max-height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;scrollbar-gutter:stable}
 </style><style id="admin-plan-payments-style">#adminTabPlans{padding:24px;background:white;border:1px solid #e1e6df;border-radius:18px;color:#2c3b31}#adminTabPlans h2{font-size:21px;font-weight:700;margin:0 0 8px}.ap-controls{display:flex;gap:12px;align-items:center;margin:20px 0;flex-wrap:wrap}#adminTabPlans button{border:1px solid #dce4dc;background:white;padding:11px 15px;border-radius:9px;font:600 12px inherit;cursor:pointer}#adminTabPlans button:disabled{opacity:.5;cursor:wait}#adminTabPlans select{padding:10px;border:1px solid #dde4db;background:white;border-radius:9px}.ap-order{padding:20px 0;border-top:1px solid #edf0e9;display:grid;grid-template-columns:1fr auto;gap:16px}.ap-order strong{font-size:14px}.ap-order p{font-size:12px;color:#74836d;line-height:1.7;margin:6px 0;overflow-wrap:anywhere}.ap-order small{font-size:10px;color:#899580}.ap-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ap-actions button:first-child{background:#234b35!important;color:white}#apNotice{font-size:12px;margin:14px 0;line-height:1.6}@media(max-width:600px){#adminTabPlans{padding:18px}.ap-order{grid-template-columns:1fr}.ap-actions{justify-content:start}}</style><link rel="stylesheet" href="welcome-theme.css?v=orders20261004"><link rel="icon" type="image/png" href="favicon.png?v=brand20261029"><link rel="apple-touch-icon" href="apple-touch-icon.png?v=brand20261029"><link rel="stylesheet" href="delivery-notifications.css?v=orders20261004"><link rel="stylesheet" href="app-polish.css?v=orders20261004"><link rel="stylesheet" href="premium-theme.css?v=orders20261004"><link rel="stylesheet" href="app-design.css?v=orders20261004"><link rel="stylesheet" href="app-quality.css?v=customer-refinement20261007"><link rel="stylesheet" href="app-promotions.css?v=orders20261004"><link rel="stylesheet" href="admin-email-announcements.css?v=20261008"><link rel="stylesheet" href="live-deals.css?v=orders20261004">
 <style>#customerAuthCode[hidden]{display:none!important}#customerAuthEmail,#customerAuthCode{box-sizing:border-box;width:100%;margin-top:10px;padding:13px;border:1px solid #d9ddd8;border-radius:12px;font-size:16px;background:#fff;color:#18231c}#customerAuthCode{letter-spacing:3px}#profilePhone[readonly]{color:#5b625c}</style>
-<script>document.documentElement.classList.add("swift-awaiting-auth","swift-restoring-auth");</script><style>html.swift-awaiting-auth #appScreen{display:none!important}html.swift-restoring-auth #authScreen{visibility:hidden}</style>
+<script>document.documentElement.classList.add("swift-guest-browsing");</script><style>html.swift-awaiting-auth #appScreen{display:none!important}html.swift-restoring-auth #authScreen{visibility:hidden}</style>
 <style id="merchant-slider-polish">
 /* Campaign content and store actions stay unchanged; one consistent carousel surface. */
 html.swift-design #appScreen #merchantBannerSlider{max-width:none;margin:18px 0 24px;border:1px solid #e8e6e1;border-radius:24px;background:#faf8f4;box-shadow:0 8px 30px #34241508;position:relative;overflow:hidden}
@@ -8222,6 +8222,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   finally{refreshing=false;}
  }
  async function open(){
+  if(!window.SwiftCustomerAuth?.signedIn){await window.SwiftCustomerAuth?.require('Sign in to use SwiftRide.',()=>open());return;}
   if(panel.hidden){previousToggle=document.querySelector('.hero-toggle-row .toggle-btn.active');if(previousToggle)previousToggle.classList.remove('active');button.classList.add('active');}
   panel.hidden=false;button.setAttribute('aria-expanded','true');$('crTitle').focus({preventScroll:true});
   $('crName').value=localStorage.getItem('userName')||'';$('crPhone').value=localStorage.getItem('contactPhone')||(String(localStorage.getItem('userPhone')||'').startsWith('account:')?'':localStorage.getItem('userPhone'))||'';
@@ -8275,7 +8276,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   }catch(e){if(token===fareVersion){const message=errorMessage(e);$('crFareDetails').textContent=message;$('fleetNote').textContent=message;if(authIssue(e))notice(message);}}finally{fareBusy=false;}
  };
  $('crForm').onsubmit=async event=>{
-  if(!window.SwiftCustomerAuth?.signedIn){event.preventDefault();await window.SwiftCustomerAuth?.require('Sign in to request a ride.',()=>window.openSwiftRide?.());return;}
+  if(!window.SwiftCustomerAuth?.signedIn){event.preventDefault();await window.SwiftCustomerAuth?.require('Sign in to request a ride.',()=>open());return;}
   event.preventDefault();if(busy)return;if(ride){bookingNotice(terminal(ride.status)?'Tap Request another ride to start a new trip.':'You already have a ride. Open your tracking to see it.');return;}
   if(!pickup||!dropoff||!pending&&(!pinsConfirmed.pickup||!pinsConfirmed.dropoff)){bookingNotice('Confirm your pickup pin and destination pin on the map first.');return;}
   if(!$('crName').value.trim()||$('crPhone').value.trim().length<7){bookingNotice('Enter your name and a phone number of at least 7 characters.');$('crForm').reportValidity();return;}if(!$('crForm').reportValidity()){bookingNotice('Please complete the highlighted fields.');return;}
@@ -9583,6 +9584,7 @@ function closeCart() {
 
   function goToOrder() {
     if(!Object.values(cart).some(item=>Number(item.q)>0)&&!localStorage.getItem('tacoOrder')){alert('Add an item before checkout.');return;}
+    if(!window.SwiftCustomerAuth?.signedIn){window.SwiftCustomerAuth?.require('Sign in to continue to checkout.',()=>window.goToOrder());return;}
     closeCart();
     const box = document.getElementById("orderBox");
     if (box) box.style.display = "block";   // ✅ SHOW ORDER BOX
@@ -13524,7 +13526,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['swiftDeliveryFeeInfo','commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['customerSignInDialog','swiftDeliveryFeeInfo','commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -14060,10 +14062,10 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=chat20261020"></script><script src="app-polish.js?v=smooth20261111"></script><script src="app-design.js?v=smooth20261111"></script><script src="app-quality.js?v=smooth20261111"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
+});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=guest20261111"></script><script src="app-polish.js?v=smooth20261111"></script><script src="app-design.js?v=smooth20261111"></script><script src="app-quality.js?v=smooth20261111"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=admin-code20261030"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=commerce20261031"></script>
-<script src="customer-auth.js?v=signin-restored20261020"></script><script src="account-requests.js?v=orders20261004"></script>
+<script src="customer-auth.js?v=guest20261111"></script><script src="account-requests.js?v=orders20261004"></script>
 <script src="merchant-delivery-fees.js?v=20261009"></script><script src="merchant-admin-requests.js?v=full-access20261024"></script><link rel="stylesheet" href="merchant-management.css?v=20261009"><link rel="stylesheet" href="offer-ordering.css?v=quantities20261102b"><script src="offer-ordering.js?v=quantities20261102b"></script>
 <link rel="stylesheet" href="pure-offers.css?v=white20261010"><link rel="stylesheet" href="offer-admin-tools.css?v=map-controls20261028b"><script src="offer-admin-tools.js?v=district-flow20261031"></script><script src="offer-pickups.js?v=20261028"></script><script src="pure-offers.js?v=district-flow20261031"></script>
 <script src="product-cutouts.js?v=incremental20261018"></script>
@@ -14107,7 +14109,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 #customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
 </style>
 <link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=pricing20261106"></script></body>
-</html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=pricing20261105"></script><script src="swiftpay.js?v=pricing20261105"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
+</html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=pricing20261105"></script><script src="swiftpay.js?v=guest20261111"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
 

@@ -37,7 +37,37 @@
  @media(max-width:480px){#authScreen.auth-screen{padding:24px 16px!important}#authScreen #loginBox{padding:24px!important}}
  `;layout.textContent=layout.textContent.replace('#authScreen.auth-screen{display:grid!important','#authScreen.auth-screen:not([style*="display: none"]):not([style*="display:none"]){display:grid!important').replaceAll('#authScreen','html.swift-design #authScreen');document.body.append(layout);
 
- let signedIn=false;
+ let signedIn=false,pendingAction=null,authReturnFocus=null;
+ const authRoot=document.getElementById('authScreen');
+ // Admin authentication stays independent of the customer dialog.
+ const adminBox=document.getElementById('adminLoginBox');if(adminBox)document.body.append(adminBox);
+ const authDialog=make('dialog');authDialog.id='customerSignInDialog';authDialog.setAttribute('aria-label','Sign in or create an account');
+ const authHead=make('header'),context=make('p','Sign in to continue.'),dismiss=make('button','×');
+ context.id='customerSignInContext';context.setAttribute('role','status');dismiss.type='button';dismiss.setAttribute('aria-label','Continue browsing');
+ authHead.append(context,dismiss);authDialog.append(authHead,authRoot);document.body.append(authDialog);
+ const browse=make('button','Continue browsing');browse.type='button';browse.className='guest-continue-browsing';login.append(browse);
+ function closeAuth(){if(busy)return;pendingAction=null;authDialog.close();}
+ dismiss.onclick=browse.onclick=closeAuth;
+ authDialog.addEventListener('cancel',event=>{if(busy)event.preventDefault();else pendingAction=null;});
+ authDialog.addEventListener('close',()=>{document.documentElement.classList.remove('swift-auth-open');authRoot.style.display='none';password.value=confirm.value=code.value='';pendingAction=null;window.SwiftNavigation?.refresh();if(authReturnFocus?.isConnected)authReturnFocus.focus({preventScroll:true});});
+ authDialog.addEventListener('click',event=>{if(event.target!==authDialog||busy)return;const r=authDialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)closeAuth();});
+ function browseHome(){
+  document.documentElement.classList.remove('swift-awaiting-auth','swift-restoring-auth');document.documentElement.classList.toggle('swift-guest-browsing',!signedIn);
+  document.getElementById('customerSessionRestore').hidden=true;
+  if(!authDialog.open)authRoot.style.display='none';document.getElementById('appScreen').style.display='block';
+ }
+ function clearIdentity(){
+  for(const key of ['userPhone','contactPhone','userName','loggedIn','points'])localStorage.removeItem(key);
+  window.userPhone=null;customerName='';customerPhone='';customerEmail='';
+  window.SwiftCartDraft?.prepare();window.updateCartBubble?.();
+ }
+ function promptAuth(message='Sign in to continue.',resume){
+  if(typeof resume==='function')pendingAction=resume;
+  context.textContent=message;document.documentElement.classList.add('swift-auth-open');authRoot.style.display='flex';
+  if(!authDialog.open){authReturnFocus=document.activeElement;authDialog.inert=false;authDialog.showModal();}
+  window.SwiftNavigation?.refresh();
+ }
+
  let state='signin',busy=false,pendingEmail='',pendingName='',pendingPhone='',resendAfter=0;
  const name=document.getElementById('userName'),phone=document.getElementById('userPhone');
  name.setAttribute('aria-label','Full name');phone.setAttribute('aria-label','Contact phone number');
@@ -68,7 +98,7 @@
  function validatePassword(isNew=false){if(!password.value)throw Error('Enter your password.');if(isNew&&password.value.length<8)throw Error('Use at least 8 characters for your password.');if(isNew&&password.value!==confirm.value)throw Error('Passwords do not match.');}
  function readContact(){const n=name.value.trim(),p=phone.value.trim(),digits=p.replace(/\D/g,'');if(!n)throw Error('Enter your full name.');if(!(digits.length===7||/^[1-9]\d{7,14}$/.test(digits)))throw Error('Enter a valid contact number, including country code if outside Belize.');pendingName=n;pendingPhone=p;}
  async function getSession(){const r=await customerDataClient.auth.getSession();if(r.error)throw r.error;return r.data.session;}
- function authScreen(){document.getElementById('appScreen').style.display='none';document.getElementById('authScreen').style.display='flex';}
+ function authScreen(){browseHome();promptAuth(context.textContent||'Sign in to continue.');}
  async function loadProfile(args={p_name:null,p_phone:null}){const r=await customerDataClient.rpc('swift_customer_profile',args).abortSignal(AbortSignal.timeout(10000));if(r.error)throw r.error;return r.data;}
  async function finish(animate=false){
   let p=await loadProfile();
@@ -81,13 +111,14 @@
    }
   }
   if(!p){state='contact';status.textContent='';render();authScreen();return false;}
+  const resume=pendingAction;pendingAction=null;
   signedIn=true;
   localStorage.setItem('userName',p.name||'Customer');localStorage.setItem('userPhone',p.phone);localStorage.setItem('contactPhone',p.contact_phone||(!String(p.phone).startsWith('account:')?p.phone:''));localStorage.setItem('points',p.points||0);localStorage.setItem('loggedIn','true');customerName=p.name;customerPhone=p.phone;customerEmail=p.email;window.userPhone=p.phone;
-  password.value=confirm.value=code.value='';document.documentElement?.classList.remove('swift-awaiting-auth');
+  password.value=confirm.value=code.value='';document.documentElement?.classList.remove('swift-awaiting-auth','swift-guest-browsing');window.SwiftCartDraft?.adoptGuest();if(authDialog.open)authDialog.close();
   document.getElementById('authScreen').style.display='none';document.getElementById('appScreen').style.display='none';
-  const ready=()=>{enterApp();window.dispatchEvent(new Event('swift-customer-session-ready'));};if(animate&&window.showSwiftShopWelcome)window.showSwiftShopWelcome(ready);else ready();return true;
+  const ready=()=>{enterApp();window.dispatchEvent(new Event('swift-customer-session-ready'));if(typeof resume==='function')queueMicrotask(()=>{Promise.resolve(resume()).catch(()=>{window.openCart?.();});});};ready();return true;
  }
- window.SwiftCustomerAuth={get signedIn(){return signedIn;},async require(){try{const r=await customerDataClient.auth.getUser();if(!r.error&&r.data.user?.email_confirmed_at&&signedIn)return true;}catch{}await this.reconnect();return false;},async reconnect(){
+ window.SwiftCustomerAuth={get signedIn(){return signedIn;},async require(message='Sign in to continue.',resume){if(signedIn){try{const r=await customerDataClient.auth.getUser();if(!r.error&&r.data.user?.email_confirmed_at)return true;}catch{}}signedIn=false;document.documentElement.classList.add('swift-guest-browsing');promptAuth(message,resume);return false;},async reconnect(){
    signedIn=false;
    try{const r=await customerDataClient.auth.getSession();if(r.error||!r.data.session)await customerDataClient.auth.signOut({scope:'local'}).catch(()=>{});}catch{}
    state='signin';password.value=confirm.value=code.value='';status.textContent='Your session expired. Sign in again to continue.';document.documentElement.classList.remove('swift-awaiting-auth','swift-restoring-auth');restorePanel.hidden=true;render();authScreen();
@@ -126,7 +157,7 @@
  resend.onclick=async()=>{if(busy)return;if(Date.now()<resendAfter){status.textContent='Please wait a minute before requesting another code.';return;}busy=true;render();try{const r=state==='verify-signup'?await customerDataClient.auth.resend({type:'signup',email:pendingEmail}):await customerDataClient.auth.signInWithOtp({email:pendingEmail,options:{shouldCreateUser:false}});if(r.error)throw r.error;resendAfter=Date.now()+60000;status.textContent='A new code has been sent. Check your inbox and spam folder.';}catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
  change.onclick=async()=>{if(busy)return;busy=true;render();try{const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error)throw r.error;clearDraft();state='signin';status.textContent='';}catch(e){status.textContent=errorText(e);}finally{busy=false;render();}};
  for(const input of [email,password,confirm,code,name,phone])input.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();window.handleLogin();}});
- const logout=window.handleLogout;window.handleLogout=async function(...args){if(!window.swiftLogoutConfirmed&&!confirmLogout())return;const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error){alert(r.error.message);return;}signedIn=false;document.documentElement?.classList.add('swift-awaiting-auth');clearDraft();state='signin';render();window.swiftLogoutConfirmed=true;return logout.apply(this,args);};
+ const logout=window.handleLogout;window.handleLogout=async function(...args){if(!window.swiftLogoutConfirmed&&!confirmLogout())return;const r=await customerDataClient.auth.signOut({scope:'local'});if(r.error){alert(r.error.message);return;}signedIn=false;document.documentElement?.classList.add('swift-guest-browsing');clearDraft();state='signin';render();window.swiftLogoutConfirmed=true;return logout.apply(this,args);};
  function confirmLogout(){return window.confirm('Sign out of SwiftShop on this device?');}
  render();
  const profileNameField=document.getElementById('profileName');
@@ -151,17 +182,23 @@
  const phoneField=document.getElementById('profilePhone');if(phoneField){phoneField.readOnly=true;phoneField.title='Contact support to change the account phone safely.';}
  const restorePanel=document.getElementById('customerSessionRestore');
  async function restoreSession(){
-  try{const r=await customerDataClient.auth.getSession();if(r.error)throw r.error;
-   if(!r.data.session?.user?.email_confirmed_at){restorePanel.hidden=true;authScreen();return;}
-   document.getElementById('authScreen').style.display='none';restorePanel.hidden=false;
-   document.getElementById('customerSessionRestoreStatus').textContent='Welcome back';
-   document.getElementById('customerSessionRetry').hidden=true;document.getElementById('customerSessionLogout').hidden=true;
-   if(await finish(true))restorePanel.hidden=true;else{restorePanel.hidden=true;authScreen();}
-  }catch(e){if(/invalid refresh token|refresh_token_not_found|refresh_token_already_used|session_not_found|auth session missing|jwt expired/i.test([e.code,e.message].join(' '))){restorePanel.hidden=true;state='signin';password.value=confirm.value=code.value='';status.textContent='Your session expired. Sign in again to continue.';render();authScreen();}else{document.getElementById('authScreen').style.display='none';restorePanel.hidden=false;document.getElementById('customerSessionRestoreStatus').textContent='Could not reconnect. Your saved session has not been signed out.';document.getElementById('customerSessionRetry').hidden=false;document.getElementById('customerSessionLogout').hidden=false;}}
-  finally{document.documentElement?.classList.remove('swift-restoring-auth');}
+  browseHome();
+  try{
+   const r=await customerDataClient.auth.getSession();if(r.error)throw r.error;
+   if(!r.data.session?.user?.email_confirmed_at){clearIdentity();browseHome();return;}
+   // The profile RPC verifies identity. A missing contact is collected only on a private action.
+   const profile=await loadProfile();
+   if(profile)await finish(false);else browseHome();
+  }catch(e){
+   if(/invalid refresh token|refresh_token_not_found|refresh_token_already_used|session_not_found|auth session missing|jwt expired/i.test([e.code,e.message].join(' '))){signedIn=false;await customerDataClient.auth.signOut({scope:'local'}).catch(()=>{});clearIdentity();if(window.swiftCatalogueState==='error'&&typeof getProducts==='function')getProducts().then(rows=>{allProducts=rows;window.render?.();});}
+   browseHome();
+  }finally{document.documentElement.classList.remove('swift-restoring-auth');}
  }
+ // Keep private profile data behind the same verified customer sign-in.
+ const profileOpen=window.openProfile;
+ if(profileOpen)window.openProfile=function(...args){if(!signedIn){promptAuth('Sign in to view your profile.',()=>profileOpen.apply(this,args));return;}return profileOpen.apply(this,args);};
  document.getElementById('customerSessionRetry').onclick=restoreSession;
- document.getElementById('customerSessionLogout').onclick=async()=>{await window.handleLogout();restorePanel.hidden=true;authScreen();};
+ document.getElementById('customerSessionLogout').onclick=async()=>{await window.handleLogout();restorePanel.hidden=true;browseHome();};
  restoreSession();
  });
 })();

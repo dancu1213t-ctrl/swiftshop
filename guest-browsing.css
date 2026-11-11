@@ -1,0 +1,26 @@
+/* Guest entry and one contained sign-in surface. */
+html:not(.swift-auth-open) body #authScreen{display:none!important}
+html.swift-design body #customerSignInDialog{position:fixed!important;inset:0!important;margin:auto!important;width:min(460px,calc(100vw - 24px))!important;height:fit-content!important;min-height:0!important;max-width:calc(100vw - 24px)!important;max-height:calc(100dvh - 32px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))!important;padding:0!important;border:1px solid #e9eae7!important;border-radius:24px!important;background:#fff!important;color:#202420!important;box-sizing:border-box!important;overflow:auto!important;overscroll-behavior:contain!important;box-shadow:0 20px 80px #0002!important}
+#customerSignInDialog:not([open]){display:none!important}
+#customerSignInDialog::backdrop{background:#17201ab3}
+html.swift-design body #customerSignInDialog>header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 22px 0;background:#fff;position:sticky;top:0;z-index:2}
+#customerSignInContext{font-size:13px;font-weight:500;line-height:1.5;color:#697268;margin:0;max-width:320px}
+html.swift-design body #customerSignInDialog>header button{flex:0 0 40px;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:#f1f3ee;color:#202420;font-size:25px;line-height:1;cursor:pointer}
+html.swift-design body #customerSignInDialog #authScreen.auth-screen{display:block!important;position:static!important;min-height:0!important;height:auto!important;width:100%!important;max-width:100%!important;margin:0!important;padding:0!important;background:#fff!important;overflow:visible!important}
+html.swift-design body #customerSignInDialog #customerAuthHero{display:none!important}
+html.swift-design body #customerSignInDialog #loginBox{position:static!important;width:100%!important;max-width:100%!important;margin:0!important;padding:10px 24px 24px!important;background:white!important;box-shadow:none!important;border-radius:0!important;box-sizing:border-box!important}
+html.swift-design body #customerSignInDialog #loginBox .sd-login-logo{width:44px!important;height:44px!important;margin:0 0 8px!important}
+html.swift-design body #customerSignInDialog #loginBox h2{font-size:26px!important;line-height:1.2!important;margin:8px 0!important;letter-spacing:-.6px!important}
+html.swift-design body #customerSignInDialog #loginBox :is(.login-slogan,.login-steps){display:none!important}
+html.swift-design body #customerSignInDialog #loginBox input{height:48px!important;margin:6px 0 12px!important;font-size:16px!important}
+html.swift-design body #customerSignInDialog #loginBox .guest-continue-browsing{background:#fff!important;color:#586256!important;box-shadow:none!important;border:0!important;font-size:13px!important}
+html.swift-design body #customerSignInDialog #loginBox #customerAuthRemember{display:none!important}
+html.swift-design body #customerSignInDialog #loginBox button[onclick="handleLogin()"]{background:#111!important;color:#fff!important;box-shadow:none!important}
+html.swift-design body #customerSignInDialog #loginBox #customerAuthRecover{min-height:30px!important;margin-top:4px!important}
+html.swift-design body #customerSignInDialog .sq-login-privacy{position:static!important;display:block!important;width:auto!important;min-height:28px!important;margin:0 auto 12px!important;padding:6px 12px!important;font-size:12px!important;background:transparent!important;box-shadow:none!important;border:0!important;color:#697268!important}
+html.swift-guest-browsing .sd-header-balance .sd-balance-amount,html.swift-guest-browsing #deliveryNotificationBell :is(.dn-count,.dn-badge){display:none!important}
+html.swift-guest-browsing .sd-header-balance::after{content:'Sign in';font-size:12px;font-weight:600}
+html.swift-guest-browsing .sd-header-balance .swiftpay-balance-tag{display:none!important}
+#customerSignInDialog button:focus-visible{outline:2px solid #232d23;outline-offset:3px}
+@media(max-height:650px){html.swift-design body #customerSignInDialog{max-height:calc(100dvh - 16px)!important}html.swift-design body #customerSignInDialog #loginBox{padding:8px 20px 20px!important}}
+@media(prefers-reduced-motion:no-preference){#customerSignInDialog[open]{animation:guest-auth-enter 160ms ease-out}@keyframes guest-auth-enter{from{opacity:.6}to{opacity:1}}}

@@ -147,7 +147,7 @@
     finally{openingResource=false;}
   }
   window.SwiftDeliveryNotifications = { record, sync, promotions(promos){const liveIds=new Set(promos.map(p=>'promotion:'+p.id));const rows=read().filter(row=>row.kind!=='promotion'||liveIds.has(row.id));for(const p of promos){const id='promotion:'+p.id;if(!rows.some(row=>row.id===id))rows.push({id,kind:'promotion',orderId:p.id,title:p.title,body:p.body,time:p.published_at,read:false});}rows.sort((a,b)=>Date.parse(b.time)-Date.parse(a.time));write(rows);render();} };
-  function openInbox(){render();if(!panel.open)panel.showModal();sync();}
+  function openInbox(){if(!window.SwiftCustomerAuth?.signedIn){window.SwiftCustomerAuth?.require('Sign in to see your notifications.',()=>openInbox());return;}render();if(!panel.open)panel.showModal();sync();}
   bell.onclick=openInbox;
   window.SwiftDeliveryNotifications.open=openInbox;
   panel.querySelector('[data-read-all]').onclick=()=>{write(read().map(row=>({...row,read:true})));render();};
