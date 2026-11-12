@@ -1,11 +1,11 @@
 html.swift-entry-loading::before{display:none!important}
-#swiftLaunch{position:fixed!important;inset:0!important;z-index:2147483647!important;display:grid!important;place-items:center!important;background:#ff6a00!important;visibility:visible!important;pointer-events:none!important;overflow:hidden!important;contain:strict;animation:swiftLaunchExit .22s cubic-bezier(.2,.7,.2,1) 1.08s forwards}
+#swiftLaunch{position:fixed!important;inset:0!important;z-index:2147483647!important;display:grid!important;place-items:center!important;background:#ff6a00!important;visibility:visible!important;pointer-events:none!important;overflow:hidden!important;contain:strict;animation:swiftLaunchExit .5s cubic-bezier(.2,.7,.2,1) 1.9s forwards}
 #swiftLaunch .launch-stage{position:relative;width:270px;height:150px;display:grid;place-items:center}
-#swiftLaunch .launch-word{position:absolute;font:800 44px/1 Inter,system-ui,sans-serif;letter-spacing:-2px;color:#fff;animation:swiftLaunchWord .48s cubic-bezier(.2,.7,.2,1) both}
-#swiftLaunch .launch-shapes{position:absolute;display:flex;gap:12px;align-items:center;animation:swiftLaunchShapes .48s ease-in-out .34s both}
-#swiftLaunch .launch-shapes i{display:block;width:28px;height:28px;background:#fff;border-radius:50%;animation:swiftLaunchCircle .48s cubic-bezier(.2,.7,.2,1) .34s both}
-#swiftLaunch .launch-shapes i+i{border-radius:6px;animation:swiftLaunchSquare .48s cubic-bezier(.2,.7,.2,1) .34s both}
-#swiftLaunch .launch-logo{position:absolute;width:112px;height:112px;object-fit:contain;border-radius:24px;animation:swiftLaunchLogo .35s cubic-bezier(.2,.7,.2,1) .73s both}
+#swiftLaunch .launch-word{position:absolute;font:800 44px/1 Inter,system-ui,sans-serif;letter-spacing:-2px;color:#fff;animation:swiftLaunchWord .75s cubic-bezier(.2,.7,.2,1) both}
+#swiftLaunch .launch-shapes{position:absolute;display:flex;gap:12px;align-items:center;animation:swiftLaunchShapes .65s ease-in-out .58s both}
+#swiftLaunch .launch-shapes i{display:block;width:28px;height:28px;background:#fff;border-radius:50%;animation:swiftLaunchCircle .65s cubic-bezier(.2,.7,.2,1) .58s both}
+#swiftLaunch .launch-shapes i+i{border-radius:6px;animation:swiftLaunchSquare .65s cubic-bezier(.2,.7,.2,1) .58s both}
+#swiftLaunch .launch-logo{position:absolute;width:112px;height:112px;object-fit:contain;border-radius:24px;animation:swiftLaunchLogo .4s cubic-bezier(.2,.7,.2,1) 1.13s both}
 @keyframes swiftLaunchWord{0%{opacity:0;transform:translate3d(0,8px,0)}25%,65%{opacity:1;transform:translate3d(0,0,0)}100%{opacity:0;transform:scale(.94)}}
 @keyframes swiftLaunchShapes{0%{opacity:0}20%,78%{opacity:1}100%{opacity:0}}
 @keyframes swiftLaunchCircle{0%{transform:translate3d(-22px,0,0) scale(.75)}65%{transform:translate3d(0,0,0) scale(1)}100%{transform:translate3d(15px,0,0) scale(.85)}}
