@@ -19,23 +19,40 @@
     if(label){const text=make('span','home-store-category');text.textContent=label;card.append(text);}
    }
    const src=safe(rows.get(category)?.cover_image);
-   if(card.dataset.homeCover===src)continue;card.dataset.homeCover=src;
+   if(card.dataset.homeCover===src&&(!src||cover.querySelector('.home-store-banner')))continue;card.dataset.homeCover=src;
    cover.querySelector('.home-store-banner')?.remove();card.classList.remove('home-store-has-banner');
    if(!src)continue;
    const img=make('img','home-store-banner');img.alt='';img.loading='lazy';img.decoding='async';img.width=360;img.height=200;
    img.onload=()=>{if(img.isConnected){img.classList.toggle('home-store-artwork',img.naturalWidth/img.naturalHeight>2.15);card.classList.add('home-store-has-banner');}};
-   img.onerror=()=>{img.remove();card.classList.remove('home-store-has-banner');};img.src=src;cover.prepend(img);
+   img.onerror=()=>{img.remove();delete card.dataset.homeCover;card.classList.remove('home-store-has-banner');};img.src=src;cover.prepend(img);
   }
  }
- const coverRequests=new Map(),coverTimes=new Map();
- async function loadCovers(force=false){if(!directory)return;await Promise.resolve(window.SwiftRegions?.ready).catch(()=>{});const categories=[...new Set([...directory.querySelectorAll('[data-store-category]')].map(c=>c.dataset.storeCategory).filter(c=>!window.SwiftRegions||window.SwiftRegions.allowed(c)))].sort();if(!categories.length)return;const key=categories.join('|');if(coverRequests.has(key))return coverRequests.get(key);if(!force&&Date.now()-(coverTimes.get(key)||0)<60000)return;const client=typeof customerDataClient!=='undefined'?customerDataClient:typeof supabaseClient!=='undefined'?supabaseClient:null;if(!client)return;const task=(async()=>{try{const result=await client.from('merchant_storefronts').select('category,cover_image').in('category',categories).abortSignal(AbortSignal.timeout(12000));if(result.error)throw result.error;for(const record of result.data||[])rows.set(record.category,{...rows.get(record.category),...record});coverTimes.set(key,Date.now());paint();}catch{/* Keep existing covers and allow a later retry. */}finally{coverRequests.delete(key);}})();coverRequests.set(key,task);return task;}
+ const pending=new Set(),loaded=new Map();let retryTimer=null;
+ async function loadCovers(force=false){
+  if(!directory)return;
+  await Promise.resolve(window.SwiftRegions?.ready).catch(()=>{});
+  const categories=[...new Set([...directory.querySelectorAll('[data-store-category]')].map(c=>c.dataset.storeCategory).filter(c=>!window.SwiftRegions||window.SwiftRegions.allowed(c)))].filter(c=>!pending.has(c)&&(force||Date.now()-(loaded.get(c)||0)>60000));
+  const client=typeof customerDataClient!=='undefined'?customerDataClient:typeof supabaseClient!=='undefined'?supabaseClient:null;
+  if(!client||!categories.length)return;
+  categories.forEach(c=>pending.add(c));
+  const batches=[];for(let i=0;i<categories.length;i+=3)batches.push(categories.slice(i,i+3));
+  let failed=false;
+  async function worker(){while(batches.length){const group=batches.shift();try{
+   const result=await client.from('merchant_storefronts').select('category,cover_image').in('category',group).abortSignal(AbortSignal.timeout(30000));
+   if(result.error)throw result.error;
+   for(const record of result.data||[])rows.set(record.category,{...rows.get(record.category),...record});
+   group.forEach(c=>loaded.set(c,Date.now()));paint();
+  }catch{failed=true;}finally{group.forEach(c=>pending.delete(c));}}}
+  await Promise.all([worker(),worker()]);
+  if(failed&&!retryTimer)retryTimer=setTimeout(()=>{retryTimer=null;if(document.visibilityState!=='hidden')loadCovers();},5000);
+ }
  window.SwiftHomeStores={update(records){for(const row of records||[])if(row?.category)rows.set(row.category,{...rows.get(row.category),...row});paint();loadCovers();}};
  document.addEventListener('DOMContentLoaded',()=>{
   directory=document.getElementById('shopStoreDirectory');if(!directory)return;
   const heading=directory.querySelector('h2'),subtitle=directory.querySelector(':scope > p');if(heading)heading.textContent='Explore local stores';if(subtitle)subtitle.textContent='Browse menus, discover offers, and shop your local favourites.';
   directory.classList.add('home-store-directory');paint();loadCovers();
-  const row=directory.querySelector('.store-directory-row');if(row)new MutationObserver(records=>{if(records.some(r=>r.addedNodes.length))paint();}).observe(row,{childList:true});
+  const row=directory.querySelector('.store-directory-row');if(row)new MutationObserver(records=>{if(records.some(r=>r.addedNodes.length)){paint();loadCovers();}}).observe(row,{childList:true});
   window.addEventListener('swift-region-change',()=>{paint();loadCovers();});
-  window.addEventListener('swift-store-publication-changed',()=>loadCovers(true));
+  window.addEventListener('swift-store-publication-changed',()=>loadCovers(true));window.addEventListener('online',()=>loadCovers());window.addEventListener('swift-customer-session-ready',()=>loadCovers());document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')loadCovers();});
  });
 })();
