@@ -218,3 +218,23 @@ html.swift-design body #swiftCreditTransferDialog.shop-active-page{
 #swiftCreditTransferDialog [data-transfer-notice]{font-size:12px;line-height:1.65}
 #swiftCreditTransferDialog>.sp-bottom-close{margin-top:20px!important}
 @media(max-width:360px){html.swift-design body #swiftCreditTransferDialog,html.swift-design body #swiftCreditTransferDialog.shop-active-page{padding:22px 18px 16px!important;width:calc(100% - 24px)!important}}
+
+/* Card and wallet content only: preserve the existing safe header position. */
+html.swift-design body #swiftPayPage .swiftpay-card{border-radius:22px!important;padding:26px!important;border:1px solid #ffffff22!important;box-shadow:0 14px 30px #1420161a!important;min-height:290px!important}
+html.swift-design body #swiftPayPage .swiftpay-card-top{margin-bottom:22px!important}
+html.swift-design body #swiftPayPage .swiftpay-card-top>strong{font-size:25px!important}
+html.swift-design body #swiftPayPage .swiftpay-card-amount{font-size:38px!important;letter-spacing:-1px!important}
+html.swift-design body #swiftPayPage .sp-card-number{margin:23px 0 19px;display:grid;gap:7px;color:white}
+html.swift-design body #swiftPayPage .sp-card-number small{font-size:9px;letter-spacing:1.6px;opacity:.7}
+html.swift-design body #swiftPayPage .sp-card-number span{font:500 clamp(16px,4vw,23px)/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:2px;white-space:nowrap;color:#fff}
+html.swift-design body #swiftPayPage .swiftpay-card-bottom{margin-top:0!important;align-items:end!important}
+html.swift-design body #swiftPayPage .swiftpay-card-bottom strong{font-size:13px!important;letter-spacing:.6px!important;text-transform:uppercase}
+html.swift-design body #swiftPayPage .sp-contactless-mark{font:22px/1 monospace;letter-spacing:-5px;transform:rotate(-8deg);opacity:.7}
+html.swift-design body #swiftPayPage .swiftpay-recharge{background:white!important;border:1px solid #e9ebe6!important;border-radius:18px!important;padding:20px!important;box-sizing:border-box}
+html.swift-design body #swiftPayPage .swiftpay-recharge h2{font-size:18px!important;letter-spacing:-.4px}
+html.swift-design body #swiftPayPage .swiftpay-recharge p{font-size:13px!important;line-height:1.6!important;color:#697168!important}
+html.swift-design body #swiftPayPage .swiftpay-section{border-top:1px solid #e7eae4!important;padding-top:20px!important}
+html.swift-design body #swiftPayPage .swiftpay-transaction{padding:16px 0!important;border-bottom:1px solid #eceee9!important;gap:18px!important}
+html.swift-design body #swiftPayPage .sp-palette{gap:7px!important;margin-top:12px!important}
+html.swift-design body #swiftPayPage .sp-colour{font-size:11px!important;padding:8px 10px!important}
+@media(max-width:360px){html.swift-design body #swiftPayPage .swiftpay-card{padding:20px!important}.sp-card-number span{letter-spacing:1px!important}}
