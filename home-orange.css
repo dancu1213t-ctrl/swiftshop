@@ -1,0 +1,20 @@
+/* Home header only. Existing controls keep their handlers. */
+html.swift-design body #appScreen .header{position:relative!important;isolation:isolate!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto auto!important;gap:18px 12px!important;background:#ff6a00!important;color:#fff!important;margin:0 -22px 20px!important;padding:calc(24px + env(safe-area-inset-top,0px)) 22px 24px!important;border-radius:0 0 28px 28px!important;overflow:visible!important}
+html.swift-design body #appScreen .header::before,html.swift-design body #appScreen .header::after{content:none!important;display:none!important;background:none!important}
+html.swift-design body #appScreen .header .sd-brand{display:none!important}
+html.swift-design body #appScreen .header .header-saved-location{grid-column:1!important;grid-row:1!important;display:grid!important;grid-template-columns:46px minmax(0,1fr)!important;column-gap:12px!important;padding:0!important;margin:0!important;color:white!important;min-height:46px!important;background:transparent!important;border:0!important}
+html.swift-design body #appScreen .header .header-saved-location>.sd-icon{display:none!important}
+html.swift-design body #appScreen .header .header-saved-location>span:not(.home-customer-avatar){grid-column:2!important;grid-row:1!important;color:#fff!important;font-size:11px!important;opacity:.9;line-height:1.3!important}
+html.swift-design body #appScreen .header .header-saved-location>strong{grid-column:2!important;grid-row:2!important;color:white!important;font-size:15px!important;line-height:1.4!important}
+html.swift-design body #appScreen .header .home-customer-avatar{grid-column:1!important;grid-row:1/3!important;width:46px!important;height:46px!important;border-radius:50%!important;border:2px solid #fff9!important;background:#fff!important;color:#2a2c28!important;display:grid!important;place-items:center!important;overflow:hidden!important;box-sizing:border-box!important;opacity:1!important}
+.home-customer-avatar img{display:block;width:100%;height:100%;object-fit:cover}.home-customer-avatar svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8}
+html.swift-design body #appScreen .header>p{grid-column:1/-1!important;grid-row:2!important;margin:0!important;color:white!important}
+html.swift-design body #appScreen .header .sd-home-greeting{display:block;color:white!important;font-size:clamp(28px,5vw,38px)!important;line-height:1.15!important}
+html.swift-design body #appScreen .header .sd-home-subtitle{display:block;color:white!important;opacity:.92;font-size:13px!important;line-height:1.5!important;margin-top:8px!important}
+html.swift-design body #appScreen .header #deliveryNotificationBell{grid-column:2!important;grid-row:1!important;background:#ffffff24!important;border:1px solid #ffffff66!important;color:#fff!important}
+html.swift-design body #appScreen .header #deliveryNotificationBell svg{color:white!important;stroke:white!important}
+html.swift-design body #appScreen .header .sd-header-balance{grid-column:1!important;grid-row:3!important;margin:0!important;background:#fff!important;border:0!important;color:#252b23!important}
+html.swift-design body #appScreen .header .sd-header-group{grid-column:2!important;grid-row:3!important;background:#fff!important;border:0!important;color:#252b23!important;padding:10px 12px!important;font-size:11px!important}
+@media(max-width:480px){html.swift-design body #appScreen .header{padding-top:max(28px,env(safe-area-inset-top,0px))!important}.home-customer-avatar{flex-shrink:0}}
+
+html.swift-design body #appScreen .header{margin-inline:calc(-1 * var(--sd-gutter,22px))!important;padding-inline:var(--sd-gutter,22px)!important;box-sizing:border-box!important}
