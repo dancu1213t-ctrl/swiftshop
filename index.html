@@ -8344,23 +8344,23 @@ window.switchToggle=function(button){
     <div id="panel-general" class="category-panel active">
       <div class="categories uber-eats-row">
         <div class="cat-btn active" data-cat="Snack" onclick="setCategory('Snack', this)">
-          <img src="https://i.imgur.com/QduyjdT.png" class="uber-3d-icon" alt="Snacks">
+          <img src="category-snack.svg" class="uber-3d-icon" alt="Snacks">
           <span>Snacks</span>
         </div>
         <div class="cat-btn" data-cat="Drink" onclick="setCategory('Drink', this)">
-          <img src="https://i.imgur.com/Bkge0pn.png" class="uber-3d-icon" alt="Drinks">
+          <img src="category-drink.svg" class="uber-3d-icon" alt="Drinks">
           <span>Drinks</span>
         </div>
         <div class="cat-btn" data-cat="Household" onclick="setCategory('Household', this)">
-          <img src="https://i.imgur.com/j2GmDW5.png" class="uber-3d-icon" alt="Household">
+          <img src="category-household.svg" class="uber-3d-icon" alt="Household">
           <span>Household</span>
         </div>
         <div class="cat-btn" data-cat="Hygiene" onclick="setCategory('Hygiene', this)">
-          <img src="https://i.imgur.com/V5giTO5.png" class="uber-3d-icon" alt="Laundry & Cleaning">
+          <img src="category-hygiene.svg" class="uber-3d-icon" alt="Laundry & Cleaning">
           <span>Laundry & Cleaning</span>
         </div>
         <div class="cat-btn" data-cat="Vegetables" onclick="setCategory('Vegetables', this)">
-          <img src="https://i.imgur.com/YSC5fdN.png" class="uber-3d-icon" alt="Veggies">
+          <img src="category-vegetables.svg" class="uber-3d-icon" alt="Veggies">
           <span>Veggies</span>
         </div>
         <div class="cat-btn" data-cat="Treats" onclick="setCategory('Treats', this)">
@@ -10104,6 +10104,7 @@ async function render() {
       });
     }
 
+    if(!gift&&window.SwiftDeliveryAddress?.notes())msg+='ENTRANCE: '+encodeURIComponent(window.SwiftDeliveryAddress.notes())+'%0A';
     msg += `CUSTOMER: ${userName}%0A`;
     msg += `PHONE: ${userPhone}`;
 
@@ -10157,7 +10158,7 @@ async function render() {
       total:grandTotal,payment:paymentMethod,
       local_shopping:Object.values(cart).every(i=>['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(i.cat)&&!i.offer_id),
       routes:gift?[]:(window.SwiftOfferPickups?.routes(cart,customerCoords)||[...activeBusinesses].map(biz=>`https://www.google.com/maps/dir/?api=1&origin=${storePickupCoordinates(biz)}&destination=${encodeURIComponent(customerCoords)}`)),
-      arrival_notes:gift?gift.address+(gift.message?' · '+gift.message:''):'Delivery area: '+deliveryZone,
+      arrival_notes:gift?gift.address+(gift.message?' · '+gift.message:''):'Delivery area: '+deliveryZone+(window.SwiftDeliveryAddress?.notes()?' · '+window.SwiftDeliveryAddress.notes():''),
       taco_note:hasTacos?(tacoPlace+': '+tacoOrder):'',original_order_number:orderNum,
       delivery_area:deliveryZone,customer_location:customerCoords,
       sender_name:userName,sender_phone:userPhone,gift:gift||null,group:group||null,
@@ -13526,7 +13527,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['customerSignInDialog','swiftDeliveryFeeInfo','commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['swiftDeliveryAddress','customerSignInDialog','swiftDeliveryFeeInfo','commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -14209,3 +14210,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 
 
 
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"><link rel="stylesheet" href="shopping-refresh.css?v=20261111"><script src="shopping-refresh.js?v=20261111"></script>
