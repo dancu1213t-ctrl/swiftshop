@@ -18,3 +18,15 @@ html.swift-design body #appScreen .header .sd-header-group{grid-column:2!importa
 @media(max-width:480px){html.swift-design body #appScreen .header{padding-top:max(28px,env(safe-area-inset-top,0px))!important}.home-customer-avatar{flex-shrink:0}}
 
 html.swift-design body #appScreen .header{margin-inline:calc(-1 * var(--sd-gutter,22px))!important;padding-inline:var(--sd-gutter,22px)!important;box-sizing:border-box!important}
+
+/* The location controller wraps address and district in one group. */
+html.swift-design body #appScreen .header .swift-location-group{grid-column:1!important;grid-row:1!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:5px!important;width:100%!important;max-width:none!important;min-width:0!important}
+html.swift-design body #appScreen .header .swift-location-group .header-saved-location{display:grid!important;grid-template-columns:46px minmax(0,1fr)!important;grid-template-rows:auto auto!important;grid-column:auto!important;grid-row:auto!important;align-items:center!important;min-width:0!important;width:100%!important;min-height:46px!important;height:auto!important}
+html.swift-design body #appScreen .header .swift-location-group .swift-region-bar{padding:0 0 0 58px!important;margin:0!important;max-width:100%!important}
+html.swift-design body #appScreen .header .swift-location-group #swiftRegionName{background:transparent!important;color:white!important;border:0!important;min-height:26px!important;padding:2px 0!important;font-size:11px!important;max-width:100%!important}
+html.swift-design body #appScreen .header .sd-header-balance{align-self:center!important;min-width:0!important;max-width:100%!important;flex-wrap:wrap!important;gap:5px!important;padding:9px 11px!important}
+html.swift-design body #appScreen .header .sd-header-group{align-self:center!important;min-width:0!important;white-space:nowrap!important}
+html.swift-design:not(.swift-keyboard-open) body #appScreen{padding-top:0!important;margin-top:0!important}
+html.swift-design body #appScreen .header{display:grid!important;align-items:center!important;grid-template-columns:minmax(0,1fr) auto!important;grid-template-rows:auto auto auto!important;row-gap:18px!important;min-height:0!important;height:auto!important;box-shadow:0 -100px 0 #ff6a00!important}
+html.swift-design body #appScreen .header .header-saved-location>strong{display:block!important;min-width:0!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+@media(max-width:360px){html.swift-design body #appScreen .header .sd-header-balance{font-size:10px!important;padding:8px!important}.sd-header-balance .sd-balance-label{display:none}html.swift-design body #appScreen .header .sd-header-group{padding:9px!important;font-size:10px!important}}
