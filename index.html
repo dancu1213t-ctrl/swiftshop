@@ -7868,7 +7868,7 @@ window.showLoginWelcome=function(){
   const totalRow=node('cloTotal').parentElement;totalRow.querySelector('span').textContent=isSwiftPay?'Order total · Runner enters this':'Order total';
   let feeRows=node('cloSwiftPayBreakdown');if(!feeRows){feeRows=document.createElement('div');feeRows.id='cloSwiftPayBreakdown';feeRows.innerHTML='<div style="display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:12px"><span>SwiftPay fee</span><b data-fee></b></div><div style="display:flex;justify-content:space-between;gap:16px;padding-top:12px;font-size:13px"><span>Total deducted from SwiftPay</span><b data-deduction></b></div><p data-state style="margin:10px 0 0;font-size:11px;color:#738174"></p>';totalRow.after(feeRows);}
   feeRows.hidden=!isSwiftPay;feeRows.querySelector('[data-fee]').textContent=money((payment?.fee_cents??25)/100);
-  feeRows.querySelector('[data-deduction]').textContent=payment?money((payment.amount_cents+payment.fee_cents)/100):current.snapshot.total==null?'Awaiting invoice':money(Number(current.snapshot.total)+0.15);
+  feeRows.querySelector('[data-deduction]').textContent=payment?money((payment.amount_cents+payment.fee_cents)/100):current.snapshot.total==null?'Awaiting invoice':money(Number(current.snapshot.total)+0.25);
   feeRows.querySelector('[data-state]').textContent=payment?.state==='captured'?'Paid':payment?.state==='released'?'Funds released':payment?.state==='quoted'?'Accept invoice in SwiftPay':'The scanner adds the SwiftPay fee automatically. Do not include it in the amount entered.';
 if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order cancelled';node('cloSubtitle').textContent='Any SwiftPay reservation has been released.';node('cloSteps').replaceChildren();node('cloProgress').replaceChildren();}
   const select=node('cloSelect');select.replaceChildren();records.forEach(r=>{const option=document.createElement('option');option.value=r.id;option.textContent=r.id.slice(0,8).toUpperCase()+' · '+new Date(r.created).toLocaleDateString();select.append(option);});select.value=current.id;scrollArea.scrollTop=previousScroll;
@@ -9984,7 +9984,7 @@ async function render() {
     const hasTacos = !!tacoOrder;
 
     const paymentMethod = document.getElementById("paymentMethod")?.value || "Cash";
-    const walletBalance = typeof getWalletBalance === "function" ? getWalletBalance() : 0;
+
     const tipAmount = Number(document.getElementById('selectedTipAmount')?.value||0);
     if(!Number.isFinite(tipAmount)||tipAmount<0||tipAmount>1000){alert('Choose a valid tip between BZ$0 and BZ$1,000.');return;}
 
@@ -10015,10 +10015,8 @@ async function render() {
     const grandTotal = Math.round((itemsTotal + deliveryFee + platformFee + tipAmount)*100)/100;
     const customerCoords = gift ? gift.address : window.lastCartCoords || "18.0777,-88.5667";
 
-    if (paymentMethod === "SwiftPay" && grandTotal + 0.25 > walletBalance) {
-      alert(`Insufficient Wallet Balance\n\nOrder Total including fee: ${(grandTotal+0.25).toFixed(2)} BZD`);
-      return;
-    }
+    // The authenticated booking RPC validates available funds atomically and reuses
+    // the existing reservation on retries. A cached wallet must not reject it first.
 
     let msg = `SWIFT SHOP OW - NEW ORDER (${orderNum})%0A%0A`;
 
@@ -10184,6 +10182,13 @@ async function render() {
       window.dispatchEvent(new CustomEvent('swift-order-submitted',{detail:{id,snapshot}}));
       return id;
     } catch(error) {
+      if(/insufficient|not enough.*(?:balance|funds|credit)/i.test(error?.message||'')){
+        await window.SwiftPay?.refresh();
+        const available=window.SwiftPay?.availableCents;
+        const detail=Number.isFinite(available)?' Available to spend: BZ$'+(available/100).toFixed(2)+'.':'';
+        if(orderStatus)orderStatus.textContent='Not enough available SwiftPay funds.'+detail+' Money held for other active orders cannot be spent again. Your cart is saved. Review pending orders in SwiftPay or choose another payment method.';
+        return null;
+      }
       if(orderStatus)orderStatus.textContent='Order was not sent. '+(/verified|session|account|profile|sender/i.test(error?.message||'')?'Sign in with your verified email account and check your delivery contact. ':'Check your connection and retry. ')+'Your cart is still saved.';
       console.warn('Order submission could not be confirmed');
       return null;
@@ -14063,7 +14068,7 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=guest20261111"></script><script src="app-polish.js?v=smooth20261111"></script><script src="app-design.js?v=smooth20261111"></script><script src="app-quality.js?v=smooth20261111"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
+});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=guest20261111"></script><script src="app-polish.js?v=smooth20261111"></script><script src="app-design.js?v=smooth20261111"></script><script src="app-quality.js?v=wallet20261114"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="secure-access.js?v=admin-code20261030"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=commerce20261031"></script>
 <script src="customer-auth.js?v=guest20261111"></script><script src="account-requests.js?v=orders20261004"></script>
@@ -14110,7 +14115,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 #customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
 </style>
 <link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=pricing20261106"></script></body>
-</html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=pricing20261105"></script><script src="swiftpay.js?v=qr20261112"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
+</html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=pricing20261105"></script><script src="swiftpay.js?v=wallet20261114"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
 
