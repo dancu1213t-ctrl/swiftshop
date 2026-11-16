@@ -1,5 +1,5 @@
 html.swift-entry-loading::before{display:none!important}
-#swiftLaunch{position:fixed!important;inset:0!important;z-index:2147483647!important;display:grid!important;place-items:center!important;background:#ff6a00!important;visibility:visible!important;pointer-events:none!important;overflow:hidden!important;contain:strict;animation:swiftLaunchExit .5s cubic-bezier(.2,.7,.2,1) 2.5s forwards}
+#swiftLaunch{position:fixed!important;inset:0!important;z-index:2147483647!important;display:grid!important;place-items:center!important;background:#ff6a00!important;visibility:visible!important;pointer-events:none!important;overflow:hidden!important;contain:strict;animation:swiftLaunchExit .5s cubic-bezier(.2,.7,.2,1) 2.8s forwards}
 #swiftLaunch .launch-stage{position:relative;width:270px;height:150px;display:grid;place-items:center}
 #swiftLaunch .launch-word{position:absolute;font:800 44px/1 Inter,system-ui,sans-serif;letter-spacing:-2px;color:#fff;animation:swiftLaunchWord .75s cubic-bezier(.2,.7,.2,1) both}
 #swiftLaunch .launch-shapes{position:absolute;display:flex;gap:12px;align-items:center;animation:swiftLaunchShapes .65s ease-in-out .58s both}
@@ -15,3 +15,8 @@ html.swift-entry-loading::before{display:none!important}
 @media(prefers-reduced-motion:reduce){#swiftLaunch{animation:swiftLaunchExit .12s linear .12s forwards}#swiftLaunch .launch-word,#swiftLaunch .launch-shapes{display:none}#swiftLaunch .launch-logo{animation:none}}
 
 #swiftLaunch .launch-logo{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+
+/* A single lightweight sleigh pass above the logo, while the app loads underneath. */
+#swiftLaunch .launch-santa{position:absolute;width:156px;height:70px;overflow:visible;opacity:0;pointer-events:none;animation:swiftSantaFly 1.35s cubic-bezier(.22,.55,.45,1) 1.4s both;will-change:transform,opacity}
+@keyframes swiftSantaFly{0%{opacity:0;transform:translate3d(-240px,-35px,0) rotate(-9deg)}12%{opacity:1}48%{opacity:1;transform:translate3d(-10px,-91px,0) rotate(0deg)}85%{opacity:1}100%{opacity:0;transform:translate3d(240px,-48px,0) rotate(8deg)}}
+@media(prefers-reduced-motion:reduce){#swiftLaunch .launch-santa{display:none;animation:none;will-change:auto}}
