@@ -33,3 +33,14 @@
 @keyframes festiveSearch{0%,100%{transform:translateX(-3px)}50%{transform:translateX(5px)}}
 @keyframes festiveCelebrate{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
 @media(prefers-reduced-motion:reduce){#customerLiveOrder .festive-prop,#customerLiveOrder .festive-elf{animation:none!important}}
+
+/* Refined character framing and a restrained motion rhythm. */
+#customerLiveOrder .festive-step-art{border-radius:16px;background:#f7f7ef;overflow:hidden;padding:3px;box-sizing:border-box}
+#customerLiveOrder .clo-steps .active .festive-step-art{background:#f3f6ec;box-shadow:inset 0 0 0 1px #e1e8d7}
+#customerLiveOrder .clo-steps .waiting .festive-step-art{opacity:.5;background:transparent}
+#customerLiveOrder .clo-steps .done .festive-step-art{opacity:.75;background:transparent}
+#customerLiveOrder .festive-hero-character{animation-duration:3.4s;animation-timing-function:cubic-bezier(.45,0,.55,1)}
+#customerLiveOrder .festive-hero-character>svg{overflow:visible}
+#customerLiveOrder .festive-delivery-scene:before{content:'';position:absolute;inset:20% 8% 12%;background:#eef2e7;border-radius:50%;z-index:-1}
+#customerLiveOrder .festive-delivery-scene{isolation:isolate}
+@media(prefers-reduced-motion:reduce){#customerLiveOrder .festive-hero-character{animation:none!important}}
