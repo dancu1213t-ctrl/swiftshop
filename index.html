@@ -9810,17 +9810,20 @@ async function render() {
 
   const catalogueAddChecks=new Map();
   async function addCatalogItem(product,button,quantity=1,selection=null){
-    const meta=product.catalog_details||{};if(!selection&&((meta.sizes||[]).length||(meta.colors||[]).length)){window.SwiftProductDetails?.openProduct(product);return false;}
-    selection=selection?{...(selection.size?{size_system:selection.size_system,size:selection.size}:{}),...(selection.color?{color:selection.color}:{})}:null;
-    const lineDetails=selection&&(selection.size||selection.color)?{product_name:product.name,product_id:product.id,selected_options:selection}:null;
-    const lineName=selection?product.name+(selection.size?' — '+selection.size_system+' '+selection.size:'')+(selection.color?' · '+selection.color:''):product.name;
+    const meta=product.catalog_details||{};if(!selection&&((meta.sizes||[]).length||(meta.colors||[]).length||(meta.addons||[]).length)){window.SwiftProductDetails?.openProduct(product);return false;}
+    selection=selection?{...(selection.size?{size_system:selection.size_system,size:selection.size}:{}),...(selection.color?{color:selection.color}:{}),...(selection.addon_id?{addon_id:selection.addon_id}:{})}:null;
+    const addon=selection?.addon_id?(meta.addons||[]).find(a=>a.id===selection.addon_id):null;
+    if(selection?.addon_id&&!addon){alert('This extra changed. Reopen the item.');return false;}
+    const unitPrice=(Math.round(Number(product.price)*100)+Number(addon?.price_cents||0))/100;
+    const lineDetails=(selection&&(selection.size||selection.color||selection.addon_id))||(meta.addons||[]).length?{product_name:product.name,product_id:product.id,selected_options:selection}:null;
+    const lineName=selection?product.name+(selection.size?' — '+selection.size_system+' '+selection.size:'')+(selection.color?' · '+selection.color:'')+(addon?' · '+addon.name:''):product.name;
     if(button?.disabled)return;
     window.SwiftCartDraft?.prepare();
     // The displayed general catalogue is already loaded and checkout revalidates.
     // Add locally without another network round trip for each snack or staple.
     const generalCategory=['Snack','Drink','Household','Hygiene','Vegetables','Treats'].includes(product.category);
     const loaded=generalCategory&&allProducts.find(p=>p.id===product.id&&p.name===product.name&&p.category===product.category&&Number(p.price)===Number(product.price)&&String(p.active).toLowerCase()==='yes');
-    if(loaded)return add(lineName,Number(product.price),button,Number(product.was)||null,product.category,quantity,lineDetails)===true;
+    if(loaded)return add(lineName,unitPrice,button,Number(product.was)||null,product.category,quantity,lineDetails)===true;
     const label=button?.textContent;
     if(button){button.disabled=true;button.textContent='Adding…';button.setAttribute('aria-busy','true');}
     try{
@@ -9841,8 +9844,8 @@ async function render() {
         })();
         check={started,promise};catalogueAddChecks.set(key,check);
       }
-      try{const fresh=await check.promise;const m=fresh?.catalog_details||{};if(((m.sizes||[]).length&&(!(m.sizes||[]).includes(selection?.size)||selection?.size_system!==(m.size_system||'Standard')))||((m.colors||[]).length&&!(m.colors||[]).includes(selection?.color))){window.SwiftProductDetails?.openProduct({...product,...fresh});return false;}}catch(error){catalogueAddChecks.delete(key);throw error;}
-      return add(lineName,Number(product.price),button,Number(product.was)||null,product.category,quantity,lineDetails)===true;
+      try{const fresh=await check.promise;const m=fresh?.catalog_details||{};const freshAddon=selection?.addon_id?(m.addons||[]).find(a=>a.id===selection.addon_id):null;if(selection?.addon_id&&(!freshAddon||freshAddon.price_cents!==addon.price_cents||freshAddon.name!==addon.name)){window.SwiftProductDetails?.openProduct({...product,...fresh});return false;}if(((m.sizes||[]).length&&(!(m.sizes||[]).includes(selection?.size)||selection?.size_system!==(m.size_system||'Standard')))||((m.colors||[]).length&&!(m.colors||[]).includes(selection?.color))){window.SwiftProductDetails?.openProduct({...product,...fresh});return false;}}catch(error){catalogueAddChecks.delete(key);throw error;}
+      return add(lineName,unitPrice,button,Number(product.was)||null,product.category,quantity,lineDetails)===true;
     }catch(error){alert(error.message||'Could not add this item. Please try again.');return false;}
     finally{if(button){button.disabled=false;button.textContent=label;button.removeAttribute('aria-busy');}}
   }
@@ -13829,7 +13832,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   c.append(el('h3',p.name));if(p.was>p.price)c.append(el('del','$'+Number(p.was).toFixed(2)));
   c.append(el('strong','$'+Number(p.price).toFixed(2)+' BZD','store-price'));
   const add=btn(state==='yes'?'Add':'Unavailable',()=>addItem(p,add),'store-add');add.disabled=state!=='yes';c.append(add);
-  const qty=el('small',undefined,'store-item-quantity');qty.dataset.name=p.name;qty.dataset.category=p.category;qty.dataset.price=p.price;c.append(qty);window.attachStoreItemShare(c,p);return c;
+  const qty=el('small',undefined,'store-item-quantity');qty.dataset.name=p.name;qty.dataset.category=p.category;qty.dataset.price=p.price;qty.dataset.productId=p.id??'';c.append(qty);window.attachStoreItemShare(c,p);return c;
  }
  function drawProducts(){const fragment=document.createDocumentFragment();const list=window.SwiftProductFilters.apply(items.filter(p=>(filter==='All'||(p.subcategory||'Items')===filter)&&p.name.toLowerCase().includes(query)),window.SwiftProductFilters.forStore(active));if(!list.length)fragment.append(el('p',items.length?'No matching items.':'No items are available yet.'));const likedItems=saved();for(const p of list)fragment.append(card(p,false,likedItems));grid.replaceChildren(fragment);updateCounts();}
  window.addEventListener('swift-filters-changed',event=>{if(active&&event.detail?.category===active){drawProducts();drawOffers();}});
@@ -13848,7 +13851,7 @@ document.addEventListener('DOMContentLoaded',()=>{
    updateCounts();
   }catch(e){notice.textContent=e.message;}finally{b.disabled=state!=='yes';}
  }
- function updateCounts(){storePage.querySelectorAll('.store-item-quantity').forEach(n=>{const q=Object.entries(cart).filter(([key,i])=>(i.product_name||key)===n.dataset.name&&i.cat===n.dataset.category&&Number(i.p)===Number(n.dataset.price)).reduce((sum,[,i])=>sum+i.q,0);n.textContent=q?q+' in your cart':'';});const count=Object.values(cart).reduce((s,p)=>s+Number(p.q||0),0);toolbar.lastChild.textContent=count?'View cart · '+count:'View cart';}
+ function updateCounts(){storePage.querySelectorAll('.store-item-quantity').forEach(n=>{const q=Object.entries(cart).filter(([key,i])=>(i.product_name||key)===n.dataset.name&&i.cat===n.dataset.category&&((n.dataset.productId&&String(i.product_id)===n.dataset.productId)||Number(i.p)===Number(n.dataset.price))).reduce((sum,[,i])=>sum+i.q,0);n.textContent=q?q+' in your cart':'';});const count=Object.values(cart).reduce((s,p)=>s+Number(p.q||0),0);toolbar.lastChild.textContent=count?'View cart · '+count:'View cart';}
  for(const name of ['add','remove','doneOrder']){const fn=window[name];if(typeof fn==='function')window[name]=function(...args){const result=fn.apply(this,args);updateCounts();return result;};}
  const directory=el('section',undefined,'store-directory');directory.id='shopStoreDirectory';directory.append(el('h2','Visit a store'),el('p','Browse menus, discover offers, and shop your local favourites.'));
  const row=el('div',undefined,'store-directory-row');directory.append(row);
@@ -14135,7 +14138,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
 
-<link rel="stylesheet" href="product-details.css?v=description20261115-20261018"><script src="product-details.js?v=editorial20261101"></script>
+<link rel="stylesheet" href="product-details.css?v=description20261115-20261018"><script src="product-details.js?v=coffee20261115-editorial20261101"></script>
 
 <style id="navigation-screen-isolation">
 [data-swift-nav-muted],[data-swift-nav-muted] *{visibility:hidden!important;pointer-events:none!important}
@@ -14230,3 +14233,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 <script src="wallet-funds.js?v=20261112"></script>
 
 <link rel="stylesheet" href="cart-feedback.css?v=20261115b"><script src="cart-feedback.js?v=20261115b"></script>
+
+<link rel="stylesheet" href="compact-product-cards.css?v=20261115">
