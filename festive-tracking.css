@@ -1,0 +1,35 @@
+/* Artwork stays in normal flow, clear of status text and runner actions. */
+#customerLiveOrder .festive-order-hero{height:104px;margin:8px 0 -18px;position:relative;pointer-events:none;overflow:hidden}
+#customerLiveOrder .festive-order-hero[hidden]{display:none!important}
+#customerLiveOrder .festive-hero-character{position:absolute;width:138px;height:100px;left:clamp(0px,calc((100% - 138px) * var(--festive-progress,0)),100%);bottom:0;animation:festiveTrackingFloat 2.8s ease-in-out 2}
+#customerLiveOrder .festive-order-hero[data-stage="0"]{--festive-progress:0}
+#customerLiveOrder .festive-order-hero[data-stage="1"]{--festive-progress:.167}
+#customerLiveOrder .festive-order-hero[data-stage="2"]{--festive-progress:.333}
+#customerLiveOrder .festive-order-hero[data-stage="3"]{--festive-progress:.5}
+#customerLiveOrder .festive-order-hero[data-stage="4"]{--festive-progress:.667}
+#customerLiveOrder .festive-order-hero[data-stage="5"]{--festive-progress:.833}
+#customerLiveOrder .festive-order-hero[data-stage="6"]{--festive-progress:1}
+#customerLiveOrder .festive-hero-character>svg{width:100%;height:100%;display:block}
+#customerLiveOrder #cloSteps>li{align-items:flex-start!important;min-height:92px!important}
+#customerLiveOrder #cloSteps>li>div{flex:1;min-width:0}
+#customerLiveOrder .festive-step-art{display:block;flex:0 0 74px;width:74px;height:62px;margin-left:auto;pointer-events:none;align-self:center}
+#customerLiveOrder .festive-step-art>svg{display:block;width:100%;height:100%}
+#customerLiveOrder .clo-steps .waiting .festive-step-art{opacity:.65}
+#customerLiveOrder .clo-steps .done .festive-step-art{opacity:.85}
+#customerLiveOrder .festive-delivery-scene{position:relative;width:100%;height:100%;display:flex;align-items:center}
+#customerLiveOrder .festive-santa{display:block;width:82%;height:auto}
+#customerLiveOrder .festive-destination{width:20%;height:55%;position:absolute;right:0;bottom:8px}
+#customerLiveOrder .festive-order-hero[data-stage="5"] .festive-santa{animation:festiveSleighApproach 2.4s ease-in-out 2}
+@keyframes festiveTrackingFloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-4px,0)}}
+@keyframes festiveSleighApproach{0%,100%{transform:translate3d(-8px,0,0) rotate(-3deg)}50%{transform:translate3d(4px,-4px,0) rotate(1deg)}}
+@media(max-width:360px){#customerLiveOrder .festive-step-art{flex-basis:58px;width:58px;height:54px}#customerLiveOrder #cloSteps>li{gap:10px!important}}
+@media(prefers-reduced-motion:reduce){#customerLiveOrder .festive-hero-character,#customerLiveOrder .festive-santa{animation:none!important}}
+#customerLiveOrder .festive-order-hero[data-stage="0"] .festive-prop{animation:festiveSendNote 1.8s ease-out 3}
+#customerLiveOrder .festive-order-hero[data-stage="1"] .festive-prop,#customerLiveOrder .festive-order-hero[data-stage="2"] .festive-prop{animation:festivePrepare 2s ease-in-out 3}
+#customerLiveOrder .festive-order-hero[data-stage="3"] .festive-prop{animation:festiveSearch 2.2s ease-in-out 3}
+#customerLiveOrder .festive-order-hero[data-stage="6"] .festive-elf{transform-origin:67px 80px;animation:festiveCelebrate 1.6s ease-in-out 3}
+@keyframes festiveSendNote{0%,100%{transform:translate(0,0);opacity:1}65%{transform:translate(9px,-5px);opacity:.4}}
+@keyframes festivePrepare{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes festiveSearch{0%,100%{transform:translateX(-3px)}50%{transform:translateX(5px)}}
+@keyframes festiveCelebrate{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@media(prefers-reduced-motion:reduce){#customerLiveOrder .festive-prop,#customerLiveOrder .festive-elf{animation:none!important}}

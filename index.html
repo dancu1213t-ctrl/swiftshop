@@ -7871,6 +7871,7 @@ window.showLoginWelcome=function(){
   feeRows.querySelector('[data-deduction]').textContent=payment?money((payment.amount_cents+payment.fee_cents)/100):current.snapshot.total==null?'Awaiting invoice':money(Number(current.snapshot.total)+0.25);
   feeRows.querySelector('[data-state]').textContent=payment?.state==='captured'?'Paid':payment?.state==='released'?'Funds released':payment?.state==='quoted'?'Accept invoice in SwiftPay':'The scanner adds the SwiftPay fee automatically. Do not include it in the amount entered.';
 if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order cancelled';node('cloSubtitle').textContent='Any SwiftPay reservation has been released.';node('cloSteps').replaceChildren();node('cloProgress').replaceChildren();}
+  window.SwiftFestiveTracking?.render(root,index,current.remote?.phase||'sent',current.registered);
   const select=node('cloSelect');select.replaceChildren();records.forEach(r=>{const option=document.createElement('option');option.value=r.id;option.textContent=r.id.slice(0,8).toUpperCase()+' · '+new Date(r.created).toLocaleDateString();select.append(option);});select.value=current.id;scrollArea.scrollTop=previousScroll;
  }
  window.addEventListener('swiftpay-wallet-updated',()=>{if(root.open)paint();});
@@ -14243,3 +14244,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 <link rel="stylesheet" href="wallet-funds.css?v=popup20261115">
 
 <link rel="stylesheet" href="wallet-layout.css?v=20261115"><script src="wallet-layout.js?v=20261115"></script>
+
+<link rel="stylesheet" href="festive-tracking.css?v=20261116"><script src="festive-tracking.js?v=20261116"></script>
