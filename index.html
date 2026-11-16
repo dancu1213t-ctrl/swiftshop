@@ -10,7 +10,7 @@ html.swift-entry-loading #authScreen{animation:none!important;transition:none!im
 <script>
 (function(){function ready(){const settle=Promise.resolve();settle.then(()=>requestAnimationFrame(()=>requestAnimationFrame(()=>{window.scrollTo({top:0,left:0,behavior:'instant'});document.documentElement.classList.remove('swift-entry-loading');})));}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ready,{once:true});else ready();const root=document.documentElement;let awaiting=root.classList.contains('swift-awaiting-auth');new MutationObserver(()=>{const next=root.classList.contains('swift-awaiting-auth');if(awaiting&&!next){window.scrollTo({top:0,left:0,behavior:'instant'});}awaiting=next;}).observe(root,{attributes:true,attributeFilter:['class']});})();
 </script>
-<script src="customer-reviews.js?v=nostoreratings20261020" defer></script>
+<script src="customer-reviews.js?v=confirmstars20261116" defer></script>
 <script src="customer-usability.js?v=reviewsfinal20261008" defer></script>
 <script src="pickup-discovery.js?v=town20261101" defer></script>
 <link rel="stylesheet" href="swiftpay.css?v=funds20261112">
@@ -10086,8 +10086,8 @@ async function render() {
 
       if (paymentMethod.includes("Online")) {
         msg += `Bank: Belize Bank%0A`;
-        msg += `Account Name: Danilo Cu%0A`;
-        msg += `Account Number: 275378010160000%0A`;
+        msg += `Account Name: SWIFTSHOP%0A`;
+        msg += `Account Number: 275378010160000%0AInstant fund transfer only*%0A`;
       }
 
       msg += `%0A`;
@@ -10232,6 +10232,7 @@ async function render() {
     // 5. Reset Payment Dropdown
     const pm = document.getElementById("paymentMethod");
     if (pm) pm.selectedIndex = 0;
+    window.SwiftCheckoutTransfer?.refresh();
 
     // 6. Update UI
     update(); 
@@ -14246,3 +14247,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 <link rel="stylesheet" href="wallet-layout.css?v=20261115"><script src="wallet-layout.js?v=20261115"></script>
 
 <link rel="stylesheet" href="festive-tracking.css?v=polished20261116"><script src="festive-tracking.js?v=polished20261116"></script>
+
+<link rel="stylesheet" href="checkout-transfer.css?v=20261116"><script src="checkout-transfer.js?v=20261116"></script>
