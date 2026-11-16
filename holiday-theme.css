@@ -1,0 +1,114 @@
+/* SwiftShop Christmas: warm surfaces, evergreen details, gold accents. No animated overlays. */
+html.swift-holiday{--holiday-forest:#173d2e;--holiday-red:#c72634;--holiday-gold:#bd9240;--holiday-paper:#fcfbf8;--holiday-border:#e5e8df;accent-color:var(--holiday-forest)}
+html.swift-holiday body{background:var(--holiday-paper)!important;color:#19221b}
+html.swift-holiday body :is(#appScreen,#merchantStorePage,#cartPanel,#orderBox,#profileOverlay,#pureOfferOrderPage,#promoPage,#favouritesPage,#orderHistoryPage,#savedAddressesPage,#pickupOrderBox,#customerRidePanel,.swiftpay-page,.sq-dialog,.swift-region-dialog,#swiftDeliveryAddress){background:var(--holiday-paper)!important}
+html.swift-holiday body :is(dialog,.shop-service-page,.shop-active-page,.swiftpay-page){--sd-accent:#173d2e;--sf-accent:#173d2e}
+html.swift-holiday body :is(input,textarea,select){accent-color:var(--holiday-forest)}
+html.swift-holiday body :is(input,textarea,select):focus-visible{outline-color:var(--holiday-gold)!important}
+html.swift-holiday body :is(.cr-header,.swiftpay-header,.sq-dialog>header,#swiftDeliveryAddress>header,#swiftProductDetails .spd-header){border-bottom:1px solid var(--holiday-border)!important;background:var(--holiday-paper)!important}
+html.swift-holiday body :is(.spd-option-group,.shopping-saved-address,.swiftpay-section,.swiftpay-payment-row,.soc-message,.store-profile-call){border-color:var(--holiday-border)!important}
+html.swift-holiday body :is(.spd-choice-row button[aria-pressed=true],.store-chips button[aria-pressed=true]){background:var(--holiday-forest)!important;border-color:var(--holiday-forest)!important;color:#fff!important}
+html.swift-holiday body #swiftProductDetails .spd-addon-row button[aria-pressed=true]{background:#f0f6ed!important;color:#1e3023!important}
+html.swift-holiday body :is(.store-section-nav button[aria-current=true],.sq-dialog a,.swiftpay-cancel){color:var(--holiday-forest)!important}
+html.swift-holiday body .store-section-nav button[aria-current=true]:after{background:var(--holiday-forest)!important}
+html.swift-holiday body #swiftProductDetails .spd-scroll{background:var(--holiday-paper)!important}
+html.swift-holiday body .shop-bottom-nav{background:#fffffff5!important;border-top:1px solid var(--holiday-border)!important;box-shadow:none!important;backdrop-filter:none!important}
+html.swift-holiday body .shop-bottom-nav button[aria-current=page]{color:#e86100!important}
+html.swift-holiday body #appScreen .header{grid-template-rows:auto auto auto!important;gap:18px 12px!important;padding-top:calc(22px + env(safe-area-inset-top,0px))!important;padding-bottom:22px!important;margin-bottom:16px!important;border-radius:0 0 26px 26px!important;background-color:#ff6a00!important;background-image:radial-gradient(circle at 90% 16%,#ffbc4f50 0 2px,transparent 3px),radial-gradient(circle at 83% 34%,#ffe2a84d 0 1px,transparent 2px),linear-gradient(125deg,#ff7500,#ff6200)!important;box-shadow:0 -100px 0 #ff6a00!important}
+html.swift-holiday body #appScreen .header>p{grid-row:2!important;margin:0!important}
+html.swift-holiday body #appScreen .header .sd-home-greeting{font-size:clamp(29px,5.5vw,42px)!important;letter-spacing:-1px!important;line-height:1.13!important}
+html.swift-holiday body #appScreen .header .sd-home-subtitle{display:none!important}
+.holiday-eyebrow{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:550;letter-spacing:.04em;color:#fff3d6;margin:0 0 8px}
+.holiday-eyebrow svg{width:12px;height:12px;fill:#ffe0a0;flex-shrink:0}
+html.swift-holiday body #appScreen .header .hero-search-wrapper{grid-column:1/-1!important;grid-row:3!important;display:flex!important;align-items:center!important;gap:0!important;width:100%!important;margin:0!important;padding:0!important;min-width:0!important;border:1px solid #ffffffc0!important;border-radius:18px!important;background:#fff!important;box-shadow:none!important}
+html.swift-holiday body #appScreen .header .hero-search-box{display:flex!important;flex:1!important;min-width:0!important;min-height:50px!important;margin:0!important;padding:0 12px!important;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
+html.swift-holiday body #appScreen .header .hero-search-box svg{width:20px!important;height:20px!important;stroke:#212720!important;flex-shrink:0}
+html.swift-holiday body #appScreen .header #searchInput{width:100%!important;min-width:0!important;height:50px!important;min-height:50px!important;padding:10px 8px!important;font-size:15px!important;background:transparent!important;border:0!important;color:#242a23!important;box-shadow:none!important}
+html.swift-holiday body #appScreen .header .filter-btn{flex:0 0 48px!important;width:48px!important;height:34px!important;min-height:34px!important;margin:0 4px 0 0!important;padding:6px 10px!important;border:0!important;border-left:1px solid #e5e7e0!important;border-radius:0!important;background:transparent!important;color:#20271e!important;box-shadow:none!important}
+html.swift-holiday body #appScreen .header #deliveryNotificationBell{border:0!important;background:transparent!important;color:#fff!important}
+.holiday-account-rail{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:stretch;margin:0 0 16px}
+html.swift-holiday body #appScreen .holiday-account-rail .sd-header-balance{display:flex!important;align-items:center!important;justify-content:flex-start!important;flex-wrap:wrap!important;gap:5px 9px!important;padding:12px 14px!important;margin:0!important;min-height:48px!important;min-width:0!important;border:1px solid var(--holiday-border)!important;border-radius:15px!important;background:#f2f4ee!important;color:#1e2b22!important;box-shadow:none!important;font-size:12px!important}
+html.swift-holiday body #appScreen .holiday-account-rail .sd-header-group{display:flex!important;justify-content:center!important;align-items:center!important;gap:7px!important;min-height:48px!important;margin:0!important;padding:10px 14px!important;border:1px solid #293b2b!important;border-radius:24px!important;background:#fff!important;color:#1e2b22!important;font-size:12px!important;box-shadow:none!important}
+html.swift-holiday body #appScreen .hero-toggle-row{margin:0!important;padding:0!important}
+html.swift-holiday body #appScreen .toggle-box{display:flex!important;gap:0!important;padding:3px!important;border:1px solid #e5e7e0!important;border-radius:28px!important;background:#f3f4f0!important;box-shadow:none!important}
+html.swift-holiday body #appScreen .toggle-box .toggle-btn{flex:1!important;min-width:0!important;min-height:44px!important;padding:10px 8px!important;border-radius:24px!important;font-size:13px!important;background:transparent!important;color:#3b4038!important;box-shadow:none!important}
+html.swift-holiday body #appScreen .toggle-box .toggle-btn.active{background:#161917!important;color:#fff!important}
+html.swift-holiday body #appScreen .sd-quick-actions{gap:10px!important;margin:14px 0 18px!important;padding:0!important}
+html.swift-holiday body #appScreen .sd-quick-actions button{border:1px solid #e7e9e2!important;border-radius:24px!important;background:#f2f4ee!important;color:#27352a!important;font-size:12px!important;min-height:38px!important}
+html.swift-holiday body #shopStoreDirectory.home-store-directory{background:transparent!important;margin-top:24px!important}
+.holiday-directory-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px}
+html.swift-holiday body #appScreen #shopStoreDirectory .holiday-directory-heading>h2{font-size:23px!important;line-height:1.2!important;letter-spacing:-.7px!important;margin:0!important}
+html.swift-holiday body #shopStoreDirectory>p{display:none!important}
+.holiday-see-all{flex-shrink:0;border:0;background:none;color:#d35400;padding:8px 0 8px 8px;font:600 12px inherit;cursor:pointer}
+html.swift-holiday body #appScreen #shopStoreDirectory .store-directory-row{align-items:stretch!important;gap:12px!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .store-directory-card.home-store-card{position:relative!important;--home-store-width:calc((100% - 12px)/2);border:1px solid #e4e7de!important;border-radius:15px!important;background:#fff!important;padding-bottom:12px!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .home-store-card .store-directory-cover{height:auto!important;min-height:0!important;aspect-ratio:1.35!important;border:0!important;border-radius:14px 14px 0 0!important;margin:0 0 12px!important;overflow:visible!important;background:#f0f3eb!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .home-store-card .home-store-banner{border-radius:14px 14px 0 0!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .home-store-card.home-store-has-banner .store-directory-cover .home-store-logo{left:10px!important;bottom:-51px!important;width:38px!important;height:38px!important;border-radius:10px!important;box-shadow:none!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .home-store-card>strong{width:auto!important;min-height:18px!important;margin:0 10px 4px!important;font-size:14px!important;line-height:18px!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .home-store-card.home-store-has-banner>strong{margin-left:58px!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .home-store-card .home-store-category{display:none!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .home-store-card .swift-store-meta{gap:2px!important;padding:0 10px!important;margin:0!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .home-store-card.home-store-has-banner .swift-store-meta{padding-left:58px!important;min-height:30px!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .home-store-card .swift-store-meta .swift-store-tag{margin-top:6px!important;font-size:9px!important;padding:2px 6px!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .holiday-expanded{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;overflow:visible!important}
+html.swift-holiday body #appScreen #shopStoreDirectory .holiday-expanded .store-directory-card{width:100%!important;min-width:0!important;max-width:none!important}
+html.swift-holiday body #merchantStorePage{padding:calc(12px + env(safe-area-inset-top,0px)) 16px calc(150px + env(safe-area-inset-bottom,0px))!important}
+html.swift-holiday body #merchantStorePage .store-profile-cover{height:clamp(160px,24vw,300px)!important;width:100%!important;margin:0 0 0!important;border-radius:20px!important}
+html.swift-holiday body #merchantStorePage .store-toolbar{inset:calc(24px + env(safe-area-inset-top,0px)) 28px auto!important}
+html.swift-holiday body #merchantStorePage .store-hero{background:transparent!important;border:0!important;padding:0 6px 14px!important}
+html.swift-holiday body #merchantStorePage .store-identity{grid-template-columns:76px minmax(0,1fr)!important;gap:10px 14px!important;padding-top:14px!important}
+html.swift-holiday body #merchantStorePage .store-avatar{width:76px!important;height:76px!important;margin-top:-29px!important;border:4px solid var(--holiday-paper)!important;box-shadow:0 5px 20px #1d30210b!important}
+html.swift-holiday body #merchantStorePage .store-identity h1{font-size:clamp(25px,3vw,34px)!important;letter-spacing:-.7px!important;margin-bottom:8px!important}
+html.swift-holiday body #merchantStorePage .store-header-meta{font-size:12px!important;gap:5px 9px!important}
+html.swift-holiday body #merchantStorePage .store-header-meta>p{display:none!important}
+html.swift-holiday body #merchantStorePage .store-header-actions{justify-content:flex-start!important;padding-top:4px!important}
+html.swift-holiday body #merchantStorePage .store-header-whatsapp{min-height:42px!important;padding:0 14px!important;border-color:#dce2d7!important;border-radius:12px!important;background:#fff!important;font-size:13px!important}
+html.swift-holiday body #merchantStorePage .store-header-actions .store-header-save,html.swift-holiday body #merchantStorePage .store-header-actions .store-profile-share{position:absolute!important;top:calc(24px + env(safe-area-inset-top,0px))!important;right:28px!important;width:42px!important;height:42px!important;min-width:42px!important;padding:0!important;border:1px solid #fff7!important;border-radius:50%!important;background:#18221ac7!important;color:#fff!important;font-size:0!important}
+html.swift-holiday body #merchantStorePage .store-header-actions .store-header-save{right:78px!important}
+html.swift-holiday body #merchantStorePage .store-header-save>span{font-size:25px!important;color:white!important}
+html.swift-holiday body #merchantStorePage .store-profile-share>span{display:none!important}
+html.swift-holiday body #merchantStorePage .store-profile-share svg{stroke:white!important;width:20px!important;height:20px!important}
+html.swift-holiday body #merchantStorePage .swift-store-highlights{gap:7px!important;margin:0 6px 18px!important}
+html.swift-holiday body #merchantStorePage .swift-store-tag{background:#cc202c!important;border-color:#cc202c!important;color:#fff!important;border-radius:7px!important;padding:6px 9px!important;font-size:11px!important}
+html.swift-holiday body #merchantStorePage .store-section-nav{background:transparent!important;display:flex!important;justify-content:space-between!important;gap:20px!important;border-top:1px solid #e4e8df!important;border-bottom:1px solid #e4e8df!important;margin-bottom:20px!important}
+html.swift-holiday body #merchantStorePage .store-section-nav button{min-height:48px!important;font-size:15px!important;padding:13px 4px!important}
+html.swift-holiday body #merchantStorePage .store-search-row{gap:10px!important;margin-bottom:16px!important}
+html.swift-holiday body #merchantStorePage .store-search-row input{background:#f1f3ee!important;border:1px solid #e3e7dd!important;border-radius:13px!important}
+html.swift-holiday body #merchantStorePage .store-filter-button{background:#fff!important;border-radius:13px!important;border-color:#e1e6da!important}
+html.swift-holiday body #merchantStorePage .store-chips{margin-bottom:16px!important}
+html.swift-holiday body #merchantStorePage .store-chips button{background:#f1f3ee!important;min-height:38px!important}
+html.swift-holiday body #merchantStorePage .holiday-product-heading{font-size:22px!important;letter-spacing:-.5px!important;margin:0 0 14px!important;font-weight:750!important}
+html.swift-holiday body #merchantStorePage .store-product{border-color:#e5e9de!important;border-radius:14px!important;box-shadow:none!important}
+html.swift-holiday body #merchantStorePage .store-heart{background:#fff!important;border-color:#e3e9db!important;color:#263d2b!important}
+html.swift-holiday body #merchantStorePage .store-heart[aria-pressed=true]{color:#cb2432!important}
+html.swift-holiday body #merchantStorePage .store-product>img{border-radius:13px 13px 0 0!important;background:#f3f5ef!important}
+html.swift-holiday body #merchantStorePage .store-cart-link{background:#141915!important;border:1px solid #ffffff30!important;box-shadow:0 8px 24px #1a31151a!important}
+html.swift-holiday body #merchantStorePage .store-cart-link:after{font-weight:400!important}
+html.swift-holiday body :is(#swiftProductDetails .spd-footer,.swiftpay-section,#cartPanel,.sq-dialog){border-color:var(--holiday-border)!important}
+html.swift-holiday body :is(.swiftpay-header>div>p,.sp-palette legend){color:#96702f!important}
+html.swift-holiday body .swiftpay-card{box-shadow:0 14px 34px #173d2e17!important}
+html.swift-holiday body :is(.sq-dialog,.swift-region-dialog,#savedLocationPopover){border-top:3px solid var(--holiday-forest)!important}
+@media(min-width:750px){html.swift-holiday body #appScreen #shopStoreDirectory .store-directory-card.home-store-card{--home-store-width:230px}html.swift-holiday body #appScreen #shopStoreDirectory .holiday-expanded{grid-template-columns:repeat(3,minmax(0,1fr))!important}html.swift-holiday body #merchantStorePage{padding-inline:32px!important}html.swift-holiday body #merchantStorePage .store-profile-cover{height:300px!important}html.swift-holiday body #merchantStorePage .store-toolbar{left:44px!important;right:44px!important}html.swift-holiday body #merchantStorePage .store-header-actions .store-profile-share{right:44px!important}html.swift-holiday body #merchantStorePage .store-header-actions .store-header-save{right:94px!important}}
+@media(min-width:1100px){html.swift-holiday body #appScreen #shopStoreDirectory .holiday-expanded{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@media(max-width:360px){.holiday-account-rail{gap:8px;grid-template-columns:minmax(0,1fr) auto}html.swift-holiday body #appScreen .holiday-account-rail .sd-header-group{font-size:11px!important;padding:9px 10px!important}html.swift-holiday body #appScreen .header #searchInput{font-size:14px!important}}
+
+/* Respect existing visibility and section state at every breakpoint. */
+html.swift-holiday body #appScreen #shopStoreDirectory .store-directory-card[hidden]{display:none!important}
+html.swift-holiday body #appScreen .sd-quick-actions [hidden]{display:none!important}
+html.swift-holiday body #merchantStorePage:is([data-store-view=about],[data-store-view=location]) .holiday-product-heading{display:none!important}
+html.swift-holiday body #merchantStorePage #swiftStoreHighlights>.swift-store-distance{display:none!important}
+html.swift-holiday body #merchantStorePage .store-header-actions .store-header-save,html.swift-holiday body #merchantStorePage .store-header-actions .store-profile-share{z-index:5!important}
+html.swift-holiday body #profileOverlay .profile-card,html.swift-holiday body .shopping-page,html.swift-holiday body .shop-service-page,html.swift-holiday body #loginBox{background:var(--holiday-paper)!important}
+html.swift-holiday body :is(.service-page-header,.swiftpay-header,.cr-header,#profileOverlay .profile-top,#swiftProductDetails .spd-header){background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'%3E%3Cpath fill='%23bd924026' d='m24 5 3.8 12.2H41l-10.7 7.5 4.1 12.5L24 29.5l-10.4 7.7 4.1-12.5L7 17.2h13.2Z'/%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-position:right 64px center!important;background-size:32px 32px!important}
+html.swift-holiday body #loginBox{border:1px solid var(--holiday-border)!important;border-top:4px solid var(--holiday-forest)!important}
+html.swift-holiday body #profileOverlay .gamification-box{background:linear-gradient(125deg,#183e2e,#284d35)!important;border:1px solid #ba95464d!important}
+html.swift-holiday body #profileOverlay .profile-avatar{background:#eaf1e4!important;color:var(--holiday-forest)!important;border-color:#fff!important}
+
+/* Search now lives in the header; remove the previous two-column hero track. */
+html.swift-holiday body #appScreen .hero-section{display:block!important;grid-template-columns:none!important;background:transparent!important;min-height:0!important;margin:0 0 18px!important;padding:0!important}
+html.swift-holiday body #appScreen .hero-toggle-row{display:block!important;width:100%!important}
+html.swift-holiday body #appScreen .hero-toggle-row .toggle-box{width:100%!important;max-width:none!important;box-sizing:border-box!important}
+html.swift-holiday body #appScreen .sd-quick-actions{justify-content:flex-start!important;width:100%!important;max-width:100%!important;margin-inline:0!important;padding-inline:0!important;box-sizing:border-box!important}
+html.swift-holiday body #appScreen .header .hero-search-wrapper{max-width:100%!important;margin-inline:0!important;box-sizing:border-box!important}
+@media(min-width:750px){.holiday-account-rail{grid-template-columns:minmax(240px,340px) auto;justify-content:start}html.swift-holiday body #appScreen .hero-toggle-row .toggle-box{max-width:580px!important}html.swift-holiday body #appScreen .header .hero-search-wrapper{max-width:800px!important}}
