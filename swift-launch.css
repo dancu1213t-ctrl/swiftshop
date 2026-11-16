@@ -20,3 +20,9 @@ html.swift-entry-loading::before{display:none!important}
 #swiftLaunch .launch-santa{position:absolute;width:156px;height:70px;overflow:visible;opacity:0;pointer-events:none;animation:swiftSantaFly 1.35s cubic-bezier(.22,.55,.45,1) 1.4s both;will-change:transform,opacity}
 @keyframes swiftSantaFly{0%{opacity:0;transform:translate3d(-240px,-35px,0) rotate(-9deg)}12%{opacity:1}48%{opacity:1;transform:translate3d(-10px,-91px,0) rotate(0deg)}85%{opacity:1}100%{opacity:0;transform:translate3d(240px,-48px,0) rotate(8deg)}}
 @media(prefers-reduced-motion:reduce){#swiftLaunch .launch-santa{display:none;animation:none;will-change:auto}}
+
+/* Fixed particle count: transform/opacity only, no animation loop or layout work. */
+#swiftLaunch .launch-star-trail{position:absolute;inset:0;pointer-events:none}
+#swiftLaunch .launch-star-trail i{position:absolute;left:50%;top:50%;width:var(--star-size);height:var(--star-size);background:#fff4cc;clip-path:polygon(50% 0,62% 36%,100% 50%,62% 64%,50% 100%,38% 64%,0 50%,38% 36%);opacity:0;animation:swiftSantaStardust .62s ease-out var(--star-delay) both}
+@keyframes swiftSantaStardust{0%{opacity:0;transform:translate3d(var(--star-x),var(--star-y),0) scale(.35) rotate(0deg)}18%{opacity:1;transform:translate3d(var(--star-x),var(--star-y),0) scale(1.15) rotate(18deg)}55%{opacity:.7}100%{opacity:0;transform:translate3d(calc(var(--star-x) - 12px),calc(var(--star-y) + 16px),0) scale(.2) rotate(75deg)}}
+@media(prefers-reduced-motion:reduce){#swiftLaunch .launch-star-trail{display:none}#swiftLaunch .launch-star-trail i{animation:none}}
