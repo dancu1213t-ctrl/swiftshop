@@ -1,0 +1,5 @@
+/* Keep the count in the card flow, below Add and above Share. */
+html.swift-design body #merchantStorePage .store-product>.store-item-quantity{position:static!important;inset:auto!important;display:block!important;align-self:stretch!important;width:100%!important;min-height:18px!important;margin:8px 0 0!important;padding:0!important;text-align:center!important;font-size:11px!important;line-height:18px!important;color:#526b5e!important;pointer-events:none}
+html.swift-design body #merchantStorePage .store-product>.store-item-quantity:empty{display:block!important;visibility:hidden!important}
+.swift-cart-flight{position:fixed!important;z-index:2147483000!important;object-fit:contain!important;pointer-events:none!important;user-select:none!important;border:0!important;border-radius:14px!important;margin:0!important;padding:0!important;background:transparent!important;contain:layout style paint;will-change:transform,opacity}
+@media(prefers-reduced-motion:reduce){.swift-cart-flight{display:none!important}}
