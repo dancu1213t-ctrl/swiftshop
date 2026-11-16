@@ -13,3 +13,5 @@ html.swift-entry-loading::before{display:none!important}
 @keyframes swiftLaunchLogo{0%{opacity:0;transform:scale(.86)}100%{opacity:1;transform:scale(1)}}
 @keyframes swiftLaunchExit{to{opacity:0;visibility:hidden}}
 @media(prefers-reduced-motion:reduce){#swiftLaunch{animation:swiftLaunchExit .12s linear .12s forwards}#swiftLaunch .launch-word,#swiftLaunch .launch-shapes{display:none}#swiftLaunch .launch-logo{animation:none}}
+
+#swiftLaunch .launch-logo{background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important}
