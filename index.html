@@ -13535,7 +13535,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['swiftCreditReceive','swiftCreditScanSend','swiftDeliveryAddress','customerSignInDialog','swiftDeliveryFeeInfo','commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = ['swiftAddFundsDialog','swiftWalletSettings','swiftCreditReceive','swiftCreditScanSend','swiftDeliveryAddress','customerSignInDialog','swiftDeliveryFeeInfo','commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
@@ -14123,7 +14123,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 #customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
 </style>
 <link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=pricing20261106"></script></body>
-</html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=pricing20261105"></script><script src="swiftpay.js?v=wallet20261114"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
+</html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=pricing20261105"></script><script src="swiftpay.js?v=walletlayout20261115"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
 
@@ -14230,7 +14230,7 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 
 <link rel="stylesheet" href="swiftcredit-qr.css?v=spacing20261112"><script src="swiftcredit-qr.js?v=20261112"></script>
 
-<script src="wallet-funds.js?v=popup20261115"></script>
+<script src="wallet-funds.js?v=navfix20261115"></script>
 
 <link rel="stylesheet" href="cart-feedback.css?v=20261115b"><script src="cart-feedback.js?v=20261115b"></script>
 
@@ -14241,3 +14241,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 <link rel="stylesheet" href="holiday-theme.css?v=home-restore20261115"><script src="holiday-theme.js?v=home-restore20261115"></script>
 
 <link rel="stylesheet" href="wallet-funds.css?v=popup20261115">
+
+<link rel="stylesheet" href="wallet-layout.css?v=20261115"><script src="wallet-layout.js?v=20261115"></script>
