@@ -13907,6 +13907,11 @@ function storeHoursLabel(data){
 </script><script>/* Product URLs contain identifiers only; prices and availability stay live. */
 window.attachStoreItemShare=function(card,product){
  window.SwiftProductCards ||= new WeakMap();window.SwiftProductCards.set(card,product);
+ if(product.id!=null&&!product.campaignId&&!card.querySelector('.product-description-link')){
+  const action=card.querySelector('.store-add,.customer-product-add,button[onclick^="add("]');
+  if(action){const description=document.createElement('button');description.type='button';description.className='product-description-link';description.setAttribute('aria-label','View description for '+product.name);description.innerHTML='<span>View description</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h15m-5-5 5 5-5 5"/></svg>';description.onclick=event=>{event.preventDefault();event.stopPropagation();window.SwiftProductDetails?.open(card,card.querySelector('img'));};action.before(description);}
+ }
+
  const key=String(product.campaignId||product.id||product.name);
  const kind=product.campaignId?'offer':product.id!=null?'item':'name';
  card.dataset.shareKey=key;card.dataset.shareKind=kind;
@@ -14130,7 +14135,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
 
-<link rel="stylesheet" href="product-details.css?v=20261018"><script src="product-details.js?v=editorial20261101"></script>
+<link rel="stylesheet" href="product-details.css?v=description20261115-20261018"><script src="product-details.js?v=editorial20261101"></script>
 
 <style id="navigation-screen-isolation">
 [data-swift-nav-muted],[data-swift-nav-muted] *{visibility:hidden!important;pointer-events:none!important}
