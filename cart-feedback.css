@@ -3,3 +3,6 @@ html.swift-design body #merchantStorePage .store-product>.store-item-quantity{po
 html.swift-design body #merchantStorePage .store-product>.store-item-quantity:empty{display:block!important;visibility:hidden!important}
 .swift-cart-flight{position:fixed!important;z-index:2147483000!important;object-fit:contain!important;pointer-events:none!important;user-select:none!important;border:0!important;border-radius:14px!important;margin:0!important;padding:0!important;background:transparent!important;contain:layout style paint;will-change:transform,opacity}
 @media(prefers-reduced-motion:reduce){.swift-cart-flight{display:none!important}}
+
+.swift-cart-arrival{position:fixed!important;z-index:2147483000!important;width:36px!important;height:36px!important;box-sizing:border-box!important;border:2px solid #ff7900!important;border-radius:50%!important;background:transparent!important;pointer-events:none!important;contain:layout style paint;will-change:transform,opacity}
+@media(prefers-reduced-motion:reduce){.swift-cart-arrival{display:none!important}}
