@@ -1,0 +1,38 @@
+/* Header controls keep their existing handlers and positions along the bottom row. */
+html.swift-design body #appScreen .header.hf-has-scene .sd-header-group,html.swift-design body #appScreen .header.hf-has-scene .hero-group-order{margin-top:92px!important;margin-bottom:0!important}
+html.swift-design body #appScreen .header.hf-has-scene .sd-header-balance{align-self:end!important}
+#swiftHomeFestiveScene{position:absolute!important;z-index:1!important;pointer-events:none!important;user-select:none!important;overflow:visible!important;contain:layout style;isolation:isolate}
+#swiftHomeFestiveScene>svg{display:block!important;width:100%!important;height:100%!important;overflow:visible!important;pointer-events:none!important}
+#swiftHomeFestiveScene .hf-santa{opacity:0;transform-origin:107px 115px}
+#swiftHomeFestiveScene .hf-route{opacity:1}
+#swiftHomeFestiveScene .hf-door{opacity:1}
+#swiftHomeFestiveScene .hf-parcel{transform:translate3d(36px,-2px,0)}
+#swiftHomeFestiveScene .hf-speed{opacity:0}
+#swiftHomeFestiveScene .hf-wave-arm{transform-origin:131px 73px}
+#swiftHomeFestiveScene .hf-offer-arm{transform-origin:103px 67px}
+#swiftHomeFestiveScene.hf-waiting .hf-santa{opacity:1}
+#swiftHomeFestiveScene.hf-waiting .hf-route,#swiftHomeFestiveScene.hf-waiting .hf-door{opacity:0}
+#swiftHomeFestiveScene.hf-running .hf-santa{animation:hf-greeting 9.8s cubic-bezier(.22,.61,.36,1) both}
+#swiftHomeFestiveScene.hf-running .hf-wave-arm{animation:hf-wave 1.05s ease-in-out .55s 3 both}
+#swiftHomeFestiveScene.hf-running .hf-route{animation:hf-route 9.8s cubic-bezier(.22,.61,.36,1) both}
+#swiftHomeFestiveScene.hf-running .hf-door{animation:hf-door 9.8s ease both}
+#swiftHomeFestiveScene.hf-running .hf-delivered{animation:hf-delivered 9.8s ease both;transform-origin:193px 24px}
+#swiftHomeFestiveScene.hf-running .hf-parcel{animation:hf-parcel 9.8s cubic-bezier(.22,.61,.36,1) both}
+#swiftHomeFestiveScene.hf-running .hf-offer-arm{animation:hf-offer 9.8s ease both}
+#swiftHomeFestiveScene.hf-running .hf-front-wheel,#swiftHomeFestiveScene.hf-running .hf-back-wheel{transform-box:fill-box;transform-origin:center;animation:hf-wheel 1.9s linear 3.7s both}
+#swiftHomeFestiveScene.hf-running .hf-speed{animation:hf-speed 9.8s ease both}
+#swiftHomeFestiveScene.hf-running .hf-star-one{animation:hf-star .8s ease-in-out .6s 3 both;transform-origin:64px 53px}
+#swiftHomeFestiveScene.hf-running .hf-star-two{animation:hf-star .8s ease-in-out .9s 3 both;transform-origin:151px 82px}
+#swiftHomeFestiveScene.hf-paused *,#swiftHomeFestiveScene.hf-paused{animation-play-state:paused!important}
+@keyframes hf-greeting{0%{opacity:0;transform:translate3d(0,12px,0) scale(.96)}8%,30%{opacity:1;transform:translate3d(0,0,0) scale(1)}37%,100%{opacity:0;transform:translate3d(0,8px,0) scale(.98)}}
+@keyframes hf-wave{0%,100%{transform:rotate(-8deg)}25%,75%{transform:rotate(16deg)}50%{transform:rotate(-15deg)}}
+@keyframes hf-route{0%,38%{opacity:0;transform:translate3d(-46px,0,0)}44%{opacity:1;transform:translate3d(-25px,0,0)}57%,100%{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes hf-door{0%,50%{opacity:0}63%,100%{opacity:1}}
+@keyframes hf-parcel{0%,64%{transform:translate3d(0,0,0)}79%,100%{transform:translate3d(36px,-2px,0)}}
+@keyframes hf-offer{0%,61%,85%,100%{transform:translate3d(0,0,0) rotate(0)}68%,76%{transform:translate3d(4px,-1px,0) rotate(-8deg)}}
+@keyframes hf-wheel{from{transform:rotate(0)}to{transform:rotate(620deg)}}
+@keyframes hf-speed{0%,37%,60%,100%{opacity:0}44%,53%{opacity:.8}}
+@keyframes hf-delivered{0%,77%{opacity:0;transform:scale(.6)}85%,100%{opacity:1;transform:scale(1)}}
+@keyframes hf-star{0%,100%{opacity:.35;transform:scale(.7)}50%{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){#swiftHomeFestiveScene *,#swiftHomeFestiveScene{animation:none!important;transition:none!important}#swiftHomeFestiveScene .hf-santa{opacity:1;transform:none}#swiftHomeFestiveScene .hf-route,#swiftHomeFestiveScene .hf-door{opacity:0}}
+
