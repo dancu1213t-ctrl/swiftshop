@@ -1,5 +1,6 @@
 
 /* Budget shopping: meals, drinks, and a cart made from the selected products. */
+#swiftBudgetMeals #bmTitle:focus{outline:none!important}
 #swiftBudgetMeals .bm-menu-tabs{display:flex;align-items:center;gap:8px;margin:4px 0 20px;border-bottom:1px solid #eee;padding-bottom:16px}
 #swiftBudgetMeals .bm-menu-tabs button{min-height:42px;padding:10px 22px;border:1px solid #ddd;border-radius:24px;background:#fff;color:#171717;font-size:14px;font-weight:600}
 #swiftBudgetMeals .bm-menu-tabs button[aria-pressed=true]{background:#ff6b00;border-color:#ff6b00;color:#fff}
