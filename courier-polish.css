@@ -15,3 +15,8 @@ html.swift-design body #pickupOrderBox.courier-page[data-flow]{background:#f7f8f
 #pickupOrderBox.courier-page[data-flow] .courier-dispatch-hint{font-size:10px;margin-top:13px}#pickupOrderBox.courier-page[data-flow] button:not(:disabled):active{transform:scale(.985)}#pickupOrderBox.courier-page[data-flow] [hidden]{display:none!important}
 @media(max-width:360px){#pickupOrderBox.courier-page[data-flow] .courier-hero{padding:17px 14px}#pickupOrderBox.courier-page[data-flow] .courier-hero strong{font-size:21px}#pickupOrderBox.courier-page[data-flow] .courier-hero>svg{width:63px;flex-basis:63px;height:70px}#pickupOrderBox.courier-page[data-flow] .courier-mode button{padding:14px 10px;gap:7px}#pickupOrderBox.courier-page[data-flow] .courier-mode-icon{width:28px;height:30px;flex-basis:28px}#pickupOrderBox.courier-page[data-flow] .courier-mode-copy strong{font-size:13px}}
 @media(prefers-reduced-motion:reduce){#pickupOrderBox.courier-page[data-flow] button,#pickupOrderBox.courier-page[data-flow] input,#pickupOrderBox.courier-page[data-flow] textarea{transition:none!important}}
+
+#pickupOrderBox.courier-page[data-flow] .courier-section-title>small{font-size:9px;max-width:130px;line-height:1.5}
+#pickupOrderBox.courier-page[data-flow] .courier-payment-options small{font-size:10px}
+#pickupOrderBox.courier-page[data-flow] .courier-mode-copy small{font-size:10px}
+#pickupOrderBox.courier-page[data-flow] :is(input,textarea)[aria-invalid=true]{border-color:#ca765a!important;background:#fffbf8!important}
