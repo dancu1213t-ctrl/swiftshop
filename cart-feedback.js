@@ -10,7 +10,7 @@
   let animation;const clean=()=>{arrivals.delete(animation);ring.remove();};try{animation=ring.animate([{transform:'scale(.4)',opacity:.65},{transform:'scale(1.5)',opacity:0}],{duration:260,easing:'cubic-bezier(.16,1,.3,1)'});arrivals.add(animation);animation.onfinish=clean;animation.oncancel=clean;}catch{clean();}
  }
  function fly(from){if(!from||reduced()||document.hidden||!Element.prototype.animate)return;
-  const target=[...document.querySelectorAll('#merchantStorePage .store-cart-link,.shop-bottom-nav [data-destination="cart"],#cartBubble')].find(visible);if(!target)return;
+  const target=[...document.querySelectorAll('#swiftBudgetMeals .bm-footer .bm-cart-link,#swiftBudgetMeals .bm-header .bm-cart-link,#merchantStorePage .store-cart-link,.shop-bottom-nav [data-destination="cart"],#cartBubble')].find(visible);if(!target)return;
   const end=target.getBoundingClientRect(),x=end.width>160?end.right-32:end.left+end.width/2,y=end.top+end.height/2;const dx=x-from.x,dy=y-from.y;
   while(running.size>=2){const oldest=running.values().next().value;running.delete(oldest);oldest.cancel();}
   const ghost=document.createElement('img');ghost.className='swift-cart-flight';ghost.alt='';ghost.setAttribute('aria-hidden','true');ghost.draggable=false;ghost.src=from.src;
