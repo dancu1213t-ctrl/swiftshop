@@ -1,0 +1,21 @@
+/* Compact photos preserve the existing cart's typography and spacing. */
+html.swift-design body #cartPanel .customer-cart-item.cc-has-photo{display:flex!important;align-items:center!important;gap:14px!important}
+html.swift-design body #cartPanel .cc-item-art{width:52px;height:58px;flex:none;display:grid;place-items:center;position:relative;background:transparent}
+html.swift-design body #cartPanel .cc-item-photo{display:block;width:100%;height:100%;object-fit:contain!important;background:transparent!important;border:0!important;mix-blend-mode:multiply}
+html.swift-design body #cartPanel .cc-photo-fallback{width:100%;height:100%;display:grid;place-items:center;color:#92958f;background:#f2f2ef;border-radius:9px}
+html.swift-design body #cartPanel .cc-has-photo .customer-cart-item-copy{flex:1;min-width:0}
+html.swift-design body #cartPanel .cc-has-photo .customer-cart-item-copy>strong{overflow-wrap:anywhere}
+html.swift-design body #cartPanel .cc-has-photo .customer-cart-item-actions{flex:none}
+html.swift-design body #cartPanel .cc-item-art [hidden]{display:none!important}
+html.swift-design body #cartPanel .cc-delivery-preview{margin:14px 0 22px;border:1px solid #e4e5e1;border-radius:16px;padding:15px;background:#fff;color:#1a1d18}
+html.swift-design body #cartPanel .cc-location-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px}
+html.swift-design body #cartPanel .cc-location-head strong{display:block;font-size:14px;font-weight:600}
+html.swift-design body #cartPanel .cc-location-head p{font-size:12px;color:#767a73;margin:5px 0 0;line-height:1.45}
+html.swift-design body #cartPanel .cc-location-head button,html.swift-design body #cartPanel .cc-map-retry{border:1px solid #e1e2df;border-radius:10px;background:#fff;color:#bd4e00;padding:10px 12px;min-height:42px;font:600 12px Inter,Arial,sans-serif;white-space:nowrap;box-shadow:none}
+html.swift-design body #cartPanel .cc-location-head button:disabled{opacity:.5}
+html.swift-design body #cartPanel .cc-fixed-map{border-radius:12px;overflow:hidden;background:#f1f2ef}
+html.swift-design body #cartPanel .cc-fixed-map #cartDeliveryMap{height:180px!important;min-height:180px!important;width:100%!important;border-radius:0!important}
+html.swift-design body #cartPanel .cc-map-message{font-size:11px;line-height:1.5;color:#777e73;margin:10px 0 0}
+html.swift-design body #cartPanel .cc-delivery-preview [hidden]{display:none!important}
+html.swift-design body #cartPanel .cc-delivery-preview button:focus-visible{outline:3px solid #ffb47d;outline-offset:3px}
+@media(max-width:480px){html.swift-design body #cartPanel .customer-cart-item.cc-has-photo{gap:10px!important}html.swift-design body #cartPanel .cc-item-art{width:40px;height:48px}html.swift-design body #cartPanel .cc-has-photo .customer-cart-item-copy>strong{font-size:13px!important;line-height:1.4!important}html.swift-design body #cartPanel .cc-has-photo .customer-cart-item-actions{gap:8px!important}html.swift-design body #cartPanel .cc-has-photo .customer-cart-item-actions>strong{font-size:12px!important}html.swift-design body #cartPanel .cc-has-photo .minus-btn{width:36px!important;height:40px!important;min-width:36px!important;padding:0!important}html.swift-design body #cartPanel .cc-location-head{gap:10px}.cc-location-head>div{min-width:0}html.swift-design body #cartPanel .cc-location-head button{white-space:normal;max-width:115px}}
