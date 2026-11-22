@@ -1,0 +1,44 @@
+
+/* Budget shopping: meals, drinks, and a cart made from the selected products. */
+#swiftBudgetMeals .bm-menu-tabs{display:flex;align-items:center;gap:8px;margin:4px 0 20px;border-bottom:1px solid #eee;padding-bottom:16px}
+#swiftBudgetMeals .bm-menu-tabs button{min-height:42px;padding:10px 22px;border:1px solid #ddd;border-radius:24px;background:#fff;color:#171717;font-size:14px;font-weight:600}
+#swiftBudgetMeals .bm-menu-tabs button[aria-pressed=true]{background:#ff6b00;border-color:#ff6b00;color:#fff}
+#swiftBudgetMeals [data-left]{margin-left:auto;font-size:12px;color:#777;white-space:nowrap}
+#swiftBudgetMeals .bm-drink-hint{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 0 20px;font-size:13px}
+#swiftBudgetMeals .bm-drink-hint button{border:0;background:transparent;color:#c34e00;font-weight:600;font-size:12px;padding:8px 0;white-space:nowrap}
+#swiftBudgetMeals .bm-add:disabled,#swiftBudgetMeals .bm-footer button:disabled{opacity:.4;cursor:default}
+#swiftBudgetMeals .bm-shopping-cart{max-width:620px;margin:auto}
+#swiftBudgetMeals .bm-cart-intro{text-align:center}
+#swiftBudgetMeals .bm-cart-intro h2{font-size:28px;line-height:1.2;letter-spacing:-1px;margin:12px 0}
+#swiftBudgetMeals .bm-cart-intro>p{font-size:13px;color:#777;margin:10px 0 0}
+#swiftBudgetMeals .bm-trolley{position:relative;width:100%;max-width:360px;aspect-ratio:360/270;margin:8px auto 20px;isolation:isolate}
+#swiftBudgetMeals .bm-trolley-back,#swiftBudgetMeals .bm-trolley-front{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+#swiftBudgetMeals .bm-trolley-back{z-index:0}
+#swiftBudgetMeals .bm-trolley-front{z-index:2}
+#swiftBudgetMeals .bm-trolley-products{position:absolute;inset:0;z-index:1}
+#swiftBudgetMeals .bm-trolley-item{position:absolute;width:21%;height:33%;left:calc(28% + mod(var(--slot),4)*12%);top:calc(16% + round(down,var(--slot)/4)*16%);background:#fff;border:1px solid #ececec;border-radius:10px;box-shadow:0 5px 10px #0000000d;display:flex;align-items:center;justify-content:center;transform:rotate(var(--tilt));overflow:hidden;will-change:auto}
+#swiftBudgetMeals .bm-trolley-item:nth-child(4n+1){left:28%}#swiftBudgetMeals .bm-trolley-item:nth-child(4n+2){left:40%}#swiftBudgetMeals .bm-trolley-item:nth-child(4n+3){left:52%}#swiftBudgetMeals .bm-trolley-item:nth-child(4n+4){left:64%}#swiftBudgetMeals .bm-trolley-item:nth-child(n+5){top:32%}
+#swiftBudgetMeals .bm-trolley-item img{width:100%;height:100%;object-fit:contain!important;mix-blend-mode:multiply;pointer-events:none}
+#swiftBudgetMeals .bm-trolley-item>span{font-size:24px;color:#ff6b00;font-weight:700}
+#swiftBudgetMeals .bm-trolley-item b{position:absolute;right:3px;top:3px;background:#171717;color:#fff;border-radius:10px;padding:2px 5px;font-size:10px}
+#swiftBudgetMeals .bm-trolley.is-empty .bm-trolley-products{display:none}
+#swiftBudgetMeals .bm-trolley-enter{animation:bm-roll-in .65s cubic-bezier(.16,1,.3,1) both}
+#swiftBudgetMeals .bm-trolley-enter .bm-trolley-item{animation:bm-pack-in .5s cubic-bezier(.16,1,.3,1) both;animation-delay:calc(.15s + var(--slot)*.045s)}
+#swiftBudgetMeals .bm-cart-items{border-top:1px solid #ececec;margin:12px 0 20px}
+#swiftBudgetMeals .bm-cart-item{gap:12px;padding:14px 0}
+#swiftBudgetMeals .bm-line-photo{width:46px;height:46px;object-fit:contain;background:#f7f7f7;border-radius:8px;flex:none}
+#swiftBudgetMeals .bm-line-copy{display:grid;gap:5px;flex:1;min-width:0}
+#swiftBudgetMeals .bm-line-copy strong{font-size:13px;font-weight:600;line-height:1.4;overflow-wrap:anywhere}
+#swiftBudgetMeals .bm-line-copy small{font-size:11px;color:#777}
+#swiftBudgetMeals .bm-cart-item>strong{font-size:12px}
+#swiftBudgetMeals .bm-cart-summary{border-top:1px solid #eee;padding-top:18px}
+#swiftBudgetMeals .bm-cart-summary>div{display:flex;justify-content:space-between;gap:15px;font-size:14px;margin-bottom:12px}
+#swiftBudgetMeals .bm-cart-summary>div:nth-child(2){font-size:18px;font-weight:600}
+#swiftBudgetMeals [data-budget-left]{text-align:right;font-size:12px;color:#b34a00;margin:16px 0}
+#swiftBudgetMeals .bm-keep-browsing{display:block;width:100%;background:#fff;border:1px solid #ddd;border-radius:12px;min-height:44px;padding:12px;font-size:13px;color:#171717;margin:18px 0 0}
+#swiftBudgetMeals [data-cart-empty]{font-size:14px;line-height:1.5;text-align:center;color:#777}
+@keyframes bm-roll-in{from{opacity:0;transform:translate3d(-35px,0,0) rotate(-3deg)}to{opacity:1;transform:translate3d(0,0,0) rotate(0)}}
+@keyframes bm-pack-in{from{opacity:0;transform:translate3d(0,-25px,0) rotate(0)}to{opacity:1;transform:translate3d(0,0,0) rotate(var(--tilt))}}
+@media(max-width:420px){#swiftBudgetMeals .bm-cart-intro h2{font-size:25px}#swiftBudgetMeals .bm-menu-tabs button{padding:9px 20px}#swiftBudgetMeals .bm-cart-item{gap:8px}#swiftBudgetMeals .bm-line-photo{width:38px;height:42px}}
+@media(prefers-reduced-motion:reduce){#swiftBudgetMeals .bm-trolley-enter,#swiftBudgetMeals .bm-trolley-enter .bm-trolley-item{animation:none!important}}
+
