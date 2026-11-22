@@ -2,7 +2,7 @@
 html.swift-design body #appScreen .header.hf-has-scene>p{position:relative!important;z-index:2!important;transform:translateZ(0)}
 html.swift-design body #appScreen .header.hf-has-scene .sd-header-group,html.swift-design body #appScreen .header.hf-has-scene .hero-group-order{margin-top:92px!important;margin-bottom:0!important}
 html.swift-design body #appScreen .header.hf-has-scene .sd-header-balance{align-self:end!important}
-#swiftHomeFestiveScene{position:absolute!important;z-index:1!important;pointer-events:none!important;user-select:none!important;overflow:visible!important;contain:layout style;isolation:isolate}
+#swiftHomeFestiveScene{position:absolute!important;z-index:1!important;pointer-events:none!important;user-select:none!important;overflow:hidden!important;contain:layout style paint;isolation:isolate}
 #swiftHomeFestiveScene>svg{display:block!important;width:100%!important;height:100%!important;overflow:visible!important;pointer-events:none!important}
 #swiftHomeFestiveScene .hf-santa{opacity:0;transform-origin:107px 115px}
 #swiftHomeFestiveScene .hf-route{opacity:1}
