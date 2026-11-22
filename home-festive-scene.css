@@ -4,23 +4,27 @@ html.swift-design body #appScreen .header.hf-has-scene .sd-header-group,html.swi
 html.swift-design body #appScreen .header.hf-has-scene .sd-header-balance{align-self:end!important}
 #swiftHomeFestiveScene{position:absolute!important;z-index:1!important;pointer-events:none!important;user-select:none!important;overflow:hidden!important;contain:layout style paint;isolation:isolate}
 #swiftHomeFestiveScene>svg{display:block!important;width:100%!important;height:100%!important;overflow:visible!important;pointer-events:none!important}
-#swiftHomeFestiveScene .hf-santa{opacity:0;transform-origin:107px 115px}
+#swiftHomeFestiveScene .hf-layer,#swiftHomeFestiveScene .hf-art{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;pointer-events:none!important}
+#swiftHomeFestiveScene .hf-art>svg{display:block!important;width:100%!important;height:100%!important;pointer-events:none!important}
+#swiftHomeFestiveScene .hf-santa{opacity:0;transform-origin:50% 85%}
 #swiftHomeFestiveScene .hf-route{opacity:1}
 #swiftHomeFestiveScene .hf-door{opacity:1}
-#swiftHomeFestiveScene .hf-parcel{transform:translate3d(36px,-2px,0)}
+#swiftHomeFestiveScene .hf-parcel{transform:translate3d(16.3636%,-1.4286%,0)}
 #swiftHomeFestiveScene .hf-speed{opacity:0}
-#swiftHomeFestiveScene .hf-wave-arm{transform-origin:131px 73px}
-#swiftHomeFestiveScene .hf-offer-arm{transform-origin:103px 67px}
+#swiftHomeFestiveScene .hf-wave-arm{transform-origin:59.5455% 52.1429%}
+#swiftHomeFestiveScene .hf-offer-arm{transform-origin:46.8182% 47.8571%}
 #swiftHomeFestiveScene.hf-waiting .hf-santa{opacity:1}
 #swiftHomeFestiveScene.hf-waiting .hf-route,#swiftHomeFestiveScene.hf-waiting .hf-door{opacity:0}
 #swiftHomeFestiveScene.hf-running .hf-santa{animation:hf-greeting 9.8s cubic-bezier(.22,.61,.36,1) both}
 #swiftHomeFestiveScene.hf-running .hf-wave-arm{animation:hf-wave 1.05s ease-in-out .55s 3 both}
 #swiftHomeFestiveScene.hf-running .hf-route{animation:hf-route 9.8s cubic-bezier(.22,.61,.36,1) both}
 #swiftHomeFestiveScene.hf-running .hf-door{animation:hf-door 9.8s ease both}
-#swiftHomeFestiveScene.hf-running .hf-delivered{animation:hf-delivered 9.8s ease both;transform-origin:193px 24px}
+#swiftHomeFestiveScene.hf-running .hf-delivered{animation:hf-delivered 9.8s ease both;transform-origin:87.7273% 17.1429%}
 #swiftHomeFestiveScene.hf-running .hf-parcel{animation:hf-parcel 9.8s cubic-bezier(.22,.61,.36,1) both}
 #swiftHomeFestiveScene.hf-running .hf-offer-arm{animation:hf-offer 9.8s ease both}
 #swiftHomeFestiveScene.hf-running .hf-front-wheel,#swiftHomeFestiveScene.hf-running .hf-back-wheel{transform-box:fill-box;transform-origin:center;animation:hf-wheel 1.9s linear 3.7s both}
+#swiftHomeFestiveScene.hf-running .hf-front-wheel{transform-origin:67.2727% 77.8571%}
+#swiftHomeFestiveScene.hf-running .hf-back-wheel{transform-origin:26.3636% 77.8571%}
 #swiftHomeFestiveScene.hf-running .hf-speed{animation:hf-speed 9.8s ease both}
 #swiftHomeFestiveScene.hf-running .hf-star-one{animation:hf-star .8s ease-in-out .6s 3 both;transform-origin:64px 53px}
 #swiftHomeFestiveScene.hf-running .hf-star-two{animation:hf-star .8s ease-in-out .9s 3 both;transform-origin:151px 82px}
@@ -29,7 +33,7 @@ html.swift-design body #appScreen .header.hf-has-scene .sd-header-balance{align-
 @keyframes hf-wave{0%,100%{transform:rotate(-8deg)}25%,75%{transform:rotate(16deg)}50%{transform:rotate(-15deg)}}
 @keyframes hf-route{0%,38%{opacity:0;transform:translate3d(-46px,0,0)}44%{opacity:1;transform:translate3d(-25px,0,0)}57%,100%{opacity:1;transform:translate3d(0,0,0)}}
 @keyframes hf-door{0%,50%{opacity:0}63%,100%{opacity:1}}
-@keyframes hf-parcel{0%,64%{transform:translate3d(0,0,0)}79%,100%{transform:translate3d(36px,-2px,0)}}
+@keyframes hf-parcel{0%,64%{transform:translate3d(0,0,0)}79%,100%{transform:translate3d(16.3636%,-1.4286%,0)}}
 @keyframes hf-offer{0%,61%,85%,100%{transform:translate3d(0,0,0) rotate(0)}68%,76%{transform:translate3d(4px,-1px,0) rotate(-8deg)}}
 @keyframes hf-wheel{from{transform:rotate(0)}to{transform:rotate(620deg)}}
 @keyframes hf-speed{0%,37%,60%,100%{opacity:0}44%,53%{opacity:.8}}
