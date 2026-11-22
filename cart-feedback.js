@@ -6,7 +6,7 @@
  function arrive(target,x,y){
   if(!target.isConnected||reduced()||document.hidden)return;
   while(arrivals.size>=2){const oldest=arrivals.values().next().value;arrivals.delete(oldest);oldest.cancel();}
-  const ring=document.createElement('span');ring.className='swift-cart-arrival';ring.setAttribute('aria-hidden','true');Object.assign(ring.style,{left:(x-18)+'px',top:(y-18)+'px'});document.body.append(ring);
+  const ring=document.createElement('span');ring.className='swift-cart-arrival';ring.setAttribute('aria-hidden','true');Object.assign(ring.style,{left:(x-18)+'px',top:(y-18)+'px'});(target.closest('dialog[open]')||document.body).append(ring);
   let animation;const clean=()=>{arrivals.delete(animation);ring.remove();};try{animation=ring.animate([{transform:'scale(.4)',opacity:.65},{transform:'scale(1.5)',opacity:0}],{duration:260,easing:'cubic-bezier(.16,1,.3,1)'});arrivals.add(animation);animation.onfinish=clean;animation.oncancel=clean;}catch{clean();}
  }
  function fly(from){if(!from||reduced()||document.hidden||!Element.prototype.animate)return;
@@ -14,7 +14,7 @@
   const end=target.getBoundingClientRect(),x=end.width>160?end.right-32:end.left+end.width/2,y=end.top+end.height/2;const dx=x-from.x,dy=y-from.y;
   while(running.size>=2){const oldest=running.values().next().value;running.delete(oldest);oldest.cancel();}
   const ghost=document.createElement('img');ghost.className='swift-cart-flight';ghost.alt='';ghost.setAttribute('aria-hidden','true');ghost.draggable=false;ghost.src=from.src;
-  Object.assign(ghost.style,{left:(from.x-from.size/2)+'px',top:(from.y-from.size/2)+'px',width:from.size+'px',height:from.size+'px'});document.body.append(ghost);
+  Object.assign(ghost.style,{left:(from.x-from.size/2)+'px',top:(from.y-from.size/2)+'px',width:from.size+'px',height:from.size+'px'});(target.closest('dialog[open]')||document.body).append(ghost);
   let animation;const clean=()=>{running.delete(animation);ghost.remove();};
   // Sample a single cubic curve: lift, glide, then settle into the cart.
   const frames=[],direction=dx<0?-1:1;
