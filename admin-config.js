@@ -1,0 +1,3 @@
+window.SWIFT_ADMIN_CONFIG={"url":"https://sbjadbqlmkktljfpqowc.supabase.co","key":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNiamFkYnFsbWtrdGxqZnBxb3djIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5MTc2NTIsImV4cCI6MjEwMjQ5MzY1Mn0.RCgn8yNmxkQWFPu6sJdyYD3_zJ7n2QmvPQjqZC70F8s"};
+
+
