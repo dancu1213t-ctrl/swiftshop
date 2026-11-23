@@ -16,7 +16,14 @@ begin
  if not exists(select 1 from public.merchant_storefronts m where m.category=v_category and latitude is null and longitude is null) then raise exception 'Optional pickup pin failed';end if;
  again:=public.swift_admin_quick_store(request_id,merchant_id,'{}');
  if again<>v_category then raise exception 'Idempotent retry failed';end if;
- perform public.swift_store_publish(v_category,false);perform public.swift_store_publish(v_category,true);
+ update public.merchant_storefronts set auto_close=true,weekly_hours=(select jsonb_object_agg(i::text,jsonb_build_object('closed',true)) from generate_series(1,7)i) where public.merchant_storefronts.category=v_category;
+ perform public.swift_store_publish(v_category,true);
+ if not exists(select 1 from public.stores s join public.swift_store_registry r using(category) where s.category=v_category and r.status='live' and s.is_open='no' and s.hours_auto_closed) then raise exception 'Closed-hours publication must stay live but closed';end if;
+ perform public.swift_store_publish(v_category,false);perform public.swift_store_auto_close();
+ if exists(select 1 from public.stores s where s.category=v_category and (s.is_open='yes' or s.hours_auto_closed)) then raise exception 'Paused store must not automatically reopen';end if;
+ update public.merchant_storefronts set auto_close=false where public.merchant_storefronts.category=v_category;
+ perform public.swift_store_publish(v_category,true);
+ if not exists(select 1 from public.stores s where s.category=v_category and s.is_open='yes') then raise exception 'Unscheduled store should open when published';end if;
  result:=public.swift_admin_portal_snapshot('orange-walk');
  if jsonb_typeof(result->'orders')<>'array' then raise exception 'Tracking shape invalid';end if;
  perform public.swift_admin_portal_extras('orange-walk');

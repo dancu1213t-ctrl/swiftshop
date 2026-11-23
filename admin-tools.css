@@ -3,8 +3,8 @@ html,body{background:#fff!important;margin:0!important;padding:0!important;overf
 body>*:not(#adminScreen):not(#pureOffersAdminPage):not(dialog):not(#portalToolNotice):not(script):not(style):not(link){display:none!important}
 #adminScreen{display:none!important;position:static!important;inset:auto!important;width:100%!important;height:auto!important;min-height:100dvh!important;overflow:visible!important;background:#fff!important;padding:0!important;max-width:none!important}
 html[data-portal-authorized=true] #adminScreen{display:block!important}
-#adminScreen>div:first-child,#adminScreen .admin-tab-btn,#adminScreen>.swift-native-header{display:none!important}
-#adminScreen>div:last-child{max-width:none!important;width:100%!important;padding:24px!important;margin:0!important;box-sizing:border-box!important}
+#adminScreen>.admin-tools-legacy-header,#adminScreen .admin-tab-btn,#adminScreen>.swift-native-header{display:none!important}
+#adminScreen>.admin-tools-content{max-width:none!important;width:100%!important;padding:24px!important;margin:0!important;box-sizing:border-box!important}
 #adminScreen .admin-tab-content{max-width:1100px!important;margin:auto!important}
 #adminScreen h3{font-family:Inter,Arial,sans-serif!important;letter-spacing:-.4px!important}
 #adminScreen input,#adminScreen select,#adminScreen textarea{font-family:Inter,Arial,sans-serif!important;font-size:14px!important;min-height:44px!important;max-width:100%!important;box-sizing:border-box!important}
@@ -13,5 +13,5 @@ html[data-portal-authorized=true] #adminScreen{display:block!important}
 #portalToolNotice{padding:36px;color:#686868;font:14px/1.7 Inter,Arial,sans-serif}
 #portalAreaTools{padding:0!important}#portalAreaTools .region-workspace{display:block;max-width:none;padding:0}#portalAreaTools .region-heading,#portalAreaTools .region-tabs{display:none}#portalAreaTools .region-workspace>section{margin:0}
 #pureOffersAdminPage{background:white!important}#pureOffersAdminPage .po-topbar button{display:none!important}
-@media(max-width:600px){#adminScreen>div:last-child{padding:16px!important}}
+@media(max-width:600px){#adminScreen>.admin-tools-content{padding:16px!important}}
 
