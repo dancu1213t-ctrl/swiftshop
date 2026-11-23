@@ -2,7 +2,7 @@
 // The inherited markup nests this screen inside #appScreen. The tools shell
 // hides customer screens, so the management root must be its own body child.
 const managementRoot=document.getElementById('adminScreen');
-if(managementRoot){managementRoot.firstElementChild?.classList.add('admin-tools-legacy-header');managementRoot.lastElementChild?.classList.add('admin-tools-content');document.body.append(managementRoot);}
+if(managementRoot){managementRoot.firstElementChild?.classList.add('admin-tools-legacy-header');managementRoot.lastElementChild?.classList.add('admin-tools-content');managementRoot.hidden=false;managementRoot.inert=false;managementRoot.removeAttribute('data-swift-nav-muted');document.body.append(managementRoot);}
 const notice=document.createElement('p');notice.id='portalToolNotice';notice.textContent='Opening management tools…';document.body.append(notice);let ready=false,routing=0,areaHost;
 function parameters(){return Object.fromEntries(new URLSearchParams(location.hash.slice(1)));}
 async function route(){if(!ready)return;const ticket=++routing,{tab='products',category,zone=''}=parameters();document.getElementById('adminScreen').style.display='block';document.getElementById('pureOffersAdminPage')?.style.setProperty('display','none');if(areaHost)areaHost.hidden=true;

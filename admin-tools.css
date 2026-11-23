@@ -3,6 +3,7 @@ html,body{background:#fff!important;margin:0!important;padding:0!important;overf
 body>*:not(#adminScreen):not(#pureOffersAdminPage):not(dialog):not(#portalToolNotice):not(script):not(style):not(link){display:none!important}
 #adminScreen{display:none!important;position:static!important;inset:auto!important;width:100%!important;height:auto!important;min-height:100dvh!important;overflow:visible!important;background:#fff!important;padding:0!important;max-width:none!important}
 html[data-portal-authorized=true] #adminScreen{display:block!important}
+html[data-portal-authorized=true] #adminScreen,html[data-portal-authorized=true] #adminScreen *{visibility:visible!important}
 #adminScreen>.admin-tools-legacy-header,#adminScreen .admin-tab-btn,#adminScreen>.swift-native-header{display:none!important}
 #adminScreen>.admin-tools-content{max-width:none!important;width:100%!important;padding:24px!important;margin:0!important;box-sizing:border-box!important}
 #adminScreen .admin-tab-content{max-width:1100px!important;margin:auto!important}

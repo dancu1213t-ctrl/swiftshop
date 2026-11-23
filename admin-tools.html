@@ -6737,7 +6737,7 @@ html.swift-design body #cartPanel #cartGrandTotal{flex-wrap:wrap}.checkout-taco-
 <link rel="stylesheet" href="support-requests.css?v=20261028">
 <script defer src="support-requests.js?v=verified20261028b"></script>
 <script defer src="operations-report.js?v=20261028"></script>
-<meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="admin-tools.css?v=visible20261122"></head>
+<meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="admin-tools.css?v=isolated20261122"></head>
 
 <body data-admin-tools><script src="swift-launch.js?v=stardust20261115"></script>
 
@@ -8312,7 +8312,7 @@ window.switchToggle=function(button){
  else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox')?.style.setProperty('display','none');}
  window.SwiftNavigation?.refresh();
 };
-</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=smooth20261111"></script><link rel="stylesheet" href="customer-experience.css?v=20261101"><script src="admin-tools-safe.js?v=20261122"></script><script src="admin-tools.js?v=visible20261122"></script></body>
+</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=smooth20261111"></script><link rel="stylesheet" href="customer-experience.css?v=20261101"><script src="admin-tools-safe.js?v=20261122"></script><script src="admin-tools.js?v=isolated20261122"></script></body>
 
 
 
@@ -13535,7 +13535,7 @@ document.addEventListener('DOMContentLoaded', () => {
   for(const name of ['closeCreditPurchase','closeLeaderBoard','closeFoodMap','closeAdminPortal']){
     const original=window[name];if(typeof original==='function')window[name]=function(...args){const result=original.apply(this,args);openProfile();return result;};
   }
-  const ids = ['swiftBudgetMeals','swiftAddFundsDialog','swiftWalletSettings','swiftCreditReceive','swiftCreditScanSend','swiftDeliveryAddress','customerSignInDialog','swiftDeliveryFeeInfo','commerceStoreEntrance','regionAdminDialog','catalogueFilterDialog','swiftRidePinPicker','swiftOrderChat','swiftOrderInstructions','swiftPayStoreDialog','pharmacyStoreChooser','swiftProductDetails','productPhotoDialog','pureOfferOrderPage','pureOffersAdminPage','swiftCreditTransferDialog','swiftReviewDialog','swiftPayPage','swiftPayPaymentDialog','swiftPayAdminDialog','swiftPromotionDialog','swiftQualityDialog','customerLiveOrder','deliveryNotificationInbox','customerRidePanel','merchantStorePage','profileOverlay','cartPanel','orderBox','tacoOrderBox','pickupOrderBox','requestRideBox','foodMapScreen','leaderBoardScreen','creditPurchaseScreen','creditConfirmScreen','adminScreen','promoPage','favouritesPage','orderHistoryPage','savedAddressesPage','savedLocationPopover','suggestOverlay','locationModal','imageOverlay','spinWheelModal','rewardChoiceModal','adminLoginBox'];
+  const ids = []; // Customer page navigation is not used inside the admin workspace.
   const pages = ids.map(id => document.getElementById(id)).filter(Boolean);
   const inlinePages = ['orderBox','tacoOrderBox','pickupOrderBox','requestRideBox'];
   let stack = [], previous = new Set(), locked = false, scrollY = 0, bodyStyle;
