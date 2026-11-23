@@ -22,6 +22,7 @@ begin
  delete from public.promos where category=p_category;
  delete from public.app_promotions where category=p_category;
  delete from public.merchant_members where category=p_category;
+ delete from public.swift_merchant_plans where category=p_category;
  delete from public.swift_merchant_delivery where category=p_category;
  delete from public.merchant_storefronts where category=p_category;
  delete from public.swift_store_onboarding where category=p_category;
@@ -32,5 +33,3 @@ begin
  insert into public.swift_region_audit(actor_id,action,entity,detail) values(auth.uid(),'store_deleted',p_category,result);
  return result||jsonb_build_object('deleted',true);
 end $function$
-
-
