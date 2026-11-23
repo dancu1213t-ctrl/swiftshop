@@ -1,8 +1,7 @@
 (()=>{'use strict';
 // The inherited markup nests this screen inside #appScreen. The tools shell
 // hides customer screens, so the management root must be its own body child.
-const managementRoot=document.getElementById('adminScreen');
-if(managementRoot){managementRoot.firstElementChild?.classList.add('admin-tools-legacy-header');managementRoot.lastElementChild?.classList.add('admin-tools-content');managementRoot.hidden=false;managementRoot.inert=false;managementRoot.removeAttribute('data-swift-nav-muted');document.body.append(managementRoot);}
+function prepareManagementRoot(){const managementRoot=document.getElementById('adminScreen');if(!managementRoot)throw Error('Management markup has not loaded');managementRoot.firstElementChild?.classList.add('admin-tools-legacy-header');managementRoot.lastElementChild?.classList.add('admin-tools-content');managementRoot.hidden=false;managementRoot.inert=false;managementRoot.removeAttribute('data-swift-nav-muted');document.body.append(managementRoot);}
 const notice=document.createElement('p');notice.id='portalToolNotice';notice.textContent='Opening management tools…';document.body.append(notice);let ready=false,routing=0,areaHost;
 function parameters(){return Object.fromEntries(new URLSearchParams(location.hash.slice(1)));}
 async function route(){if(!ready)return;const ticket=++routing,{tab='products',category,zone=''}=parameters();document.getElementById('adminScreen').style.display='block';document.getElementById('pureOffersAdminPage')?.style.setProperty('display','none');if(areaHost)areaHost.hidden=true;
@@ -16,7 +15,7 @@ async function route(){if(!ready)return;const ticket=++routing,{tab='products',c
  else window.switchAdminTab(tab==='wallet'?'users':tab);
  if(category){await window.SwiftAdminStores?.editItems(category);if(ticket!==routing)return;const filter=document.getElementById('adminInventoryFilter');if(filter&&![...filter.options].some(o=>o.value===category))filter.add(new Option(category,category));}
 }
-async function boot(){if(window.parent===window){location.replace('admin.html');return;}try{await window.SwiftAdmin.resume();ready=true;document.documentElement.dataset.portalAuthorized='true';notice.remove();await route();}catch(e){document.documentElement.dataset.portalAuthorized='false';notice.textContent='Your admin session ended. Return to the portal and sign in again.';window.parent.postMessage({type:'swift-admin-expired'},location.origin);}}
+async function boot(){if(window.parent===window){location.replace('admin.html');return;}try{prepareManagementRoot();await window.SwiftAdmin.resume();ready=true;document.documentElement.dataset.portalAuthorized='true';notice.remove();await route();}catch(e){document.documentElement.dataset.portalAuthorized='false';notice.textContent='Management tools could not open: '+(e.message||'Please sign in again.');if(/session|sign.in|access|jwt/i.test(e.message||''))window.parent.postMessage({type:'swift-admin-expired'},location.origin);}}
 window.addEventListener('hashchange',()=>route().catch(e=>{notice.textContent=e.message;document.body.append(notice);}));window.addEventListener('swift-store-publication-changed',()=>window.parent.postMessage({type:'swift-admin-published'},location.origin));
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
