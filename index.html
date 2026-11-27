@@ -9118,6 +9118,7 @@ function refreshCartTotals() {
   if (feeText) {
     feeText.innerHTML =
       (hasOrder?`<div class="checkout-row"><span class="checkout-delivery-label">Delivery Fee<button type="button" class="delivery-fee-info-button" data-delivery-fee-info aria-label="Delivery Fee info" title="Delivery Fee info">ⓘ</button></span><strong>${deliveryFee.toFixed(2)}</strong></div>`:'') +
+      (hasOrder&&window.SwiftRegions?.breakdown()?.savings_cents>0?`<div class="checkout-row" style="color:#c62828;font-weight:600"><span>Delivery offer · You save</span><strong>BZ${(window.SwiftRegions.breakdown().savings_cents/100).toFixed(2)}</strong></div>`:'') +
       (swiftPayFee ? '<div class="checkout-row"><span>SwiftPay transaction fee</span><strong>$0.25</strong></div>' : '') +
       (hasOrder && tipAmount > 0 ? `<div class="checkout-row"><span>Runner tip (optional)</span><strong>$${tipAmount.toFixed(2)}</strong></div>` : '') +
       '';
@@ -14076,7 +14077,7 @@ const timer=setInterval(()=>{if(!paused&&!hover&&!focused&&!document.hidden&&slo
 const close=window.closeMerchantStore;window.closeMerchantStore=function(){++request;stopSlider();return close.apply(this,arguments);};
 
 })();
-});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=guest20261111"></script><script src="app-polish.js?v=smooth20261111"></script><script src="app-design.js?v=smooth20261111"></script><script src="app-quality.js?v=wallet20261114"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
+});</script><script src="customer-web-push.js?v=20261009"></script><script src="delivery-notifications.js?v=guest20261111"></script><script src="app-polish.js?v=smooth20261111"></script><script src="app-design.js?v=smooth20261111"></script><script src="app-quality.js?v=offers20261127"></script><script src="customer-refinement.js?v=store-scope20261027b"></script><script src="app-promotions.js?v=text20261008"></script><script src="admin-email-announcements.js?v=20261008"></script>
 <script src="live-deals.js?v=orders20261004"></script><script src="customer-admin-retired.js?v=20261122"></script><div id="swiftLoginReveal" hidden role="status" aria-label="Welcome to SwiftShop"><div class="swift-reveal-half swift-reveal-left" aria-hidden="true"><span>Swift</span></div><div class="swift-reveal-half swift-reveal-right" aria-hidden="true"><span>Shop</span></div></div>
 <script src="login-transition.js?v=commerce20261031"></script>
 <script src="customer-auth.js?v=guest20261111"></script><script src="account-requests.js?v=orders20261004"></script>
@@ -14122,7 +14123,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 .add-check-exclusive{animation-duration:.4s!important}
 #customerRidePanel .cr-ride-option{min-width:0;white-space:normal}
 </style>
-<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=pricing20261106"></script></body>
+<link rel="stylesheet" href="store-onboarding.css?v=20261030setup3"><link rel="stylesheet" href="customer-regions.css?v=district-flow20261031"><script src="store-onboarding.js?v=20261030setup3"></script><script src="customer-regions.js?v=offers20261127"></script></body>
 </html><link rel="stylesheet" href="completion-codes.css?v=paymentqr20261010"><script src="completion-libs.js?v=qr1"></script><script src="completion-codes.js?v=pricing20261105"></script><script src="swiftpay.js?v=walletlayout20261115"></script><script src="swiftpay-admin.js?v=admin-recovery20261026"></script>
 
 <link rel="stylesheet" href="home-offer-cards.css?v=20261009">
@@ -14211,7 +14212,7 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 <script src="image-banners.js?v=20261026"></script>
 
 <link rel="stylesheet" href="storefront-layout.css?v=cart-info20261106b">
-<script src="storefront-layout.js?v=cart-info20261106"></script>
+<script src="storefront-layout.js?v=offers20261127"></script>
 
 <link rel="stylesheet" href="home-store-cards.css?v=portal-ui20261031">
 <script src="home-store-cards.js?v=covers20261112"></script>
