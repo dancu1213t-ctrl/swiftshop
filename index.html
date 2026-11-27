@@ -7858,7 +7858,7 @@ window.showLoginWelcome=function(){
 
  const money=v=>'$'+Number(v||0).toFixed(2)+' BZD';
 
- function paint(){updateChip();if(!current)return;window.SwiftReviews?.update(node('cloConfirmation'),{id:current.id,completed:current.registered&&current.remote?.phase==='delivered'});window.SwiftCompletionCards?.update(node('cloConfirmation'),{kind:'delivery',id:current.id,token:current.token,payment:current.snapshot.payment,active:current.registered&&current.remote?.phase==='on_the_way'});const displayKey=JSON.stringify([current.id,current.registered,current.snapshot,current.remote?.phase,current.remote?.runner_name,current.remote?.runner_phone,current.remote?.runner_photo,current.remote?.courier_leg,window.SwiftPay?.payment('delivery',current.id),records.map(r=>[r.id,r.created])]);if(displayKey===paintedKey)return;paintedKey=displayKey;const previousScroll=scrollArea.scrollTop;const courier=window.SwiftCourierTracking?.presentation(current.snapshot,current.remote);const shownStages=courier?.stages||stages,index=courier?courier.index:Math.max(0,stages.findIndex(s=>s[0]===(current.remote?.phase||'sent'))),active=shownStages[index];node('cloPreparing').hidden=!(current.registered&&current.remote?.phase==='preparing');node('cloReference').textContent=(courier?'COURIER ':'ORDER ')+current.id.slice(0,8).toUpperCase();node('cloTitle').textContent=current.registered?active[1]:'Order not sent yet';node('cloSubtitle').textContent=current.registered?active[2]:'SwiftShop has not received this order. Retry sending when connected.';node('cloProgress').replaceChildren();
+ function paint(){updateChip();if(!current)return;window.SwiftReviews?.update(node('cloConfirmation'),{id:current.id,completed:current.registered&&current.remote?.phase==='delivered'});window.SwiftCompletionCards?.update(node('cloConfirmation'),{kind:'delivery',id:current.id,token:current.token,payment:current.snapshot.payment,active:current.registered&&current.remote?.phase==='on_the_way'});const displayKey=JSON.stringify([current.id,current.registered,current.snapshot,current.remote?.phase,current.remote?.runner_name,current.remote?.runner_phone,current.remote?.runner_photo,current.remote?.courier_leg,current.remote?.delivery_progress,window.SwiftPay?.payment('delivery',current.id),records.map(r=>[r.id,r.created])]);if(displayKey===paintedKey)return;paintedKey=displayKey;const previousScroll=scrollArea.scrollTop;const courier=window.SwiftCourierTracking?.presentation(current.snapshot,current.remote);const shownStages=courier?.stages||stages,index=courier?courier.index:Math.max(0,stages.findIndex(s=>s[0]===(current.remote?.phase||'sent'))),active=shownStages[index];node('cloPreparing').hidden=!(current.registered&&current.remote?.phase==='preparing');node('cloReference').textContent=(courier?'COURIER ':'ORDER ')+current.id.slice(0,8).toUpperCase();node('cloTitle').textContent=current.registered?active[1]:'Order not sent yet';node('cloSubtitle').textContent=current.registered?active[2]:'SwiftShop has not received this order. Retry sending when connected.';node('cloProgress').replaceChildren();
   shownStages.forEach((_,i)=>{const bar=document.createElement('span');bar.className=i<index?'complete':i===index&&index<shownStages.length-1?'current':'';if(index===shownStages.length-1)bar.className='complete';node('cloProgress').append(bar);});
   node('cloSteps').replaceChildren();shownStages.forEach((stage,i)=>{const li=document.createElement('li');li.className=i<index?'done':i===index?'active':'waiting';if(i===index)li.setAttribute('aria-current','step');const dot=document.createElement('span');dot.className='clo-dot';dot.textContent=i<index?'✓':String(i+1);const text=document.createElement('div'),title=document.createElement('strong'),desc=document.createElement('p');title.textContent=stage[1];desc.textContent=i===index?stage[2]:i<index?'Complete':'Coming next';text.append(title,desc);li.append(dot,text);node('cloSteps').append(li);});
   const runner=node('cloRunner');runner.replaceChildren();runner.hidden=(courier?index<1:index<4)||!current.remote?.runner_name;
@@ -7871,7 +7871,7 @@ window.showLoginWelcome=function(){
   feeRows.querySelector('[data-deduction]').textContent=payment?money((payment.amount_cents+payment.fee_cents)/100):current.snapshot.total==null?'Awaiting invoice':money(Number(current.snapshot.total)+0.25);
   feeRows.querySelector('[data-state]').textContent=payment?.state==='captured'?'Paid':payment?.state==='released'?'Funds released':payment?.state==='quoted'?'Accept invoice in SwiftPay':'The scanner adds the SwiftPay fee automatically. Do not include it in the amount entered.';
 if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order cancelled';node('cloSubtitle').textContent='Any SwiftPay reservation has been released.';node('cloSteps').replaceChildren();node('cloProgress').replaceChildren();}
-  window.SwiftFestiveTracking?.render(root,courier?courier.artMap[index]:index,current.remote?.phase||'sent',current.registered,courier?.artMap);
+  window.SwiftDeliveryMotion?.render(root,current.remote?.delivery_progress,current.remote?.phase);window.SwiftFestiveTracking?.render(root,courier?courier.artMap[index]:index,current.remote?.phase||'sent',current.registered,courier?.artMap);
   const select=node('cloSelect');select.replaceChildren();records.forEach(r=>{const option=document.createElement('option');option.value=r.id;option.textContent=r.id.slice(0,8).toUpperCase()+' · '+new Date(r.created).toLocaleDateString();select.append(option);});select.value=current.id;scrollArea.scrollTop=previousScroll;
  }
  window.addEventListener('swiftpay-wallet-updated',()=>{if(root.open)paint();});
@@ -7994,7 +7994,7 @@ if(current.remote?.phase==='cancelled'){node('cloTitle').textContent='Order canc
  <button type="button" id="crSignIn" hidden>Sign in again</button><form id="crForm" novalidate><div class="cr-locations"><label>Pickup<input id="crPickup" maxlength="250" placeholder="Choose pickup on the map" autocomplete="off" readonly aria-haspopup="dialog" required></label><label>Destination<input id="crDropoff" maxlength="250" placeholder="Choose destination on the map" autocomplete="off" readonly aria-haspopup="dialog" required></label></div>
  <div class="cr-tools"><button type="button" id="crGPS">◎ GPS pickup pin</button><button type="button" id="crPin">Choose destination pin</button><button type="button" id="crCenter">Center map</button><button type="button" id="crReconnect">Refresh connection</button></div>
  <div id="crMap" aria-label="Pickup, destination and live ride map"></div><p id="crMapNotice" role="status">Confirm your pickup and destination pins. The map below previews your route.</p>
- <div id="crNearby" hidden><div class="fleet-heading"><strong id="fleetCount">Available rides</strong><select id="fleetRange" aria-label="Driver map area"><option value="nearby">Within 15 km</option><option value="all">All available drivers</option></select><button type="button" id="fleetFit">Show drivers on map</button></div><p id="fleetNote">Choose pickup and destination to see rides.</p><div id="fleetCards" class="fleet-cards"></div></div>
+ <div id="crNearby" hidden><div class="fleet-heading"><strong id="fleetCount">Choose your service</strong><select id="fleetRange" aria-label="Driver map area"><option value="nearby">Within 15 km</option><option value="all">All available drivers</option></select><button type="button" id="fleetFit">Show drivers on map</button></div><p id="fleetNote">Choose pickup and destination to see rides.</p><div id="fleetCards" class="fleet-cards"></div></div>
  <div class="cr-contact"><label>Your name<input id="crName" maxlength="100" autocomplete="name" required></label><label>Phone number<input id="crPhone" maxlength="30" autocomplete="tel" inputmode="tel" required minlength="7"></label></div>
  <section id="crFareBox" hidden aria-label="Ride fare">
  <div class="cr-fare-heading"><h2>Your ride fare</h2><span>BZD</span></div>
@@ -8150,7 +8150,7 @@ window.addEventListener('swift-region-change',()=>{if(ride||pending)return;geoVe
   $('crThanks').hidden=true;$('crRating').hidden=true;$('crNotice').hidden=false;$('crForm').hidden=false;
 
   window.SwiftCompletionCards?.update($('crConfirmation'),{kind:'ride',id:ride?.id,payment:ride?.payment_method,active:ride?.status==='in_progress'});
-  const tracking=!!ride;if(tracking)window.SwiftRidePinPicker?.cancel(); $('crTracking').hidden=!tracking;$('crForm').classList.toggle('cr-has-ride',tracking);
+  window.SwiftRideExperience?.tracking(ride);const tracking=!!ride;if(tracking)window.SwiftRidePinPicker?.cancel(); $('crTracking').hidden=!tracking;$('crForm').classList.toggle('cr-has-ride',tracking);
   ['crPickup','crDropoff','crName','crPhone'].forEach(id=>$(id).disabled=tracking);
   ['crGPS','crPin'].forEach(id=>$(id).hidden=tracking);$('crRequest').hidden=tracking||(!rideOptionSelected&&!pending);$('crFareBox').hidden=tracking||!rideOptionSelected;
   syncFleetVisibility();chip.hidden=!tracking;chip.textContent=tracking?labels[ride.status]+' · View ride':'View ride';
@@ -8179,26 +8179,21 @@ window.addEventListener('swift-region-change',()=>{if(ride||pending)return;geoVe
  function fleetLocationFresh(driver){const at=Date.parse(driver.location_updated_at);return driver.location_fresh!==false&&driver.lat!=null&&driver.lng!=null&&Number.isFinite(Number(driver.lat))&&Number.isFinite(Number(driver.lng))&&Number.isFinite(at)&&Date.now()-at>=0&&Date.now()-at<90000;}
  function renderRideOption(){
   if(!syncFleetVisibility()||!rideOptions.length)return;
-  $('fleetCount').textContent=rideOptions.length+' available '+(rideOptions.length===1?'ride':'rides');
-  $('fleetNote').textContent='Closest first · Estimated pickup time · Totals include pickup.';
-  const cards=rideOptions.map((quote,index)=>{
-   const option=document.createElement('button');option.type='button';option.className='cr-ride-option';
-   option.setAttribute('aria-pressed',String(rideOptionSelected&&fareQuote?.quoteId===quote.quoteId));
-   const info=document.createElement('span');info.className='cr-ride-option-info';
-   const label=document.createElement('span');label.className='cr-ride-option-name';label.textContent=quote.vehicleType==='motorcycle'?'Motorcycle ride':'Car ride';
-   if(index===0){const badge=document.createElement('span');badge.className='cr-ride-closest';badge.textContent='Closest';label.append(badge);}
-   const eta=document.createElement('span');eta.className='cr-ride-option-eta';
-   const minutes=Number(quote.pickupMinutes);
-   eta.textContent=Number.isFinite(minutes)?(minutes===0?'Near pickup':minutes+' min away'):'Pickup time pending';
-   if(quote.locationFresh===false)eta.textContent+=' · Estimate from last reported location';
-   info.append(label,eta);
-   const total=document.createElement('strong');total.textContent=money(quote.customerTotal);
-   option.append(info,total);option.onclick=()=>{
-    if(fareQuote?.quoteId!==quote.quoteId)$('crLongPickupConfirm').checked=false;
-    fareQuote=quote;rideOptionSelected=true;renderSelectedFare();renderRideOption();
-   };return option;
-  });
-  $('fleetCards').replaceChildren(...cards);
+  $('fleetCount').textContent='Choose your service';
+  $('fleetNote').textContent='Select Swift ONE, then review your fare. Pickup times are estimates.';
+  const selected=fareQuote||rideOptions[0],card=document.createElement('button');card.type='button';card.className='cr-service-card';card.setAttribute('aria-pressed',String(rideOptionSelected));
+  const info=document.createElement('span'),name=document.createElement('strong'),description=document.createElement('small'),time=document.createElement('span');
+  name.textContent='Swift ONE';description.textContent='Standard everyday rides';time.textContent=(Number.isFinite(Number(selected.tripMinutes))&&Number(selected.tripMinutes)>0?selected.tripMinutes+' min trip · ':'')+Number(selected.roadMiles).toFixed(2)+' road miles';
+  info.append(name,description,time);const amount=document.createElement('strong');amount.textContent=money(selected.customerTotal);card.append(info,amount);card.onclick=()=>{rideOptionSelected=true;renderSelectedFare();renderRideOption();};
+  const title=document.createElement('h3');title.className='cr-driver-options-title';title.textContent='Drivers for this trip';
+  const cards=rideOptions.map(quote=>{
+   const option=document.createElement('button');option.type='button';option.className='cr-ride-option';option.setAttribute('aria-pressed',String(rideOptionSelected&&fareQuote?.quoteId===quote.quoteId));
+   const info=document.createElement('span');info.className='cr-ride-option-info';const label=document.createElement('span');label.className='cr-ride-option-name';label.textContent=quote.driverName||'Verified driver';
+   const eta=document.createElement('span');eta.className='cr-ride-option-eta';const minutes=Number(quote.pickupMinutes);
+   eta.textContent=[quote.vehicleModel|| (quote.vehicleType==='motorcycle'?'Motorcycle':'Car'),Number.isFinite(minutes)?'Pickup about '+Math.max(1,minutes)+' min':'Pickup estimate pending'].join(' · ');if(quote.locationFresh===false)eta.textContent+=' · Last reported location';
+   info.append(label,eta);const total=document.createElement('strong');total.textContent=money(quote.customerTotal);option.append(info,total);
+   option.onclick=()=>{if(fareQuote?.quoteId!==quote.quoteId)$('crLongPickupConfirm').checked=false;fareQuote=quote;rideOptionSelected=true;renderSelectedFare();renderRideOption();};return option;
+  });$('fleetCards').replaceChildren(card,title,...cards);
  }
  function renderSelectedFare(){
   const data=fareQuote;if(!data||!rideOptionSelected)return;
@@ -8227,7 +8222,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   if(panel.hidden){previousToggle=document.querySelector('.hero-toggle-row .toggle-btn.active');if(previousToggle)previousToggle.classList.remove('active');button.classList.add('active');}
   panel.hidden=false;button.setAttribute('aria-expanded','true');$('crTitle').focus({preventScroll:true});
   $('crName').value=localStorage.getItem('userName')||'';$('crPhone').value=localStorage.getItem('contactPhone')||(String(localStorage.getItem('userPhone')||'').startsWith('account:')?'':localStorage.getItem('userPhone'))||'';
-  notice('Connecting to SwiftRide…');
+  savedRideContact();notice('Connecting to SwiftRide…');
   try{await mapReady();await auth();try{pending=JSON.parse(localStorage.getItem(key())||'null');}catch{pending=null;}await refresh();
    if(pending&&!pending.p_quote_id){pending=null;localStorage.removeItem(key());}
    if(!ride&&pending){$('crName').value=pending.p_name;$('crPhone').value=pending.p_phone;setPoint('pickup',{lat:pending.p_pickup_lat,lng:pending.p_pickup_lng},pending.p_pickup);setPoint('dropoff',{lat:pending.p_dropoff_lat,lng:pending.p_dropoff_lng},pending.p_dropoff);notice('Your previous request is awaiting confirmation. Tap Request ride to safely retry that same trip.');}
@@ -8244,6 +8239,7 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
  $('crClose').onclick=()=>{if(ride?.status==='completed'&&!$('crRating').hidden){$('crRatingContinue').click();return;}close();};$('crGPS').onclick=gps;$('crCenter').onclick=frame;$('crRefresh').onclick=refresh;$('crReconnect').onclick=async()=>{try{await mapReady();session=null;await auth();await refresh();paint();if(!ride&&pickup&&dropoff)invalidateFare();}catch(e){notice(errorMessage(e));}};
  $('crPin').onclick=()=>choosePoint('dropoff');
 
+ function savedRideContact(){const name=localStorage.getItem('userName')||'',phone=localStorage.getItem('contactPhone')||'';if(name)$('crName').value=name;if(phone)$('crPhone').value=phone;const valid=!!$('crName').value.trim()&&$('crPhone').value.trim().length>=7;$('crName').closest('.cr-contact').hidden=valid;}
  function bookingFields(){return {p_name:$('crName').value.trim(),p_phone:$('crPhone').value.trim(),p_pickup:$('crPickup').value.trim(),p_dropoff:$('crDropoff').value.trim(),p_pickup_lat:pickup.lat,p_pickup_lng:pickup.lng,p_dropoff_lat:dropoff.lat,p_dropoff_lng:dropoff.lng};}
  function quoteSignature(){return pickup&&dropoff?JSON.stringify(bookingFields()):'';}
  for(const id of ['crName','crPhone'])$(id).addEventListener('input',invalidateFare);
@@ -8280,15 +8276,15 @@ lastSync=Date.now();notice('● Updated '+new Date(lastSync).toLocaleTimeString(
   if(!window.SwiftCustomerAuth?.signedIn){event.preventDefault();await window.SwiftCustomerAuth?.require('Sign in to request a ride.',()=>open());return;}
   event.preventDefault();if(busy)return;if(ride){bookingNotice(terminal(ride.status)?'Tap Request another ride to start a new trip.':'You already have a ride. Open your tracking to see it.');return;}
   if(!pickup||!dropoff||!pending&&(!pinsConfirmed.pickup||!pinsConfirmed.dropoff)){bookingNotice('Confirm your pickup pin and destination pin on the map first.');return;}
-  if(!$('crName').value.trim()||$('crPhone').value.trim().length<7){bookingNotice('Enter your name and a phone number of at least 7 characters.');$('crForm').reportValidity();return;}if(!$('crForm').reportValidity()){bookingNotice('Please complete the highlighted fields.');return;}
+  savedRideContact();if(!$('crName').value.trim()||$('crPhone').value.trim().length<7){bookingNotice('Enter your name and a phone number of at least 7 characters.');$('crForm').reportValidity();return;}if(!$('crForm').reportValidity()){bookingNotice('Please complete the highlighted fields.');return;}
   if(!pending&&!rideOptionSelected){bookingNotice('Select an available ride to review its fare before booking.');return;}
   if(!pending&&(!fareQuote||fareQuote.signature!==quoteSignature()||Date.parse(fareQuote.expiresAt)<=Date.now())){invalidateFare();bookingNotice('Your fare is updating. Please wait for the total before booking.');return;}
   if(!pending&&fareQuote.requiresConfirmation&&!$('crLongPickupConfirm').checked){bookingNotice('Confirm the shown distant-pickup supplement before booking.');return;}
-  busy=true;$('crRequest').disabled=true;
+  busy=true;$('crRequest').disabled=true;window.SwiftRideExperience?.searching(true);
   try{await auth();if(!pending){pending={...bookingFields(),p_request_id:crypto.randomUUID(),p_quote_id:fareQuote.quoteId,p_confirm_pickup:$('crLongPickupConfirm').checked,p_payment_method:document.getElementById('crPaymentMethod')?.value||'Cash'};localStorage.setItem(key(),JSON.stringify(pending));}
    bookingNotice('Sending your request…');const id=await rpc('swiftpay_book_ride',{p_quote_id:pending.p_quote_id,p_request_id:pending.p_request_id,p_confirm_pickup:pending.p_confirm_pickup,p_payment_method:pending.p_payment_method||'Cash'});ride=await rpc('swiftride_current_priced',{p_id:id});if(ride)window.SwiftRideNotifications?.record(ride.id,ride.status);if(!ride)throw Error('Request sent. Tap Refresh connection to restore your tracking.');pending=null;localStorage.removeItem(key());fitNext=true;paint();bookingNotice('Ride requested. Finding your driver…');
   }catch(e){const message=e.message||String(e);if(/Enter your name, phone, pickup|Invalid .*location|violates check constraint|Fare quote expired|Fare quote not found/i.test(message)){pending=null;localStorage.removeItem(key());}bookingNotice('Could not confirm your ride: '+message+(e.code?' ['+e.code+']':'')+' · Refresh or retry; the same request will not be sent twice.');}
-  finally{busy=false;$('crRequest').disabled=false;}
+  finally{busy=false;$('crRequest').disabled=false;window.SwiftRideExperience?.searching(false);}
  };
  $('crCancel').onclick=async()=>{if(!ride||busy||!confirm('Cancel this ride?'))return;busy=true;$('crCancel').disabled=true;try{await rpc('swiftride_cancel',{p_id:ride.id});await refresh();}catch(e){notice(errorMessage(e));}finally{busy=false;$('crCancel').disabled=false;}};
  $('crNew').onclick=()=>{if(!ride||!terminal(ride.status))return;dismissed=ride.id;ride=null;pending=null;if(client&&client!==customerDataClient){client.auth.stopAutoRefresh();client=null;session=null;}$('crBookingNotice').textContent='';pickup=null;dropoff=null;pinsConfirmed={pickup:false,dropoff:false};pin('pickup',null);pin('dropoff',null);$('crPickup').value='';$('crDropoff').value='';route();paint();notice('Choose pickup and destination for your next ride.');};
@@ -14261,3 +14257,5 @@ html.swift-design body #appScreen #merchantBannerSlider .banner-copy button{font
 <link rel="stylesheet" href="home-festive-scene.css?v=notext20261122"><script src="home-festive-scene.js?v=layers20261122"></script>
 
 <link rel="stylesheet" href="home-christmas-countdown.css?v=ornaments20261122"><script src="home-christmas-countdown.js?v=20261122"></script>
+
+<link rel="stylesheet" href="ride-experience.css?v=20261127"><script src="ride-experience.js?v=20261127"></script>
