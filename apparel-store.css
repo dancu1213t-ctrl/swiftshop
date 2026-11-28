@@ -1,0 +1,50 @@
+/* Apparel only: real store imagery and the shared checkout controls. */
+html.swift-design body #merchantStorePage[data-apparel=true]{background:#fffdfa!important;--sf-ink:#211e1b}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-profile-cover{margin:18px 0 0!important;width:100%!important;height:clamp(220px,30vw,380px)!important;border-radius:20px!important;background:#f5e9df!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-profile-cover>img:not(.store-cover-product){object-fit:cover!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-cover-intro{position:relative;z-index:1;max-width:53%;padding:28px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-cover-intro strong{font-family:Georgia,serif!important;font-size:clamp(25px,4vw,44px)!important;line-height:1.08!important;color:#292019!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-hero{background:transparent!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-identity{padding-block:20px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-avatar{margin:0!important;width:64px!important;height:64px!important;border-radius:16px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-identity h1{font-size:26px!important;letter-spacing:-.6px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-header-prep{display:none!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-search-row input{background:#fff!important;border:1px solid #e7e1da!important;border-radius:14px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-chips{padding-block:8px 20px!important;gap:8px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-chips button{background:#f0ece7!important;border:0!important;border-radius:10px!important;color:#514941!important;padding:10px 16px!important;min-height:44px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-chips button[aria-pressed=true]{background:#211e1b!important;color:#fff!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-product-grid{gap:16px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-product{background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:0 0 12px!important;gap:8px!important;overflow:hidden!important;min-height:0!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-product>img{margin:0!important;width:100%!important;aspect-ratio:3/4!important;height:auto!important;object-fit:contain!important;background:#f1ede8!important;border-radius:14px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-product h3{padding:0 2px!important;margin:4px 0 0!important;font-size:14px!important;font-weight:550!important;line-height:1.4!important;min-height:0!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-price{font-size:15px!important;padding:0 2px!important;margin:0!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-heart{top:9px!important;right:9px!important;background:#fff!important;color:#29231e!important;width:36px!important;height:36px!important;box-shadow:none!important;border:0!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-add{background:#ff6a00!important;color:#fff!important;border:0!important;border-radius:10px!important;width:100%!important;min-height:42px!important;padding:10px!important;margin:0!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .product-description-link{min-height:26px!important;margin:0!important;font-size:11px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-item-quantity{font-size:11px!important;text-align:center!important;margin:0!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-item-quantity:empty{display:none!important}
+#swiftProductDetails[data-apparel=true]{background:#fffdfa!important;width:min(100%,620px)!important;height:100dvh!important;max-height:100dvh!important;border-radius:0!important}
+#swiftProductDetails[data-apparel=true] .spd-header{background:#fffdfa!important;border:0!important}
+#swiftProductDetails[data-apparel=true] .spd-header strong{color:#211e1b!important;font-size:13px!important}
+#swiftProductDetails[data-apparel=true] .spd-scroll{background:#fffdfa!important;padding:0 0 24px!important}
+#swiftProductDetails[data-apparel=true] .spd-hero{display:flex!important;flex-direction:column!important;padding:0 20px!important;gap:0!important}
+#swiftProductDetails[data-apparel=true] .spd-photo{order:-1!important;display:flex!important;margin:0 -20px 22px!important;width:calc(100% + 40px)!important;padding:12px 20px!important;border:0!important;border-radius:0 0 26px 26px!important;background:#f3e8de!important}
+#swiftProductDetails[data-apparel=true] .spd-photo img{width:100%!important;height:clamp(240px,43dvh,480px)!important;object-fit:contain!important}
+#swiftProductDetails[data-apparel=true] .spd-photo span{color:#74665b!important;font-size:10px!important}
+#swiftProductDetails[data-apparel=true] .spd-store{margin:0 0 6px!important;color:#77695d!important}
+#swiftProductDetails[data-apparel=true] h2{font-size:25px!important;line-height:1.2!important;letter-spacing:-.5px!important}
+#swiftProductDetails[data-apparel=true] .spd-price{margin:0 0 16px!important}
+#swiftProductDetails[data-apparel=true] [data-price]{color:#d85400!important;font-size:23px!important}
+#swiftProductDetails[data-apparel=true] .spd-copy{padding:0 20px!important}
+#swiftProductDetails[data-apparel=true] .spd-option-group{padding:16px 0!important;border:0!important;border-top:1px solid #ebe4dc!important;border-radius:0!important;background:transparent!important}
+#swiftProductDetails[data-apparel=true] .spd-option-heading small{background:transparent!important;color:#77695d!important}
+#swiftProductDetails[data-apparel=true] .spd-choice-row{display:flex!important;flex-wrap:wrap!important;gap:9px!important}
+#swiftProductDetails[data-apparel=true] .spd-choice-row button{border:1px solid #ddd5cb!important;background:#fff!important;color:#342c25!important;min-width:44px!important;border-radius:24px!important}
+#swiftProductDetails[data-apparel=true] .spd-choice-row button[aria-pressed=true]{background:#211e1b!important;color:#fff!important;border-color:#211e1b!important}
+#swiftProductDetails[data-apparel=true] .spd-description p{color:#6c625a!important}
+#swiftProductDetails[data-apparel=true] .spd-quantity-line{border-color:#ebe4dc!important;background:transparent!important}
+#swiftProductDetails[data-apparel=true] .spd-footer{background:#fffdfa!important;border-color:#ebe4dc!important}
+#swiftProductDetails[data-apparel=true] [data-add]{background:#ff6a00!important;color:#fff!important;border-radius:28px!important}
+#swiftProductDetails[data-apparel=true] [data-add]:disabled{background:#e7e0d8!important;color:#766e66!important}
+@media(min-width:1000px){html.swift-design body #merchantStorePage[data-apparel=true] .store-product-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}}
+@media(max-width:600px){html.swift-design body #merchantStorePage[data-apparel=true] .store-product-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important}html.swift-design body #merchantStorePage[data-apparel=true] .store-identity{grid-template-columns:64px minmax(0,1fr)!important}html.swift-design body #merchantStorePage[data-apparel=true] .store-profile-cover{height:220px!important}}

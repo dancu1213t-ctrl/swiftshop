@@ -8300,7 +8300,8 @@ window.switchToggle=function(button){
  else{document.getElementById('pickupOrderBox').style.display='none';document.getElementById('products').style.display='grid';document.getElementById('tacoOrderBox')?.style.setProperty('display','none');}
  window.SwiftNavigation?.refresh();
 };
-</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=smooth20261111"></script><link rel="stylesheet" href="customer-experience.css?v=20261101"></body>
+</script><link rel="stylesheet" href="customer-ride-layout.css?v=20261012"><link rel="stylesheet" href="product-photo-viewer.css?v=20261012v2"><script src="product-photo-viewer.js?v=smooth20261111"></script><link rel="stylesheet" href="customer-experience.css?v=20261101"><link rel="stylesheet" href="apparel-store.css?v=20261127">
+</body>
 
 
 
@@ -13754,6 +13755,8 @@ document.addEventListener('DOMContentLoaded',()=>{
  storePage.append(toolbar,hero,details,searchRow,chips,notice,offerBox,grid);
  function estimate(category){if(general.has(category))return '5–10 min';if(['Cosmetics','Faye','Sister','Electronics','AddToCart','Pocket Mobile','DeLaFuentePharmacy'].includes(category))return 'Estimate confirmed by Dispatch';return '15–25 min';}
  function describe(category){return meta.get(category)||{name:category,logo:'',group:'local'};}
+ window.SwiftStoreGroup=category=>describe(category).group;
+ window.SwiftIsApparel=category=>/apparel|clothing|fashion/i.test(describe(category).group);
  function setStatus(){
   const m=describe(active);hero.replaceChildren();
   const identity=el('div',undefined,'store-identity');
@@ -13762,7 +13765,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   const dot=el('span',undefined,'store-status-dot');dot.dataset.status=state;dot.title=state==='yes'?'Open':state==='no'?'Closed':'Availability unconfirmed';avatar.append(dot);
   const copy=el('div',undefined,'store-identity-copy'),title=el('h1',m.name);
   title.append(el('span','✓','store-blue-check'));title.lastChild.setAttribute('aria-hidden','true');
-  copy.append(title,el('p','Local storefront'));
+  copy.append(title,el('p',window.SwiftIsApparel(active)?'Clothing & accessories':'Local storefront'));
   copy.append(el('span',state==='yes'?'Open now':state==='no'?'Currently closed':'Checking availability',state==='yes'?'store-open':state==='no'?'store-closed':'store-pending'));
   const share=btn('',async()=>{
    if(!window.SWIFTSHOP_PUBLIC_URL&&!/^https?:$/.test(location.protocol)){notice.textContent='A public website is required to share this store.';return;}
@@ -13786,7 +13789,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  function close(){clearTimeout(searchTimer);request++;storePage.style.display='none';active=null;document.querySelectorAll('.shop-bottom-nav button').forEach(n=>{if(n.dataset.destination==='home')n.setAttribute('aria-current','page');else n.removeAttribute('aria-current');});}
  window.closeMerchantStore=close;
  window.openMerchantStore=async function(category){
-  clearTimeout(searchTimer);const token=++request;active=category;items=[];offers=[];state='unknown';filter='All';query='';search.value='';const settings=window.SwiftProductFilters.forStore(category);filterButton.setAttribute('aria-pressed',String(settings.min!==null||settings.max!==null||settings.sort!=='recommended'));
+  clearTimeout(searchTimer);const token=++request;active=category;storePage.dataset.apparel=String(window.SwiftIsApparel(category));search.placeholder=window.SwiftIsApparel(category)?'Search clothing & accessories':'Search this store';grid.setAttribute('aria-label',window.SwiftIsApparel(category)?'Shop the collection':'Store products');items=[];offers=[];state='unknown';filter='All';query='';search.value='';const settings=window.SwiftProductFilters.forStore(category);filterButton.setAttribute('aria-pressed',String(settings.min!==null||settings.max!==null||settings.sort!=='recommended'));
   // Restore any promo-owned grid before opening another destination.
   if(document.getElementById('promoPage')?.style.display!=='none')window.closePromoPage?.();
   storePage.style.display='block';storePage.setAttribute('aria-busy','true');storePage.scrollTop=0;updateCounts();setStatus();grid.replaceChildren();chips.replaceChildren();offerBox.replaceChildren();notice.textContent='Loading this store…';window.SwiftLoading?.show(grid);
@@ -13807,7 +13810,7 @@ document.addEventListener('DOMContentLoaded',()=>{
    notice.textContent=state==='no'?'This store is closed. Browse now and order when it reopens.':state==='unknown'?'Availability could not be confirmed.':'';
    if(state==='unknown')notice.append(btn('Retry',()=>window.openMerchantStore(category)));
    drawChips();drawProducts();drawOffers();
-   const cover=document.getElementById('storeProfileCover');if(cover&&!cover.querySelector('img')){const intro=el('div',undefined,'store-cover-intro');intro.append(el('small','LOCAL FAVOURITES'),el('strong','Explore the menu.'),el('span',describe(active).name));cover.append(intro);for(const product of items.filter(p=>p.image).slice(0,3)){const artwork=new Image();artwork.alt='';artwork.className='store-cover-product';artwork.onload=()=>{if(token===request&&!cover.querySelector('img:not(.store-cover-product)'))cover.append(artwork);};artwork.src=merchantFeed.imageURL(product.image);}}
+   const cover=document.getElementById('storeProfileCover');if(cover&&!cover.querySelector('img')){const intro=el('div',undefined,'store-cover-intro');intro.append(el('small',window.SwiftIsApparel(active)?'THE COLLECTION':'LOCAL FAVOURITES'),el('strong',window.SwiftIsApparel(active)?'Find your next favourite.':'Explore the menu.'),el('span',describe(active).name));cover.append(intro);for(const product of items.filter(p=>p.image).slice(0,3)){const artwork=new Image();artwork.alt='';artwork.className='store-cover-product';artwork.onload=()=>{if(token===request&&!cover.querySelector('img:not(.store-cover-product)'))cover.append(artwork);};artwork.src=merchantFeed.imageURL(product.image);}}
   }catch(e){if(token!==request)return;notice.replaceChildren(el('span',navigator.onLine===false?'You’re offline. Connect to load this store.':e.message),btn('Retry',()=>window.openMerchantStore(category)));}finally{if(token===request){storePage.removeAttribute('aria-busy');window.SwiftLoading?.clear(grid);}}
  };
  function drawChips(){chips.replaceChildren();for(const label of ['All',...new Set(items.map(p=>p.subcategory||'Items'))]){const b=btn(label,()=>{filter=label;drawChips();drawProducts();});b.setAttribute('aria-pressed',String(label===filter));chips.append(b);}}
@@ -14127,7 +14130,7 @@ html.swift-design body .store-item-share svg{color:#fff!important;stroke:#fff!im
 
 <link rel="stylesheet" href="ride-mobile-safe-layout.css?v=20261018">
 
-<link rel="stylesheet" href="product-details.css?v=description20261115-20261018"><script src="product-details.js?v=budget20261122"></script>
+<link rel="stylesheet" href="product-details.css?v=description20261115-20261018"><script src="product-details.js?v=apparel20261127"></script>
 
 <style id="navigation-screen-isolation">
 [data-swift-nav-muted],[data-swift-nav-muted] *{visibility:hidden!important;pointer-events:none!important}
