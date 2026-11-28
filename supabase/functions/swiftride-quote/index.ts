@@ -170,7 +170,7 @@ Deno.serve(async req => {
     const { data: quotes, error } = await admin.from('swiftride_pricing_quotes').insert(prepared.map(({driver,pickupMiles,fare})=>({
       customer_id: user.id, driver_id: driver.driver_id, booking: b, road_miles: miles, pickup_miles: pickupMiles,
       standard_fare: fare.standardFare, pickup_supplement: fare.pickupSupplement, requires_confirmation: fare.requiresConfirmation, return_miles: returnMiles, return_allowance: fare.returnAllowance, rounding_adjustment: fare.roundingAdjustment, driver_protection_fee: fare.driverProtectionFee
-    }))).select('id,driver_id,expires_at,driver_protection_fee');
+    }))).select('id,driver_id,expires_at,driver_protection_fee,deferred_fee_cents');
     if (error) throw Error(error.message);
     // Database time is authoritative, including a quote that crosses 20:45 while routing.
     const options=prepared.map(({driver,pickupMiles,pickupMinutes,fare})=>{
@@ -178,13 +178,12 @@ Deno.serve(async req => {
       if(!quote)throw Error('A ride quote was not saved. Please try again.');
       const driverProtectionFee=Number(quote.driver_protection_fee);
       if(![0,3].includes(driverProtectionFee))throw Error('Invalid Driver Protection Fee');
-      const customerTotal=Math.round((fare.customerTotal-fare.driverProtectionFee+driverProtectionFee)*100)/100;
+      const deferredCancellationFee=Number(quote.deferred_fee_cents||0)/100;
+      const customerTotal=Math.round((fare.customerTotal-fare.driverProtectionFee+driverProtectionFee+deferredCancellationFee)*100)/100;
       const locationAge=Date.now()-Date.parse(driver.location_updated_at);
-      return {...fare,driverName:driver.display_name||'Verified driver',driverId:driver.driver_id,vehicleModel:driver.vehicle_model||null,serviceName:'Swift ONE',tripMinutes,driverProtectionFee,customerTotal,quoteId:quote.id,expiresAt:quote.expires_at,roadMiles:miles,pickupMiles,returnMiles,pickupMinutes,locationFresh:driver.location_fresh!==false&&locationAge>=0&&locationAge<90000,locationUpdatedAt:driver.location_updated_at,vehicleType:driver.vehicle_type==='motorcycle'?'motorcycle':'car',passengerSeats:driver.passenger_seats};
+      return {...fare,deferredCancellationFee,driverName:driver.display_name||'Verified driver',driverId:driver.driver_id,vehicleModel:driver.vehicle_model||null,serviceName:'Swift ONE',tripMinutes,driverProtectionFee,customerTotal,quoteId:quote.id,expiresAt:quote.expires_at,roadMiles:miles,pickupMiles,returnMiles,pickupMinutes,locationFresh:driver.location_fresh!==false&&locationAge>=0&&locationAge<90000,locationUpdatedAt:driver.location_updated_at,vehicleType:driver.vehicle_type==='motorcycle'?'motorcycle':'car',passengerSeats:driver.passenger_seats};
     });
     // Keep the closest quote at the top level for already-installed APKs.
     return reply({...options[0],driverName:prepared[0].driver.display_name,options});
   } catch (e) { return reply({ error: e instanceof Error ? e.message : 'Could not calculate fare' }, 400); }
 });
-
-
