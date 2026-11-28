@@ -50,7 +50,7 @@ async function send(job: any) {
   const [statusTitle,statusBody]=job.kind==='promotion'?[job.title,job.body]:(job.kind==='ride'?rideMessages:messages)[job.phase] || []; if(!statusTitle) throw Error('Unknown delivery phase');
   const title='SWIFTSHOP';
   let body=job.kind==='promotion'?statusBody:statusTitle+' — '+statusBody;
-  if(motion?.active){const percent=Number(motion.progress);const count=motion.progress==null?0:Math.min(4,Math.floor(percent/25));const bar='━'.repeat(count)+'🏍️'+'─'.repeat(4-count)+'⌂';body=bar+'  '+(motion.progress==null?'Delivery started':percent+'% estimated progress')+(motion.eta_minutes?' · about '+motion.eta_minutes+' min':'')+'. '+(motion.mode==='gps_estimate'?'Based on recent runner GPS.':'Time-based estimate; not live GPS.')+(motion.delayed?' Awaiting delivery confirmation.':'');}
+  if(motion?.active){body=motion.mode==='live_gps'?'Your runner is on the way.'+(motion.eta_minutes?' Estimated arrival: about '+motion.eta_minutes+' min.':'')+' Updated from runner GPS.':'Delivery has started. Waiting for a fresh runner GPS update.';}
   const data=job.kind==='promotion'?{kind:job.phase==='test'?'push_test':'promotion',promotion_id:job.order_id,event_id:job.event_id}:job.kind==='ride'?{kind:'ride',ride_id:job.order_id,phase:job.phase,event_id:job.event_id}:{kind:'delivery',order_id:job.order_id,phase:job.phase,event_id:job.event_id};
   if(motion?.active)Object.assign(data,{progress:String(motion.progress??''),eta_minutes:String(motion.eta_minutes??''),progress_mode:String(motion.mode||'')});
   const collapseTag=job.kind==='delivery'&&job.phase!=='chat_message'?'swiftshop-delivery-'+job.order_id:job.kind==='ride'?'swiftshop-ride-'+job.order_id:'swiftshop-'+job.event_id;
@@ -117,6 +117,4 @@ Deno.serve(async request => {
   return Response.json({claimed:results.length,sent:results.filter(r=>r==='sent').length,retries:results.filter(r=>r==='retry').length});
 });
 function retry(job:any, reason:string) { return {lease_until:null,last_error:reason,next_attempt_at:new Date(Date.now()+Math.min(3600,15*2**Math.min(job.attempts,8))*1000).toISOString(),failed_at:job.attempts>=12?new Date().toISOString():null}; }
-
-
 

@@ -1,0 +1,19 @@
+begin;
+do $$declare t public.customer_order_tracking;q jsonb;points jsonb;a float8[];b float8[];runner uuid;
+begin
+select * into t from public.customer_order_tracking c where swift_tracking_private.endpoints(c.id)->'pickup'->>0 is not null and swift_tracking_private.endpoints(c.id)->'dropoff'->>0 is not null and linked_order_id in(select order_id from public.orders where assigned_runner_id is not null and coalesce(jsonb_array_length(run_stops),0)<=2) limit 1;
+if t.id is null then raise exception 'No route fixture';end if;
+select assigned_runner_id into runner from public.orders where order_id=t.linked_order_id;
+update public.customer_order_tracking set phase='runner_assigned' where id=t.id;
+delete from swift_tracking_private.motion where order_id=t.id;
+q:=swift_tracking_private.progress(t.id);if (q->>'active')::boolean then raise exception 'Started before pickup';end if;
+update public.customer_order_tracking set phase='on_the_way' where id=t.id;
+q:=swift_tracking_private.progress(t.id);if q->>'mode'<>'awaiting_gps' or q->>'progress' is not null then raise exception 'No-GPS simulation: %',q;end if;
+points:=swift_tracking_private.endpoints(t.id);a:=array[(points->'pickup'->>0)::float8,(points->'pickup'->>1)::float8];b:=array[(points->'dropoff'->>0)::float8,(points->'dropoff'->>1)::float8];
+insert into swift_tracking_private.motion(order_id,runner_id,lat,lng,observed_at) values(t.id,runner,(a[1]+b[1])/2,(a[2]+b[2])/2,now());
+q:=swift_tracking_private.progress(t.id);if q->>'mode'<>'live_gps' or (q->>'progress')::int not between 45 and 55 then raise exception 'Midpoint GPS mismatch: %',q;end if;
+update swift_tracking_private.motion set observed_at=now()-interval '46 seconds' where order_id=t.id;q:=swift_tracking_private.progress(t.id);if q->>'mode'<>'stale_gps' or q->>'progress' is not null or q->>'eta_minutes' is not null then raise exception 'Stale GPS not paused: %',q;end if;
+update swift_tracking_private.motion set observed_at=now(),runner_id=gen_random_uuid() where order_id=t.id;q:=swift_tracking_private.progress(t.id);if q->>'mode'='live_gps' then raise exception 'Other runner location exposed';end if;
+update public.customer_order_tracking set phase='delivered' where id=t.id;q:=swift_tracking_private.progress(t.id);if (q->>'active')::boolean then raise exception 'Terminal progress';end if;
+perform set_config('request.jwt.claim.sub','',true);begin perform public.swift_runner_delivery_position('unassigned',18,-88,10,now());raise exception 'Runner bypass';exception when insufficient_privilege then null;end;
+end $$;rollback;select 'PASS: pickup gate, no timer simulation, midpoint GPS, 45-second pause, assigned-runner isolation and terminal cleanup' result;
