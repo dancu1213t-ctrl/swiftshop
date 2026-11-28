@@ -71,3 +71,10 @@ html.swift-design body #merchantStorePage[data-apparel=true] .store-product .sto
 #commerceStoreEntrance[data-apparel=true]{background:#fff!important}
 #commerceStoreEntrance[data-apparel=true] .entrance-backdrop{display:none!important}
 #commerceStoreEntrance .entrance-hint{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom));left:20px;right:20px;text-align:center;font:500 12px/1.5 system-ui;color:#fff;background:#111b;border-radius:24px;padding:8px 14px;width:fit-content;margin:0 auto;z-index:2;pointer-events:none}
+
+/* Edge-to-edge artwork atmosphere without cropping merchant lettering. */
+html.swift-design body #commerceStoreEntrance[data-apparel=true]{background:#171310!important;isolation:isolate}
+html.swift-design body #commerceStoreEntrance[data-apparel=true]>.entrance-backdrop{display:block!important;inset:-20px!important;width:calc(100% + 40px)!important;height:calc(100% + 40px)!important;object-fit:cover!important;filter:blur(18px) brightness(.65)!important;opacity:1!important;z-index:0!important}
+html.swift-design body #commerceStoreEntrance[data-apparel=true]>.entrance-artwork{inset:0!important;width:100%!important;height:100%!important;object-fit:contain!important;padding:0!important;z-index:1!important}
+html.swift-design body #commerceStoreEntrance[data-apparel=true]>.entrance-close{top:calc(12px + env(safe-area-inset-top,0px))!important;right:16px!important;width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;max-width:36px!important;font-size:23px!important;background:#1117!important;border:1px solid #ffffff60!important;box-shadow:none!important}
+html.swift-design body #commerceStoreEntrance[data-apparel=true]>.entrance-hint{bottom:calc(22px + env(safe-area-inset-bottom,0px))!important;background:transparent!important;color:#fff!important;font-size:11px!important;font-weight:400!important;letter-spacing:.02em!important;text-shadow:0 1px 6px #000b;padding:6px 12px!important}
