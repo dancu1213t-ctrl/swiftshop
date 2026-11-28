@@ -63,3 +63,11 @@ html.swift-design body #merchantStorePage[data-apparel=true] .store-product{heig
 html.swift-design body #merchantStorePage[data-apparel=true] .store-product .store-price{margin:auto 0 0!important;padding-top:8px!important}
 html.swift-design body #merchantStorePage[data-apparel=true] .store-product .store-item-quantity,
 html.swift-design body #merchantStorePage[data-apparel=true] .store-product .store-item-quantity:empty{display:block!important;min-height:18px!important;line-height:18px!important;margin:0!important}
+
+/* Fine apparel card outlines; sharing lives in product details. */
+html.swift-design body #merchantStorePage[data-apparel=true] .store-product{border:1px solid #0003!important;border-radius:14px!important;padding:0 12px 12px!important}
+html.swift-design body #merchantStorePage[data-apparel=true] .store-product .store-item-share{display:none!important}
+#swiftProductDetails .spd-header .spd-share{display:grid!important;place-items:center!important;width:44px!important;height:44px!important;background:#fff!important;border:1px solid #dedede!important;color:#202020!important;border-radius:50%!important;flex-shrink:0}
+#commerceStoreEntrance[data-apparel=true]{background:#fff!important}
+#commerceStoreEntrance[data-apparel=true] .entrance-backdrop{display:none!important}
+#commerceStoreEntrance .entrance-hint{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom));left:20px;right:20px;text-align:center;font:500 12px/1.5 system-ui;color:#fff;background:#111b;border-radius:24px;padding:8px 14px;width:fit-content;margin:0 auto;z-index:2;pointer-events:none}
